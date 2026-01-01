@@ -26,12 +26,9 @@ section:not(#home) {
 }
 
 .animate-scroll {
-    animation: infinite-scroll 30s linear infinite;
-}
-
-/* Pause animation on hover for better UX */
-.animate-scroll:hover {
-    animation-play-state: paused;
+    display: flex; /* Ensures items sit in a row */
+    width: max-content; /* Ensures the row is as wide as needed */
+    animation: infinite-scroll 40s linear infinite; /* Slower, smoother speed */
 }
 
 /* ============================================
