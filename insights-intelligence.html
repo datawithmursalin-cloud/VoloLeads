@@ -4,23 +4,50 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Targeting The Right Prospects | VoloLeads Insights</title>
+    
+    <meta name="description" content="Stop dialing random numbers. Learn how VoloLeads uses visual intelligence to target seller motivation before we even dial.">
+
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
     <script>
         tailwind.config = {
             theme: {
                 extend: {
                     fontFamily: { sans: ['Inter', 'sans-serif'] },
                     colors: { 
-                        brand: { navy: '#0f172a', light: '#f8fafc', orange: '#f97316' } 
-                    }
+                        brand: { 
+                            navy: '#0f172a',
+                            light: '#f8fafc',
+                            orange: '#f97316',
+                            orangeHover: '#ea580c',
+                        } 
+                    },
+                    animation: {
+                        blob: "blob 10s infinite",
+                    },
+                    keyframes: {
+                        blob: {
+                            "0%": { transform: "translate(-50%, -50%) scale(1)" },
+                            "33%": { transform: "translate(-50%, -50%) scale(1.1) translate(20px, -30px)" },
+                            "66%": { transform: "translate(-50%, -50%) scale(0.9) translate(-20px, 20px)" },
+                            "100%": { transform: "translate(-50%, -50%) scale(1)" },
+                        },
+                    },
                 }
             }
         }
     </script>
+    
+    <link rel="stylesheet" href="styles.css">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        .animation-delay-2000 { animation-delay: 2s; }
+        .animation-delay-4000 { animation-delay: 4s; }
+    </style>
 </head>
-<body class="bg-brand-light text-brand-navy font-sans antialiased">
+<body class="bg-brand-light text-brand-navy font-sans antialiased flex flex-col min-h-screen">
 
     <nav class="fixed top-6 left-0 right-0 z-50 w-[92%] max-w-7xl mx-auto bg-white/90 backdrop-blur-md border border-slate-200 rounded-full shadow-2xl transition-all duration-300">
         <div class="px-6 md:px-8">
@@ -32,9 +59,9 @@
                 </a>
                 
                 <div class="hidden md:flex space-x-8 items-center text-sm font-semibold">
-                    <a href="index.html" class="text-slate-600 hover:text-brand-orange transition-colors">Home</a>
+                    <a href="index.html#home" class="text-slate-600 hover:text-brand-orange transition-colors">Home</a>
                     <a href="index.html#services" class="text-slate-600 hover:text-brand-orange transition-colors">Services</a>
-                    <a href="index.html#pricing" class="text-slate-600 hover:text-brand-orange transition-colors">Plans</a>
+                    <a href="index.html#plans" class="text-slate-600 hover:text-brand-orange transition-colors">Plans</a>
                     <a href="index.html#insights" class="text-brand-orange font-bold transition-colors">Insights</a>
                     <a href="index.html#about" class="text-slate-600 hover:text-brand-orange transition-colors">About Us</a>
                 </div>
@@ -43,17 +70,30 @@
                     Book Now
                 </a>
 
-                <div class="md:hidden text-slate-600 text-xl cursor-pointer">
-                    <i class="fa-solid fa-bars"></i>
-                </div>
+                <button id="mobile-menu-btn" class="md:hidden text-slate-600 text-xl cursor-pointer focus:outline-none" aria-label="Toggle Menu">
+                    <i class="fa-solid fa-bars" id="menu-icon"></i>
+                </button>
             </div>
+        </div>
+
+        <div id="mobile-menu" class="hidden md:hidden absolute top-20 left-0 right-0 bg-white border border-slate-200 rounded-2xl shadow-2xl mx-6 p-6 flex flex-col gap-4 text-center">
+            <a href="index.html#home" class="text-slate-600 font-bold hover:text-brand-orange py-2">Home</a>
+            <a href="index.html#services" class="text-slate-600 font-bold hover:text-brand-orange py-2">Services</a>
+            <a href="index.html#plans" class="text-slate-600 font-bold hover:text-brand-orange py-2">Plans</a>
+            <a href="index.html#insights" class="text-slate-600 font-bold hover:text-brand-orange py-2">Insights</a>
+            <a href="index.html#about" class="text-slate-600 font-bold hover:text-brand-orange py-2">About Us</a>
+            <a href="index.html#contact" class="bg-brand-orange text-white py-3 rounded-full font-bold shadow-md">Book Now</a>
         </div>
     </nav>
 
     <header class="pt-48 pb-16 lg:pt-60 lg:pb-20 relative overflow-hidden bg-white border-b border-slate-100">
+        <div class="absolute top-0 left-1/2 w-72 h-72 bg-purple-300 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-blob"></div>
+        <div class="absolute top-0 right-1/2 w-72 h-72 bg-brand-orange rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-blob animation-delay-2000"></div>
+        <div class="absolute -bottom-8 left-1/2 w-72 h-72 bg-pink-300 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-blob animation-delay-4000"></div>
+
         <div class="absolute inset-0 bg-brand-navy/5 -z-10"></div>
-        <div class="max-w-4xl mx-auto px-6 text-center">
-            
+        
+        <div class="max-w-4xl mx-auto px-6 text-center relative z-10">
             <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-orange-100 text-orange-700 text-xs font-bold uppercase tracking-wide mb-6">
                 <i class="fa-solid fa-bolt"></i> Strategy Hub
             </div>
@@ -68,7 +108,7 @@
         </div>
     </header>
 
-    <article class="py-16 bg-white">
+    <article class="py-16 bg-white flex-grow">
         <div class="max-w-3xl mx-auto px-6 prose prose-slate prose-lg">
             
             <p class="lead text-lg text-slate-600 font-medium mb-8">
@@ -79,17 +119,17 @@
                 While niche lists are powerful, they are also crowded. Every wholesaler in your market is calling the same probate list. At <span class="font-extrabold text-brand-orange">VoloLeads</span>, we take a different approach. We believe the cost of acquisition isn't just about the list you buy, but the intelligence you <span class="font-semibold">'apply'</span> <em>before</em> you dial.
             </p>
 
-            <h3 class="text-2xl font-bold text-brand-navy mt-10 mb-4">1. The "Spray and Pray" Problem</h3>
-            <p class="text-slate-600 mb-6">
+            <h3 class="text-2xl font-bold text-brand-navy mt-10 mb-4 reveal-on-scroll">1. The "Spray and Pray" Problem</h3>
+            <p class="text-slate-600 mb-6 reveal-on-scroll">
                 Traditional cold calling relies on volume. You load 10,000 records, press start on the dialer, and hope for the best. The problem? You are treating a pristine, renovated property the same way you treat a vacant, boarded-up house. You are wasting valuable talk time on people who have zero motivation to sell.
             </p>
 
-            <h3 class="text-2xl font-bold text-brand-navy mt-10 mb-4">2. The VoloLeads Difference: Virtual Drivers</h3>
-            <p class="text-slate-600 mb-6">
+            <h3 class="text-2xl font-bold text-brand-navy mt-10 mb-4 reveal-on-scroll">2. The VoloLeads Difference: Virtual Drivers</h3>
+            <p class="text-slate-600 mb-6 reveal-on-scroll">
                 We don't just spam; we target. At <span class="font-extrabold text-brand-orange">VoloLeads</span> we offer you the option to deploy <strong>Virtual Drivers for Dollars</strong>. Using the latest satellite and google street-view imagery, our team visually inspects your target list for specific <strong>Distress Indicators</strong>:
             </p>    
             
-            <ul class="space-y-4 my-8 list-none pl-0">
+            <ul class="space-y-4 my-8 list-none pl-0 reveal-on-scroll">
                 <li class="flex items-start gap-3">
                     <i class="fa-solid fa-check-circle text-brand-orange mt-1"></i>
                     <span class="text-slate-700"><strong>Vegetation Neglect:</strong> Overgrown grass, dead trees, or bushes blocking windows.</span>
@@ -104,25 +144,25 @@
                 </li>
             </ul>
 
-            <h3 class="text-2xl font-bold text-brand-navy mt-10 mb-4">3. Categorizing by Motivation</h3>
-            <p class="text-slate-600 mb-6">
+            <h3 class="text-2xl font-bold text-brand-navy mt-10 mb-4 reveal-on-scroll">3. Categorizing by Motivation</h3>
+            <p class="text-slate-600 mb-6 reveal-on-scroll">
                 Once we identify these physical signs of neglect, we categorize the lead differently. A homeowner with a "Code Violation" who also has "Blue Tarp on Roof" is not a cold lead—they are a <strong>high-priority target</strong>.
             </p>
             
-            <div class="bg-orange-50 border-l-4 border-brand-orange p-6 my-8 rounded-r-lg">
+            <div class="bg-orange-50 border-l-4 border-brand-orange p-6 my-8 rounded-r-lg reveal-on-scroll">
                 <h4 class="font-bold text-brand-navy mb-2">The Intelligence Advantage:</h4>
                 <p class="text-sm text-slate-700">
                     When our VAs call these specific leads, they don't use a generic script. They reference the condition implicitly: <em>"I was driving by virtually and noticed the property might need some work—are you looking to sell it as-is?"</em> This builds instant credibility.
                 </p>
             </div>
 
-            <p class="text-slate-600 mb-6">
+            <p class="text-slate-600 mb-6 reveal-on-scroll">
                 Stop wasting money on dials that go nowhere. Start targeting motivation based on the asset itself.
             </p>
 
             <hr class="my-12 border-slate-200">
 
-            <div class="bg-brand-navy rounded-2xl p-8 text-center text-white shadow-xl relative overflow-hidden">
+            <div class="bg-brand-navy rounded-2xl p-8 text-center text-white shadow-xl relative overflow-hidden reveal-on-scroll">
                 <div class="absolute top-0 right-0 w-32 h-32 bg-brand-orange/20 rounded-full blur-2xl -translate-y-1/2 translate-x-1/2"></div>
                 
                 <h3 class="text-2xl font-bold mb-4 relative z-10">Ready to Upgrade Your Data?</h3>
@@ -156,18 +196,25 @@
                     <div>
                         <h4 class="text-white font-bold mb-4">Navigate</h4>
                         <ul class="space-y-2 text-sm">
-                            <li><a href="index.html#about" class="hover:text-brand-orange">About Us</a></li>
-                            <li><a href="index.html#services" class="hover:text-brand-orange">Services</a></li>
-                            <li><a href="index.html#insights" class="hover:text-brand-orange">Insights</a></li>
-                            <li><a href="index.html#contact" class="hover:text-brand-orange">Contact</a></li>
+                            <li><a href="index.html#about" class="hover:text-brand-orange transition-colors">About Us</a></li>
+                            <li><a href="index.html#services" class="hover:text-brand-orange transition-colors">Services</a></li>
+                            <li><a href="index.html#plans" class="hover:text-brand-orange transition-colors">Plans</a></li>
+                            <li><a href="index.html#insights" class="hover:text-brand-orange transition-colors">Insights</a></li>
+                            <li><a href="index.html#contact" class="hover:text-brand-orange transition-colors">Contact</a></li>
                         </ul>
                     </div>
 
                     <div>
                         <h4 class="text-white font-bold mb-4">Contact</h4>
                         <ul class="space-y-2 text-sm">
-                            <li class="flex items-center gap-2"><span class="w-5 flex items-center justify-center text-brand-orange"><i class="fa-solid fa-envelope"></i></span><span class="break-words">cc.managementbd@gmail.com</span></li>
-                            <li class="flex items-center gap-2"><span class="w-5 flex items-center justify-center text-brand-orange"><i class="fa-brands fa-whatsapp"></i></span><span>WhatsApp Support</span></li>
+                            <li class="flex items-center gap-2">
+                                <span class="w-5 flex items-center justify-center text-brand-orange"><i class="fa-solid fa-envelope"></i></span>
+                                <span class="break-words">cc.managementbd@gmail.com</span>
+                            </li>
+                            <li class="flex items-center gap-2">
+                                <span class="w-5 flex items-center justify-center text-brand-orange"><i class="fa-brands fa-whatsapp"></i></span>
+                                <span>WhatsApp Support</span>
+                            </li>
                         </ul>
                     </div>
                 </div>
@@ -184,16 +231,18 @@
             </div>
             
             <div class="border-t border-slate-800 pt-8 flex flex-col md:flex-row justify-between items-center text-xs">
-                <p>&copy; 2025 VoloLeads Agency. All rights reserved.</p>
+                <p>&copy; <span id="current-year">2025</span> VoloLeads Agency. All rights reserved.</p>
                 <div class="flex gap-4 mt-4 md:mt-0">
-                    <a href="#" class="hover:text-white">Privacy Policy</a>
-                    <a href="#" class="hover:text-white">Terms of Service</a>
-                    <a href="#" class="hover:text-white">Refund Policy</a>
-                    <a href="#" class="hover:text-white">FAQs</a>
+                    <a href="privacy-policy.html" class="hover:text-white transition-colors">Privacy Policy</a>
+                    <a href="terms-condition.html" class="hover:text-white transition-colors">Terms of Service</a>
+                    <a href="terms-condition.html#refund-policy" class="hover:text-white transition-colors">Refund Policy</a>
+                    <a href="#" class="hover:text-white transition-colors">FAQs</a>
                 </div>
             </div>
         </div>
     </footer>
+
+    <script src="app.js"></script>
 
 </body>
 </html>
