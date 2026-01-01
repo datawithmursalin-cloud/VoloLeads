@@ -355,3 +355,37 @@ function initAccordions() {
         });
     });
 }
+
+function updateCountdown(audio) {
+    // 1. Find the timer span that matches this audio player
+    // We look for an ID like "timer-" + "audio-richard"
+    const timerSpan = document.getElementById(`timer-${audio.id}`);
+    
+    // 2. Ensure we have a valid number to work with
+    if (audio.duration) {
+        // Calculate remaining time
+        const remaining = audio.duration - audio.currentTime;
+        
+        // Math to convert seconds into Minutes:Seconds
+        const minutes = Math.floor(remaining / 60);
+        const seconds = Math.floor(remaining % 60);
+        
+        // Add a "0" if seconds are single digit (e.g. "5:09" instead of "5:9")
+        const formattedTime = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+        
+        // Update the text on screen
+        timerSpan.textContent = formattedTime;
+    }
+}
+
+// Optional: Resets the timer back to original text when audio finishes
+function resetPlayer(audio) {
+    const timerSpan = document.getElementById(`timer-${audio.id}`);
+    const minutes = Math.floor(audio.duration / 60);
+    const seconds = Math.floor(audio.duration % 60);
+    timerSpan.textContent = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+    
+    // Reset icon to Play
+    const btn = audio.nextElementSibling;
+    btn.querySelector('i').className = 'fa-solid fa-play ml-0.5';
+}
