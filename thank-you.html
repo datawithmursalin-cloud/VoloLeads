@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thank You | VoloLeads</title>
+    
+    <meta name="robots" content="noindex, nofollow">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Inter', 'sans-serif'] },
+                    colors: { 
+                        brand: { 
+                            navy: '#0f172a',
+                            light: '#f8fafc',
+                            orange: '#f97316',
+                            orangeHover: '#ea580c',
+                        } 
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <link rel="stylesheet" href="styles.css">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body class="bg-brand-light text-brand-navy font-sans antialiased flex flex-col min-h-screen">
+
+    <nav class="fixed top-6 left-0 right-0 z-50 w-[92%] max-w-7xl mx-auto bg-white/90 backdrop-blur-md border border-slate-200 rounded-full shadow-2xl transition-all duration-300">
+        <div class="px-6 md:px-8">
+            <div class="flex justify-between items-center h-16">
+                <a href="index.html" class="flex items-center gap-2 cursor-pointer group">
+                    <i class="fa-solid fa-bolt text-brand-orange text-2xl group-hover:animate-pulse"></i>
+                    <span class="font-bold text-xl tracking-tight text-brand-navy">VoloLeads</span>
+                </a>
+                
+                <div class="hidden md:flex space-x-8 items-center text-sm font-semibold">
+                    <a href="index.html#home" class="text-slate-600 hover:text-brand-orange transition-colors">Home</a>
+                    <a href="index.html#services" class="text-slate-600 hover:text-brand-orange transition-colors">Services</a>
+                    <a href="index.html#plans" class="text-slate-600 hover:text-brand-orange transition-colors">Plans</a>
+                    <a href="index.html#insights" class="text-slate-600 hover:text-brand-orange transition-colors">Insights</a>
+                    <a href="index.html#about" class="text-slate-600 hover:text-brand-orange transition-colors">About Us</a>
+                </div>
+
+                <a href="index.html#contact" class="hidden md:block px-6 py-2 bg-brand-navy hover:bg-slate-800 text-white text-sm font-bold rounded-full shadow-lg transition-all transform hover:-translate-y-0.5">
+                    Book Now
+                </a>
+
+                <button id="mobile-menu-btn" class="md:hidden text-slate-600 text-xl cursor-pointer focus:outline-none" aria-label="Toggle Menu">
+                    <i class="fa-solid fa-bars" id="menu-icon"></i>
+                </button>
+            </div>
+        </div>
+
+        <div id="mobile-menu" class="hidden md:hidden absolute top-20 left-0 right-0 bg-white border border-slate-200 rounded-2xl shadow-2xl mx-6 p-6 flex flex-col gap-4 text-center">
+            <a href="index.html#home" class="text-slate-600 font-bold hover:text-brand-orange py-2">Home</a>
+            <a href="index.html#services" class="text-slate-600 font-bold hover:text-brand-orange py-2">Services</a>
+            <a href="index.html#plans" class="text-slate-600 font-bold hover:text-brand-orange py-2">Plans</a>
+            <a href="index.html#insights" class="text-slate-600 font-bold hover:text-brand-orange py-2">Insights</a>
+            <a href="index.html#about" class="text-slate-600 font-bold hover:text-brand-orange py-2">About Us</a>
+            <a href="index.html#contact" class="bg-brand-orange text-white py-3 rounded-full font-bold shadow-md">Book Now</a>
+        </div>
+    </nav>
+
+    <section class="relative flex-grow flex flex-col items-center pb-24 px-4 overflow-hidden" style="padding-top: 12rem !important;">
+        
+        <div class="absolute inset-0 bg-gradient-to-br from-orange-50 via-white to-slate-50 -z-20"></div>
+        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-brand-orange/5 rounded-full blur-3xl -z-10 pointer-events-none"></div>
+
+        <div class="max-w-2xl mx-auto text-center relative z-10">
+            
+            <div class="mb-8 flex justify-center">
+                <svg class="w-24 h-24" viewBox="0 0 52 52" xmlns="http://www.w3.org/2000/svg">
+                    <circle class="checkmark-circle" cx="26" cy="26" r="25" fill="none" stroke="#10b981" stroke-width="2"/>
+                    <path class="checkmark-check" fill="none" stroke="#10b981" stroke-width="3" d="M14 27l7 7 16-16"/>
+                </svg>
+            </div>
+
+            <h1 class="text-4xl md:text-5xl font-extrabold text-brand-navy mb-4 animate-fade-in-down">
+                We've Received Your Request!
+            </h1>
+            
+            <p class="text-lg text-slate-600 mb-8 max-w-xl mx-auto leading-relaxed animate-fade-in-down" style="animation-delay: 0.1s;">
+                Thank you for reaching out to <span class="font-bold text-brand-orange">VoloLeads</span>. 
+                Our team will review your information and get back to you within <span class="font-bold">24 hours</span>.
+            </p>
+
+            <div class="bg-white rounded-2xl shadow-xl border border-slate-200 p-8 mb-8 max-w-lg mx-auto animate-fade-in-down" style="animation-delay: 0.2s;">
+                <h3 class="text-xl font-bold text-brand-navy mb-6 border-b border-slate-100 pb-2">What Happens Next?</h3>
+                
+                <div class="space-y-5 text-left">
+                    <div class="flex items-start gap-4">
+                        <div class="w-10 h-10 rounded-full bg-orange-100 flex items-center justify-center flex-shrink-0 mt-0.5">
+                            <i class="fa-solid fa-envelope text-brand-orange"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-brand-navy text-sm mb-0.5">Step 1: Email Confirmation</h4>
+                            <p class="text-xs text-slate-500 leading-snug">Check your inbox for a confirmation email with your request details.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-start gap-4">
+                        <div class="w-10 h-10 rounded-full bg-orange-100 flex items-center justify-center flex-shrink-0 mt-0.5">
+                            <i class="fa-solid fa-phone text-brand-orange"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-brand-navy text-sm mb-0.5">Step 2: Discovery Call</h4>
+                            <p class="text-xs text-slate-500 leading-snug">We'll schedule a call to understand your specific needs and goals.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-start gap-4">
+                        <div class="w-10 h-10 rounded-full bg-orange-100 flex items-center justify-center flex-shrink-0 mt-0.5">
+                            <i class="fa-solid fa-file-contract text-brand-orange"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-brand-navy text-sm mb-0.5">Step 3: Custom Proposal</h4>
+                            <p class="text-xs text-slate-500 leading-snug">Receive a tailored proposal with pricing and team structure.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-start gap-4">
+                        <div class="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center flex-shrink-0 mt-0.5">
+                            <i class="fa-solid fa-rocket text-green-600"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-brand-navy text-sm mb-0.5">Step 4: Launch</h4>
+                            <p class="text-xs text-slate-500 leading-snug">Your dedicated team starts calling within 48-72 hours of onboarding.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex flex-col sm:flex-row gap-4 justify-center animate-fade-in-down" style="animation-delay: 0.3s;">
+                <a href="index.html" class="px-8 py-4 bg-brand-orange hover:bg-orange-600 text-white font-bold rounded-full shadow-xl transition-all transform hover:-translate-y-1">
+                    <i class="fa-solid fa-home mr-2"></i> Back to Home
+                </a>
+                <a href="index.html#insights" class="px-8 py-4 bg-white border-2 border-slate-200 hover:border-brand-orange text-brand-navy font-bold rounded-full shadow-md transition-all hover:-translate-y-1">
+                    <i class="fa-solid fa-book-open mr-2"></i> Explore Insights
+                </a>
+            </div>
+
+            <div class="mt-12 p-6 bg-slate-50 rounded-xl border border-slate-200 animate-fade-in-down" style="animation-delay: 0.4s;">
+                <p class="text-sm text-slate-600 mb-3">
+                    <i class="fa-solid fa-clock text-brand-orange mr-2"></i>
+                    <span class="font-bold">Need immediate assistance?</span>
+                </p>
+                <div class="flex flex-col sm:flex-row gap-3 justify-center items-center text-sm">
+                    <a href="mailto:cc.managementbd@gmail.com" class="flex items-center gap-2 text-brand-navy font-semibold hover:text-brand-orange transition-colors">
+                        <i class="fa-solid fa-envelope text-slate-400"></i>
+                        cc.managementbd@gmail.com
+                    </a>
+                    <span class="hidden sm:block text-slate-300">|</span>
+                    <a href="#" class="flex items-center gap-2 text-brand-navy font-semibold hover:text-brand-orange transition-colors">
+                        <i class="fa-brands fa-whatsapp text-green-500"></i>
+                        WhatsApp Support
+                    </a>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <footer id="contact" class="bg-brand-navy text-slate-400 py-12 border-t border-slate-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+                
+                <div class="col-span-1 md:col-span-1">
+                    <div class="flex items-center gap-2 mb-4">
+                        <i class="fa-solid fa-bolt text-brand-orange text-xl"></i>
+                        <span class="font-bold text-xl text-white">VoloLeads</span>
+                    </div>
+                    <p class="text-xs text-slate-500">
+                        High-velocity virtual assistants for real estate wholesalers. We hunt, you close.
+                    </p>
+                </div>
+
+                <div class="hidden md:block"></div>
+
+                <div class="flex flex-col md:flex-row md:justify-end md:items-start gap-8 md:gap-12">
+                    <div>
+                        <h4 class="text-white font-bold mb-4">Navigate</h4>
+                        <ul class="space-y-2 text-sm">
+                            <li><a href="index.html#about" class="hover:text-brand-orange transition-colors">About Us</a></li>
+                            <li><a href="index.html#services" class="hover:text-brand-orange transition-colors">Services</a></li>
+                            <li><a href="index.html#insights" class="hover:text-brand-orange transition-colors">Insights</a></li>
+                            <li><a href="index.html#contact" class="hover:text-brand-orange transition-colors">Contact</a></li>
+                        </ul>
+                    </div>
+
+                    <div>
+                        <h4 class="text-white font-bold mb-4">Contact</h4>
+                        <ul class="space-y-2 text-sm">
+                            <li class="flex items-center gap-2">
+                                <span class="w-5 flex items-center justify-center text-brand-orange"><i class="fa-solid fa-envelope"></i></span>
+                                <span class="break-words">cc.managementbd@gmail.com</span>
+                            </li>
+                            <li class="flex items-center gap-2">
+                                <span class="w-5 flex items-center justify-center text-brand-orange"><i class="fa-brands fa-whatsapp"></i></span>
+                                <span>WhatsApp Support</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div>
+                    <h4 class="text-white font-bold mb-4">Follow Us</h4>
+                    <div class="flex gap-4">
+                        <a href="#" class="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center hover:bg-brand-orange hover:text-white transition-all"><i class="fa-brands fa-linkedin-in"></i></a>
+                        <a href="#" class="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center hover:bg-brand-orange hover:text-white transition-all"><i class="fa-brands fa-facebook"></i></a>
+                        <a href="#" class="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center hover:bg-brand-orange hover:text-white transition-all"><i class="fa-brands fa-instagram"></i></a>
+                        <a href="#" class="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center hover:bg-brand-orange hover:text-white transition-all"><i class="fa-brands fa-twitter"></i></a>
+                    </div>
+                </div>
+
+            </div>
+            
+            <div class="border-t border-slate-800 pt-8 flex flex-col md:flex-row justify-between items-center text-xs">
+                <p>&copy; <span id="current-year">2025</span> VoloLeads Agency. All rights reserved.</p>
+                <div class="flex gap-4 mt-4 md:mt-0">
+                    <a href="#" class="hover:text-white transition-colors">Privacy Policy</a>
+                    <a href="#" class="hover:text-white transition-colors">Terms of Service</a>
+                    <a href="#" class="hover:text-white transition-colors">Refund Policy</a>
+                    <a href="#" class="hover:text-white transition-colors">FAQs</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="app.js"></script>
+
+</body>
+</html>

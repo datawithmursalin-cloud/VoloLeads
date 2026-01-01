@@ -1,0 +1,285 @@
+/* ============================================
+   VoloLeads Custom Styles & Animations
+   ============================================ */
+
+/* Section Spacing Normalization */
+section:not(#home) {
+    padding-top: 4rem !important;
+    padding-bottom: 4rem !important;
+}
+
+#home {
+    padding-top: 8rem !important;
+    padding-bottom: 7rem !important;
+}
+
+/* ============================================
+   Infinite Scroll Animation (Integration Logos)
+   ============================================ */
+@keyframes infinite-scroll {
+    from {
+        transform: translateX(0);
+    }
+    to {
+        transform: translateX(-50%);
+    }
+}
+
+.animate-scroll {
+    animation: infinite-scroll 30s linear infinite;
+}
+
+/* Pause animation on hover for better UX */
+.animate-scroll:hover {
+    animation-play-state: paused;
+}
+
+/* ============================================
+   Scrollbar Hide Utility
+   ============================================ */
+.scrollbar-hide::-webkit-scrollbar {
+    display: none;
+}
+
+.scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+/* ============================================
+   Fade In Down Animation (for dynamic elements)
+   ============================================ */
+@keyframes fade-in-down {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.animate-fade-in-down {
+    animation: fade-in-down 0.3s ease-out;
+}
+
+/* ============================================
+   Custom Pulse Animation (for status indicators)
+   ============================================ */
+@keyframes pulse-custom {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.5;
+    }
+}
+
+.animate-pulse-custom {
+    animation: pulse-custom 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* ============================================
+   Smooth Transitions for Interactive Elements
+   ============================================ */
+.transition-smooth {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ============================================
+   Grid Background Pattern (Hero Section)
+   ============================================ */
+.strategic-grid-bg {
+    background-color: white;
+    background-image: 
+        linear-gradient(to right, #cbd5e1 1px, transparent 1px),
+        linear-gradient(to bottom, #cbd5e1 1px, transparent 1px);
+    background-size: 14px 24px;
+    mask-image: radial-gradient(ellipse 60% 50% at 50% 0%, #000 70%, transparent 100%);
+    -webkit-mask-image: radial-gradient(ellipse 60% 50% at 50% 0%, #000 70%, transparent 100%);
+}
+
+/* ============================================
+   Audio Player Styles
+   ============================================ */
+.audio-player-btn {
+    transition: all 0.2s ease;
+}
+
+.audio-player-btn:hover {
+    transform: scale(1.05);
+}
+
+.audio-player-btn:active {
+    transform: scale(0.95);
+}
+
+/* ============================================
+   Form Input Focus States (Enhanced)
+   ============================================ */
+input:focus,
+select:focus,
+textarea:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.1);
+}
+
+/* ============================================
+   Loading State Animation (for future use)
+   ============================================ */
+@keyframes spin-slow {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.animate-spin-slow {
+    animation: spin-slow 2s linear infinite;
+}
+
+/* ============================================
+   Glassmorphism Effect
+   ============================================ */
+.glass-effect {
+    background: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+}
+
+/* ============================================
+   Service Card Hover Effects
+   ============================================ */
+.service-card {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.service-card:hover {
+    transform: translateY(-4px);
+}
+
+/* ============================================
+   Mobile Responsiveness Helpers
+   ============================================ */
+@media (max-width: 768px) {
+    section:not(#home) {
+        padding-top: 3rem !important;
+        padding-bottom: 3rem !important;
+    }
+    
+    #home {
+        padding-top: 6rem !important;
+        padding-bottom: 5rem !important;
+    }
+}
+
+/* ============================================
+   Print Styles (for documentation/proposals)
+   ============================================ */
+@media print {
+    nav,
+    footer,
+    .no-print {
+        display: none !important;
+    }
+    
+    section {
+        page-break-inside: avoid;
+    }
+}
+
+/* ============================================
+   Smooth Scroll Behavior
+   ============================================ */
+html {
+    scroll-behavior: smooth;
+}
+
+/* Reduce motion for accessibility */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+    
+    html {
+        scroll-behavior: auto;
+    }
+}
+
+/* ============================================
+   Thank You Page Animations
+   ============================================ */
+@keyframes checkmark-draw {
+    0% {
+        stroke-dashoffset: 100;
+    }
+    100% {
+        stroke-dashoffset: 0;
+    }
+}
+
+.checkmark-circle {
+    stroke-dasharray: 166;
+    stroke-dashoffset: 166;
+    animation: checkmark-draw 0.6s cubic-bezier(0.65, 0, 0.45, 1) forwards;
+}
+
+.checkmark-check {
+    stroke-dasharray: 48;
+    stroke-dashoffset: 48;
+    animation: checkmark-draw 0.3s cubic-bezier(0.65, 0, 0.45, 1) 0.4s forwards;
+}
+
+/* ============================================
+   FUTURE-PROOFING: ANIMATION UTILITIES
+   ============================================ */
+
+/* --- 1. Reveal on Scroll State --- */
+.reveal-on-scroll {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: all 0.8s cubic-bezier(0.5, 0, 0, 1);
+}
+
+.reveal-on-scroll.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* --- 2. Scroll to Top Button --- */
+#scroll-top-btn {
+    visibility: hidden;
+    opacity: 0;
+    transition: all 0.4s ease;
+}
+
+#scroll-top-btn.show {
+    visibility: visible;
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* --- 3. FAQ / Accordion --- */
+.accordion-content {
+    transition: max-height 0.3s ease-out, opacity 0.3s ease-out;
+    max-height: 0;
+    opacity: 0;
+    overflow: hidden;
+}
+
+.accordion-content.open {
+    opacity: 1;
+    /* Max-height is set via JS for smooth animation */
+}
+
+/* --- 4. Staggered Delays (for lists/grids) --- */
+.delay-100 { transition-delay: 100ms; }
+.delay-200 { transition-delay: 200ms; }
+.delay-300 { transition-delay: 300ms; }
