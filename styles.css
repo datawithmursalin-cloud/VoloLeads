@@ -280,3 +280,44 @@ html {
 .delay-100 { transition-delay: 100ms; }
 .delay-200 { transition-delay: 200ms; }
 .delay-300 { transition-delay: 300ms; }
+
+/* --- 5. 3D Flip Card Styles --- */
+.perspective-1000 {
+    perspective: 1000px;
+}
+
+.transform-style-3d {
+    transform-style: preserve-3d;
+}
+
+.backface-hidden {
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+}
+
+.rotate-y-180 {
+    transform: rotateY(180deg);
+}
+
+/* The class JS will toggle */
+.is-flipped {
+    transform: rotateY(180deg);
+}
+
+/* --- Security & Spam Protection --- */
+.honey-trap {
+    position: absolute;
+    left: -9999px;
+    opacity: 0;
+    z-index: -1;
+}
+
+/* Optional: Loading Spinner Animation if not already present */
+.fa-spinner {
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}

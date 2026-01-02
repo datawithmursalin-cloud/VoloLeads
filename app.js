@@ -389,3 +389,66 @@ function resetPlayer(audio) {
     const btn = audio.nextElementSibling;
     btn.querySelector('i').className = 'fa-solid fa-play ml-0.5';
 }
+
+/* --- Flip Card Function --- */
+function flipCard(cardWrapper) {
+    // Finds the inner div that holds the front/back faces and toggles the class
+    const innerCard = cardWrapper.querySelector('.transform-style-3d');
+    if (innerCard) {
+        innerCard.classList.toggle('is-flipped');
+    }
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    
+    /* --- Contact Form Security & Handling --- */
+    const contactForm = document.getElementById('contact-form');
+    
+    // Only run this logic if the form actually exists on the current page
+    if (contactForm) {
+        
+        // SECURITY LAYER 3: Time-Lock
+        // We record the time when the Javascript loads.
+        // Bots fill forms in < 0.1s. Humans take several seconds.
+        const loadTime = Date.now();
+
+        const submitBtn = document.getElementById('submit-btn');
+        const btnText = document.getElementById('btn-text');
+        const btnLoader = document.getElementById('btn-loader');
+        const honeyTrap = document.getElementById('website_honeypot');
+
+        contactForm.addEventListener('submit', function(e) {
+            const submitTime = Date.now();
+            const timeDifference = submitTime - loadTime;
+
+            // Check 1: Honey Trap (Must remain empty)
+            // If a bot filled this hidden field, block the submission.
+            if (honeyTrap && honeyTrap.value !== "") {
+                e.preventDefault();
+                console.warn("Bot detected: Honey trap triggered.");
+                return false;
+            }
+
+            // Check 2: Time Trap (Must take > 3 seconds)
+            // If the form is submitted faster than 3 seconds after page load, it's likely a bot.
+            if (timeDifference < 3000) {
+                e.preventDefault();
+                console.warn("Bot detected: Form filled too fast.");
+                alert("Please wait a moment before submitting to verify you are human.");
+                return false;
+            }
+
+            // Check 3: UI Feedback (Prevent Double Submit)
+            if (submitBtn) {
+                submitBtn.disabled = true;
+                submitBtn.classList.add('opacity-75', 'cursor-not-allowed');
+                
+                if (btnText) btnText.classList.add('hidden');
+                if (btnLoader) btnLoader.classList.remove('hidden');
+            }
+            
+            // If all checks pass, allow the form to submit normally
+            return true;
+        });
+    }
+});
