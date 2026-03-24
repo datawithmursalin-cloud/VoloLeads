@@ -5,7 +5,59 @@
 document.addEventListener('DOMContentLoaded', () => {
     initMobileMenu();
     updateCopyrightYear();
+    initDarkMode();
 });
+
+/* --- Dark Mode Logic --- */
+function initDarkMode() {
+    const html = document.documentElement;
+
+    // Check for saved dark mode preference or default to light mode
+    const isDarkMode = localStorage.getItem('dark-mode') === 'true';
+
+    if (isDarkMode) {
+        html.classList.add('dark');
+    }
+
+    // Helper function to update icon
+    const updateIcon = (icon, isDark) => {
+        if (isDark) {
+            icon.classList.remove('fa-moon');
+            icon.classList.add('fa-sun');
+        } else {
+            icon.classList.remove('fa-sun');
+            icon.classList.add('fa-moon');
+        }
+    };
+
+    // Helper function to toggle dark mode
+    const toggleDarkMode = () => {
+        html.classList.toggle('dark');
+        const isNowDark = html.classList.contains('dark');
+
+        // Update all toggle button icons
+        const darkModeIcon = document.getElementById('dark-mode-icon');
+        const mobileDarkModeIcon = document.getElementById('mobile-dark-mode-icon');
+
+        if (darkModeIcon) updateIcon(darkModeIcon, isNowDark);
+        if (mobileDarkModeIcon) updateIcon(mobileDarkModeIcon, isNowDark);
+
+        // Save preference to localStorage
+        localStorage.setItem('dark-mode', isNowDark);
+    };
+
+    // Attach click handlers to all dark mode toggle buttons
+    const darkModeToggle = document.getElementById('dark-mode-toggle');
+    const mobileDarkModeToggle = document.getElementById('mobile-dark-mode-toggle');
+
+    if (darkModeToggle) {
+        darkModeToggle.addEventListener('click', toggleDarkMode);
+    }
+
+    if (mobileDarkModeToggle) {
+        mobileDarkModeToggle.addEventListener('click', toggleDarkMode);
+    }
+}
 
 /* --- Mobile Menu Logic --- */
 function initMobileMenu() {
@@ -19,7 +71,7 @@ function initMobileMenu() {
     // Toggle Menu Function
     const toggleMenu = () => {
         const isHidden = mobileMenu.classList.contains('hidden');
-        
+
         if (isHidden) {
             // Open Menu
             mobileMenu.classList.remove('hidden');

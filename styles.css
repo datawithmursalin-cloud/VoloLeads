@@ -89,12 +89,20 @@ section:not(#home) {
    ============================================ */
 .strategic-grid-bg {
     background-color: white;
-    background-image: 
-        linear-gradient(to right, #cbd5e1 1px, transparent 1px),
-        linear-gradient(to bottom, #cbd5e1 1px, transparent 1px);
+    background-image:
+        linear-gradient(to right, #e2e8f0 1px, transparent 1px),
+        linear-gradient(to bottom, #e2e8f0 1px, transparent 1px);
     background-size: 14px 24px;
     mask-image: radial-gradient(ellipse 60% 50% at 50% 0%, #000 70%, transparent 100%);
     -webkit-mask-image: radial-gradient(ellipse 60% 50% at 50% 0%, #000 70%, transparent 100%);
+}
+
+/* Dark mode blueprint */
+.dark .strategic-grid-bg {
+    background-color: #0f172a;
+    background-image:
+        linear-gradient(to right, #475569 1px, transparent 1px),
+        linear-gradient(to bottom, #475569 1px, transparent 1px);
 }
 
 /* ============================================
