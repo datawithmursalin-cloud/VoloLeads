@@ -10,10 +10,11 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
+            darkMode: 'class',
             theme: {
                 extend: {
                     fontFamily: { sans: ['Inter', 'sans-serif'] },
-                    colors: { 
+                    colors: {
                         brand: { 
                             navy: '#0f172a',
                             light: '#f8fafc',
@@ -47,46 +48,67 @@
         .animation-delay-4000 { animation-delay: 4s; }
     </style>
 </head>
-<body class="bg-brand-light text-brand-navy font-sans antialiased flex flex-col min-h-screen">
+<body class="bg-brand-light dark:bg-slate-950 text-brand-navy dark:text-slate-100 font-sans antialiased flex flex-col min-h-screen">
 
-    <nav class="fixed top-6 left-0 right-0 z-50 w-[92%] max-w-7xl mx-auto bg-white/90 backdrop-blur-md border border-slate-200 rounded-full shadow-2xl transition-all duration-300">
+    <!-- ================================================
+         NAVIGATION BAR (HEADER)
+         - Fixed position with blur backdrop
+         - Responsive design: desktop menu + mobile hamburger
+         - Dark mode toggle for light/dark theme switching
+         ================================================ -->
+    <nav class="fixed top-6 left-0 right-0 z-50 w-[92%] max-w-7xl mx-auto bg-white/90 dark:bg-slate-900/90 backdrop-blur-md border border-slate-200 dark:border-slate-700 rounded-full shadow-2xl transition-all duration-300">
         <div class="px-6 md:px-8">
             <div class="flex justify-between items-center h-16">
-                
+
                 <a href="index.html" class="flex items-center gap-2 cursor-pointer group">
                     <i class="fa-solid fa-bolt text-brand-orange text-2xl group-hover:animate-pulse"></i>
-                    <span class="font-bold text-xl tracking-tight text-brand-navy">VoloLeads</span>
+                    <span class="font-bold text-xl tracking-tight text-brand-navy dark:text-white">VoloLeads</span>
                 </a>
-                
+
                 <div class="hidden md:flex space-x-8 items-center text-sm font-semibold">
-                    <a href="index.html#home" class="text-slate-600 hover:text-brand-orange transition-colors">Home</a>
-                    <a href="index.html#services" class="text-slate-600 hover:text-brand-orange transition-colors">Services</a>
-                    <a href="index.html#plans" class="text-slate-600 hover:text-brand-orange transition-colors">Plans</a>
+                    <a href="index.html#home" class="text-slate-600 dark:text-slate-300 hover:text-brand-orange transition-colors">Home</a>
+                    <a href="index.html#services" class="text-slate-600 dark:text-slate-300 hover:text-brand-orange transition-colors">Services</a>
+                    <a href="index.html#plans" class="text-slate-600 dark:text-slate-300 hover:text-brand-orange transition-colors">Plans</a>
                     <a href="index.html#insights" class="text-brand-orange font-bold transition-colors">Insights</a>
-                    <a href="index.html#about" class="text-slate-600 hover:text-brand-orange transition-colors">About Us</a>
+                    <a href="index.html#about" class="text-slate-600 dark:text-slate-300 hover:text-brand-orange transition-colors">About Us</a>
                 </div>
 
-                <a href="index.html#contact" class="hidden md:block px-6 py-2 bg-brand-navy hover:bg-slate-800 text-white text-sm font-bold rounded-full shadow-lg transition-all transform hover:-translate-y-0.5">
-                    Book Now
-                </a>
+                <!-- Right Side Actions: Book Now, Dark Mode Toggle, Mobile Menu -->
+                <div class="flex items-center gap-3">
+                    <!-- Desktop CTA Button: Book Now (Hidden on mobile) -->
+                    <a href="index.html#contact" class="hidden md:block px-6 py-2 bg-brand-navy dark:bg-slate-800 hover:bg-slate-800 text-white text-sm font-bold rounded-full shadow-lg transition-all transform hover:-translate-y-0.5">
+                        Book Now
+                    </a>
 
-                <button id="mobile-menu-btn" class="md:hidden text-slate-600 text-xl cursor-pointer focus:outline-none" aria-label="Toggle Menu">
-                    <i class="fa-solid fa-bars" id="menu-icon"></i>
-                </button>
+                    <!-- Dark Mode Toggle Button -->
+                    <button id="dark-mode-toggle" class="text-slate-600 dark:text-slate-300 text-xl cursor-pointer focus:outline-none transition-colors hover:text-brand-orange dark:hover:text-brand-orange" aria-label="Toggle Dark Mode">
+                        <i id="dark-mode-icon" class="fa-solid fa-moon"></i>
+                    </button>
+
+                    <!-- Mobile Menu Toggle Button -->
+                    <button id="mobile-menu-btn" class="md:hidden text-slate-600 dark:text-slate-300 text-xl cursor-pointer focus:outline-none" aria-label="Toggle Menu">
+                        <i class="fa-solid fa-bars" id="menu-icon"></i>
+                    </button>
+                </div>
             </div>
         </div>
 
-        <div id="mobile-menu" class="hidden md:hidden absolute top-20 left-0 right-0 bg-white border border-slate-200 rounded-2xl shadow-2xl mx-6 p-6 flex flex-col gap-4 text-center">
-            <a href="index.html#home" class="text-slate-600 font-bold hover:text-brand-orange py-2">Home</a>
-            <a href="index.html#services" class="text-slate-600 font-bold hover:text-brand-orange py-2">Services</a>
-            <a href="index.html#plans" class="text-slate-600 font-bold hover:text-brand-orange py-2">Plans</a>
-            <a href="index.html#insights" class="text-slate-600 font-bold hover:text-brand-orange py-2">Insights</a>
-            <a href="index.html#about" class="text-slate-600 font-bold hover:text-brand-orange py-2">About Us</a>
+        <div id="mobile-menu" class="hidden md:hidden absolute top-20 left-0 right-0 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl shadow-2xl mx-6 p-6 flex flex-col gap-4 text-center">
+            <a href="index.html#home" class="text-slate-600 dark:text-slate-300 font-bold hover:text-brand-orange py-2">Home</a>
+            <a href="index.html#services" class="text-slate-600 dark:text-slate-300 font-bold hover:text-brand-orange py-2">Services</a>
+            <a href="index.html#plans" class="text-slate-600 dark:text-slate-300 font-bold hover:text-brand-orange py-2">Plans</a>
+            <a href="index.html#insights" class="text-slate-600 dark:text-slate-300 font-bold hover:text-brand-orange py-2">Insights</a>
+            <a href="index.html#about" class="text-slate-600 dark:text-slate-300 font-bold hover:text-brand-orange py-2">About Us</a>
             <a href="index.html#contact" class="bg-brand-orange text-white py-3 rounded-full font-bold shadow-md">Book Now</a>
         </div>
     </nav>
 
-    <header class="pt-48 pb-16 lg:pt-60 lg:pb-20 relative overflow-hidden bg-white border-b border-slate-100">
+    <!-- ================================================
+         PAGE HEADER WITH HERO BACKGROUND
+         - Animated gradient blob backgrounds
+         - Main page title and description
+         ================================================ -->
+    <header class="pt-48 pb-16 lg:pt-60 lg:pb-20 relative overflow-hidden bg-white dark:bg-slate-900 border-b border-slate-100 dark:border-slate-700">
         <div class="absolute top-0 left-1/2 w-72 h-72 bg-purple-300 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-blob"></div>
         <div class="absolute top-0 right-1/2 w-72 h-72 bg-brand-orange rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-blob animation-delay-2000"></div>
         <div class="absolute -bottom-8 left-1/2 w-72 h-72 bg-pink-300 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-blob animation-delay-4000"></div>
@@ -97,40 +119,46 @@
             <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-100 text-blue-700 text-xs font-bold uppercase tracking-wide mb-6">
                 <i class="fa-solid fa-chart-area"></i> Market Intelligence
             </div>
-            <h1 class="text-4xl md:text-5xl font-extrabold text-brand-navy mb-6 leading-tight">
+            <h1 class="text-4xl md:text-5xl font-extrabold text-brand-navy dark:text-white mb-6 leading-tight">
                 Mastering Market Seasonality: <br> <span class="text-transparent bg-clip-text bg-gradient-to-r from-brand-orange to-red-600">How to Surf the Cycle.</span>
             </h1>
-            <p class="text-slate-600 text-lg font-semibold max-w-2xl mx-auto">
+            <p class="text-slate-600 dark:text-slate-300 text-lg font-semibold max-w-2xl mx-auto">
                 Real estate is cyclical. We track inventory volume and days-on-market trends to deploy your budget exactly when seller motivation is peaking.
             </p>
         </div>
     </header>
 
-    <article class="py-16 bg-white flex-grow">
+    <!-- ================================================
+         MAIN CONTENT SECTION
+         - Market seasonality analysis
+         - Inventory trends and historical data
+         - Strategic deployment timing guidance
+         ================================================ -->
+    <article class="py-16 bg-white dark:bg-slate-900 flex-grow">
         <div class="max-w-3xl mx-auto px-6 prose prose-slate prose-lg">
             
-            <p class="lead text-lg text-slate-600 font-medium mb-8">
+            <p class="lead text-lg text-slate-600 dark:text-slate-300 font-medium mb-8">
                 Most investors deploy their marketing budget in a flat line, spending the same amount in December as they do in May. This is a mistake. The market breathes in predictable cycles, and by analyzing <strong>Inventory Volume</strong> and <strong>Days on Market (DOM)</strong>, we can predict exactly when homeowners are most likely to negotiate.
             </p>
 
-            <h3 class="text-2xl font-bold text-brand-navy mt-10 mb-4 reveal-on-scroll">1. The Inventory Cycle</h3>
-            <p class="text-slate-600 mb-6 reveal-on-scroll">
+            <h3 class="text-2xl font-bold text-brand-navy dark:text-white mt-10 mb-4 reveal-on-scroll">1. The Inventory Cycle</h3>
+            <p class="text-slate-600 dark:text-slate-300 mb-6 reveal-on-scroll">
                 According to national housing data, "Active Listings" fluctuate wildly depending on the season. In the spring, inventory spikes as families try to move before the school year. For wholesalers, this means <strong>more competition</strong>. We pivot your strategy during these high-volume months to focus on speed-to-lead, ensuring you touch new listings before the bidding wars begin.
             </p>
 
-            <h3 class="text-2xl font-bold text-brand-navy mt-10 mb-4 reveal-on-scroll">2. Days on Market (DOM) is Leverage</h3>
-            <p class="text-slate-600 mb-6 reveal-on-scroll">
+            <h3 class="text-2xl font-bold text-brand-navy dark:text-white mt-10 mb-4 reveal-on-scroll">2. Days on Market (DOM) is Leverage</h3>
+            <p class="text-slate-600 dark:text-slate-300 mb-6 reveal-on-scroll">
                 The "Days on Market" metric is the single best indicator of seller motivation. When this number trends upward (typically in late fall and winter), buyers retreat, and sellers get nervous. This is the <strong>Wholesaler's Goldmine</strong>. We increase dial volume specifically targeting stale listings during these windows, knowing that an offer that was rejected in June might be accepted in November.
             </p>
 
-            <h3 class="text-2xl font-bold text-brand-navy mt-10 mb-4 reveal-on-scroll">3. Timing Your "Ask"</h3>
-            <p class="text-slate-600 mb-6 reveal-on-scroll">
+            <h3 class="text-2xl font-bold text-brand-navy dark:text-white mt-10 mb-4 reveal-on-scroll">3. Timing Your "Ask"</h3>
+            <p class="text-slate-600 dark:text-slate-300 mb-6 reveal-on-scroll">
                 We don't just call random numbers; we forecast. By overlaying "Pending Sales" data against "New Listings", we identify markets where supply is outpacing demand. In these pockets, we train our VAs to be more aggressive with price negotiation, because the data proves the seller has fewer options.
             </p>
 
-            <hr class="my-12 border-slate-200">
+            <hr class="my-12 border-slate-200 dark:border-slate-700">
 
-            <div class="bg-brand-navy rounded-2xl p-8 text-center text-white relative overflow-hidden shadow-xl reveal-on-scroll">
+            <div class="bg-brand-navy dark:bg-slate-800 rounded-2xl p-8 text-center text-white relative overflow-hidden shadow-xl reveal-on-scroll">
                 <div class="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2"></div>
                 
                 <h3 class="text-2xl font-bold mb-4 relative z-10">Stop Fighting the Trend</h3>
@@ -143,7 +171,13 @@
         </div>
     </article>
 
-    <footer class="bg-brand-navy text-slate-400 py-12 border-t border-slate-800">
+    <!-- ================================================
+         FOOTER SECTION
+         - Company branding
+         - Navigation, contact info, social media links
+         - Legal links and copyright info
+         ================================================ -->
+    <footer class="bg-brand-navy dark:bg-slate-950 text-slate-400 py-12 border-t border-slate-800 dark:border-slate-700">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
                 
@@ -152,7 +186,7 @@
                         <i class="fa-solid fa-bolt text-brand-orange text-xl"></i>
                         <span class="font-bold text-xl text-white">VoloLeads</span>
                     </div>
-                    <p class="text-xs text-slate-500">
+                    <p class="text-xs text-slate-500 dark:text-slate-400">
                         High-velocity virtual assistants for real estate wholesalers. We hunt, you close.
                     </p>
                 </div>
@@ -189,16 +223,16 @@
           <div>
                     <h4 class="text-white font-bold mb-4">Follow Us</h4>
                     <div class="flex gap-4">
-                        <a href="https://www.linkedin.com/company/vololeads" class="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center hover:bg-brand-orange hover:text-white transition-all"><i class="fa-brands fa-linkedin-in"></i></a>
-                        <a href="https://www.facebook.com/vololeads" class="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center hover:bg-brand-orange hover:text-white transition-all"><i class="fa-brands fa-facebook"></i></a>
-                        <a href="https://www.instagram.com/vololeads" class="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center hover:bg-brand-orange hover:text-white transition-all"><i class="fa-brands fa-instagram"></i></a>
-                        <a href="https://x.com/vololeads" class="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center hover:bg-brand-orange hover:text-white transition-all"><i class="fa-brands fa-twitter"></i></a>
+                        <a href="https://www.linkedin.com/company/vololeads" class="w-10 h-10 rounded-full bg-slate-800 dark:bg-slate-700 flex items-center justify-center hover:bg-brand-orange hover:text-white transition-all"><i class="fa-brands fa-linkedin-in"></i></a>
+                        <a href="https://www.facebook.com/vololeads" class="w-10 h-10 rounded-full bg-slate-800 dark:bg-slate-700 flex items-center justify-center hover:bg-brand-orange hover:text-white transition-all"><i class="fa-brands fa-facebook"></i></a>
+                        <a href="https://www.instagram.com/vololeads" class="w-10 h-10 rounded-full bg-slate-800 dark:bg-slate-700 flex items-center justify-center hover:bg-brand-orange hover:text-white transition-all"><i class="fa-brands fa-instagram"></i></a>
+                        <a href="https://x.com/vololeads" class="w-10 h-10 rounded-full bg-slate-800 dark:bg-slate-700 flex items-center justify-center hover:bg-brand-orange hover:text-white transition-all"><i class="fa-brands fa-twitter"></i></a>
                     </div>
                 </div>
 
             </div>
             
-            <div class="border-t border-slate-800 pt-8 flex flex-col md:flex-row justify-between items-center text-xs">
+            <div class="border-t border-slate-800 dark:border-slate-700 pt-8 flex flex-col md:flex-row justify-between items-center text-xs">
                 <p>&copy; <span id="current-year">2025</span> VoloLeads Agency. All rights reserved.</p>
                 <div class="flex gap-4 mt-4 md:mt-0">
                     <a href="privacy-policy.html" class="hover:text-white transition-colors">Privacy Policy</a>
