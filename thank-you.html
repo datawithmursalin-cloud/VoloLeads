@@ -75,7 +75,7 @@
                 <!-- Right Side Actions: Book Now, Dark Mode Toggle, Mobile Menu -->
                 <div class="flex items-center gap-3">
                     <!-- Desktop CTA Button: Book Now (Hidden on mobile) -->
-                    <a href="index.html#contact" class="hidden md:block px-6 py-2 bg-brand-navy dark:bg-slate-800 hover:bg-slate-800 text-white text-sm font-bold rounded-full shadow-lg transition-all transform hover:-translate-y-0.5">
+                    <a href="index.html#contact" class="hidden md:block px-6 py-2 bg-brand-navy dark:bg-brand-orange hover:bg-slate-800 dark:hover:bg-orange-600 text-white text-sm font-bold rounded-full shadow-lg transition-all transform hover:-translate-y-0.5">
                         Book Now
                     </a>
 
@@ -200,7 +200,7 @@
                         contact@vololeads.com
                     </a>
                     <span class="hidden sm:block text-slate-300 dark:text-slate-600">|</span>
-                    <a href="#" class="flex items-center gap-2 text-brand-navy dark:text-white font-semibold hover:text-brand-orange transition-colors">
+                    <a href="https://wa.me/8801793716608" target="_blank" class="flex items-center gap-2 text-brand-navy dark:text-white font-semibold hover:text-brand-orange transition-colors">
                         <i class="fa-brands fa-whatsapp text-green-500"></i>
                         WhatsApp Support
                     </a>
@@ -232,10 +232,8 @@
                     </p>
                 </div>
 
-                <div class="hidden md:block"></div>
-
                 <!-- Columns 2-4: Navigation, Contact, & Social Links -->
-                <div class="flex flex-col md:flex-row md:justify-end md:items-start gap-8 md:gap-12">
+                <div class="col-span-1 md:col-span-3 flex flex-col md:flex-row md:justify-end md:items-start gap-8 md:gap-12">
                     <!-- Navigation Links -->
                     <div>
                         <h4 class="text-white font-bold mb-4">Navigate</h4>
@@ -257,7 +255,7 @@
                             </li>
                             <li class="flex items-center gap-2">
                                 <span class="w-5 flex items-center justify-center text-brand-orange"><i class="fa-brands fa-whatsapp"></i></span>
-                                <span>WhatsApp Support</span>
+                                <a href="https://wa.me/8801793716608" target="_blank" class="hover:text-brand-orange transition-colors">WhatsApp Support</a>
                             </li>
                         </ul>
                     </div>
@@ -291,5 +289,39 @@
 
     <script src="app.js"></script>
 
+    <!-- Dark Mode Toggle Script -->
+    <script>
+        // Dark Mode Toggle Functionality
+        const darkModeToggle = document.getElementById('dark-mode-toggle');
+        const darkModeIcon = document.getElementById('dark-mode-icon');
+        const htmlElement = document.documentElement;
+
+        // Initialize dark mode from localStorage
+        function initDarkMode() {
+            const isDarkMode = localStorage.getItem('darkMode') === 'true';
+            if (isDarkMode) {
+                htmlElement.classList.add('dark');
+                darkModeIcon.classList.remove('fa-moon');
+                darkModeIcon.classList.add('fa-sun');
+            }
+        }
+
+        // Toggle dark mode
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = htmlElement.classList.toggle('dark');
+            localStorage.setItem('darkMode', isDarkMode);
+
+            if (isDarkMode) {
+                darkModeIcon.classList.remove('fa-moon');
+                darkModeIcon.classList.add('fa-sun');
+            } else {
+                darkModeIcon.classList.remove('fa-sun');
+                darkModeIcon.classList.add('fa-moon');
+            }
+        });
+
+        // Initialize on page load
+        initDarkMode();
+    </script>
 </body>
 </html>
