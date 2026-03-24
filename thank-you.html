@@ -21,11 +21,27 @@
                             orange: '#f97316',
                             orangeHover: '#ea580c',
                         }
-                    }
+                    },
+                    animation: {
+                        blob: "blob 10s infinite",
+                    },
+                    keyframes: {
+                        blob: {
+                            "0%": { transform: "translate(-50%, -50%) scale(1)" },
+                            "33%": { transform: "translate(-50%, -50%) scale(1.1) translate(20px, -30px)" },
+                            "66%": { transform: "translate(-50%, -50%) scale(0.9) translate(-20px, 20px)" },
+                            "100%": { transform: "translate(-50%, -50%) scale(1)" },
+                        },
+                    },
                 }
             }
         }
     </script>
+
+    <style>
+        .animation-delay-2000 { animation-delay: 2s; }
+        .animation-delay-4000 { animation-delay: 4s; }
+    </style>
     
     <link rel="stylesheet" href="styles.css">
     
@@ -93,6 +109,10 @@
          - Call-to-action links back to site
          ================================================ -->
     <section class="relative flex-grow flex flex-col items-center pb-24 px-4 overflow-hidden" style="padding-top: 12rem !important;">
+
+        <div class="absolute top-0 left-1/2 w-72 h-72 bg-purple-300 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-blob"></div>
+        <div class="absolute top-0 right-1/2 w-72 h-72 bg-brand-orange rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-blob animation-delay-2000"></div>
+        <div class="absolute -bottom-8 left-1/2 w-72 h-72 bg-pink-300 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-blob animation-delay-4000"></div>
 
         <div class="absolute inset-0 bg-gradient-to-br from-orange-50 dark:from-slate-900 via-white dark:via-slate-900 to-slate-50 dark:to-slate-800 -z-20"></div>
         <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-brand-orange/5 dark:bg-brand-orange/10 rounded-full blur-3xl -z-10 pointer-events-none"></div>
