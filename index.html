@@ -869,5 +869,238 @@
         </div>
     </footer>
 
+    <style>
+        #visitor-consent-banner { display: none; }
+        #visitor-consent-banner.active { display: block; }
+    </style>
+
+    <div id="visitor-consent-banner" class="fixed bottom-0 left-0 right-0 z-[100] bg-brand-navy text-white border-t-2 border-brand-orange shadow-2xl">
+        <div class="max-w-7xl mx-auto px-4 py-4">
+            <div class="flex flex-col lg:flex-row lg:items-end gap-4">
+                <div class="lg:flex-1">
+                    <p class="font-bold text-sm sm:text-base">Cookie Consent & Visitor Tracking</p>
+                    <p class="text-slate-300 text-xs sm:text-sm mt-1">
+                        With your consent, we store your name/email in cookies (365 days), and store consent choice in local storage to remember your preference. If you reject, we log that preference without storing identity cookies.
+                    </p>
+                </div>
+                <div class="w-full lg:w-auto grid grid-cols-1 sm:grid-cols-2 gap-2 lg:min-w-[460px]">
+                    <input id="visitor-name" type="text" placeholder="Your Name" autocomplete="name" required class="w-full px-3 py-2 rounded-lg border border-slate-500 bg-slate-800 text-sm outline-none focus:border-brand-orange focus:ring-1 focus:ring-brand-orange">
+                    <input id="visitor-email" type="email" placeholder="Your Email" autocomplete="email" required class="w-full px-3 py-2 rounded-lg border border-slate-500 bg-slate-800 text-sm outline-none focus:border-brand-orange focus:ring-1 focus:ring-brand-orange">
+                    <button id="visitor-accept-btn" type="button" class="px-4 py-2 rounded-lg bg-brand-orange hover:bg-orange-600 text-white font-bold text-sm transition-colors">Accept & Save</button>
+                    <button id="visitor-reject-btn" type="button" class="px-4 py-2 rounded-lg border border-slate-400 hover:border-white text-white font-semibold text-sm transition-colors">Reject</button>
+                </div>
+            </div>
+            <p id="visitor-consent-error" class="text-red-300 text-xs mt-2 min-h-4" aria-live="polite"></p>
+        </div>
+    </div>
+
+    <script>
+        (function () {
+            var WEB3FORMS_ENDPOINT = "https://api.web3forms.com/submit";
+            var accessKeyInput = document.querySelector('input[name="access_key"]');
+            var ACCESS_KEY = accessKeyInput ? accessKeyInput.value : "";
+            var CONSENT_STORAGE_KEY = "volo_cookie_consent_status";
+            var COOKIE_DAYS = 365;
+            var pageStart = Date.now();
+            var exitEventSent = false;
+            var secureWarningShown = false;
+
+            function setCookie(name, value, days) {
+                var expires = "";
+                if (days) {
+                    var date = new Date();
+                    date.setTime(date.getTime() + days * 24 * 60 * 60 * 1000);
+                    expires = "; expires=" + date.toUTCString();
+                }
+                var isHttps = window.location.protocol === "https:";
+                var secureFlag = isHttps ? "; Secure" : "";
+                if (!isHttps && !secureWarningShown) {
+                    secureWarningShown = true;
+                    console.warn("Visitor tracking cookies are set without Secure flag because this page is not served over HTTPS.");
+                }
+                document.cookie = name + "=" + encodeURIComponent(value) + expires + "; path=/; SameSite=Lax" + secureFlag;
+            }
+
+            function getCookie(name) {
+                var nameEQ = name + "=";
+                var cookies = document.cookie.split(";");
+                for (var i = 0; i < cookies.length; i++) {
+                    var cookie = cookies[i].trim();
+                    if (cookie.indexOf(nameEQ) === 0) {
+                        return decodeURIComponent(cookie.substring(nameEQ.length));
+                    }
+                }
+                return null;
+            }
+
+            function parseVisitCount(value) {
+                var parsed = parseInt(value, 10);
+                return Number.isNaN(parsed) || parsed < 0 ? 0 : parsed;
+            }
+
+            function submitTrackingEvent(eventType, payload, keepalive) {
+                if (!ACCESS_KEY) {
+                    console.warn("Web3Forms access key is missing; visitor tracking event was skipped.");
+                    return;
+                }
+
+                var data = {
+                    access_key: ACCESS_KEY,
+                    subject: "Visitor Tracking Event",
+                    event_type: eventType,
+                    page_url: window.location.href,
+                    page_path: window.location.pathname,
+                    referrer: document.referrer || "Direct",
+                    event_time: new Date().toISOString()
+                };
+
+                for (var key in payload) {
+                    if (Object.prototype.hasOwnProperty.call(payload, key)) {
+                        data[key] = payload[key];
+                    }
+                }
+
+                fetch(WEB3FORMS_ENDPOINT, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(data),
+                    keepalive: !!keepalive
+                }).catch(function (error) {
+                    console.warn("Visitor tracking submission failed:", error);
+                });
+            }
+
+            function hideBanner() {
+                var banner = document.getElementById("visitor-consent-banner");
+                if (banner) banner.classList.remove("active");
+            }
+
+            function showBanner() {
+                var banner = document.getElementById("visitor-consent-banner");
+                if (banner) banner.classList.add("active");
+            }
+
+            function setConsentError(message) {
+                var errorEl = document.getElementById("visitor-consent-error");
+                if (errorEl) errorEl.textContent = message || "";
+            }
+
+            function handleAccept() {
+                var nameInput = document.getElementById("visitor-name");
+                var emailInput = document.getElementById("visitor-email");
+                var name = (nameInput.value || "").trim();
+                var email = (emailInput.value || "").trim();
+                setConsentError("");
+
+                if (!name || !email) {
+                    setConsentError("Please enter both your name and email.");
+                    return;
+                }
+
+                if (!emailInput.checkValidity()) {
+                    setConsentError("Please enter a valid email address.");
+                    return;
+                }
+
+                var isHttps = window.location.protocol === "https:";
+                var isLocalhost = window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1";
+                if (!isHttps && !isLocalhost) {
+                    setConsentError("Secure connection required for saving visitor details.");
+                    return;
+                }
+
+                var nowIso = new Date().toISOString();
+                var existingCount = Math.max(1, parseVisitCount(getCookie("volo_repeat_visit_count")));
+
+                localStorage.setItem(CONSENT_STORAGE_KEY, "accepted");
+                setCookie("volo_visitor_name", name, COOKIE_DAYS);
+                setCookie("volo_visitor_email", email, COOKIE_DAYS);
+                setCookie("volo_first_visit_date", getCookie("volo_first_visit_date") || nowIso, COOKIE_DAYS);
+                setCookie("volo_last_visit_date", nowIso, COOKIE_DAYS);
+                setCookie("volo_repeat_visit_count", String(existingCount), COOKIE_DAYS);
+
+                hideBanner();
+
+                submitTrackingEvent("consent_accepted", {
+                    visitor_name: name,
+                    visitor_email: email,
+                    first_visit_date: getCookie("volo_first_visit_date") || nowIso,
+                    last_visit_date: nowIso,
+                    repeat_visit_count: existingCount
+                }, false);
+            }
+
+            function handleReject() {
+                localStorage.setItem(CONSENT_STORAGE_KEY, "rejected");
+                hideBanner();
+                submitTrackingEvent("consent_rejected", {}, false);
+            }
+
+            function trackAcceptedVisit() {
+                var nowIso = new Date().toISOString();
+                var name = getCookie("volo_visitor_name");
+                var email = getCookie("volo_visitor_email");
+                if (!name || !email) {
+                    localStorage.removeItem(CONSENT_STORAGE_KEY);
+                    showBanner();
+                    return;
+                }
+                var firstVisitDate = getCookie("volo_first_visit_date") || nowIso;
+                var count = parseVisitCount(getCookie("volo_repeat_visit_count"));
+                count += 1;
+
+                setCookie("volo_first_visit_date", firstVisitDate, COOKIE_DAYS);
+                setCookie("volo_last_visit_date", nowIso, COOKIE_DAYS);
+                setCookie("volo_repeat_visit_count", String(count), COOKIE_DAYS);
+
+                submitTrackingEvent("page_view", {
+                    visitor_name: name,
+                    visitor_email: email,
+                    first_visit_date: firstVisitDate,
+                    last_visit_date: nowIso,
+                    repeat_visit_count: count
+                }, false);
+            }
+
+            function trackExit() {
+                if (exitEventSent) return;
+                exitEventSent = true;
+                if (localStorage.getItem(CONSENT_STORAGE_KEY) !== "accepted") return;
+
+                var secondsOnPage = Math.max(0, Math.round((Date.now() - pageStart) / 1000));
+                var exitName = getCookie("volo_visitor_name");
+                var exitEmail = getCookie("volo_visitor_email");
+                if (!exitName || !exitEmail) return;
+
+                submitTrackingEvent("page_exit", {
+                    visitor_name: exitName,
+                    visitor_email: exitEmail,
+                    time_on_page_seconds: secondsOnPage,
+                    repeat_visit_count: parseVisitCount(getCookie("volo_repeat_visit_count"))
+                }, true);
+            }
+
+            document.addEventListener("DOMContentLoaded", function () {
+                var consentStatus = localStorage.getItem(CONSENT_STORAGE_KEY);
+                var acceptBtn = document.getElementById("visitor-accept-btn");
+                var rejectBtn = document.getElementById("visitor-reject-btn");
+
+                if (acceptBtn) acceptBtn.addEventListener("click", handleAccept);
+                if (rejectBtn) rejectBtn.addEventListener("click", handleReject);
+
+                if (consentStatus === "accepted") {
+                    hideBanner();
+                    trackAcceptedVisit();
+                } else if (consentStatus === "rejected") {
+                    hideBanner();
+                } else {
+                    showBanner();
+                }
+            });
+
+            window.addEventListener("pagehide", trackExit);
+        })();
+    </script>
+
 </body>
 </html>
