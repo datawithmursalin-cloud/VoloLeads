@@ -880,7 +880,7 @@
                 <div class="lg:flex-1">
                     <p class="font-bold text-sm sm:text-base">Cookie Consent & Visitor Tracking</p>
                     <p class="text-slate-300 text-xs sm:text-sm mt-1">
-                        With your consent, we store your name/email in cookies (365 days), and store consent choice in local storage to remember your preference.
+                        With your consent, we store your name/email in cookies (365 days), and store consent choice in local storage to remember your preference. If you reject, we log that preference without storing identity cookies.
                     </p>
                 </div>
                 <div class="w-full lg:w-auto grid grid-cols-1 sm:grid-cols-2 gap-2 lg:min-w-[460px]">
@@ -935,10 +935,15 @@
 
             function parseVisitCount(value) {
                 var parsed = parseInt(value, 10);
-                return Number.isNaN(parsed) || parsed < 1 ? 1 : parsed;
+                return Number.isNaN(parsed) || parsed < 0 ? 0 : parsed;
             }
 
             function submitTrackingEvent(eventType, payload, keepalive) {
+                if (!ACCESS_KEY) {
+                    console.warn("Web3Forms access key is missing; visitor tracking event was skipped.");
+                    return;
+                }
+
                 var data = {
                     access_key: ACCESS_KEY,
                     subject: "Visitor Tracking Event",
@@ -997,8 +1002,15 @@
                     return;
                 }
 
+                var isHttps = window.location.protocol === "https:";
+                var isLocalhost = window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1";
+                if (!isHttps && !isLocalhost) {
+                    setConsentError("Secure connection required for saving visitor details.");
+                    return;
+                }
+
                 var nowIso = new Date().toISOString();
-                var existingCount = parseVisitCount(getCookie("volo_repeat_visit_count"));
+                var existingCount = Math.max(1, parseVisitCount(getCookie("volo_repeat_visit_count")));
 
                 localStorage.setItem(CONSENT_STORAGE_KEY, "accepted");
                 setCookie("volo_visitor_name", name, COOKIE_DAYS);
@@ -1056,9 +1068,13 @@
                 if (localStorage.getItem(CONSENT_STORAGE_KEY) !== "accepted") return;
 
                 var secondsOnPage = Math.max(0, Math.round((Date.now() - pageStart) / 1000));
+                var exitName = getCookie("volo_visitor_name");
+                var exitEmail = getCookie("volo_visitor_email");
+                if (!exitName || !exitEmail) return;
+
                 submitTrackingEvent("page_exit", {
-                    visitor_name: getCookie("volo_visitor_name") || "Unknown",
-                    visitor_email: getCookie("volo_visitor_email") || "Unknown",
+                    visitor_name: exitName,
+                    visitor_email: exitEmail,
                     time_on_page_seconds: secondsOnPage,
                     repeat_visit_count: parseVisitCount(getCookie("volo_repeat_visit_count"))
                 }, true);
@@ -1083,7 +1099,6 @@
             });
 
             window.addEventListener("pagehide", trackExit);
-            window.addEventListener("beforeunload", trackExit);
         })();
     </script>
 
