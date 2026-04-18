@@ -884,19 +884,21 @@
                     </p>
                 </div>
                 <div class="w-full lg:w-auto grid grid-cols-1 sm:grid-cols-2 gap-2 lg:min-w-[460px]">
-                    <input id="visitor-name" type="text" placeholder="Your Name" autocomplete="name" class="w-full px-3 py-2 rounded-lg border border-slate-500 bg-slate-800 text-sm outline-none focus:border-brand-orange focus:ring-1 focus:ring-brand-orange">
-                    <input id="visitor-email" type="email" placeholder="Your Email" autocomplete="email" class="w-full px-3 py-2 rounded-lg border border-slate-500 bg-slate-800 text-sm outline-none focus:border-brand-orange focus:ring-1 focus:ring-brand-orange">
+                    <input id="visitor-name" type="text" placeholder="Your Name" autocomplete="name" required class="w-full px-3 py-2 rounded-lg border border-slate-500 bg-slate-800 text-sm outline-none focus:border-brand-orange focus:ring-1 focus:ring-brand-orange">
+                    <input id="visitor-email" type="email" placeholder="Your Email" autocomplete="email" required class="w-full px-3 py-2 rounded-lg border border-slate-500 bg-slate-800 text-sm outline-none focus:border-brand-orange focus:ring-1 focus:ring-brand-orange">
                     <button id="visitor-accept-btn" type="button" class="px-4 py-2 rounded-lg bg-brand-orange hover:bg-orange-600 text-white font-bold text-sm transition-colors">Accept & Save</button>
                     <button id="visitor-reject-btn" type="button" class="px-4 py-2 rounded-lg border border-slate-400 hover:border-white text-white font-semibold text-sm transition-colors">Reject</button>
                 </div>
             </div>
+            <p id="visitor-consent-error" class="text-red-300 text-xs mt-2 min-h-4" aria-live="polite"></p>
         </div>
     </div>
 
     <script>
         (function () {
             var WEB3FORMS_ENDPOINT = "https://api.web3forms.com/submit";
-            var ACCESS_KEY = "13abc37b-f6ed-4d4c-99cc-94b2aade3d6e";
+            var accessKeyInput = document.querySelector('input[name="access_key"]');
+            var ACCESS_KEY = accessKeyInput ? accessKeyInput.value : "";
             var CONSENT_STORAGE_KEY = "volo_cookie_consent_status";
             var COOKIE_DAYS = 365;
             var pageStart = Date.now();
@@ -909,7 +911,8 @@
                     date.setTime(date.getTime() + days * 24 * 60 * 60 * 1000);
                     expires = "; expires=" + date.toUTCString();
                 }
-                document.cookie = name + "=" + encodeURIComponent(value) + expires + "; path=/; SameSite=Lax";
+                var secureFlag = window.location.protocol === "https:" ? "; Secure" : "";
+                document.cookie = name + "=" + encodeURIComponent(value) + expires + "; path=/; SameSite=Lax" + secureFlag;
             }
 
             function getCookie(name) {
@@ -951,7 +954,9 @@
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify(data),
                     keepalive: !!keepalive
-                }).catch(function () {});
+                }).catch(function (error) {
+                    console.warn("Visitor tracking submission failed:", error);
+                });
             }
 
             function hideBanner() {
@@ -965,7 +970,12 @@
             }
 
             function validateEmail(email) {
-                return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+                return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email) && email.indexOf("..") === -1;
+            }
+
+            function setConsentError(message) {
+                var errorEl = document.getElementById("visitor-consent-error");
+                if (errorEl) errorEl.textContent = message || "";
             }
 
             function handleAccept() {
@@ -973,14 +983,15 @@
                 var emailInput = document.getElementById("visitor-email");
                 var name = (nameInput.value || "").trim();
                 var email = (emailInput.value || "").trim();
+                setConsentError("");
 
                 if (!name || !email) {
-                    alert("Please enter both your name and email.");
+                    setConsentError("Please enter both your name and email.");
                     return;
                 }
 
                 if (!validateEmail(email)) {
-                    alert("Please enter a valid email address.");
+                    setConsentError("Please enter a valid email address.");
                     return;
                 }
 
@@ -1037,7 +1048,7 @@
                 exitEventSent = true;
                 if (localStorage.getItem(CONSENT_STORAGE_KEY) !== "accepted") return;
 
-                var secondsOnPage = Math.max(1, Math.round((Date.now() - pageStart) / 1000));
+                var secondsOnPage = Math.max(0, Math.round((Date.now() - pageStart) / 1000));
                 submitTrackingEvent("page_exit", {
                     visitor_name: getCookie("volo_visitor_name") || "Unknown",
                     visitor_email: getCookie("volo_visitor_email") || "Unknown",
