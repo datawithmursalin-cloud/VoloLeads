@@ -880,7 +880,7 @@
                 <div class="lg:flex-1">
                     <p class="font-bold text-sm sm:text-base">Cookie Consent & Visitor Tracking</p>
                     <p class="text-slate-300 text-xs sm:text-sm mt-1">
-                        With your consent, we store your name/email in cookies for 365 days and track visit activity to personalize follow-ups.
+                        With your consent, we store your name/email in cookies (365 days), and store consent choice in local storage to remember your preference.
                     </p>
                 </div>
                 <div class="w-full lg:w-auto grid grid-cols-1 sm:grid-cols-2 gap-2 lg:min-w-[460px]">
@@ -903,6 +903,7 @@
             var COOKIE_DAYS = 365;
             var pageStart = Date.now();
             var exitEventSent = false;
+            var secureWarningShown = false;
 
             function setCookie(name, value, days) {
                 var expires = "";
@@ -911,7 +912,12 @@
                     date.setTime(date.getTime() + days * 24 * 60 * 60 * 1000);
                     expires = "; expires=" + date.toUTCString();
                 }
-                var secureFlag = window.location.protocol === "https:" ? "; Secure" : "";
+                var isHttps = window.location.protocol === "https:";
+                var secureFlag = isHttps ? "; Secure" : "";
+                if (!isHttps && !secureWarningShown) {
+                    secureWarningShown = true;
+                    console.warn("Visitor tracking cookies are set without Secure flag because this page is not served over HTTPS.");
+                }
                 document.cookie = name + "=" + encodeURIComponent(value) + expires + "; path=/; SameSite=Lax" + secureFlag;
             }
 
@@ -969,10 +975,6 @@
                 if (banner) banner.classList.add("active");
             }
 
-            function validateEmail(email) {
-                return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email) && email.indexOf("..") === -1;
-            }
-
             function setConsentError(message) {
                 var errorEl = document.getElementById("visitor-consent-error");
                 if (errorEl) errorEl.textContent = message || "";
@@ -990,7 +992,7 @@
                     return;
                 }
 
-                if (!validateEmail(email)) {
+                if (!emailInput.checkValidity()) {
                     setConsentError("Please enter a valid email address.");
                     return;
                 }
@@ -1026,6 +1028,11 @@
                 var nowIso = new Date().toISOString();
                 var name = getCookie("volo_visitor_name");
                 var email = getCookie("volo_visitor_email");
+                if (!name || !email) {
+                    localStorage.removeItem(CONSENT_STORAGE_KEY);
+                    showBanner();
+                    return;
+                }
                 var firstVisitDate = getCookie("volo_first_visit_date") || nowIso;
                 var count = parseVisitCount(getCookie("volo_repeat_visit_count"));
                 count += 1;
@@ -1035,8 +1042,8 @@
                 setCookie("volo_repeat_visit_count", String(count), COOKIE_DAYS);
 
                 submitTrackingEvent("page_view", {
-                    visitor_name: name || "Unknown",
-                    visitor_email: email || "Unknown",
+                    visitor_name: name,
+                    visitor_email: email,
                     first_visit_date: firstVisitDate,
                     last_visit_date: nowIso,
                     repeat_visit_count: count
