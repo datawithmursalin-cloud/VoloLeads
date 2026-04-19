@@ -1,0 +1,17 @@
+{
+  "name": "vololeads",
+  "version": "1.0.0",
+  "description": "VoloLeads - Real Estate Cold Calling & Lead Generation Platform",
+  "main": "index.html",
+  "scripts": {
+    "build:css": "tailwindcss -i ./styles-input.css -o ./styles.css --minify",
+    "watch:css": "tailwindcss -i ./styles-input.css -o ./styles.css --watch",
+    "dev": "tailwindcss -i ./styles-input.css -o ./styles.css --watch"
+  },
+  "keywords": ["real-estate", "cold-calling", "leads"],
+  "author": "VoloLeads Agency",
+  "license": "MIT",
+  "devDependencies": {
+    "tailwindcss": "^3.3.0"
+  }
+}

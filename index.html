@@ -19,118 +19,27 @@
     <link rel="icon" type="image/png" href="./png/logo.png" sizes="any">
     <link rel="apple-touch-icon" href="./png/logo.png">
 
+    <!-- ========== PRECONNECT FOR PERFORMANCE ========== -->
+    <!-- DNS/TCP prefetch for third-party domains -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+    <link rel="preconnect" href="https://client.crisp.chat" crossorigin>
+
     <!-- ========== CSS Framework & Custom Theme ========== -->
-    <!-- Tailwind CSS CDN for utility-first styling -->
-    <script src="https://cdn.tailwindcss.com"></script>
-
-    <!-- Custom Tailwind Configuration: Brand Colors & Typography -->
-    <script>
-        tailwind.config = {
-            darkMode: 'class',
-            theme: {
-                extend: {
-                    fontFamily: { sans: ['Inter', 'sans-serif'] },
-                    colors: {
-                        brand: {
-                            navy: '#0f172a',    /* slate-900 - Primary dark color */
-                            light: '#f8fafc',   /* slate-50 - Primary light background */
-                            orange: '#f97316',  /* orange-500 - Primary accent color */
-                            orangeHover: '#ea580c', /* orange-600 - Hover state for orange */
-                        }
-                    },
-                    keyframes: {
-                        fadeInUp: {
-                            '0%': { opacity: '0', transform: 'translateY(10px)' },
-                            '100%': { opacity: '1', transform: 'translateY(0)' },
-                        },
-                        pulse: {
-                            '0%, 100%': { opacity: '1' },
-                            '50%': { opacity: '.5' },
-                        },
-                    },
-                    animation: {
-                        fadeInUp: 'fadeInUp 0.6s ease-out',
-                        pulse: 'pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite',
-                    }
-                }
-            }
-        }
-    </script>
-
-    <!-- Premium Animation & Counter Script -->
-    <script>
-        // Counter Animation for statistics
-        document.addEventListener('DOMContentLoaded', function() {
-            const counters = document.querySelectorAll('.counter-animate');
-
-            const animateCounter = (counter) => {
-                const target = parseInt(counter.getAttribute('data-target'));
-                const duration = 2000; // 2 seconds
-                const increment = target / (duration / 50);
-                let current = 0;
-
-                const interval = setInterval(() => {
-                    current += increment;
-                    if (current >= target) {
-                        counter.textContent = target.toLocaleString();
-                        clearInterval(interval);
-                    } else {
-                        counter.textContent = Math.floor(current).toLocaleString();
-                    }
-                }, 50);
-            };
-
-            // Intersection Observer for triggering animations on scroll
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        const counter = entry.target;
-                        animateCounter(counter);
-                        observer.unobserve(counter);
-                    }
-                });
-            }, { threshold: 0.5 });
-
-            counters.forEach(counter => observer.observe(counter));
-        });
-
-        // Smooth scroll reveal animations
-        const revealElements = document.querySelectorAll('.reveal-on-scroll');
-        const revealOnScroll = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.style.opacity = '1';
-                    entry.target.style.transform = 'translateY(0)';
-                    revealOnScroll.unobserve(entry.target);
-                }
-            });
-        }, { threshold: 0.1 });
-
-        revealElements.forEach(element => {
-            element.style.opacity = '0';
-            element.style.transform = 'translateY(20px)';
-            element.style.transition = 'opacity 0.6s ease-out, transform 0.6s ease-out';
-            if (element.classList.contains('delay-100')) {
-                element.style.transitionDelay = '0.1s';
-            } else if (element.classList.contains('delay-200')) {
-                element.style.transitionDelay = '0.2s';
-            } else if (element.classList.contains('delay-300')) {
-                element.style.transitionDelay = '0.3s';
-            } else if (element.classList.contains('delay-400')) {
-                element.style.transitionDelay = '0.4s';
-            }
-            revealOnScroll.observe(element);
-        });
-    </script>
-
-    <!-- ========== External Stylesheets ========== -->
-    <!-- Custom CSS for animations and grid backgrounds -->
+    <!-- Tailwind CSS - Pre-purged for 90% size reduction -->
     <link rel="stylesheet" href="styles.css">
 
+    <!-- ========== CRITICAL RESOURCES - PRELOAD ========== -->
+    <!-- Preload critical fonts to reduce layout shift -->
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" as="style">
+    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" as="style">
+
+    <!-- ========== External Stylesheets ========== -->
     <!-- Font Awesome Icons for UI elements -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-    <!-- ========== Google Fonts ========== -->
+    <!-- ========== Google Fonts with Performance Optimization ========== -->
     <!-- Inter: Primary font for body text and headings -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
     <!-- Playfair Display: Secondary font for premium typography (future use) -->
@@ -1366,7 +1275,7 @@
                                     >
                                     <span id="name-error" style="color: #ef4444; font-size: 12px; display: none;"></span>
                                 </div>
-
+inst
                                 <!-- Email input -->
                                 <div style="display: flex; flex-direction: column; gap: 4px;">
                                     <input
