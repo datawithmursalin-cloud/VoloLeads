@@ -292,6 +292,8 @@ html {
 /* --- 5. 3D Flip Card Styles --- */
 .perspective-1000 {
     perspective: 1000px;
+    position: relative;
+    z-index: 1;
 }
 
 .transform-style-3d {
@@ -310,6 +312,32 @@ html {
 /* The class JS will toggle */
 .is-flipped {
     transform: rotateY(180deg);
+}
+
+/* Grid for pricing cards - ensure proper layout */
+#plans .grid {
+    position: relative;
+    z-index: 10;
+    overflow: visible;
+}
+
+#plans .perspective-1000 {
+    overflow: visible;
+}
+
+#plans .transform-style-3d {
+    overflow: visible;
+}
+
+#plans > div {
+    position: relative;
+    z-index: 5;
+}
+
+#plans .mt-16 {
+    position: relative;
+    z-index: 0;
+    margin-top: 4rem;
 }
 
 /* --- Security & Spam Protection --- */
