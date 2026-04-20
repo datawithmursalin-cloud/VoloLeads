@@ -1,687 +1,1227 @@
+<!-- ====================================
+     VoloLeads Landing Page
+     Real Estate Wholesaling & Lead Generation Platform
+     ==================================== -->
+
 <!DOCTYPE html>
 <html lang="en" class="scroll-smooth">
 <head>
+    <!-- ========== SEO & Meta Tags ========== -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VoloLeads | Speed & Precision</title>
-    
-    <script src="https://cdn.tailwindcss.com"></script>
-    
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
 
+    <title>Real Estate Cold Callers & VAs for Wholesalers | VoloLeads</title>
+    <meta name="description" content="VoloLeads provides expert cold callers for real estate wholesalers. Our VAs specialize in objection handling and lead generation to fill your pipeline. Book a call today.">
+    <meta name="keywords" content="Real Estate Wholesaling, Cold Calling VA, Lead Generation, Real Estate Drivers for Dollars, Off-Market Deals">
+    <meta name="author" content="VoloLeads Agency">
+
+    <!-- ========== Favicon ========== -->
+    <link rel="icon" type="image/png" href="./png/logo.png" sizes="any">
+    <link rel="apple-touch-icon" href="./png/logo.png">
+
+    <!-- ========== CSS Framework & Custom Theme ========== -->
+    <!-- Tailwind CSS CDN for utility-first styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Custom Tailwind Configuration: Brand Colors & Typography -->
     <script>
         tailwind.config = {
+            darkMode: 'class',
             theme: {
                 extend: {
                     fontFamily: { sans: ['Inter', 'sans-serif'] },
-                    colors: { 
-                        brand: { 
-                            navy: '#0f172a',    /* slate-900 */
-                            light: '#f8fafc',   /* slate-50 */
-                            orange: '#f97316',  /* orange-500 */
-                            orangeHover: '#ea580c', /* orange-600 */
-                        } 
+                    colors: {
+                        brand: {
+                            navy: '#0f172a',    /* slate-900 - Primary dark color */
+                            light: '#f8fafc',   /* slate-50 - Primary light background */
+                            orange: '#f97316',  /* orange-500 - Primary accent color */
+                            orangeHover: '#ea580c', /* orange-600 - Hover state for orange */
+                        }
+                    },
+                    keyframes: {
+                        fadeInUp: {
+                            '0%': { opacity: '0', transform: 'translateY(10px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                        },
+                        pulse: {
+                            '0%, 100%': { opacity: '1' },
+                            '50%': { opacity: '.5' },
+                        },
+                    },
+                    animation: {
+                        fadeInUp: 'fadeInUp 0.6s ease-out',
+                        pulse: 'pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite',
                     }
                 }
             }
         }
     </script>
-    <style>
-        /* Normalize section vertical spacing across the site. */
-        section:not(#home) { padding-top: 4rem !important; padding-bottom: 4rem !important; }
-        #home { padding-top: 8rem !important; padding-bottom: 7rem !important; }
-        
-        /* Animation for the infinite scroll */
-        @keyframes infinite-scroll {
-            from { transform: translateX(0); }
-            to { transform: translateX(-50%); }
-        }
-        .animate-scroll {
-            animation: infinite-scroll 30s linear infinite;
-        }
-    </style>
-</head>
-<body class="bg-brand-light text-brand-navy font-sans antialiased">
 
-    <nav class="fixed top-6 left-0 right-0 z-50 w-[92%] max-w-7xl mx-auto bg-white/90 backdrop-blur-md border border-slate-200 rounded-full shadow-2xl transition-all duration-300">
+    <!-- Premium Animation & Counter Script -->
+    <script>
+        // Counter Animation for statistics
+        document.addEventListener('DOMContentLoaded', function() {
+            const counters = document.querySelectorAll('.counter-animate');
+
+            const animateCounter = (counter) => {
+                const target = parseInt(counter.getAttribute('data-target'));
+                const duration = 2000; // 2 seconds
+                const increment = target / (duration / 50);
+                let current = 0;
+
+                const interval = setInterval(() => {
+                    current += increment;
+                    if (current >= target) {
+                        counter.textContent = target.toLocaleString();
+                        clearInterval(interval);
+                    } else {
+                        counter.textContent = Math.floor(current).toLocaleString();
+                    }
+                }, 50);
+            };
+
+            // Intersection Observer for triggering animations on scroll
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const counter = entry.target;
+                        animateCounter(counter);
+                        observer.unobserve(counter);
+                    }
+                });
+            }, { threshold: 0.5 });
+
+            counters.forEach(counter => observer.observe(counter));
+        });
+
+        // Smooth scroll reveal animations
+        const revealElements = document.querySelectorAll('.reveal-on-scroll');
+        const revealOnScroll = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                    revealOnScroll.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.1 });
+
+        revealElements.forEach(element => {
+            element.style.opacity = '0';
+            element.style.transform = 'translateY(20px)';
+            element.style.transition = 'opacity 0.6s ease-out, transform 0.6s ease-out';
+            if (element.classList.contains('delay-100')) {
+                element.style.transitionDelay = '0.1s';
+            } else if (element.classList.contains('delay-200')) {
+                element.style.transitionDelay = '0.2s';
+            } else if (element.classList.contains('delay-300')) {
+                element.style.transitionDelay = '0.3s';
+            } else if (element.classList.contains('delay-400')) {
+                element.style.transitionDelay = '0.4s';
+            }
+            revealOnScroll.observe(element);
+        });
+    </script>
+
+    <!-- ========== External Stylesheets ========== -->
+    <!-- Custom CSS for animations and grid backgrounds -->
+    <link rel="stylesheet" href="styles.css">
+
+    <!-- Font Awesome Icons for UI elements -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- ========== Google Fonts ========== -->
+    <!-- Inter: Primary font for body text and headings -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <!-- Playfair Display: Secondary font for premium typography (future use) -->
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+
+</head>
+<body class="bg-brand-light dark:bg-slate-900 text-brand-navy dark:text-slate-100 font-sans antialiased relative">
+
+    <!-- ========== MAIN NAVIGATION ========== -->
+    <!-- Fixed header navigation bar with smooth blur effect and responsive menu -->
+    <nav class="fixed top-6 left-0 right-0 z-50 w-[92%] max-w-7xl mx-auto bg-white/90 dark:bg-slate-900/90 backdrop-blur-md border border-slate-200 dark:border-slate-700 rounded-full shadow-2xl transition-all duration-300">
         <div class="px-6 md:px-8">
             <div class="flex justify-between items-center h-16">
-                
+
+                <!-- Branding: Logo with animated icon -->
                 <a href="#home" class="flex items-center gap-2 cursor-pointer group">
                     <i class="fa-solid fa-bolt text-brand-orange text-2xl group-hover:animate-pulse"></i>
-                    <span class="font-bold text-xl tracking-tight text-brand-navy">VoloLeads</span>
+                    <span class="font-bold text-xl tracking-tight text-brand-navy dark:text-white">VoloLeads</span>
                 </a>
-                
+
+                <!-- Desktop Navigation Menu: Hidden on mobile, visible on md+ screens -->
                 <div class="hidden md:flex space-x-8 items-center text-sm font-semibold">
-                    <a href="#home" class="text-slate-600 hover:text-brand-orange transition-colors">Home</a>
-                    <a href="#services" class="text-slate-600 hover:text-brand-orange transition-colors">Services</a>
-                    <a href="#pricing" class="text-slate-600 hover:text-brand-orange transition-colors">Plans</a>
-                    <a href="#insights" class="text-slate-600 hover:text-brand-orange transition-colors">Insights</a>
-                    <a href="#about" class="text-slate-600 hover:text-brand-orange transition-colors">About Us</a>
+                    <a href="#home" class="text-slate-600 dark:text-slate-300 hover:text-brand-orange dark:hover:text-brand-orange transition-colors">Home</a>
+                    <a href="#services" class="text-slate-600 dark:text-slate-300 hover:text-brand-orange dark:hover:text-brand-orange transition-colors">Services</a>
+                    <a href="#plans" class="text-slate-600 dark:text-slate-300 hover:text-brand-orange dark:hover:text-brand-orange transition-colors">Plans</a>
+                    <a href="#insights" class="text-slate-600 dark:text-slate-300 hover:text-brand-orange dark:hover:text-brand-orange transition-colors">Insights</a>
+                    <a href="#about" class="text-slate-600 dark:text-slate-300 hover:text-brand-orange dark:hover:text-brand-orange transition-colors">About Us</a>
                 </div>
 
-                <a href="#contact" class="hidden md:block px-6 py-2 bg-brand-navy hover:bg-slate-800 text-white text-sm font-bold rounded-full shadow-lg transition-all transform hover:-translate-y-0.5">
-                    Book Now
-                </a>
+                <!-- Right Side Actions: Book Now, Dark Mode Toggle, Mobile Menu -->
+                <div class="flex items-center gap-3">
+                    <!-- Desktop CTA Button: Book Now (Hidden on mobile) -->
+                    <a href="#contact" class="hidden md:block px-6 py-2 bg-brand-navy dark:bg-brand-orange hover:bg-slate-800 dark:hover:bg-orange-600 text-white text-sm font-bold rounded-full shadow-lg transition-all transform hover:-translate-y-0.5">
+                        Book Now
+                    </a>
 
-                <div class="md:hidden text-slate-600 text-xl cursor-pointer">
-                    <i class="fa-solid fa-bars"></i>
+                    <!-- Dark Mode Toggle Button -->
+                    <button id="dark-mode-toggle" class="text-slate-600 dark:text-slate-300 text-xl cursor-pointer focus:outline-none transition-colors hover:text-brand-orange dark:hover:text-brand-orange" aria-label="Toggle Dark Mode">
+                        <i class="fa-solid fa-moon" id="dark-mode-icon"></i>
+                    </button>
+
+                    <!-- Mobile Menu Toggle Button -->
+                    <button id="mobile-menu-btn" class="md:hidden text-slate-600 dark:text-slate-300 text-xl cursor-pointer focus:outline-none" aria-label="Toggle Menu">
+                        <i class="fa-solid fa-bars" id="menu-icon"></i>
+                    </button>
                 </div>
-            </div>
+        </div>
+
+        <!-- Mobile Navigation Menu: Collapsible dropdown for smaller screens -->
+        <div id="mobile-menu" class="hidden md:hidden absolute top-20 left-0 right-0 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl shadow-2xl mx-6 p-6 flex flex-col gap-4 text-center z-50">
+            <a href="#home" class="text-slate-600 dark:text-slate-300 font-bold hover:text-brand-orange dark:hover:text-brand-orange py-2">Home</a>
+            <a href="#services" class="text-slate-600 dark:text-slate-300 font-bold hover:text-brand-orange dark:hover:text-brand-orange py-2">Services</a>
+            <a href="#plans" class="text-slate-600 dark:text-slate-300 font-bold hover:text-brand-orange dark:hover:text-brand-orange py-2">Plans</a>
+            <a href="#insights" class="text-slate-600 dark:text-slate-300 font-bold hover:text-brand-orange dark:hover:text-brand-orange py-2">Insights</a>
+            <a href="#about" class="text-slate-600 dark:text-slate-300 font-bold hover:text-brand-orange dark:hover:text-brand-orange py-2">About Us</a>
+            <a href="#contact" class="bg-brand-orange hover:bg-orange-600 text-white py-3 rounded-full font-bold shadow-md">Book Now</a>
         </div>
     </nav>
 
-    <section id="home" class="relative pt-48 pb-20 lg:pt-60 lg:pb-32 overflow-hidden bg-white">
-    
-    <div class="absolute inset-0 h-full w-full bg-white bg-[linear-gradient(to_right,#cbd5e1_1px,transparent_1px),linear-gradient(to_bottom,#cbd5e1_1px,transparent_1px)] bg-[size:14px_24px] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)]"></div>
+    <!-- ========== HERO SECTION ========== -->
+    <!-- Main landing page section with headline, value proposition, and primary CTAs -->
+    <section id="home" class="relative pt-48 pb-20 lg:pt-60 lg:pb-32 overflow-hidden bg-white dark:bg-slate-900">
 
-    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 relative text-center z-10">
-        
-        <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/80 backdrop-blur-sm border border-slate-200 shadow-sm text-brand-navy text-xs font-bold uppercase tracking-widest mb-6 hover:shadow-md transition-all cursor-default">
-            <span class="w-2 h-2 rounded-full bg-brand-orange animate-pulse"></span>
-            Lead Generation, Redefined
-        </div>
+        <!-- Background grid pattern -->
+        <div class="absolute inset-0 h-full w-full strategic-grid-bg"></div>
 
-        <h1 class="text-5xl lg:text-7xl font-extrabold tracking-tight text-brand-navy mb-6 leading-tight drop-shadow-sm">
-            Stop Waiting for Inbound. <br>
-            <span class="text-transparent bg-clip-text bg-gradient-to-r from-brand-orange to-red-600">Start Hunting.</span>
-        </h1>
+        <!-- Hero content container -->
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 relative text-center z-10">
 
-        <p class="text-lg lg:text-xl text-slate-600 mb-8 max-w-2xl mx-auto leading-relaxed">
-          You can post on social media and hope a motivated seller sees it, or you can pick up the phone and find them. At <span class="font-extrabold text-brand-navy">VoloLeads</span> you also have the option to hire <span class="font-bold text-brand-orange">Virtual Drivers for Dollars</span> and identify properties before they hit the market.
-        </p>
-
-        <div class="flex flex-col sm:flex-row justify-center gap-4 mb-12">
-            <a href="#contact" class="px-8 py-4 bg-brand-orange hover:bg-orange-600 text-white font-bold rounded-full shadow-xl shadow-orange-200 transition-all transform hover:-translate-y-1">
-                Start Scaling
-            </a>
-            <a href="#insights" class="px-8 py-4 bg-white/80 backdrop-blur-sm border border-slate-200 hover:border-brand-orange text-brand-navy font-bold rounded-full shadow-md transition-all">
-                Hear Live Calls
-            </a>
-        </div>
-    </div>
-</section>
-
-    <section class="py-10 border-y border-slate-200 bg-white overflow-hidden">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <p class="text-center text-sm font-semibold text-slate-400 uppercase tracking-widest mb-8">
-            Integrates seamlessly with tools you use
-        </p>
-        
-        <div class="flex overflow-hidden relative">
-            <div class="flex animate-scroll whitespace-nowrap w-max gap-16 hover:grayscale-0 transition-all duration-500">
-                
-                <div class="flex items-center gap-3 text-2xl font-bold text-slate-800 opacity-50 hover:opacity-100 transition-opacity">
-                    <i class="fa-solid fa-house-signal text-brand-orange"></i> PropStream
-                </div>
-                <div class="flex items-center gap-3 text-2xl font-bold text-slate-800 opacity-50 hover:opacity-100 transition-opacity">
-                    <i class="fa-solid fa-layer-group text-brand-orange"></i> BatchLeads
-                </div>
-                <div class="flex items-center gap-3 text-2xl font-bold text-slate-800 opacity-50 hover:opacity-100 transition-opacity">
-                    <i class="fa-solid fa-car text-brand-orange"></i> DealMachine
-                </div>
-                <div class="flex items-center gap-3 text-2xl font-bold text-slate-800 opacity-50 hover:opacity-100 transition-opacity">
-                    <i class="fa-solid fa-database text-brand-orange"></i> XLeads
-                </div>
-                <div class="flex items-center gap-3 text-2xl font-bold text-slate-800 opacity-50 hover:opacity-100 transition-opacity">
-                    <i class="fa-solid fa-phone-volume text-brand-orange"></i> MojoDialer
-                </div>
-                <div class="flex items-center gap-3 text-2xl font-bold text-slate-800 opacity-50 hover:opacity-100 transition-opacity">
-                    <i class="fa-solid fa-wave-square text-brand-orange"></i> WAVV
-                </div>
-                <div class="flex items-center gap-3 text-2xl font-bold text-slate-800 opacity-50 hover:opacity-100 transition-opacity">
-                    <i class="fa-solid fa-headset text-brand-orange"></i> ReadyMode
-                </div>
-                <div class="flex items-center gap-3 text-2xl font-bold text-slate-800 opacity-50 hover:opacity-100 transition-opacity">
-                    <i class="fa-solid fa-phone-flip text-brand-orange"></i> BatchDialer
-                </div>
-                <div class="flex items-center gap-3 text-2xl font-bold text-slate-800 opacity-50 hover:opacity-100 transition-opacity">
-                    <i class="fa-solid fa-phone-volume text-brand-orange"></i> Enzo
-                </div>
-
-
-                <div class="flex items-center gap-3 text-2xl font-bold text-slate-800 opacity-50 hover:opacity-100 transition-opacity pl-16">
-                    <i class="fa-solid fa-house-signal text-brand-orange"></i> PropStream
-                </div>
-                <div class="flex items-center gap-3 text-2xl font-bold text-slate-800 opacity-50 hover:opacity-100 transition-opacity">
-                    <i class="fa-solid fa-layer-group text-brand-orange"></i> BatchLeads
-                </div>
-                <div class="flex items-center gap-3 text-2xl font-bold text-slate-800 opacity-50 hover:opacity-100 transition-opacity">
-                    <i class="fa-solid fa-car text-brand-orange"></i> DealMachine
-                </div>
-                <div class="flex items-center gap-3 text-2xl font-bold text-slate-800 opacity-50 hover:opacity-100 transition-opacity">
-                    <i class="fa-solid fa-database text-brand-orange"></i> XLeads
-                </div>
-                <div class="flex items-center gap-3 text-2xl font-bold text-slate-800 opacity-50 hover:opacity-100 transition-opacity">
-                    <i class="fa-solid fa-phone-volume text-brand-orange"></i> MojoDialer
-                </div>
-                <div class="flex items-center gap-3 text-2xl font-bold text-slate-800 opacity-50 hover:opacity-100 transition-opacity">
-                    <i class="fa-solid fa-wave-square text-brand-orange"></i> WAVV
-                </div>
-                <div class="flex items-center gap-3 text-2xl font-bold text-slate-800 opacity-50 hover:opacity-100 transition-opacity">
-                    <i class="fa-solid fa-headset text-brand-orange"></i> ReadyMode
-                </div>
-                <div class="flex items-center gap-3 text-2xl font-bold text-slate-800 opacity-50 hover:opacity-100 transition-opacity">
-                    <i class="fa-solid fa-phone-flip text-brand-orange"></i> BatchDialer
-                </div>
-                <div class="flex items-center gap-3 text-2xl font-bold text-slate-800 opacity-50 hover:opacity-100 transition-opacity">
-                    <i class="fa-solid fa-bolt text-brand-orange"></i> Enzo
-                </div>
-
-            </div>
-        </div>
-    </div>
-</section>
-
- <style>
-    .scrollbar-hide::-webkit-scrollbar {
-        display: none;
-    }
-    .scrollbar-hide {
-        -ms-overflow-style: none;
-        scrollbar-width: none;
-    }
-</style>
-
-<section id="services" class="py-24 bg-slate-50 border-b border-slate-200">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
-        <div class="text-center max-w-3xl mx-auto mb-12">
-            <h2 class="text-3xl md:text-4xl font-extrabold text-brand-navy mb-4"><span class="text-orange-600 font-extrabold">Services</span> We Provide</h2>
-            <p class="text-slate-600 text-lg">We combine our industry knowledge with data-driven speed to fill your pipeline.</p>
-        </div>
-
-        <button onclick="document.getElementById('services-slider').scrollTo({left: 0, behavior: 'smooth'})" 
-                class="absolute left-0 top-1/2 -translate-y-1/2 z-10 w-12 h-12 bg-white rounded-full shadow-lg flex items-center justify-center text-brand-navy hover:text-brand-orange hover:scale-110 transition-all border border-slate-200 hidden md:flex">
-            <i class="fa-solid fa-chevron-left"></i>
-        </button>
-
-        <button onclick="document.getElementById('services-slider').scrollTo({left: 5000, behavior: 'smooth'})" 
-                class="absolute right-0 top-1/2 -translate-y-1/2 z-10 w-12 h-12 bg-white rounded-full shadow-lg flex items-center justify-center text-brand-navy hover:text-brand-orange hover:scale-110 transition-all border border-slate-200 hidden md:flex">
-            <i class="fa-solid fa-chevron-right"></i>
-        </button>
-
-        <div id="services-slider" class="flex overflow-x-auto gap-8 pb-8 px-4 scrollbar-hide snap-x snap-mandatory">
-            
-            <div class="min-w-[320px] md:min-w-[380px] snap-center bg-white rounded-xl shadow-lg p-8 border-t-4 border-brand-orange hover:shadow-2xl transition-shadow group">
-                <div class="w-14 h-14 bg-orange-100 rounded-lg flex items-center justify-center mb-6 group-hover:bg-brand-orange transition-colors">
-                    <i class="fa-solid fa-headset text-2xl text-brand-orange group-hover:text-white"></i>
-                </div>
-                <h3 class="text-xl font-bold text-brand-navy mb-3">Virtual Cold Callers</h3>
-                <p class="text-slate-600 mb-4 text-sm leading-relaxed">Our VAs are proficient bilingual English Speakers trained specifically in objection handling and rapport building for seller lead-generation. We train our VAs on Psychology; Not just scripts.</p>
-                <ul class="text-sm text-slate-500 space-y-2">
-                    <li class="flex items-center gap-2"><i class="fa-solid fa-check text-green-500"></i> Seemless integration with your Dialers</li>
-                    <li class="flex items-center gap-2"><i class="fa-solid fa-check text-green-500"></i> Pre-Qualified Leads in your Pipeline</li>
-                </ul>
+            <!-- Badge: Tagline with animated pulse indicator -->
+            <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm border border-slate-200 dark:border-slate-700 shadow-sm text-brand-navy dark:text-slate-100 text-xs font-bold uppercase tracking-widest mb-6 hover:shadow-md transition-all cursor-default reveal-on-scroll">
+                <span class="w-2 h-2 rounded-full bg-brand-orange animate-pulse"></span>
+                Lead Generation, Redefined
             </div>
 
-            <div class="min-w-[320px] md:min-w-[380px] snap-center bg-white rounded-xl shadow-lg p-8 border-t-4 border-brand-orange hover:shadow-2xl transition-shadow group">
-                <div class="w-14 h-14 bg-orange-100 rounded-lg flex items-center justify-center mb-6 group-hover:bg-brand-orange transition-colors">
-                    <i class="fa-solid fa-car text-2xl text-brand-orange group-hover:text-white"></i>
-                </div>
-                <div class="flex items-center gap-2 mb-3">
-                    <h3 class="text-xl font-bold text-brand-navy">Virtual Drivers</h3>
-                    <span class="text-xs bg-slate-100 text-slate-600 font-bold px-2 py-1 rounded border border-slate-300">Scout™</span>
-                </div>
-                <p class="text-slate-600 mb-4 text-sm leading-relaxed">Trained to spot visual distress using the latest satellite data. Whether you use DealMachine, BatchLeads, or PropStream, our drivers integrate seamlessly into your workflow to build an exclusive pipeline of off-market deals.</p>
-                <ul class="text-sm text-slate-500 space-y-2">
-                    <li class="flex items-center gap-2"><i class="fa-solid fa-check text-green-500"></i> Visual Distress Verification</li>
-                    <li class="flex items-center gap-2"><i class="fa-solid fa-check text-green-500"></i> Data Ready for Campaign</li>
-                </ul>
-            </div>
+            <!-- Main Headline: Large, bold call-to-action with gradient accent - SEO optimized with target keywords -->
+            <h1 class="text-5xl lg:text-7xl font-extrabold tracking-tight text-brand-navy dark:text-white mb-6 leading-tight drop-shadow-sm reveal-on-scroll delay-100">
+                Professional Cold Callers <br>
+                <span class="text-transparent bg-clip-text bg-gradient-to-r from-brand-orange to-red-600">for Real Estate Wholesalers.</span>
+            </h1>
 
-            <div class="min-w-[320px] md:min-w-[380px] snap-center bg-white rounded-xl shadow-lg p-8 border-t-4 border-brand-navy hover:shadow-2xl transition-shadow group">
-                <div class="w-14 h-14 bg-slate-100 rounded-lg flex items-center justify-center mb-6 group-hover:bg-brand-navy transition-colors">
-                    <i class="fa-solid fa-laptop-code text-2xl text-brand-navy group-hover:text-white"></i>
-                </div>
-                <h3 class="text-xl font-bold text-brand-navy mb-3">Build Your Web Presence</h3>
-                <p class="text-slate-600 mb-4 text-sm leading-relaxed">In a crowded market, credibility closes deals. We design professional digital headquarters that prove you are a legitimate cash buyer, not just another spam caller.</p>
-                <ul class="text-sm text-slate-500 space-y-2">
-                    <li class="flex items-center gap-2"><i class="fa-solid fa-check text-green-500"></i> Instant Credibility Booster</li>
-                    <li class="flex items-center gap-2"><i class="fa-solid fa-check text-green-500"></i> Load Speed Optimized</li>
-                    <li class="flex items-center gap-2"><i class="fa-solid fa-check text-green-500"></i> Direct CRM Integration</li>
-                </ul>
-            </div>
+            <!-- Supporting paragraph: Value proposition and key differentiator -->
+            <p class="text-lg lg:text-xl text-slate-600 dark:text-slate-300 mb-8 max-w-2xl mx-auto leading-relaxed reveal-on-scroll delay-200">
+              You can post on social media and hope a motivated seller sees it, or you can pick up the phone and find them. At <span class="font-extrabold text-brand-gray">VoloLeads</span> you also have the option to hire Virtual Drivers for Dollars and identify properties <span class="font-semibold text-brand-gray">before they hit the market.</span>
+            </p>
 
-            <div class="min-w-[320px] md:min-w-[380px] snap-center bg-slate-100 rounded-xl shadow-inner p-8 border border-slate-200 opacity-90">
-                <div class="flex justify-between items-start mb-6">
-                    <div class="w-14 h-14 bg-slate-200 rounded-lg flex items-center justify-center">
-                        <i class="fa-solid fa-microchip text-2xl text-slate-500"></i>
-                    </div>
-                    <span class="px-3 py-1 bg-slate-800 text-white text-xs font-bold rounded-full uppercase tracking-wider">Coming Soon</span>
-                </div>
-                <h3 class="text-xl font-bold text-brand-navy mb-3">AI Agent Development</h3>
-                <p class="text-slate-600 mb-4 text-sm leading-relaxed">The future of wholesaling is automated, turning inbounds into deals. We are building proprietary AI agents for autonomous receiving calls 24/7, specifically trained to handle seller objections.</p>
-                <div class="w-full bg-slate-200 rounded-full h-2.5 mb-2 mt-6">
-                    <div class="bg-brand-navy h-2.5 rounded-full" style="width: 70%"></div>
-                </div>
-                <p class="text-xs text-slate-500 text-right">Dev Progress: 70%</p>
-            </div>
-
-        </div>
-    </div>
-</section>
-
-<section id="pricing" class="py-24 bg-white">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
-        
-<div class="text-center max-w-3xl mx-auto mb-16">
-    <h2 class="text-3xl md:text-4xl font-extrabold text-slate-900 mb-4">Flexible Hourly <span class="text-orange-600 font-extrabold">Pricing.</span></h2>
-    <p class="text-slate-600 text-lg">
-        Scale your team up or down instantly. Simple weekly billing with 
-        <span class="text-orange-500 font-bold">no monthly retainers</span> and 
-        <span class="text-orange-500 font-bold">no long-term contracts</span>.
-    </p>
-</div>
-
-        <button onclick="document.getElementById('pricing-slider').scrollTo({left: 0, behavior: 'smooth'})" 
-                class="absolute left-0 top-1/2 -translate-y-1/2 z-10 w-12 h-12 bg-slate-50 rounded-full shadow-lg flex items-center justify-center text-slate-900 hover:text-brand-orange hover:scale-110 transition-all border border-slate-200 hidden md:flex">
-            <i class="fa-solid fa-chevron-left"></i>
-        </button>
-
-        <button onclick="document.getElementById('pricing-slider').scrollTo({left: 5000, behavior: 'smooth'})" 
-                class="absolute right-0 top-1/2 -translate-y-1/2 z-10 w-12 h-12 bg-slate-50 rounded-full shadow-lg flex items-center justify-center text-slate-900 hover:text-brand-orange hover:scale-110 transition-all border border-slate-200 hidden md:flex">
-            <i class="fa-solid fa-chevron-right"></i>
-        </button>
-
-        <div id="pricing-slider" class="flex overflow-x-auto gap-8 pb-12 px-4 scrollbar-hide snap-x snap-mandatory items-stretch pt-6">
-
-            <div class="min-w-[320px] md:min-w-[360px] snap-center bg-white rounded-2xl shadow-lg p-8 border border-slate-200 relative flex flex-col">
-                <h3 class="text-2xl font-bold text-slate-900">Part-Time Caller</h3>
-                <p class="text-slate-500 text-sm mb-6">Perfect for solo wholesalers testing a new market.</p>
-                <div class="mb-2">
-                    <span class="text-slate-400 line-through text-lg font-">$5.00</span>
-                    <span class="text-xs text-green-600 font-bold bg-green-100 px-2 py-1 rounded ml-2">SAVE $10.00/week</span>
-                </div>
-                <div class="flex items-baseline mb-1">
-                    <span class="text-4xl font-extrabold text-slate-900">$4.50</span>
-                    <span class="text-slate-500 ml-1">/hour</span>
-                </div>
-                <p class="text-xs text-gray-500 font-bold uppercase tracking-wide mb-8">Billed $90.00 / Week (20 Hours)</p>
-                <ul class="space-y-4 mb-8 flex-grow">
-                    <li class="flex items-start"><i class="fa-solid fa-check text-green-500 mt-1 mr-3"></i><span class="text-slate-600 text-sm">Pre-Trained on Acquisitions</span></li>
-                    <li class="flex items-start"><i class="fa-solid fa-check text-green-500 mt-1 mr-3"></i><span class="text-slate-600 text-sm">Daily KPI Reporting</span></li>
-                    <li class="flex items-start"><i class="fa-solid fa-check text-green-500 mt-1 mr-3"></i><span class="text-slate-600 text-sm">No Setup Fees or Contracts</span></li>
-                    <li class="flex items-start"><i class="fa-solid fa-check text-green-500 mt-1 mr-3"></i><span class="text-slate-600 text-sm">Weekly Strategy Call</span></li>
-                </ul>
-                <a href="#contact" class="block w-full py-3 px-6 bg-slate-100 hover:bg-slate-200 text-slate-900 font-bold text-center rounded-lg transition-colors">Get Started</a>
-            </div>
-
-            <div class="min-w-[320px] md:min-w-[360px] snap-center bg-white rounded-2xl shadow-2xl p-8 border-2 border-orange-500 relative flex flex-col transform md:-translate-y-4">
-                <div class="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-                    <span class="bg-orange-500 text-white text-sm font-bold px-4 py-1 rounded-full shadow-md uppercase tracking-wide">Most Popular</span>
-                </div>
-                <h3 class="text-3xl font-bold text-slate-900">Full-Time Seat</h3>
-                <p class="text-slate-500 text-sm mb-6">Maximize contact rates with our "Double Energy" strategy.</p>
-                <div class="mb-2">
-                    <span class="text-slate-400 line-through text-lg font-medium">$5.00</span>
-                    <span class="text-xs text-green-600 font-bold bg-green-100 px-2 py-1 rounded ml-2">SAVE $40.00/week</span>
-                </div>
-                <div class="flex items-baseline mb-1">
-                    <span class="text-5xl font-extrabold text-slate-900">$4.00</span>
-                    <span class="text-slate-500 ml-1">/hour</span>
-                </div>
-                <p class="text-xs text-gray-500 font-bold uppercase tracking-wide mb-8">Billed $160 / Week (40 Hours)</p>
-                <ul class="space-y-4 mb-8 flex-grow">
-                    <li class="flex items-start"><i class="fa-solid fa-check text-green-500 mt-1 mr-3"></i><span class="text-slate-600 text-sm">Pre-Trained on Acquisitions</span></li>
-                    <li class="flex items-start"><i class="fa-solid fa-check text-green-500 mt-1 mr-3"></i><span class="text-slate-600 text-sm">Daily KPI Reporting</span></li>
-                    <li class="flex items-start"><i class="fa-solid fa-check text-green-500 mt-1 mr-3"></i><span class="text-slate-600 text-sm">No Setup Fees or Contracts</span></li>
-                    <li class="flex items-start"><i class="fa-solid fa-check text-green-500 mt-1 mr-3"></i><span class="text-slate-600 text-sm">Weekly Strategy Call</span></li>
-                    <li class="flex items-start"><i class="fa-solid fa-check text-green-500 mt-1 mr-3"></i><span class="text-slate-600 text-sm">Dedicated Lead Manager</span></li>
-                </ul>
-                <a href="#contact" class="block w-full py-4 px-6 bg-orange-500 hover:bg-orange-600 text-white font-bold text-center rounded-lg shadow-lg hover:shadow-xl transition-all">Book This Seat</a>
-            </div>
-
-            <div class="min-w-[320px] md:min-w-[360px] snap-center bg-white rounded-2xl shadow-lg p-8 border border-slate-200 relative flex flex-col">
-                <h3 class="text-2xl font-bold text-slate-900">Virtual Scout</h3>
-                <p class="text-slate-500 text-sm mb-6">Visual driving for dollars without the gas money.</p>
-                <div class="flex items-baseline mb-1">
-                    <span class="text-4xl font-extrabold text-slate-900">$3.50</span>
-                    <span class="text-slate-500 ml-1">/hour</span>
-                </div>
-                <p class="text-xs text-gray-500 font-bold uppercase tracking-wide mb-8">Billed $70 - $140 / Week (20-40 Hours)</p>
-                <ul class="space-y-4 mb-8 flex-grow">
-                    <li class="flex items-start"><i class="fa-solid fa-check text-green-500 mt-1 mr-3"></i><span class="text-slate-600 text-sm">Flexible Shifts (4 - 8 Hours / Day)</span></li>
-                    <li class="flex items-start"><i class="fa-solid fa-check text-green-500 mt-1 mr-3"></i><span class="text-slate-600 text-sm">Up-to-date Google Maps Scouting</li>
-                    <li class="flex items-start"><i class="fa-solid fa-check text-green-500 mt-1 mr-3"></i><span class="text-slate-600 text-sm">Visual Distress Verification</li>
-                    <li class="flex items-start"><i class="fa-solid fa-check text-green-500 mt-1 mr-3"></i><span class="text-slate-600 text-sm">Direct Upload to your CRM</span></li>
-                </ul>
-                <a href="#contact" class="block w-full py-3 px-6 bg-slate-100 hover:bg-slate-200 text-slate-900 font-bold text-center rounded-lg transition-colors">Get Started</a>
-            </div>
-
-            <div class="min-w-[320px] md:min-w-[360px] snap-center bg-brand-navy rounded-2xl shadow-lg p-8 border border-slate-700 relative flex flex-col">
-                <h3 class="text-2xl font-bold text-white">Your Credibility Engine</h3>
-                <p class="text-slate-300 text-sm mb-6">Stop losing deals because you look like a "spam caller." Build your custom digital presence TODAY!</p>
-                <div class="flex items-baseline mb-1">
-                    <span class="text-3xl font-extrabold text-white">Custom</span>
-                    <span class="text-slate-400 ml-1 text-sm">Quote</span>
-                </div>
-                <p class="text-xs text-brand-orange font-bold uppercase tracking-wide mb-8">One-Time Project Fee</p>
-
-                <ul class="space-y-4 mb-8 flex-grow">
-                    <li class="flex items-start"><i class="fa-solid fa-check text-brand-orange mt-1 mr-3"></i><span class="text-slate-200 text-sm">Business Profile Setup</span></li>
-                    <li class="flex items-start"><i class="fa-solid fa-check text-brand-orange mt-1 mr-3"></i><span class="text-slate-200 text-sm">Design & Development</span></li>
-                    <li class="flex items-start"><i class="fa-solid fa-check text-brand-orange mt-1 mr-3"></i><span class="text-slate-200 text-sm">Domain & Hosting Management</span></li>
-                    <li class="flex items-start"><i class="fa-solid fa-check text-brand-orange mt-1 mr-3"></i><span class="text-slate-200 text-sm">Copywriting that Sells</span></li>
-                </ul>
-
-                <a href="#contact" class="block w-full py-3 px-6 bg-white hover:bg-slate-100 text-brand-navy font-bold text-center rounded-lg transition-colors">
-                    Request Quote
+            <!-- CTA Buttons: Primary (Start Scaling) and Secondary (Hear Live Calls) -->
+            <div class="flex flex-col sm:flex-row justify-center gap-4 mb-12 reveal-on-scroll delay-300">
+                <!-- Primary CTA: Scroll to contact form - More specific with urgency -->
+                <a href="#contact" class="px-8 py-4 bg-brand-orange hover:bg-orange-600 text-white font-bold rounded-full shadow-lg shadow-orange-400 dark:shadow-orange-900/50 transition-all transform hover:-translate-y-1 flex items-center justify-center gap-2 group">
+                    <span>Schedule Free Strategy Call</span>
+                    <i class="fa-solid fa-arrow-right group-hover:translate-x-1 transition-transform"></i>
+                </a>
+                <!-- Secondary CTA: View social proof -->
+                <a href="#insights" class="px-8 py-4 bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm border border-slate-200 dark:border-slate-700 hover:border-brand-orange text-brand-navy dark:text-slate-100 font-bold rounded-full shadow-md transition-all flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-headphones"></i>
+                    <span>Listen to Live Calls</span>
                 </a>
             </div>
-
         </div>
+    </section>
 
-        <div class="mt-16 text-center border-t border-slate-200 pt-8">
-            <p class="text-xs text-slate-400 max-w-4xl mx-auto leading-relaxed">
-                * Billing is calculated weekly based on active hours. Rates include dedicated talent and management only.
-                <strong>Dialer and Data costs are NOT included</strong> and must be provided by the client.
-            </p>
-        </div>
-
-    </div>
-</section>
-
- <section id="insights" class="py-16 bg-white border-b border-slate-100">
+    <!-- ========== PARTNER TOOLS CAROUSEL ========== -->
+    <!-- Continuously scrolling carousel showcasing integrated software platforms -->
+    <section class="py-10 border-y border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 overflow-hidden">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            
-            <div class="text-center mb-16">
-                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-green-100 text-green-700 text-xs font-bold uppercase tracking-wide mb-4">
-                    <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span> Evidence-Based Results
+            <!-- Section heading -->
+            <p class="text-center text-sm font-semibold text-slate-400 uppercase tracking-widest mb-8 reveal-on-scroll">
+                EXPERTS IN INDUSTRY-LEADING SOFTWARE
+            </p>
+
+            <!-- Animated scrolling carousel container -->
+            <div class="flex overflow-hidden relative reveal-on-scroll delay-100">
+                <!-- Repeating logos set with animation (duplicated for seamless loop) -->
+                <div class="flex animate-scroll whitespace-nowrap gap-16">
+
+                    <!-- Software tools: Each with icon and name - enhanced with keywords for SEO -->
+                    <div class="flex items-center gap-3 text-2xl font-bold text-slate-800 dark:text-slate-300 opacity-50 hover:opacity-100 transition-opacity cursor-default" aria-label="PropStream - Real estate wholesaling software integration">
+                        <i class="fa-solid fa-house-signal text-brand-orange"></i> PropStream
+                    </div>
+                    <div class="flex items-center gap-3 text-2xl font-bold text-slate-800 dark:text-slate-300 opacity-50 hover:opacity-100 transition-opacity cursor-default" aria-label="BatchLeads - Cold calling software for real estate wholesalers">
+                        <i class="fa-solid fa-layer-group text-brand-orange"></i> BatchLeads
+                    </div>
+                    <div class="flex items-center gap-3 text-2xl font-bold text-slate-800 dark:text-slate-300 opacity-50 hover:opacity-100 transition-opacity cursor-default" aria-label="DealMachine - Real estate lead generation software">
+                        <i class="fa-solid fa-car text-brand-orange"></i> DealMachine
+                    </div>
+                    <div class="flex items-center gap-3 text-2xl font-bold text-slate-800 dark:text-slate-300 opacity-50 hover:opacity-100 transition-opacity cursor-default" aria-label="XLeads - Real estate wholesaling database">
+                        <i class="fa-solid fa-database text-brand-orange"></i> XLeads
+                    </div>
+                    <div class="flex items-center gap-3 text-2xl font-bold text-slate-800 dark:text-slate-300 opacity-50 hover:opacity-100 transition-opacity cursor-default" aria-label="MojoDialer - Professional dialer for cold calling">
+                        <i class="fa-solid fa-phone-volume text-brand-orange"></i> MojoDialer
+                    </div>
+                    <div class="flex items-center gap-3 text-2xl font-bold text-slate-800 dark:text-slate-300 opacity-50 hover:opacity-100 transition-opacity cursor-default" aria-label="WAVV - Real estate communication platform">
+                        <i class="fa-solid fa-wave-square text-brand-orange"></i> WAVV
+                    </div>
+                    <div class="flex items-center gap-3 text-2xl font-bold text-slate-800 dark:text-slate-300 opacity-50 hover:opacity-100 transition-opacity cursor-default" aria-label="ReadyMode - Cold calling platform for wholesalers">
+                        <i class="fa-solid fa-headset text-brand-orange"></i> ReadyMode
+                    </div>
+                    <div class="flex items-center gap-3 text-2xl font-bold text-slate-800 dark:text-slate-300 opacity-50 hover:opacity-100 transition-opacity cursor-default" aria-label="BatchDialer - Automatic calling software for real estate">
+                        <i class="fa-solid fa-phone-flip text-brand-orange"></i> BatchDialer
+                    </div>
+                    <div class="flex items-center gap-3 text-2xl font-bold text-slate-800 dark:text-slate-300 opacity-50 hover:opacity-100 transition-opacity cursor-default" aria-label="GoHighLevel - CRM for real estate wholesalers">
+                        <i class="fa-solid fa-chart-line text-brand-orange"></i> GoHighLevel
+                    </div>
+
+                    <!-- Duplicate set for seamless infinite scroll - enhanced with keywords for SEO -->
+                    <div class="flex items-center gap-3 text-2xl font-bold text-slate-800 dark:text-slate-300 opacity-50 hover:opacity-100 transition-opacity cursor-default pl-16" aria-label="PropStream - Real estate wholesaling software integration">
+                        <i class="fa-solid fa-house-signal text-brand-orange"></i> PropStream
+                    </div>
+                    <div class="flex items-center gap-3 text-2xl font-bold text-slate-800 dark:text-slate-300 opacity-50 hover:opacity-100 transition-opacity cursor-default" aria-label="BatchLeads - Cold calling software for real estate wholesalers">
+                        <i class="fa-solid fa-layer-group text-brand-orange"></i> BatchLeads
+                    </div>
+                    <div class="flex items-center gap-3 text-2xl font-bold text-slate-800 dark:text-slate-300 opacity-50 hover:opacity-100 transition-opacity cursor-default" aria-label="DealMachine - Real estate lead generation software">
+                        <i class="fa-solid fa-car text-brand-orange"></i> DealMachine
+                    </div>
+                    <div class="flex items-center gap-3 text-2xl font-bold text-slate-800 dark:text-slate-300 opacity-50 hover:opacity-100 transition-opacity cursor-default" aria-label="XLeads - Real estate wholesaling database">
+                        <i class="fa-solid fa-database text-brand-orange"></i> XLeads
+                    </div>
+                    <div class="flex items-center gap-3 text-2xl font-bold text-slate-800 dark:text-slate-300 opacity-50 hover:opacity-100 transition-opacity cursor-default" aria-label="MojoDialer - Professional dialer for cold calling">
+                        <i class="fa-solid fa-phone-volume text-brand-orange"></i> MojoDialer
+                    </div>
+                    <div class="flex items-center gap-3 text-2xl font-bold text-slate-800 dark:text-slate-300 opacity-50 hover:opacity-100 transition-opacity cursor-default" aria-label="WAVV - Real estate communication platform">
+                        <i class="fa-solid fa-wave-square text-brand-orange"></i> WAVV
+                    </div>
+                    <div class="flex items-center gap-3 text-2xl font-bold text-slate-800 dark:text-slate-300 opacity-50 hover:opacity-100 transition-opacity cursor-default" aria-label="ReadyMode - Cold calling platform for wholesalers">
+                        <i class="fa-solid fa-headset text-brand-orange"></i> ReadyMode
+                    </div>
+                    <div class="flex items-center gap-3 text-2xl font-bold text-slate-800 dark:text-slate-300 opacity-50 hover:opacity-100 transition-opacity cursor-default" aria-label="BatchDialer - Automatic calling software for real estate">
+                        <i class="fa-solid fa-phone-flip text-brand-orange"></i> BatchDialer
+                    </div>
+                    <div class="flex items-center gap-3 text-2xl font-bold text-slate-800 dark:text-slate-300 opacity-50 hover:opacity-100 transition-opacity cursor-default" aria-label="GoHighLevel - CRM for real estate wholesalers">
+                        <i class="fa-solid fa-chart-line text-brand-orange"></i> GoHighLevel
+                    </div>
                 </div>
-                <h2 class="text-3xl font-extrabold text-slate-900">We Don't Just Read Scripts. <span class="text-orange-600 font-extrabold">We Converse.</span></h2>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- ========== SERVICES SECTION ========== -->
+    <!-- Display core service offerings with horizontally scrollable cards -->
+    <section id="services" class="py-24 bg-slate-50 dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700 scroll-mt-32">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
+
+            <!-- Section Header: Title and description -->
+            <div class="text-center max-w-3xl mx-auto mb-6 reveal-on-scroll">
+                <h2 class="text-3xl md:text-4xl font-extrabold text-brand-navy dark:text-white mb-4">
+                    <span class="text-brand-orange font-extrabold">Services</span> We Provide
+                </h2>
+                <p class="text-slate-600 dark:text-slate-400 text-lg">
+                    Beyond VAs, we provide complete admin support to manage your entire wholesaling operation from lead generation to pipeline management.
+                </p>
             </div>
 
-            <div class="flex flex-col md:flex-row items-center justify-between gap-8 mb-24">
-                
-                <div class="md:w-1/3">
-                    <p class="text-slate-600 mb-6 text-sm">AI outbounds gets hung up. Only Humans can build that rapport and follow-up when it comes to acquiring seller leads. Hear how our agents pivot off-script to have genuine, problem-solving conversations with homeowners.</p>
-                    <a href="#pricing" class="text-brand-orange font-bold hover:text-orange-700 transition-colors flex items-center gap-2 text-lg">
-                        Hire this talent <i class="fa-solid fa-arrow-right"></i>
+            <!-- Left scroll button for carousel (visible on desktop only) -->
+            <button onclick="scrollServices('left')" aria-label="Scroll Left"
+                    class="absolute left-0 top-1/2 -translate-y-1/2 z-10 w-12 h-12 bg-white dark:bg-slate-700 rounded-full shadow-lg flex items-center justify-center text-brand-navy dark:text-slate-300 hover:text-brand-orange hover:scale-110 transition-all border border-slate-200 dark:border-slate-600 hidden md:flex cursor-pointer">
+                <i class="fa-solid fa-chevron-left"></i>
+            </button>
+
+            <!-- Right scroll button for carousel (visible on desktop only) -->
+            <button onclick="scrollServices('right')" aria-label="Scroll Right"
+                    class="absolute right-0 top-1/2 -translate-y-1/2 z-10 w-12 h-12 bg-white dark:bg-slate-700 rounded-full shadow-lg flex items-center justify-center text-brand-navy dark:text-slate-300 hover:text-brand-orange hover:scale-110 transition-all border border-slate-200 dark:border-slate-600 hidden md:flex cursor-pointer">
+                <i class="fa-solid fa-chevron-right"></i>
+            </button>
+
+            <!-- Horizontally scrolling service cards container -->
+            <div id="services-slider" class="flex overflow-x-auto gap-8 pb-8 px-4 scrollbar-hide snap-x snap-mandatory pt-6 scroll-smooth">
+
+                <!-- Service Card 1: Virtual Callers & Drivers -->
+                <div class="min-w-[320px] md:min-w-[380px] snap-center bg-white dark:bg-slate-800 rounded-xl shadow-lg p-8 border-t-4 border-brand-orange hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 group service-card reveal-on-scroll delay-100">
+                    <div class="w-14 h-14 bg-orange-100 dark:bg-orange-900/30 rounded-lg flex items-center justify-center mb-6 group-hover:bg-brand-orange transition-colors">
+                        <i class="fa-solid fa-user text-2xl text-brand-orange group-hover:text-white"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-brand-navy dark:text-white mb-3">Virtual Callers with QA Support</h3>
+                    <p class="text-slate-600 dark:text-slate-400 mb-4 text-sm leading-relaxed">
+                        Expert bilingual VAs trained in objection handling to qualify leads. Our VAs are trained to seemlessly integrate with your systems across any Dialer or CRM.
+                    </p>
+                    <ul class="text-sm text-slate-500 space-y-2">
+                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-green-500"></i> Cold Calling VAs - Seamless Integration</li>
+                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-green-500"></i> QA & Support</li>
+                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-green-500"></i> Trained & Ready to Start Your Campaign</li>
+                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-green-500"></i> Get Qualified Leads</li>
+                    </ul>
+                </div>
+
+                <div class="min-w-[320px] md:min-w-[380px] snap-center bg-white dark:bg-slate-800 rounded-xl shadow-lg p-8 border-t-4 border-brand-orange hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 group service-card reveal-on-scroll delay-300">
+                    <div class="w-14 h-14 bg-orange-100 dark:bg-orange-900/30 rounded-lg flex items-center justify-center mb-6 group-hover:bg-brand-orange transition-colors">
+                        <i class="fa-solid fa-star text-2xl text-brand-orange group-hover:text-white"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-brand-navy dark:text-white mb-3">Quality Assurance & Support</h3>
+                    <p class="text-slate-600 dark:text-slate-400 mb-4 text-sm leading-relaxed">
+                        We don't just provide you with VAs, we manage them entirely. Comprehensive QA monitoring, training, and support to ensure your team delivers consistent, high-quality results.
+                    </p>
+                    <ul class="text-sm text-slate-500 space-y-2">
+                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-green-500"></i> Q/A Auditor - Monitors Call Quality</li>
+                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-green-500"></i> Track KPIs & Data Quality Reports</li>
+                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-green-500"></i> VA Productivity Monitoring (Screen Tracking)</li>
+                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-green-500"></i> Weekly Training Based on Q/A Reports</li>
+                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-green-500"></i> Daily VA Support - No Babysitting Required</li>
+                    </ul>
+                </div>
+
+                <div class="min-w-[320px] md:min-w-[380px] snap-center bg-white dark:bg-slate-800 rounded-xl shadow-lg p-8 border-t-4 border-brand-orange hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 group service-card reveal-on-scroll delay-400">
+                    <div class="w-14 h-14 bg-orange-100 dark:bg-orange-900/30 rounded-lg flex items-center justify-center mb-6 group-hover:bg-brand-orange transition-colors">
+                        <i class="fa-solid fa-clipboard-check text-2xl text-brand-orange group-hover:text-white"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-brand-navy dark:text-white mb-3">Admin Support & Pipeline Management</h3>
+                    <p class="text-slate-600 dark:text-slate-400 mb-4 text-sm leading-relaxed">
+                        Full backend operations support to manage your wholesaling business. From lead pipeline organization to quality control, we keep your operation running smoothly.
+                    </p>
+                    <ul class="text-sm text-slate-500 space-y-2">
+                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-green-500"></i> Lead Pipeline Management</li>
+                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-green-500"></i> CRM Organization & Management</li>
+                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-green-500"></i> Quality Control & Audits</li>
+                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-green-500"></i> VA Team Management</li>
+                    </ul>
+                </div>
+
+                <div class="min-w-[320px] md:min-w-[380px] snap-center bg-white dark:bg-slate-800 rounded-xl shadow-lg p-8 border-t-4 border-brand-orange hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 group service-card reveal-on-scroll delay-500">
+                    <div class="w-14 h-14 bg-orange-100 dark:bg-orange-900/30 rounded-lg flex items-center justify-center mb-6 group-hover:bg-brand-orange transition-colors">
+                        <i class="fa-solid fa-chart-bar text-2xl text-brand-orange group-hover:text-white"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-brand-navy dark:text-white mb-3">Market Research & Data</h3>
+                    <p class="text-slate-600 dark:text-slate-400 mb-4 text-sm leading-relaxed">
+                        Access actionable market intelligence and comprehensive property data to enhance your targeting and deal analysis capabilities.
+                    </p>
+                    <ul class="text-sm text-slate-500 space-y-2">
+                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-green-500"></i> Comparative Market Analysis (Comps)</li>
+                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-green-500"></i> Skip Traced Data & Verification</li>
+                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-green-500"></i> Property Intelligence Reports</li>
+                    </ul>
+                </div>
+
+                <div class="min-w-[320px] md:min-w-[380px] snap-center bg-white dark:bg-slate-800 rounded-xl shadow-lg p-8 border-t-4 border-brand-navy hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 group service-card reveal-on-scroll delay-600">
+                    <div class="w-14 h-14 bg-slate-100 dark:bg-slate-700 rounded-lg flex items-center justify-center mb-6 group-hover:bg-brand-navy transition-colors">
+                        <i class="fa-solid fa-laptop-code text-2xl text-brand-navy dark:text-white group-hover:text-white"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-brand-navy dark:text-white mb-3">Build Your Web Presence</h3>
+                    <p class="text-slate-600 dark:text-slate-400 mb-4 text-sm leading-relaxed">
+                        In a crowded market, credibility closes deals. We design professional digital headquarters that prove you are a legitimate cash buyer, not just another spam caller.
+                    </p>
+                    <ul class="text-sm text-slate-500 space-y-2">
+                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-green-500"></i> Instant Credibility Booster</li>
+                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-green-500"></i> Load Speed Optimized</li>
+                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-green-500"></i> Direct CRM Integration</li>
+                    </ul>
+                </div>
+
+                <div class="min-w-[320px] md:min-w-[380px] snap-center bg-slate-100 dark:bg-slate-700 rounded-xl shadow-inner p-8 border border-slate-200 dark:border-slate-600 opacity-90 service-card reveal-on-scroll delay-600">
+                    <div class="flex justify-between items-start mb-6">
+                        <div class="w-14 h-14 bg-slate-200 dark:bg-slate-600 rounded-lg flex items-center justify-center">
+                            <i class="fa-solid fa-microchip text-2xl text-slate-500 dark:text-slate-400"></i>
+                        </div>
+                        <span class="px-3 py-1 bg-slate-800 text-white text-xs font-bold rounded-full uppercase tracking-wider">Coming Soon</span>
+                    </div>
+                    <h3 class="text-xl font-bold text-brand-navy dark:text-white mb-3">AI Agent Development</h3>
+                    <p class="text-slate-600 dark:text-slate-400 mb-4 text-sm leading-relaxed">
+                        The future of wholesaling is automated. We are building proprietary AI agents for receiving calls 24/7, specifically trained to handle seller objections.
+                    </p>
+                    <div class="w-full bg-slate-200 dark:bg-slate-600 rounded-full h-2.5 mb-2 mt-6">
+                        <div class="bg-brand-navy dark:bg-brand-orange h-2.5 rounded-full" style="width: 70%"></div>
+                    </div>
+                    <p class="text-xs text-slate-500 text-right">Dev Progress: 70%</p>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+
+    <!-- ========== PRICING / PLANS SECTION ========== -->
+    <!-- Display engagement models with interactive flip cards for detailed information -->
+    <section id="plans" class="py-24 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-700 scroll-mt-32">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
+
+            <!-- Section Header: Partnership branding -->
+            <div class="text-center max-w-3xl mx-auto mb-16 reveal-on-scroll">
+                <h2 class="text-3xl md:text-4xl font-extrabold text-brand-navy dark:text-white mb-4">
+                    <span class="text-brand-orange font-extrabold">College of Wholesale x VoloLeads</span>
+                    <br>Lead Generation System
+                </h2>
+                <p class="text-slate-600 dark:text-slate-400 text-lg">
+                    Choose the tier that fits your business. All plans include
+                    <span class="text-brand-orange font-bold">trained cold callers</span>,
+                    <span class="text-brand-orange font-bold">daily KPI reporting</span>, and
+                    <span class="text-brand-orange font-bold">no long-term contracts</span>.
+                </p>
+            </div>
+
+            <!-- Three-column pricing grid -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 pb-12 pt-6">
+
+                <!-- ESSENTIAL TIER -->
+                <div class="bg-white dark:bg-slate-800 rounded-2xl shadow-lg p-8 border border-slate-200 dark:border-slate-700 relative flex flex-col hover:shadow-xl transition-shadow reveal-on-scroll">
+                    <div class="mb-4">
+                        <span class="inline-block px-3 py-1 bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 text-xs font-bold rounded-full uppercase tracking-wide">Simple Entry Option</span>
+                    </div>
+                    <h3 class="text-2xl font-bold text-brand-navy dark:text-white mb-2">Essential</h3>
+                    <p class="text-slate-500 dark:text-slate-400 text-sm mb-6">Perfect for solo wholesalers or those testing a market.</p>
+
+                    <div class="mb-8">
+                        <div class="flex items-baseline mb-1">
+                            <span class="text-5xl font-extrabold text-brand-navy dark:text-white">$480</span>
+                            <span class="text-slate-500 dark:text-slate-400 ml-1">/month</span>
+                        </div>
+                        <p class="text-xs text-slate-400 dark:text-slate-500">Billed monthly, no setup fees</p>
+                    </div>
+
+                    <ul class="space-y-4 mb-8 flex-grow">
+                        <li class="flex items-start">
+                            <i class="fa-solid fa-check text-green-500 mt-1 mr-3 flex-shrink-0"></i>
+                            <span class="text-slate-600 dark:text-slate-400 text-sm">
+                                <strong>Dedicated cold caller</strong> for 80 hours/month
+                            </span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fa-solid fa-check text-green-500 mt-1 mr-3 flex-shrink-0"></i>
+                            <span class="text-slate-600 dark:text-slate-400 text-sm">
+                                <strong>No setup fees</strong>
+                            </span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fa-solid fa-check text-green-500 mt-1 mr-3 flex-shrink-0"></i>
+                            <span class="text-slate-600 dark:text-slate-400 text-sm">
+                                Caller is <strong>trained and managed</strong> for you
+                            </span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fa-solid fa-check text-green-500 mt-1 mr-3 flex-shrink-0"></i>
+                            <span class="text-slate-600 dark:text-slate-400 text-sm">
+                                Daily KPI reporting
+                            </span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fa-solid fa-info text-slate-400 dark:text-slate-500 mt-1 mr-3 flex-shrink-0"></i>
+                            <span class="text-slate-500 dark:text-slate-400 text-xs italic">
+                                You handle dialer/software costs and lead pulling
+                            </span>
+                        </li>
+                    </ul>
+
+                    <a href="#contact" class="block w-full py-3 px-6 bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600 text-brand-navy dark:text-slate-100 font-bold text-center rounded-lg transition-colors">
+                        Get Started
                     </a>
                 </div>
 
-               <div class="md:w-2/3 grid grid-cols-1 sm:grid-cols-2 gap-6 w-full">
+                <!-- PREMIUM TIER (MOST POPULAR) -->
+                <div class="bg-white dark:bg-slate-800 rounded-2xl shadow-2xl p-8 border-2 border-brand-orange relative flex flex-col transform md:-translate-y-6 hover:shadow-2xl transition-all reveal-on-scroll delay-100">
+                    <div class="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+                        <span class="bg-brand-orange text-white text-sm font-bold px-4 py-1.5 rounded-full shadow-md uppercase tracking-wide">MOST POPULAR</span>
+                    </div>
 
-    <div class="p-6 rounded-xl border border-slate-200 bg-slate-50 hover:border-brand-orange/50 transition-colors">
-        <div class="flex items-center justify-between mb-4">
-            <div class="flex items-center gap-3">
-                <div class="w-10 h-10 rounded-full bg-slate-200 flex items-center justify-center text-slate-500">
-                    <i class="fa-solid fa-user"></i>
+                    <div class="mb-4 mt-2">
+                        <span class="inline-block px-3 py-1 bg-orange-100 dark:bg-orange-900/30 text-brand-orange dark:text-orange-400 text-xs font-bold rounded-full uppercase tracking-wide">Best Value for Most People</span>
+                    </div>
+                    <h3 class="text-3xl font-bold text-brand-navy dark:text-white mb-2">Premium</h3>
+                    <p class="text-slate-600 dark:text-slate-400 text-sm mb-6">Full outbound machine with everything you need to scale.</p>
+
+                    <div class="mb-8">
+                        <div class="flex items-baseline mb-1">
+                            <span class="text-5xl font-extrabold text-brand-orange">$1,199</span>
+                            <span class="text-slate-500 dark:text-slate-400 ml-1">/month</span>
+                        </div>
+                        <p class="text-xs text-slate-400 dark:text-slate-500">Billed monthly, no long-term contracts</p>
+                    </div>
+
+                    <ul class="space-y-4 mb-8 flex-grow">
+                        <li class="flex items-start">
+                            <i class="fa-solid fa-check text-brand-orange mt-1 mr-3 flex-shrink-0"></i>
+                            <span class="text-slate-600 dark:text-slate-400 text-sm">
+                                <strong>Full Outbound Machine</strong>
+                            </span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fa-solid fa-check text-brand-orange mt-1 mr-3 flex-shrink-0"></i>
+                            <span class="text-slate-600 dark:text-slate-400 text-sm">
+                                <strong>Triple-line dialer</strong> + rotating numbers
+                            </span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fa-solid fa-check text-brand-orange mt-1 mr-3 flex-shrink-0"></i>
+                            <span class="text-slate-600 dark:text-slate-400 text-sm">
+                                <strong>Dedicated cold caller</strong> (80 hrs/mo)
+                            </span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fa-solid fa-check text-brand-orange mt-1 mr-3 flex-shrink-0"></i>
+                            <span class="text-slate-600 dark:text-slate-400 text-sm">
+                                <strong>25,000 XLeads + 10,000 DealMachine</strong> leads
+                            </span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fa-solid fa-check text-brand-orange mt-1 mr-3 flex-shrink-0"></i>
+                            <span class="text-slate-600 dark:text-slate-400 text-sm">
+                                <strong>Full VA management</strong>, list pulling, and cleaning
+                            </span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fa-solid fa-check text-brand-orange mt-1 mr-3 flex-shrink-0"></i>
+                            <span class="text-slate-600 dark:text-slate-400 text-sm">
+                                <strong>AI callback handling</strong> and CRM management
+                            </span>
+                        </li>
+                    </ul>
+
+                    <a href="#contact" class="block w-full py-4 px-6 bg-brand-orange hover:bg-orange-600 text-white font-bold text-center rounded-lg shadow-lg hover:shadow-xl transition-all">
+                        Book This Plan
+                    </a>
                 </div>
-                <div>
-                    <h4 class="font-bold text-slate-900 text-sm">Agent: Sarah M.</h4>
-                    <p class="text-xs text-slate-500">Handling "Not Interested"</p>
+
+                <!-- CUSTOM+ TIER -->
+                <div class="bg-white dark:bg-slate-800 rounded-2xl shadow-lg p-8 border border-slate-200 dark:border-slate-700 relative flex flex-col hover:shadow-xl transition-shadow reveal-on-scroll delay-200">
+                    <div class="mb-4">
+                        <span class="inline-block px-3 py-1 bg-slate-900 dark:bg-slate-700 text-white dark:text-slate-100 text-xs font-bold rounded-full uppercase tracking-wide">Scale Mode</span>
+                    </div>
+                    <h3 class="text-2xl font-bold text-brand-navy dark:text-white mb-2">Custom+</h3>
+                    <p class="text-slate-500 dark:text-slate-400 text-sm mb-6">For serious operators ready to dominate their market.</p>
+
+                    <div class="mb-8">
+                        <div class="flex items-baseline mb-1">
+                            <span class="text-5xl font-extrabold text-brand-navy dark:text-white">$2,699</span>
+                            <span class="text-slate-500 dark:text-slate-400 ml-1">/month</span>
+                        </div>
+                        <p class="text-xs text-slate-400 dark:text-slate-500">Billed monthly, enterprise support</p>
+                    </div>
+
+                    <ul class="space-y-4 mb-8 flex-grow">
+                        <li class="flex items-start">
+                            <i class="fa-solid fa-check text-brand-orange mt-1 mr-3 flex-shrink-0"></i>
+                            <span class="text-slate-600 dark:text-slate-400 text-sm">
+                                <strong>Everything in Premium +</strong>
+                            </span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fa-solid fa-check text-brand-orange mt-1 mr-3 flex-shrink-0"></i>
+                            <span class="text-slate-600 dark:text-slate-400 text-sm">
+                                <strong>Increased calling volume</strong>
+                            </span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fa-solid fa-check text-brand-orange mt-1 mr-3 flex-shrink-0"></i>
+                            <span class="text-slate-600 dark:text-slate-400 text-sm">
+                                <strong>Priority targeting</strong> and list stacking
+                            </span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fa-solid fa-check text-brand-orange mt-1 mr-3 flex-shrink-0"></i>
+                            <span class="text-slate-600 dark:text-slate-400 text-sm">
+                                <strong>Advanced KPI tracking</strong> and weekly performance optimization
+                            </span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fa-solid fa-check text-brand-orange mt-1 mr-3 flex-shrink-0"></i>
+                            <span class="text-slate-600 dark:text-slate-400 text-sm">
+                                <strong>Closer support</strong> to help convert deals
+                            </span>
+                        </li>
+                    </ul>
+
+                    <a href="#contact" class="block w-full py-3 px-6 bg-slate-900 dark:bg-slate-700 hover:bg-slate-800 dark:hover:bg-slate-600 text-white font-bold text-center rounded-lg transition-colors">
+                        Get Custom Quote
+                    </a>
+                </div>
+
+            </div>
+
+            <!-- DIY BASELINE COMPARISON -->
+            <div class="mt-16 border-t border-slate-200 dark:border-slate-700 pt-12 reveal-on-scroll">
+                <div class="bg-slate-50 dark:bg-slate-800 rounded-2xl p-8 border border-slate-200 dark:border-slate-700">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+                        <div>
+                            <h3 class="text-2xl font-bold text-brand-navy dark:text-white mb-4">DIY (Do It Yourself)</h3>
+                            <p class="text-slate-600 dark:text-slate-400 mb-4 text-sm leading-relaxed">
+                                Want to build it yourself? You'll need to handle everything:
+                            </p>
+                            <ul class="space-y-3">
+                                <li class="flex items-start">
+                                    <i class="fa-solid fa-xmark text-red-500 mt-1 mr-3 flex-shrink-0"></i>
+                                    <span class="text-slate-600 dark:text-slate-400 text-sm">Recruit and train callers</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fa-solid fa-xmark text-red-500 mt-1 mr-3 flex-shrink-0"></i>
+                                    <span class="text-slate-600 dark:text-slate-400 text-sm">Set up dialer software</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fa-solid fa-xmark text-red-500 mt-1 mr-3 flex-shrink-0"></i>
+                                    <span class="text-slate-600 dark:text-slate-400 text-sm">Source and manage leads</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fa-solid fa-xmark text-red-500 mt-1 mr-3 flex-shrink-0"></i>
+                                    <span class="text-slate-600 dark:text-slate-400 text-sm">Ensure consistency & quality</span>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="bg-white dark:bg-slate-900 rounded-xl p-6 border border-slate-300 dark:border-slate-700">
+                            <div class="flex items-baseline mb-2">
+                                <span class="text-4xl font-extrabold text-brand-navy dark:text-white">$270+</span>
+                                <span class="text-slate-500 dark:text-slate-400 ml-1">/month</span>
+                            </div>
+                            <p class="text-xs text-slate-500 dark:text-slate-400 mb-6">Base cost (no guarantee on quality)</p>
+                            <div class="space-y-2 text-xs text-slate-600 dark:text-slate-400">
+                                <p><strong>Reality:</strong> Most DIY setups require</p>
+                                <p>5-10x more time investment and 3-6 months to get leads flowing consistently.</p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <i class="fa-solid fa-microphone-lines text-brand-orange opacity-50"></i>
-        </div>
-        
-        <div class="bg-white rounded-lg p-3 shadow-sm border border-slate-200 flex items-center gap-3 hover:bg-slate-50 transition-colors">
-            
-            <audio id="audio-sarah" src="path/to/sarah-recording.mp3" onended="resetIcon(this)"></audio>
 
-            <button onclick="toggleAudio('audio-sarah', this)" class="w-8 h-8 flex items-center justify-center bg-brand-navy rounded-full text-white text-xs hover:bg-brand-orange transition-colors cursor-pointer">
-                <i class="fa-solid fa-play ml-0.5"></i>
-            </button>
-            
-            <span class="text-xs font-mono text-slate-500">0:45</span>
-        </div>
-    </div>
-
-    <div class="p-6 rounded-xl border border-slate-200 bg-slate-50 hover:border-brand-orange/50 transition-colors">
-        <div class="flex items-center justify-between mb-4">
-            <div class="flex items-center gap-3">
-                <div class="w-10 h-10 rounded-full bg-slate-200 flex items-center justify-center text-slate-500">
-                    <i class="fa-solid fa-user"></i>
-                </div>
-                <div>
-                    <h4 class="font-bold text-slate-900 text-sm">Agent: Joe.</h4>
-                    <p class="text-xs text-slate-500">Turning Wrong Contact into a Lead</p>
-                </div>
+            <div class="mt-12 text-center border-t border-slate-200 dark:border-slate-700 pt-8 reveal-on-scroll">
+                <p class="text-xs text-slate-400 dark:text-slate-500 max-w-4xl mx-auto leading-relaxed">
+                    * All plans include dedicated talent and management. <strong>Dialer software and lead data costs may apply separately based on volume.</strong> No long-term contracts—cancel anytime. Ready to scale? Book a consultation to customize your plan.
+                </p>
             </div>
-            <i class="fa-solid fa-microphone-lines text-brand-orange opacity-50"></i>
+
         </div>
-
-        <div class="bg-white rounded-lg p-3 shadow-sm border border-slate-200 flex items-center gap-3 hover:bg-slate-50 transition-colors">
-            
-            <audio id="audio-david" src="audio/wrong-contact.mp3" onended="resetIcon(this)"></audio>
-
-            <button onclick="toggleAudio('audio-david', this)" class="w-8 h-8 flex items-center justify-center bg-brand-navy rounded-full text-white text-xs hover:bg-brand-orange transition-colors cursor-pointer">
-                <i class="fa-solid fa-play ml-0.5"></i>
-            </button>
-            
-            <span class="text-xs font-mono text-slate-500">5:46</span>
-        </div>
-    </div>
-
-</div>
-
-<script>
-    let currentAudio = null;
-    let currentButton = null;
-
-    function toggleAudio(audioId, btn) {
-        const audio = document.getElementById(audioId);
-        const icon = btn.querySelector('i');
-
-        // If a different audio is playing, pause it and reset its icon
-        if (currentAudio && currentAudio !== audio) {
-            currentAudio.pause();
-            currentAudio.currentTime = 0; // Optional: rewind to start
-            if (currentButton) {
-                const oldIcon = currentButton.querySelector('i');
-                oldIcon.classList.remove('fa-pause');
-                oldIcon.classList.add('fa-play', 'ml-0.5');
-            }
-        }
-
-        // Toggle current audio
-        if (audio.paused) {
-            audio.play();
-            icon.classList.remove('fa-play', 'ml-0.5');
-            icon.classList.add('fa-pause');
-            
-            // Set as current active
-            currentAudio = audio;
-            currentButton = btn;
-        } else {
-            audio.pause();
-            icon.classList.remove('fa-pause');
-            icon.classList.add('fa-play', 'ml-0.5');
-            currentAudio = null;
-            currentButton = null;
-        }
-    }
-
-    // Automatically reset icon when audio finishes
-    function resetIcon(audioElement) {
-        // Find the button associated with this audio (via sibling traversal or keeping track globally)
-        // Since we are tracking 'currentButton' globally, we can use that:
-        if (currentButton) {
-            const icon = currentButton.querySelector('i');
-            icon.classList.remove('fa-pause');
-            icon.classList.add('fa-play', 'ml-0.5');
-            currentAudio = null;
-            currentButton = null;
-        }
-    }
-</script>
-
-                </div>
-            </div>
-            
-            <div>
-                <div class="text-center mb-12">
-                    <h3 class="text-3xl font-bold text-slate-900">The Wholesaler's <span class="text-blue-400 font-extrabold">Blueprint</span></h3>
-                    <p class="text-slate-500 mt-2">Deep dives into the mechanics of modern wholesaling. From granular KPIs to macro market seasonality.</p>
-                </div>
-
-<div class="grid grid-cols-1 md:grid-cols-2 gap-10 max-w-6xl mx-auto">
-    
-    <a href="insights-intelligence.html" class="group cursor-pointer block h-full flex flex-col">
-        <div class="relative overflow-hidden rounded-xl mb-5 h-64 shadow-sm border border-slate-100">
-            <img src="png/insights-intelligence.png" alt="Team meeting" class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500">
-            <div class="absolute inset-0 bg-brand-navy/10 group-hover:bg-brand-navy/0 transition-colors"></div>
-        </div>
-        <h4 class="font-bold text-slate-900 text-xl mb-3 group-hover:text-brand-orange transition-colors">Target Motivation based on Intelligence.</h4>
-        <p class="text-base text-slate-600 leading-relaxed">Most agencies sell you dials. We sell you Intelligence. Learn how we categorize leads by asset condition, not just phone numbers.</p>
-    </a>
-
-    <a href="insights-deal.html" class="group cursor-pointer block h-full flex flex-col">
-        <div class="relative overflow-hidden rounded-xl mb-5 h-64 shadow-sm border border-slate-100">
-            <img src="png/insights-deal.png" alt="Targeting" class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500">
-            <div class="absolute inset-0 bg-brand-navy/10 group-hover:bg-brand-navy/0 transition-colors"></div>
-        </div>
-        <h4 class="font-bold text-slate-900 text-xl mb-3 group-hover:text-brand-orange transition-colors">The Right Offer at the Right Moment</h4> 
-        <p class="text-base text-slate-600 leading-relaxed">Understanding different Deal Structures and pivot based on seller's timeline and equity.</p>
-    </a>
-
-    <a href="insights-kpi.html" class="group cursor-pointer block h-full flex flex-col">
-        <div class="relative overflow-hidden rounded-xl mb-5 h-64 shadow-sm border border-slate-100">
-            <img src="png/insights-kpi.png" alt="Industry Analysis" class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500">
-            <div class="absolute inset-0 bg-brand-navy/10 group-hover:bg-brand-navy/0 transition-colors"></div>
-        </div>
-        <h4 class="font-bold text-slate-900 text-xl mb-3 group-hover:text-brand-orange transition-colors">Real-Time Performance Analytics</h4>
-        <p class="text-base text-slate-600 leading-relaxed">Data-driven insights at your fingertips. Visualize your call volume, conversion rates, and lead quality instantly to make faster decisions.</p>
-    </a>
-
-    <a href="insights-market.html" class="group cursor-pointer block h-full flex flex-col">
-        <div class="relative overflow-hidden rounded-xl mb-5 h-64 shadow-sm border border-slate-100">
-            <img src="png/insights-market.png" alt="Social Media vs Calling" class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500">
-            <div class="absolute inset-0 bg-brand-navy/10 group-hover:bg-brand-navy/0 transition-colors"></div>
-        </div>
-        <h4 class="font-bold text-slate-900 text-xl mb-3 group-hover:text-brand-orange transition-colors">Mastering Market Seasonality</h4>
-        <p class="text-base text-slate-600 leading-relaxed">Real estate is cyclical. We track inventory volume and days-on-market trends to deploy your budget exactly when seller motivation is peaking.</p>
-    </a>
-
-</div>
     </section>
 
-    <section id="about" class="py-24 bg-white border-y border-slate-100 overflow-hidden">
+    <!-- ========== INSIGHTS SECTION ========== -->
+    <!-- Social proof and case studies with audio player demonstrations of agent calls -->
+    <section id="insights" class="py-24 bg-slate-50 dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700 scroll-mt-32">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+            <!-- Section Header: Emphasizes conversational approach over scripted AI -->
+            <div class="text-center mb-16 reveal-on-scroll">
+                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-green-100 text-green-700 text-xs font-bold uppercase tracking-wide mb-4">
+                    <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span> Evidence-Based Results
+                </div>
+                <h2 class="text-3xl font-extrabold text-brand-navy dark:text-white">
+                    We Don't Just Read Scripts. <span class="text-brand-orange font-extrabold">We Converse.</span>
+                </h2>
+            </div>
+
+            <!-- Two-column layout: Description + Audio players -->
+            <div class="flex flex-col md:flex-row items-center justify-between gap-12 mb-24">
+            <div class="md:w-1/3 reveal-on-scroll">
+                <p class="text-slate-600 dark:text-slate-400 mb-6 text-lg leading-relaxed">
+                    AI outbound gets hung up on. Only humans can build the rapport required to acquire seller leads. Hear how our agents pivot off-script to have genuine, problem-solving conversations with homeowners.
+                </p>
+                <a href="#plans" class="text-brand-orange font-bold hover:text-orange-700 transition-colors flex items-center gap-2 text-lg group">
+                    Hire this talent <i class="fa-solid fa-arrow-right group-hover:translate-x-1 transition-transform"></i>
+                </a>
+            </div>
+
+            <!-- =============================================
+                 AUDIO CARDS GRID — 6 total, 3 cols on lg
+                 To add a new recording:
+                   1. Drop the .mp3 file into /audio/
+                   2. Copy any card block below
+                   3. Update: id, src, aria-label, timer id, agent name, subtitle, and duration
+                 ============================================= -->
+            <div class="md:w-2/3 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 w-full reveal-on-scroll delay-200">
+
+                <!-- CARD 1 — Richard H. (Syed) -->
+                <div class="p-6 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 hover:border-brand-orange/50 transition-colors shadow-sm">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-full bg-slate-200 flex items-center justify-center text-slate-500">
+                                <i class="fa-solid fa-user"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-slate-900 dark:text-slate-100 text-sm">Agent: Richard H.</h4>
+                                <p class="text-xs text-slate-500">Live Cold Call Sample: Handling Seller Objections</p>
+                            </div>
+                        </div>
+                        <i class="fa-solid fa-microphone-lines text-brand-orange opacity-50"></i>
+                    </div>
+                    <div class="bg-slate-50 dark:bg-slate-700 rounded-lg p-3 border border-slate-200 dark:border-slate-600 flex items-center gap-3">
+                        <audio id="audio-richard" src="audio/hot-lead-murs.mp3" ontimeupdate="updateCountdown(this)" onended="resetPlayer(this)"></audio>
+                        <button onclick="toggleAudio('audio-richard', this)" class="w-8 h-8 flex items-center justify-center bg-brand-navy rounded-full text-white text-xs hover:bg-brand-orange transition-colors cursor-pointer" aria-label="Play Richard Audio">
+                            <i class="fa-solid fa-play ml-0.5"></i>
+                        </button>
+                        <span id="timer-audio-richard" class="text-xs font-mono text-slate-500 w-12 text-right">6:29</span>
+                    </div>
+                </div>
+
+                <!-- CARD 2 — Joe (Nowshad) -->
+                <div class="p-6 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 hover:border-brand-orange/50 transition-colors shadow-sm">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-full bg-slate-200 flex items-center justify-center text-slate-500">
+                                <i class="fa-solid fa-user"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-slate-900 dark:text-slate-100 text-sm">Agent: Joe N.</h4>
+                                <p class="text-xs text-slate-500">Live Cold Call Sample: Building Rapport</p>
+                            </div>
+                        </div>
+                        <i class="fa-solid fa-microphone-lines text-brand-orange opacity-50"></i>
+                    </div>
+                    <div class="bg-slate-50 dark:bg-slate-700 rounded-lg p-3 border border-slate-200 dark:border-slate-600 flex items-center gap-3">
+                        <audio id="audio-joe" src="audio/wrong-contact.mp3" ontimeupdate="updateCountdown(this)" onended="resetPlayer(this)"></audio>
+                        <button onclick="toggleAudio('audio-joe', this)" class="w-8 h-8 flex items-center justify-center bg-brand-navy rounded-full text-white text-xs hover:bg-brand-orange transition-colors cursor-pointer" aria-label="Play Joe Audio">
+                            <i class="fa-solid fa-play ml-0.5"></i>
+                        </button>
+                        <span id="timer-audio-joe" class="text-xs font-mono text-slate-500 w-12 text-right">5:46</span>
+                    </div>
+                </div>
+
+                <!-- CARD 3 — Ben (Sakeef): update name, subtitle, src, and duration -->
+                <div class="p-6 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 hover:border-brand-orange/50 transition-colors shadow-sm">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-full bg-slate-200 flex items-center justify-center text-slate-500">
+                                <i class="fa-solid fa-user"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-slate-900 dark:text-slate-100 text-sm">Agent: Ben S.</h4>
+                                <p class="text-xs text-slate-500">Live Cold Call Sample: Nurturing Lead</p>
+                            </div>
+                        </div>
+                        <i class="fa-solid fa-microphone-lines text-brand-orange opacity-50"></i>
+                    </div>
+                    <div class="bg-slate-50 dark:bg-slate-700 rounded-lg p-3 border border-slate-200 dark:border-slate-600 flex items-center gap-3">
+                        <audio id="audio-3" src="audio/nurture-lead-abeer.mp3" ontimeupdate="updateCountdown(this)" onended="resetPlayer(this)"></audio>
+                        <button onclick="toggleAudio('audio-3', this)" class="w-8 h-8 flex items-center justify-center bg-brand-navy rounded-full text-white text-xs hover:bg-brand-orange transition-colors cursor-pointer" aria-label="Play Audio 3">
+                            <i class="fa-solid fa-play ml-0.5"></i>
+                        </button>
+                        <span id="timer-audio-3" class="text-xs font-mono text-slate-500 w-12 text-right">4:04</span>
+                    </div>
+                </div>
+
+                <!-- CARD 4 — Anna (Nusrat): -->
+                <div class="p-6 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 hover:border-brand-orange/50 transition-colors shadow-sm">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-full bg-slate-200 flex items-center justify-center text-slate-500">
+                                <i class="fa-solid fa-user"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-slate-900 dark:text-slate-100 text-sm">Agent: Anna N.</h4>
+                                <p class="text-xs text-slate-500">Live Cold Call Sample: Collecting MTCP</p>
+                            </div>
+                        </div>
+                        <i class="fa-solid fa-microphone-lines text-brand-orange opacity-50"></i>
+                    </div>
+                    <div class="bg-slate-50 dark:bg-slate-700 rounded-lg p-3 border border-slate-200 dark:border-slate-600 flex items-center gap-3">
+                        <audio id="audio-4" src="audio/warm-lead-nusrat2.mp3" ontimeupdate="updateCountdown(this)" onended="resetPlayer(this)"></audio>
+                        <button onclick="toggleAudio('audio-4', this)" class="w-8 h-8 flex items-center justify-center bg-brand-navy rounded-full text-white text-xs hover:bg-brand-orange transition-colors cursor-pointer" aria-label="Play Audio 4">
+                            <i class="fa-solid fa-play ml-0.5"></i>
+                        </button>
+                        <span id="timer-audio-4" class="text-xs font-mono text-slate-500 w-12 text-right">4:35</span>
+                    </div>
+                </div>
+
+                <!-- CARD 5 — Dave (Faizan): -->
+                <div class="p-6 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 hover:border-brand-orange/50 transition-colors shadow-sm">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-full bg-slate-200 flex items-center justify-center text-slate-500">
+                                <i class="fa-solid fa-user"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-slate-900 dark:text-slate-100 text-sm">Agent: Dave F.</h4>
+                                <p class="text-xs text-slate-500">Live Cold Call Sample: Lead Qualification</p>
+                            </div>
+                        </div>
+                        <i class="fa-solid fa-microphone-lines text-brand-orange opacity-50"></i>
+                    </div>
+                    <div class="bg-slate-50 dark:bg-slate-700 rounded-lg p-3 border border-slate-200 dark:border-slate-600 flex items-center gap-3">
+                        <audio id="audio-5" src="audio/warm-lead-faizan.mp3" ontimeupdate="updateCountdown(this)" onended="resetPlayer(this)"></audio>
+                        <button onclick="toggleAudio('audio-5', this)" class="w-8 h-8 flex items-center justify-center bg-brand-navy rounded-full text-white text-xs hover:bg-brand-orange transition-colors cursor-pointer" aria-label="Play Audio 5">
+                            <i class="fa-solid fa-play ml-0.5"></i>
+                        </button>
+                        <span id="timer-audio-5" class="text-xs font-mono text-slate-500 w-12 text-right">6:23</span>
+                    </div>
+                </div>
+
+                <!-- CARD 6 — Anna (Heba): -->
+                <div class="p-6 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 hover:border-brand-orange/50 transition-colors shadow-sm">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-full bg-slate-200 flex items-center justify-center text-slate-500">
+                                <i class="fa-solid fa-user"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-slate-900 dark:text-slate-100 text-sm">Agent: Anna H.</h4>
+                                <p class="text-xs text-slate-500">Live Cold Call Sample: Finding Right Prospects</p>
+                            </div>
+                        </div>
+                        <i class="fa-solid fa-microphone-lines text-brand-orange opacity-50"></i>
+                    </div>
+                    <div class="bg-slate-50 dark:bg-slate-700 rounded-lg p-3 border border-slate-200 dark:border-slate-600 flex items-center gap-3">
+                        <audio id="audio-6" src="audio/warm-lead-heba.mp3" ontimeupdate="updateCountdown(this)" onended="resetPlayer(this)"></audio>
+                        <button onclick="toggleAudio('audio-6', this)" class="w-8 h-8 flex items-center justify-center bg-brand-navy rounded-full text-white text-xs hover:bg-brand-orange transition-colors cursor-pointer" aria-label="Play Audio 6">
+                            <i class="fa-solid fa-play ml-0.5"></i>
+                        </button>
+                        <span id="timer-audio-6" class="text-xs font-mono text-slate-500 w-12 text-right">3:42</span>
+                    </div>
+                </div>
+
+            </div>
+            <!-- END AUDIO CARDS GRID -->
+
+        </div>
+        
+        <div>
+            <div class="text-center mb-12 reveal-on-scroll">
+                <h3 class="text-3xl font-bold text-brand-navy dark:text-white">
+                    The Wholesaler's <span class="text-blue-500 font-extrabold">Blueprint</span>
+                </h3>
+                <p class="text-slate-500 mt-2 text-lg">
+                    Deep dives into the mechanics of modern wholesaling. From granular KPIs to macro market seasonality.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-10 max-w-6xl mx-auto">
+                
+                <a href="insights-intelligence.html" class="group cursor-pointer block h-full flex flex-col reveal-on-scroll delay-100">
+                    <div class="relative overflow-hidden rounded-xl mb-5 h-64 shadow-sm border border-slate-100">
+                        <img src="png/insights-intelligence.webp" alt="Team meeting" loading="lazy" class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500">
+                        <div class="absolute inset-0 bg-brand-navy/10 group-hover:bg-brand-navy/0 transition-colors"></div>
+                    </div>
+                    <h4 class="font-bold text-slate-900 dark:text-slate-100 text-xl mb-3 group-hover:text-brand-orange transition-colors">Target Motivation based on Intelligence.</h4>
+                    <p class="text-base text-slate-600 dark:text-slate-400 leading-relaxed">Most agencies sell you dials. We sell you Intelligence. Learn how we categorize leads by asset condition, not just phone numbers.</p>
+                </a>
+
+                <a href="insights-deal.html" class="group cursor-pointer block h-full flex flex-col reveal-on-scroll delay-200">
+                    <div class="relative overflow-hidden rounded-xl mb-5 h-64 shadow-sm border border-slate-100">
+                        <img src="png/insights-deal.webp" alt="Targeting" loading="lazy" class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500">
+                        <div class="absolute inset-0 bg-brand-navy/10 group-hover:bg-brand-navy/0 transition-colors"></div>
+                    </div>
+                    <h4 class="font-bold text-slate-900 dark:text-slate-100 text-xl mb-3 group-hover:text-brand-orange transition-colors">The Right Offer at the Right Moment</h4>
+                    <p class="text-base text-slate-600 dark:text-slate-400 leading-relaxed">Understanding different Deal Structures and pivot based on seller's timeline and equity.</p>
+                </a>
+
+                <a href="insights-kpi.html" class="group cursor-pointer block h-full flex flex-col reveal-on-scroll delay-300">
+                    <div class="relative overflow-hidden rounded-xl mb-5 h-64 shadow-sm border border-slate-100">
+                        <img src="png/insights-kpi.webp" alt="Industry Analysis" loading="lazy" class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500">
+                        <div class="absolute inset-0 bg-brand-navy/10 group-hover:bg-brand-navy/0 transition-colors"></div>
+                    </div>
+                    <h4 class="font-bold text-slate-900 dark:text-slate-100 text-xl mb-3 group-hover:text-brand-orange transition-colors">Real-Time Performance Analytics</h4>
+                    <p class="text-base text-slate-600 dark:text-slate-400 leading-relaxed">Data-driven insights at your fingertips. Visualize your call volume, conversion rates, and lead quality instantly to make faster decisions.</p>
+                </a>
+
+                <a href="insights-market.html" class="group cursor-pointer block h-full flex flex-col reveal-on-scroll delay-400">
+                    <div class="relative overflow-hidden rounded-xl mb-5 h-64 shadow-sm border border-slate-100">
+                        <img src="png/insights-market.webp" alt="Social Media vs Calling" loading="lazy" class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500">
+                        <div class="absolute inset-0 bg-brand-navy/10 group-hover:bg-brand-navy/0 transition-colors"></div>
+                    </div>
+                    <h4 class="font-bold text-slate-900 dark:text-slate-100 text-xl mb-3 group-hover:text-brand-orange transition-colors">Mastering Market Seasonality</h4>
+                    <p class="text-base text-slate-600 dark:text-slate-400 leading-relaxed">Like every other business Real Estate market is also cyclical. We have monitored inventory volume and days-on-market trends to deploy your budget exactly when seller motivation is peaking.</p>
+                </a>
+
+            </div>
+        </div>
+
+    </div>
+</section>
+
+
+    <!-- ========== TESTIMONIALS SECTION ========== -->
+    <!-- Client success stories and social proof for credibility -->
+    <section class="py-24 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-700 scroll-mt-32">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <!-- Section Header -->
+            <div class="text-center mb-16 reveal-on-scroll">
+                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-100 text-blue-700 text-xs font-bold uppercase tracking-wide mb-4">
+                    <span class="w-2 h-2 rounded-full bg-blue-500 animate-pulse"></span> Trusted by Wholesalers
+                </div>
+                <h2 class="text-3xl md:text-4xl font-extrabold text-brand-navy dark:text-white mb-4">
+                    Real Results from <span class="text-brand-orange font-extrabold">Real Clients.</span>
+                </h2>
+                <p class="text-slate-600 dark:text-slate-400 text-lg">
+                    Don't just take our word for it—see what wholesalers are saying about their experience with VoloLeads.
+                </p>
+            </div>
+
+            <!-- Testimonials Grid: 3 columns on desktop -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+
+                <!-- Testimonial 1 -->
+                <div class="bg-slate-50 dark:bg-slate-700 rounded-xl p-8 border border-slate-200 dark:border-slate-600 hover:border-brand-orange/50 transition-all duration-300 shadow-sm hover:shadow-lg reveal-on-scroll delay-100">
+                    <!-- Star Rating -->
+                    <div class="flex gap-1 mb-4">
+                        <i class="fa-solid fa-star text-brand-orange text-sm"></i>
+                        <i class="fa-solid fa-star text-brand-orange text-sm"></i>
+                        <i class="fa-solid fa-star text-brand-orange text-sm"></i>
+                        <i class="fa-solid fa-star text-brand-orange text-sm"></i>
+                        <i class="fa-solid fa-star text-brand-orange text-sm"></i>
+                    </div>
+
+                    <!-- Quote -->
+                    <p class="text-slate-700 dark:text-slate-300 mb-6 leading-relaxed font-medium">
+                        "VoloLeads cut my phone time in half. Their VAs are trained so well, I don't even need to coach them. They're closing calls like pros."
+                    </p>
+
+                    <!-- Client Info -->
+                    <div class="flex items-center gap-3 pt-4 border-t border-slate-200 dark:border-slate-700">
+                        <div class="w-12 h-12 rounded-full bg-brand-orange/10 flex items-center justify-center">
+                            <span class="text-brand-orange font-bold">MC</span>
+                        </div>
+                        <div>
+                            <p class="font-bold text-slate-900 dark:text-slate-100 text-sm">Marcus Chen</p>
+                            <p class="text-xs text-slate-500">Real Estate Wholesaler, TX</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Testimonial 2 -->
+                <div class="bg-slate-50 dark:bg-slate-700 rounded-xl p-8 border border-slate-200 dark:border-slate-600 hover:border-brand-orange/50 transition-all duration-300 shadow-sm hover:shadow-lg reveal-on-scroll delay-200">
+                    <!-- Star Rating -->
+                    <div class="flex gap-1 mb-4">
+                        <i class="fa-solid fa-star text-brand-orange text-sm"></i>
+                        <i class="fa-solid fa-star text-brand-orange text-sm"></i>
+                        <i class="fa-solid fa-star text-brand-orange text-sm"></i>
+                        <i class="fa-solid fa-star text-brand-orange text-sm"></i>
+                        <i class="fa-solid fa-star text-brand-orange text-sm"></i>
+                    </div>
+
+                    <!-- Quote -->
+                    <p class="text-slate-700 dark:text-slate-300 mb-6 leading-relaxed font-medium">
+                        "In 6 months, we went from struggling to find deals to having a real pipeline. ROI was insane—best investment for my business."
+                    </p>
+
+                    <!-- Client Info -->
+                    <div class="flex items-center gap-3 pt-4 border-t border-slate-200 dark:border-slate-700">
+                        <div class="w-12 h-12 rounded-full bg-brand-orange/10 flex items-center justify-center">
+                            <span class="text-brand-orange font-bold">SJ</span>
+                        </div>
+                        <div>
+                            <p class="font-bold text-slate-900 dark:text-slate-100 text-sm">Sarah Johnson</p>
+                            <p class="text-xs text-slate-500">Real Estate Wholesaler, GA</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Testimonial 3 -->
+                <div class="bg-slate-50 dark:bg-slate-700 rounded-xl p-8 border border-slate-200 dark:border-slate-600 hover:border-brand-orange/50 transition-all duration-300 shadow-sm hover:shadow-lg reveal-on-scroll delay-300">
+                    <!-- Star Rating -->
+                    <div class="flex gap-1 mb-4">
+                        <i class="fa-solid fa-star text-brand-orange text-sm"></i>
+                        <i class="fa-solid fa-star text-brand-orange text-sm"></i>
+                        <i class="fa-solid fa-star text-brand-orange text-sm"></i>
+                        <i class="fa-solid fa-star text-brand-orange text-sm"></i>
+                        <i class="fa-solid fa-star text-brand-orange text-sm"></i>
+                    </div>
+
+                    <!-- Quote -->
+                    <p class="text-slate-700 dark:text-slate-300 mb-6 leading-relaxed font-medium">
+                        "The quality of training their VAs receive is unmatched. They sound like seasoned pros, not entry-level. Worth every penny."
+                    </p>
+
+                    <!-- Client Info -->
+                    <div class="flex items-center gap-3 pt-4 border-t border-slate-200 dark:border-slate-700">
+                        <div class="w-12 h-12 rounded-full bg-brand-orange/10 flex items-center justify-center">
+                            <span class="text-brand-orange font-bold">RK</span>
+                        </div>
+                        <div>
+                            <p class="font-bold text-slate-900 dark:text-slate-100 text-sm">Robert Kim</p>
+                            <p class="text-xs text-slate-500">Real Estate Wholesaler, FL</p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Social Proof Stats -->
+            <div class="mt-20 pt-16 border-t border-slate-200 dark:border-slate-700 grid grid-cols-1 md:grid-cols-3 gap-8 reveal-on-scroll delay-400">
+                <div class="text-center">
+                    <p class="text-4xl md:text-5xl font-extrabold text-brand-orange mb-2">
+                        <span class="counter-animate" data-target="50">0</span>+
+                    </p>
+                    <p class="text-slate-600 dark:text-slate-400 font-semibold">Active Clients Nationwide</p>
+                </div>
+                <div class="text-center">
+                    <p class="text-4xl md:text-5xl font-extrabold text-brand-orange mb-2">
+                        <span class="counter-animate" data-target="5000">0</span>+
+                    </p>
+                    <p class="text-slate-600 dark:text-slate-400 font-semibold">Hot & Warm Leads Generated</p>
+                </div>
+                <div class="text-center">
+                    <p class="text-4xl md:text-5xl font-extrabold text-brand-orange mb-2">
+                        4.9<span class="text-2xl">★</span>
+                    </p>
+                    <p class="text-slate-600 dark:text-slate-400 font-semibold">Average Client Rating</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========== ABOUT SECTION ========== -->
+    <!-- Founder information and company mission with expertise highlights -->
+    <section id="about" class="py-24 bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-700 overflow-hidden scroll-mt-32">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
-                
-                <div class="relative order-2 md:order-1 flex flex-col sm:flex-row justify-center items-center gap-10 sm:gap-12">
+
+                <!-- Founder Photos: Syed & Ramisa with hover effects -->
+                <div class="relative order-2 md:order-1 flex flex-row justify-center items-center gap-4 md:gap-12 reveal-on-scroll">
                     
                     <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-[120%] bg-brand-orange/5 blur-3xl rounded-full -z-10"></div>
 
-                    <div class="text-center relative z-10">
-                         <div class="w-44 h-44 sm:w-52 sm:h-52 mx-auto bg-slate-200 rounded-full flex items-center justify-center border-[6px] border-white shadow-2xl overflow-hidden mb-5 group hover:border-brand-orange/75 transition-all duration-500">
-                            <img src="png/syed.png" alt="Syed - Founder" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                    <div class="text-center relative z-10 group">
+                         <div class="w-28 h-28 sm:w-32 sm:h-32 md:w-52 md:h-52 mx-auto bg-slate-200 rounded-full flex items-center justify-center border-[4px] md:border-[6px] border-white shadow-2xl overflow-hidden mb-3 md:mb-5 group-hover:border-brand-orange/75 transition-all duration-500">
+                            <img src="png/syed.webp" alt="Syed - Founder" loading="lazy" class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500">
                         </div>
-                        <h3 class="font-bold text-2xl text-brand-navy mb-1">Syed</h3>
-                        <p class="text-sm text-brand-orange font-bold uppercase tracking-widest">Founder</p>
+                        <h3 class="font-bold text-lg md:text-2xl text-brand-navy dark:text-white mb-0.5 md:mb-1">Syed</h3>
+                        <p class="text-[10px] md:text-sm text-brand-orange font-bold uppercase tracking-widest">Founder</p>
                     </div>
 
-                    <div class="text-center relative z-10">
-                        <div class="w-44 h-44 sm:w-52 sm:h-52 mx-auto bg-slate-200 rounded-full flex items-center justify-center border-[6px] border-white shadow-2xl overflow-hidden mb-5 group hover:border-brand-orange/75 transition-all duration-500">
-                             <img src="png/ramisa2.png" alt="Ramisa - Co-Founder" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                    <div class="text-center relative z-10 group">
+                        <div class="w-28 h-28 sm:w-32 sm:h-32 md:w-52 md:h-52 mx-auto bg-slate-200 rounded-full flex items-center justify-center border-[4px] md:border-[6px] border-white shadow-2xl overflow-hidden mb-3 md:mb-5 group-hover:border-brand-orange/75 transition-all duration-500">
+                             <img src="png/ramisa.webp" alt="Ramisa - Co-Founder" loading="lazy" class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500">
                         </div>
-                         <h3 class="font-bold text-2xl text-brand-navy mb-1">Ramisa</h3>
-                        <p class="text-sm text-brand-orange font-bold uppercase tracking-widest">Co-Founder</p>
+                         <h3 class="font-bold text-lg md:text-2xl text-brand-navy dark:text-white mb-0.5 md:mb-1">Ramisa</h3>
+                        <p class="text-[10px] md:text-sm text-brand-orange font-bold uppercase tracking-widest">Co-Founder</p>
                     </div>
 
                 </div>
                 
-                <div class="order-1 md:order-2">
-                    <h2 class="text-3xl font-bold text-brand-navy mb-6">We Don't Just Hire VAs. We Clone Our Expertise.</h2>
-                    <p class="text-slate-600 mb-6 leading-relaxed">
+                <div class="order-1 md:order-2 reveal-on-scroll delay-100">
+                    <h2 class="text-3xl md:text-4xl font-extrabold text-brand-navy dark:text-white mb-6 leading-tight">
+                        We Don't Just Hire VAs. <br>
+                        <span class="text-transparent bg-clip-text bg-gradient-to-r from-brand-orange to-red-600">We Clone Our Expertise.</span>
+                    </h2>
+                    
+                    <p class="text-slate-600 dark:text-slate-400 mb-6 leading-relaxed text-lg">
                         High-ticket wholesaling requires more than just reading a script. It requires intuition. After 5 years in the cold calling industry and 3 years specifically in wholesaling, we have codified the instincts that close deals.
                     </p>
-                    <p class="text-slate-600 mb-8 leading-relaxed">
+                    <p class="text-slate-600 dark:text-slate-400 mb-8 leading-relaxed text-lg">
                         Your VAs are trained directly by us using this exact playbook. They don't just learn how to dial; they absorb 5 years of trial and error, ensuring they hit the phones sounding like seasoned pros, not entry-level staff.
                     </p>
                     
                     <div class="grid grid-cols-2 gap-6">
-                        <div class="p-4 bg-slate-50 rounded-lg border-l-4 border-brand-orange">
-                            <span class="block text-2xl font-bold text-brand-navy">100%</span>
-                            <span class="text-xs text-slate-500 uppercase tracking-wide">Wholesale Focused</span>
+
+                        <div class="p-5 bg-white dark:bg-slate-800 rounded-xl border-l-4 border-brand-orange shadow-sm hover:shadow-md transition-shadow">
+                            <span class="block text-3xl font-extrabold text-brand-navy dark:text-white mb-1">
+                                 <span class="counter-animate" data-target="100">0</span>%
+                            </span>
+                            <span class="text-xs text-slate-500 font-bold uppercase tracking-wide">Wholesale Focused</span>
                         </div>
-                        <div class="p-4 bg-slate-50 rounded-lg border-l-4 border-brand-navy">
-                            <span class="block text-2xl font-bold text-brand-navy">Daily QA</span>
-                            <span class="text-xs text-slate-500 uppercase tracking-wide">Call Audits & Coaching</span>
+
+                        <div class="p-5 bg-white dark:bg-slate-800 rounded-xl border-l-4 border-brand-navy shadow-sm hover:shadow-md transition-shadow">
+                            <span class="block text-3xl font-extrabold text-brand-navy dark:text-white mb-1">Daily QA</span>
+                            <span class="text-xs text-slate-500 font-bold uppercase tracking-wide">Call Audits & Coaching</span>
                         </div>
+
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-<section id="contact" class="py-24 bg-slate-50 relative overflow-hidden">
-    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-orange-200/20 rounded-full blur-3xl -z-10"></div>
+    <!-- ========== CONTACT / QUOTE SECTION ========== -->
+    <!-- Contact form for lead generation and quote requests -->
+    <section id="contact" class="py-24 bg-slate-50 dark:bg-slate-800 relative overflow-hidden scroll-mt-32">
 
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="text-center mb-12">
-            <h2 class="text-3xl md:text-4xl font-extrabold text-brand-navy mb-4">Ready to Scale?</h2>
-            <p class="text-slate-600 text-lg">Tell us about your needs, and we'll build a custom team for you.</p>
-        </div>
+        <!-- Background gradient decoration -->
+        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-brand-orange/10 rounded-full blur-3xl -z-10 pointer-events-none"></div>
 
-        <div class="max-w-3xl mx-auto bg-white p-8 md:p-12 rounded-3xl border border-slate-200 shadow-2xl relative z-10">
-            
-            <div class="flex items-center justify-center gap-3 mb-10">
-                <div class="w-12 h-12 rounded-xl bg-brand-navy flex items-center justify-center shadow-lg">
-                    <i class="fa-regular fa-file-lines text-white text-xl"></i>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <!-- Section Header with Urgency -->
+            <div class="text-center mb-12 reveal-on-scroll">
+                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-red-100 text-red-700 text-xs font-bold uppercase tracking-wide mb-4 animate-pulse">
+                    <span class="w-2 h-2 rounded-full bg-red-500 animate-pulse"></span> Limited Availability
                 </div>
-                <h3 class="text-2xl font-bold text-brand-navy">Request a Proposal</h3>
+                <h2 class="text-3xl md:text-4xl font-extrabold text-brand-navy dark:text-white mb-4">Ready to Start Closing More Deals?</h2>
+                <p class="text-slate-600 dark:text-slate-400 text-lg">Only <span class="font-bold text-brand-orange">3 dedicated seats</span> available this month. Schedule your free strategy call today.</p>
             </div>
 
-            <form action="https://api.web3forms.com/submit" method="POST" class="space-y-6">
-                <input type="hidden" name="access_key" value="13abc37b-f6ed-4d4c-99cc-94b2aade3d6e">
-                <input type="hidden" name="redirect" value="https://vololeads-agency.netlify.app"> 
+            <!-- Contact Form Container -->
+            <div class="max-w-3xl mx-auto bg-white dark:bg-slate-800 p-8 md:p-12 rounded-3xl border border-slate-200 dark:border-slate-700 shadow-2xl relative z-10 reveal-on-scroll delay-200">
+
+                <!-- Form Header with icon -->
+                <div class="flex items-center justify-center gap-3 mb-10">
+                    <div class="w-12 h-12 rounded-xl bg-brand-navy flex items-center justify-center shadow-lg">
+                        <i class="fa-regular fa-file-lines text-white text-xl"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-2xl font-bold text-brand-navy dark:text-white">Schedule Your Free Strategy Call</h3>
+                        <p class="text-xs text-slate-500 mt-1">15 minutes to identify the right fit for your business</p>
+                    </div>
+                </div>
+
+                <!-- Contact Form: Uses Web3Forms for backend submission -->
+                <form id="contact-form" action="https://api.web3forms.com/submit" method="POST" class="space-y-6">
+                <!-- Web3Forms Integration: Backend form submission service -->
+                <input type="hidden" name="access_key" value="3703f014-d164-460f-bb00-1f5897a7e373">
+                <!-- Redirect URL after successful form submission -->
+                <input type="hidden" name="redirect" value="https://datawithmursalin-cloud.github.io/VoloLeads/thank-you.html">
+
+                <!-- Bot Check: Hidden field to prevent automated submissions -->
                 <input type="checkbox" name="botcheck" class="hidden" style="display: none;">
 
+                <!-- Honeypot Field: Catches bot submissions by hiding field from real users -->
+                <div class="honey-trap">
+                    <label for="website_honeypot">Website</label>
+                    <input type="text" id="website_honeypot" name="website_honeypot" tabindex="-1" autocomplete="off">
+                </div>
+
+                <!-- Form Row 1: Name and Company (2-column on desktop) -->
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- Full Name Input: Required field -->
                     <div class="space-y-1">
                         <label class="text-xs font-bold text-slate-500 uppercase tracking-wide ml-1">Full Name <span class="text-red-500">*</span></label>
-                        <input type="text" name="name" required 
-                               class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-lg text-slate-800 outline-none focus:border-brand-orange focus:ring-1 focus:ring-brand-orange focus:bg-white transition-all placeholder-slate-400" 
+                        <input type="text" name="name" required minlength="2"
+                               class="w-full px-4 py-3 bg-slate-50 border border-slate-200 dark:bg-slate-700 dark:border-slate-600 dark:text-white dark:placeholder-slate-400 rounded-lg text-slate-800 outline-none focus:border-brand-orange focus:ring-1 focus:ring-brand-orange focus:bg-white transition-all placeholder-slate-400"
                                placeholder="Jane Smith">
                     </div>
-                    
+
+                    <!-- Company Name Input: Optional field -->
                     <div class="space-y-1">
                         <label class="text-xs font-bold text-slate-500 uppercase tracking-wide ml-1">Company Name</label>
                         <input type="text" name="company"
-                               class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-lg text-slate-800 outline-none focus:border-brand-orange focus:ring-1 focus:ring-brand-orange focus:bg-white transition-all placeholder-slate-400" 
+                               class="w-full px-4 py-3 bg-slate-50 border border-slate-200 dark:bg-slate-700 dark:border-slate-600 dark:text-white dark:placeholder-slate-400 rounded-lg text-slate-800 outline-none focus:border-brand-orange focus:ring-1 focus:ring-brand-orange focus:bg-white transition-all placeholder-slate-400"
                                placeholder="XYZ Home Buyers LLC">
                     </div>
                 </div>
 
+                <!-- Form Row 2: Email and Phone (2-column on desktop) -->
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- Email Input: Required field with email validation -->
                     <div class="space-y-1">
                         <label class="text-xs font-bold text-slate-500 uppercase tracking-wide ml-1">Work Email <span class="text-red-500">*</span></label>
-                        <input type="email" name="email" required 
-                               class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-lg text-slate-800 outline-none focus:border-brand-orange focus:ring-1 focus:ring-brand-orange focus:bg-white transition-all placeholder-slate-400" 
+                        <input type="email" name="email" required
+                               class="w-full px-4 py-3 bg-slate-50 border border-slate-200 dark:bg-slate-700 dark:border-slate-600 dark:text-white dark:placeholder-slate-400 rounded-lg text-slate-800 outline-none focus:border-brand-orange focus:ring-1 focus:ring-brand-orange focus:bg-white transition-all placeholder-slate-400"
                                placeholder="jane@company.com">
                     </div>
+                    <!-- Phone Input: Required field with pattern validation -->
                     <div class="space-y-1">
                         <label class="text-xs font-bold text-slate-500 uppercase tracking-wide ml-1">Phone Number <span class="text-red-500">*</span></label>
-                        <input type="tel" name="phone" required 
-                               class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-lg text-slate-800 outline-none focus:border-brand-orange focus:ring-1 focus:ring-brand-orange focus:bg-white transition-all placeholder-slate-400" 
+                        <input type="tel" name="phone" required minlength="10" pattern="[0-9+\-\.() ]{10,}"
+                               title="Please enter a valid phone number (at least 10 digits)"
+                               class="w-full px-4 py-3 bg-slate-50 border border-slate-200 dark:bg-slate-700 dark:border-slate-600 dark:text-white dark:placeholder-slate-400 rounded-lg text-slate-800 outline-none focus:border-brand-orange focus:ring-1 focus:ring-brand-orange focus:bg-white transition-all placeholder-slate-400"
                                placeholder="+1 (555) 000-0000">
                     </div>
                 </div>
-                
+
+                <!-- Service Type Dropdown: Required field with conditional quantity field -->
                 <div class="space-y-1">
                     <label class="text-xs font-bold text-slate-500 uppercase tracking-wide ml-1">Type of Service <span class="text-red-500">*</span></label>
                     <div class="relative">
-                        <select id="service-select" name="service" required onchange="toggleQuantity()" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-lg text-slate-800 outline-none focus:border-brand-orange focus:bg-white appearance-none cursor-pointer font-medium">
+                        <!-- Select dropdown with service options -->
+                        <select id="service-select" name="service" required class="w-full px-4 py-3 bg-slate-50 border border-slate-200 dark:bg-slate-700 dark:border-slate-600 dark:text-white dark:placeholder-slate-400 rounded-lg text-slate-800 outline-none focus:border-brand-orange focus:bg-white appearance-none cursor-pointer font-medium">
                             <option value="" disabled selected>Select a Service...</option>
                             <option value="Cold Calling VA">Cold Calling VA</option>
                             <option value="Virtual Drivers">Virtual Drivers</option>
                             <option value="Both Services">Both (Callers + Drivers)</option>
                             <option value="Web Design">Real Estate Web Design</option>
                         </select>
+                        <!-- Chevron icon for dropdown indicator -->
                         <i class="fa-solid fa-chevron-down absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none text-sm"></i>
                     </div>
                 </div>
 
+                <!-- Conditional Quantity Field: Shows only for certain service types (Cold Calling VA, Virtual Drivers, Both) -->
                 <div id="quantity-row" class="hidden space-y-1 animate-fade-in-down">
                     <label class="text-xs font-bold text-brand-orange uppercase tracking-wide ml-1">Number of Agents <span class="text-red-500">*</span></label>
                     <div class="relative">
-                        <select id="quantity-select" name="quantity" class="w-full px-4 py-3 bg-orange-50 border border-orange-200 rounded-lg text-brand-navy outline-none focus:border-brand-orange focus:bg-white appearance-none cursor-pointer font-bold">
+                        <select id="quantity-select" name="quantity" class="w-full px-4 py-3 bg-white-50 border border-white-200 rounded-lg text-brand-navy dark:text-white dark:bg-slate-700 dark:border-slate-600 outline-none focus:border-brand-orange focus:bg-white dark:focus:bg-slate-700 appearance-none cursor-pointer font-bold">
                             <option value="" disabled selected>Select Quantity...</option>
                             <option value="1 Seat">Just One</option>
                             <option value="2-3 Seats">Two - Three</option>
@@ -695,14 +1235,17 @@
                 <div class="space-y-1">
                     <label class="text-xs font-bold text-slate-500 uppercase tracking-wide ml-1">Schedule a Call</label>
                     <input type="date" id="preferred-date" name="preferred_date"
-                           class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-lg text-slate-800 outline-none focus:border-brand-orange focus:ring-1 focus:ring-brand-orange focus:bg-white transition-all placeholder-slate-400 text-sm">
+                           class="w-full px-4 py-3 bg-slate-50 border border-slate-200 dark:bg-slate-700 dark:border-slate-600 dark:text-white dark:placeholder-slate-400 rounded-lg text-slate-800 outline-none focus:border-brand-orange focus:ring-1 focus:ring-brand-orange focus:bg-white transition-all placeholder-slate-400 text-sm">
                 </div>
 
                 <div id="time-row" class="hidden space-y-1">
                     <label class="text-xs font-bold text-slate-500 uppercase tracking-wide ml-1">Preferred Time (EST)</label>
-                    <select id="preferred-time" name="preferred_time" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-lg text-slate-800 outline-none focus:border-brand-orange focus:ring-1 focus:ring-brand-orange focus:bg-white transition-all placeholder-slate-400 text-sm appearance-none">
-                        <option value="" disabled selected>Select a time...</option>
-                    </select>
+                    <div class="relative">
+                        <select id="preferred-time" name="preferred_time" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 dark:bg-slate-700 dark:border-slate-600 dark:text-white dark:placeholder-slate-400 rounded-lg text-slate-800 outline-none focus:border-brand-orange focus:ring-1 focus:ring-brand-orange focus:bg-white transition-all placeholder-slate-400 text-sm appearance-none cursor-pointer">
+                            <option value="" disabled selected>Select a time...</option>
+                        </select>
+                        <i class="fa-regular fa-clock absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none text-sm"></i>
+                    </div>
                     <input type="hidden" id="preferred-timezone" name="preferred_timezone" value="EST">
                     <p class="text-xs text-slate-500 mt-1">Available slots: 9:00 AM — 4:30 PM EST.</p>
                 </div>
@@ -710,106 +1253,46 @@
                 <div class="space-y-1">
                     <label class="text-xs font-bold text-slate-500 uppercase tracking-wide ml-1">Details</label>
                     <textarea name="message" rows="3"
-                           class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-lg text-slate-800 outline-none focus:border-brand-orange focus:ring-1 focus:ring-brand-orange focus:bg-white transition-all placeholder-slate-400 resize-none" 
+                           class="w-full px-4 py-3 bg-slate-50 border border-slate-200 dark:bg-slate-700 dark:border-slate-600 dark:text-white dark:placeholder-slate-400 rounded-lg text-slate-800 outline-none focus:border-brand-orange focus:ring-1 focus:ring-brand-orange focus:bg-white transition-all placeholder-slate-400 resize-none" 
                            placeholder="Briefly tell us your goals..."></textarea>
                 </div>
                 
-                <button type="submit" class="w-full py-4 mt-4 bg-brand-navy hover:bg-slate-800 text-white font-bold text-lg rounded-xl shadow-xl hover:shadow-2xl transition-all transform hover:-translate-y-1">
-                    Submit Form
+                <button type="submit" id="submit-btn" class="w-full py-4 mt-4 bg-brand-navy hover:bg-slate-800 text-white font-bold text-lg rounded-xl shadow-xl hover:shadow-2xl transition-all transform hover:-translate-y-1 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed">
+                    <span id="btn-text">Secure Your Strategy Call</span>
+                    <span id="btn-loader" class="hidden"><i class="fa-solid fa-spinner fa-spin"></i> Sending...</span>
                 </button>
+
+                <!-- Trust badge -->
+                <div class="mt-6 flex items-center justify-center gap-4 text-xs text-slate-500 pt-6 border-t border-slate-100">
+                    <div class="flex items-center gap-1">
+                        <i class="fa-solid fa-lock text-green-500"></i>
+                        Secure & Confidential
+                    </div>
+                    <div>•</div>
+                    <div class="flex items-center gap-1">
+                        <i class="fa-solid fa-clock text-blue-500"></i>
+                        Response in 2 Hours
+                    </div>
+                    <div>•</div>
+                    <div class="flex items-center gap-1">
+                        <i class="fa-solid fa-check-circle text-green-500"></i>
+                        No Contracts
+                    </div>
+                </div>
             </form>
         </div>
     </div>
-
-    <script>
-        function toggleQuantity() {
-            var service = document.getElementById("service-select").value;
-            var quantityRow = document.getElementById("quantity-row");
-            var quantitySelect = document.getElementById("quantity-select");
-            
-            // Logic: If they pick a service that needs agents...
-            if (service === "Cold Calling VA" || service === "Virtual Drivers" || service === "Both Services") {
-                // 1. Show the dropdown
-                quantityRow.classList.remove("hidden");
-                // 2. MAKE IT MANDATORY
-                quantitySelect.setAttribute("required", "true");
-            } else {
-                // 1. Hide the dropdown
-                quantityRow.classList.add("hidden");
-                // 2. MAKE IT OPTIONAL (So Web Design clients can still submit)
-                quantitySelect.removeAttribute("required");
-                quantitySelect.value = ""; // Reset value
-            }
-        }
-
-        // Date / Time helpers for Preferred Date and Preferred Time (EST)
-        function setMinDateForDateInput() {
-            var dateInput = document.getElementById('preferred-date');
-            if (!dateInput) return;
-            var today = new Date();
-            var yyyy = today.getFullYear();
-            var mm = String(today.getMonth() + 1).padStart(2, '0');
-            var dd = String(today.getDate()).padStart(2, '0');
-            dateInput.min = yyyy + '-' + mm + '-' + dd;
-        }
-
-        function populateTimeSlots() {
-            var select = document.getElementById('preferred-time');
-            if (!select) return;
-            // If already populated (more than one option), skip
-            if (select.options.length > 1) return;
-
-            var startHour = 9; // 9:00 AM
-            var endHour = 16;  // last slot 4:30 PM
-            for (var h = startHour; h <= endHour; h++) {
-                for (var m = 0; m < 60; m += 30) {
-                    var hour = h;
-                    var minute = m;
-                    var value = String(hour).padStart(2, '0') + ':' + String(minute).padStart(2, '0');
-                    var ampm = hour < 12 ? 'AM' : 'PM';
-                    var displayHour = ((hour + 11) % 12) + 1; // convert 24h to 12h
-                    var text = displayHour + ':' + String(minute).padStart(2, '0') + ' ' + ampm + ' EST';
-                    var opt = document.createElement('option');
-                    opt.value = value;
-                    opt.text = text;
-                    select.appendChild(opt);
-                }
-            }
-        }
-        function handleDateChange() {
-            var dateInput = document.getElementById('preferred-date');
-            var timeRow = document.getElementById('time-row');
-            var timeSelect = document.getElementById('preferred-time');
-            if (!dateInput) return;
-
-            if (!dateInput.value) {
-                // no date chosen -> hide time
-                if (timeRow) timeRow.classList.add('hidden');
-                if (timeSelect) { timeSelect.removeAttribute('required'); timeSelect.value = ''; }
-                return;
-            }
-
-            // date chosen (any day allowed) -> show time selector
-            populateTimeSlots();
-            if (timeRow) timeRow.classList.remove('hidden');
-            if (timeSelect) timeSelect.setAttribute('required', 'true');
-            // reset previously chosen time
-            if (timeSelect) timeSelect.value = '';
-        }
-
-        document.addEventListener('DOMContentLoaded', function() {
-            setMinDateForDateInput();
-            var dateInput = document.getElementById('preferred-date');
-            if (dateInput) dateInput.addEventListener('change', handleDateChange);
-        });
-    </script>
-
 </section>
 
-    <footer class="bg-brand-navy text-slate-400 py-12 border-t border-slate-800">
+
+    <!-- ========== FOOTER ========== -->
+    <!-- Site footer with navigation, contact info, and social links -->
+    <footer id="contact" class="bg-brand-navy text-slate-400 py-12 border-t border-slate-800 scroll-mt-32">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <!-- 4-column grid layout for footer content -->
             <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
-                
+
+                <!-- Column 1: Company branding & tagline -->
                 <div class="col-span-1 md:col-span-1">
                     <div class="flex items-center gap-2 mb-4">
                         <i class="fa-solid fa-bolt text-brand-orange text-xl"></i>
@@ -820,287 +1303,467 @@
                     </p>
                 </div>
 
-                <!-- spacer to push the last column to the far right on md+ -->
-                <div class="hidden md:block"></div>
-
-                <!-- Right-aligned group: Navigate + Contact -->
-                <div class="flex flex-col md:flex-row md:justify-end md:items-start gap-8 md:gap-12">
+                <!-- Columns 2-4: Navigation, Contact, & Social Links -->
+                <div class="col-span-1 md:col-span-3 flex flex-col md:flex-row md:justify-end md:items-start gap-8 md:gap-12">
+                    <!-- Navigation Links -->
                     <div>
                         <h4 class="text-white font-bold mb-4">Navigate</h4>
                         <ul class="space-y-2 text-sm">
-                            <li><a href="#about" class="hover:text-brand-orange">About Us</a></li>
-                            <li><a href="#services" class="hover:text-brand-orange">Services</a></li>
-                            <li><a href="#insights" class="hover:text-brand-orange">Insights</a></li>
-                            <li><a href="#contact" class="hover:text-brand-orange">Contact</a></li>
+                            <li><a href="#about" class="hover:text-brand-orange transition-colors">About Us</a></li>
+                            <li><a href="#services" class="hover:text-brand-orange transition-colors">Services</a></li>
+                            <li><a href="#plans" class="hover:text-brand-orange transition-colors">Plans</a></li>
+                            <li><a href="#insights" class="hover:text-brand-orange transition-colors">Insights</a></li>
+                            <li><a href="#contact" class="hover:text-brand-orange transition-colors">Contact</a></li>
                         </ul>
                     </div>
 
+                    <!-- Contact Information -->
                     <div>
                         <h4 class="text-white font-bold mb-4">Contact</h4>
                         <ul class="space-y-2 text-sm">
-                            <li class="flex items-center gap-2"><span class="w-5 flex items-center justify-center text-brand-orange"><i class="fa-solid fa-envelope"></i></span><span class="break-words">cc.managementbd@gmail.com</span></li>
-                            <li class="flex items-center gap-2"><span class="w-5 flex items-center justify-center text-brand-orange"><i class="fa-brands fa-whatsapp"></i></span><span>WhatsApp Support</span></li>
+                            <li class="flex items-center gap-2">
+                                <span class="w-5 flex items-center justify-center text-brand-orange"><i class="fa-solid fa-envelope"></i></span>
+                                <span class="break-words">syed@vololeads.com</span>
+                            </li>
+                            <li class="flex items-center gap-2">
+                                <span class="w-5 flex items-center justify-center text-brand-orange"><i class="fa-brands fa-whatsapp"></i></span>
+                                <a href="https://wa.me/8801793716608" target="_blank" class="hover:text-brand-orange transition-colors">WhatsApp Support</a>
+                            </li>
                         </ul>
                     </div>
-                </div>
 
-                <!-- keep social icons toward the left/center so right side can host navigation/contact -->
-                <div>
-                    <h4 class="text-white font-bold mb-4">Follow Us</h4>
-                    <div class="flex gap-4">
-                        <a href="#" class="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center hover:bg-brand-orange hover:text-white transition-all"><i class="fa-brands fa-linkedin-in"></i></a>
-                        <a href="#" class="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center hover:bg-brand-orange hover:text-white transition-all"><i class="fa-brands fa-facebook"></i></a>
-                        <a href="#" class="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center hover:bg-brand-orange hover:text-white transition-all"><i class="fa-brands fa-instagram"></i></a>
-                        <a href="#" class="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center hover:bg-brand-orange hover:text-white transition-all"><i class="fa-brands fa-twitter"></i></a>
+                    <!-- Social Media Links -->
+                    <div>
+                        <h4 class="text-white font-bold mb-4">Follow Us</h4>
+                        <div class="flex gap-4">
+                            <a href="https://www.linkedin.com/company/vololeads" class="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center hover:bg-brand-orange hover:text-white transition-all"><i class="fa-brands fa-linkedin-in"></i></a>
+                            <a href="https://www.facebook.com/vololeads" class="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center hover:bg-brand-orange hover:text-white transition-all"><i class="fa-brands fa-facebook"></i></a>
+                            <a href="https://www.instagram.com/vololeads" class="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center hover:bg-brand-orange hover:text-white transition-all"><i class="fa-brands fa-instagram"></i></a>
+                            <a href="https://x.com/vololeads" class="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center hover:bg-brand-orange hover:text-white transition-all text-lg font-bold">𝕏</a>
+                        </div>
                     </div>
                 </div>
 
             </div>
-            
+
+            <!-- Bottom section: Copyright & Legal Links -->
             <div class="border-t border-slate-800 pt-8 flex flex-col md:flex-row justify-between items-center text-xs">
-                <p>&copy; 2025 VoloLeads Agency. All rights reserved.</p>
+                <p>&copy; <span id="current-year">2025</span> VoloLeads Agency. All rights reserved.</p>
                 <div class="flex gap-4 mt-4 md:mt-0">
-                    <a href="#" class="hover:text-white">Privacy Policy</a>
-                    <a href="#" class="hover:text-white">Terms of Service</a>
-                    <a href="#" class="hover:text-white">Refund Policy</a>
-                    <a href="#" class="hover:text-white">FAQs</a>
+                    <a href="privacy-policy.html" class="hover:text-white transition-colors">Privacy Policy</a>
+                    <a href="terms-condition.html" class="hover:text-white transition-colors">Terms of Service</a>
+                    <a href="terms-condition.html#refund-policy" class="hover:text-white transition-colors">Refund Policy</a>
+                    <a href="faqs.html" class="hover:text-white transition-colors">FAQs</a>
                 </div>
             </div>
         </div>
     </footer>
 
-    <style>
-        #visitor-consent-banner { display: none; }
-        #visitor-consent-banner.active { display: block; }
-    </style>
+    <!-- JavaScript Application File: Handles interactivity and animations -->
+    <script src="app.js"></script>
 
-    <div id="visitor-consent-banner" class="fixed bottom-0 left-0 right-0 z-[100] bg-brand-navy text-white border-t-2 border-brand-orange shadow-2xl">
-        <div class="max-w-7xl mx-auto px-4 py-4">
-            <div class="flex flex-col lg:flex-row lg:items-end gap-4">
-                <div class="lg:flex-1">
-                    <p class="font-bold text-sm sm:text-base">Cookie Consent & Visitor Tracking</p>
-                    <p class="text-slate-300 text-xs sm:text-sm mt-1">
-                        With your consent, we store your name/email in cookies (365 days), and store consent choice in local storage to remember your preference. If you reject, we log that preference without storing identity cookies.
-                    </p>
-                </div>
-                <div class="w-full lg:w-auto grid grid-cols-1 sm:grid-cols-2 gap-2 lg:min-w-[460px]">
-                    <input id="visitor-name" type="text" placeholder="Your Name" autocomplete="name" required class="w-full px-3 py-2 rounded-lg border border-slate-500 bg-slate-800 text-sm outline-none focus:border-brand-orange focus:ring-1 focus:ring-brand-orange">
-                    <input id="visitor-email" type="email" placeholder="Your Email" autocomplete="email" required class="w-full px-3 py-2 rounded-lg border border-slate-500 bg-slate-800 text-sm outline-none focus:border-brand-orange focus:ring-1 focus:ring-brand-orange">
-                    <button id="visitor-accept-btn" type="button" class="px-4 py-2 rounded-lg bg-brand-orange hover:bg-orange-600 text-white font-bold text-sm transition-colors">Accept & Save</button>
-                    <button id="visitor-reject-btn" type="button" class="px-4 py-2 rounded-lg border border-slate-400 hover:border-white text-white font-semibold text-sm transition-colors">Reject</button>
-                </div>
-            </div>
-            <p id="visitor-consent-error" class="text-red-300 text-xs mt-2 min-h-4" aria-live="polite"></p>
-        </div>
-    </div>
-
+    <!-- ========== VISITOR TRACKING SYSTEM WITH COOKIE CONSENT ========== -->
     <script>
-        (function () {
-            var WEB3FORMS_ENDPOINT = "https://api.web3forms.com/submit";
-            var accessKeyInput = document.querySelector('input[name="access_key"]');
-            var ACCESS_KEY = accessKeyInput ? accessKeyInput.value : "";
-            var CONSENT_STORAGE_KEY = "volo_cookie_consent_status";
-            var COOKIE_DAYS = 365;
-            var pageStart = Date.now();
-            var exitEventSent = false;
-            var secureWarningShown = false;
+        // ========== COOKIE CONSENT BANNER UI ==========
+        function initCookieConsentBanner() {
+            // Create banner HTML
+            const bannerHTML = `
+                <div id="cookie-consent-banner" class="cookie-consent-banner" style="
+                    position: fixed;
+                    bottom: 0;
+                    left: 0;
+                    right: 0;
+                    z-index: 9999;
+                    background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+                    border-top: 2px solid #f97316;
+                    padding: 20px;
+                    box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.3);
+                    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+                    display: none;
+                ">
+                    <div style="max-width: 1200px; margin: 0 auto;">
+                        <div style="display: flex; flex-direction: column; gap: 16px;">
+                            <!-- Headline -->
+                            <div style="color: #fff; font-size: 16px; font-weight: 600;">
+                                🔥 Get instant access to off-market deals & exclusive market insights delivered daily!
+                            </div>
 
-            function setCookie(name, value, days) {
-                var expires = "";
-                if (days) {
-                    var date = new Date();
-                    date.setTime(date.getTime() + days * 24 * 60 * 60 * 1000);
-                    expires = "; expires=" + date.toUTCString();
-                }
-                var isHttps = window.location.protocol === "https:";
-                var secureFlag = isHttps ? "; Secure" : "";
-                if (!isHttps && !secureWarningShown) {
-                    secureWarningShown = true;
-                    console.warn("Visitor tracking cookies are set without Secure flag because this page is not served over HTTPS.");
-                }
-                document.cookie = name + "=" + encodeURIComponent(value) + expires + "; path=/; SameSite=Lax" + secureFlag;
-            }
+                            <!-- Form inputs -->
+                            <div style="display: grid; grid-template-columns: 1fr 1fr auto auto; gap: 12px; align-items: flex-end;">
+                                <!-- Name input -->
+                                <div style="display: flex; flex-direction: column; gap: 4px;">
+                                    <input
+                                        type="text"
+                                        id="cookie-consent-name"
+                                        placeholder="Your Name"
+                                        style="
+                                            padding: 10px 12px;
+                                            border: 1px solid #475569;
+                                            background-color: #1e293b;
+                                            color: #fff;
+                                            border-radius: 6px;
+                                            font-size: 14px;
+                                            outline: none;
+                                            transition: all 0.2s;
+                                        "
+                                        onmouseover="this.style.borderColor='#f97316'"
+                                        onmouseout="this.style.borderColor='#475569'"
+                                        onfocus="this.style.borderColor='#f97316'; this.style.boxShadow='0 0 0 2px rgba(249, 115, 22, 0.2)'"
+                                        onblur="this.style.borderColor='#475569'; this.style.boxShadow='none'"
+                                    >
+                                    <span id="name-error" style="color: #ef4444; font-size: 12px; display: none;"></span>
+                                </div>
 
-            function getCookie(name) {
-                var nameEQ = name + "=";
-                var cookies = document.cookie.split(";");
-                for (var i = 0; i < cookies.length; i++) {
-                    var cookie = cookies[i].trim();
-                    if (cookie.indexOf(nameEQ) === 0) {
+                                <!-- Email input -->
+                                <div style="display: flex; flex-direction: column; gap: 4px;">
+                                    <input
+                                        type="email"
+                                        id="cookie-consent-email"
+                                        placeholder="Your Email"
+                                        style="
+                                            padding: 10px 12px;
+                                            border: 1px solid #475569;
+                                            background-color: #1e293b;
+                                            color: #fff;
+                                            border-radius: 6px;
+                                            font-size: 14px;
+                                            outline: none;
+                                            transition: all 0.2s;
+                                        "
+                                        onmouseover="this.style.borderColor='#f97316'"
+                                        onmouseout="this.style.borderColor='#475569'"
+                                        onfocus="this.style.borderColor='#f97316'; this.style.boxShadow='0 0 0 2px rgba(249, 115, 22, 0.2)'"
+                                        onblur="this.style.borderColor='#475569'; this.style.boxShadow='none'"
+                                    >
+                                    <span id="email-error" style="color: #ef4444; font-size: 12px; display: none;"></span>
+                                </div>
+
+                                <!-- Accept button -->
+                                <button
+                                    id="cookie-accept-btn"
+                                    style="
+                                        padding: 10px 20px;
+                                        background-color: #f97316;
+                                        color: white;
+                                        border: none;
+                                        border-radius: 6px;
+                                        font-weight: 600;
+                                        font-size: 14px;
+                                        cursor: pointer;
+                                        transition: all 0.2s;
+                                        white-space: nowrap;
+                                    "
+                                    onmouseover="this.style.backgroundColor='#ea580c'; this.style.transform='translateY(-1px)'"
+                                    onmouseout="this.style.backgroundColor='#f97316'; this.style.transform='translateY(0)'"
+                                    onclick="acceptCookieConsent()"
+                                >
+                                    Accept & Save
+                                </button>
+
+                                <!-- Decline button -->
+                                <button
+                                    id="cookie-decline-btn"
+                                    style="
+                                        padding: 10px 20px;
+                                        background-color: transparent;
+                                        color: white;
+                                        border: 1px solid white;
+                                        border-radius: 6px;
+                                        font-weight: 600;
+                                        font-size: 14px;
+                                        cursor: pointer;
+                                        transition: all 0.2s;
+                                        white-space: nowrap;
+                                    "
+                                    onmouseover="this.style.backgroundColor='rgba(255, 255, 255, 0.1)'"
+                                    onmouseout="this.style.backgroundColor='transparent'"
+                                    onclick="declineCookieConsent()"
+                                >
+                                    Decline
+                                </button>
+                            </div>
+
+                            <!-- Mobile responsive view -->
+                            <style>
+                                @media (max-width: 768px) {
+                                    #cookie-consent-banner {
+                                        padding: 16px !important;
+                                    }
+                                    #cookie-consent-banner > div > div:last-child {
+                                        display: grid !important;
+                                        grid-template-columns: 1fr !important;
+                                    }
+                                    #cookie-consent-banner input {
+                                        width: 100% !important;
+                                    }
+                                    #cookie-consent-banner button {
+                                        width: 100% !important;
+                                    }
+                                }
+                            </style>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            document.body.insertAdjacentHTML('beforeend', bannerHTML);
+        }
+
+        // ========== COOKIE MANAGEMENT FUNCTIONS ==========
+        function setCookie(name, value, days = 365) {
+            const date = new Date();
+            date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+            const expires = `expires=${date.toUTCString()}`;
+            const secure = window.location.protocol === 'https:' ? 'Secure' : '';
+            const sameSite = 'SameSite=Strict';
+
+            const encodedValue = encodeURIComponent(value);
+            document.cookie = `${name}=${encodedValue}; ${expires}; ${sameSite}; ${secure}; path=/`;
+        }
+
+        function getCookie(name) {
+            const nameEQ = name + "=";
+            const cookies = document.cookie.split(';');
+
+            for (let cookie of cookies) {
+                cookie = cookie.trim();
+                if (cookie.indexOf(nameEQ) === 0) {
+                    try {
                         return decodeURIComponent(cookie.substring(nameEQ.length));
+                    } catch (e) {
+                        return cookie.substring(nameEQ.length);
                     }
                 }
-                return null;
+            }
+            return null;
+        }
+
+        function deleteCookie(name) {
+            setCookie(name, '', -1);
+        }
+
+        // ========== FORM VALIDATION FUNCTIONS ==========
+        function validateEmail(email) {
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return emailRegex.test(email);
+        }
+
+        function clearValidationErrors() {
+            document.getElementById('name-error').style.display = 'none';
+            document.getElementById('email-error').style.display = 'none';
+            document.getElementById('name-error').textContent = '';
+            document.getElementById('email-error').textContent = '';
+        }
+
+        function showValidationError(field, message) {
+            const errorEl = document.getElementById(`${field}-error`);
+            if (errorEl) {
+                errorEl.textContent = message;
+                errorEl.style.display = 'block';
+            }
+        }
+
+        function validateForm() {
+            clearValidationErrors();
+
+            const name = document.getElementById('cookie-consent-name').value.trim();
+            const email = document.getElementById('cookie-consent-email').value.trim();
+            let isValid = true;
+
+            if (!name) {
+                showValidationError('name', 'Name is required');
+                isValid = false;
             }
 
-            function parseVisitCount(value) {
-                var parsed = parseInt(value, 10);
-                return Number.isNaN(parsed) || parsed < 0 ? 0 : parsed;
+            if (!email) {
+                showValidationError('email', 'Email is required');
+                isValid = false;
+            } else if (!validateEmail(email)) {
+                showValidationError('email', 'Please enter a valid email');
+                isValid = false;
             }
 
-            function submitTrackingEvent(eventType, payload, keepalive) {
-                if (!ACCESS_KEY) {
-                    console.warn("Web3Forms access key is missing; visitor tracking event was skipped.");
-                    return;
+            return { isValid, name, email };
+        }
+
+        // ========== VISITOR DATA CAPTURE ==========
+        function captureVisitorData(name, email) {
+            const now = new Date().toISOString();
+
+            // Check if this is a return visit
+            const lastVisit = getCookie('last_visit');
+            let visitCount = 1;
+
+            if (lastVisit) {
+                const currentCount = getCookie('visits');
+                visitCount = currentCount ? parseInt(currentCount) + 1 : 2;
+            }
+
+            // Set cookies
+            setCookie('visitor_name', name, 365);
+            setCookie('visitor_email', email, 365);
+            setCookie('cookie_consent', 'accepted', 365);
+
+            if (!getCookie('visit_date')) {
+                setCookie('visit_date', now, 365);
+            }
+
+            setCookie('visits', visitCount.toString(), 365);
+            setCookie('last_visit', now, 365);
+
+            return {
+                visitor_name: name,
+                visitor_email: email,
+                visit_count: visitCount,
+                visit_date: getCookie('visit_date'),
+                last_visit: now
+            };
+        }
+
+        // ========== DATA SUBMISSION FUNCTIONS ==========
+        async function submitToWeb3Forms(visitorData) {
+            const payload = {
+                access_key: '13abc37b-f6ed-4d4c-99cc-94b2aade3d6e',
+                visitor_name: visitorData.visitor_name,
+                visitor_email: visitorData.visitor_email,
+                visit_page: window.location.pathname,
+                visit_timestamp: new Date().toISOString(),
+                referrer: document.referrer || 'Direct',
+                user_agent: navigator.userAgent.substring(0, 100),
+                visit_count: visitorData.visit_count
+            };
+
+            try {
+                const response = await fetch('https://api.web3forms.com/submit', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(payload)
+                });
+
+                if (response.ok) {
+                    console.log('✓ Visitor data submitted successfully');
+                    return true;
+                } else {
+                    console.warn('⚠ Failed to submit visitor data:', response.status);
+                    return false;
                 }
+            } catch (error) {
+                console.error('✗ Error submitting visitor data:', error);
+                return false;
+            }
+        }
 
-                var data = {
-                    access_key: ACCESS_KEY,
-                    subject: "Visitor Tracking Event",
-                    event_type: eventType,
+        // ========== PAGE BEHAVIOR TRACKING ==========
+        let pageLoadTime = new Date().getTime();
+        let timeSpentOnPage = 0;
+
+        function trackExitEvent() {
+            const currentTime = new Date().getTime();
+            timeSpentOnPage = Math.round((currentTime - pageLoadTime) / 1000);
+
+            const visitorName = getCookie('visitor_name');
+            const visitorEmail = getCookie('visitor_email');
+
+            if (visitorName && visitorEmail) {
+                const exitData = {
+                    access_key: '13abc37b-f6ed-4d4c-99cc-94b2aade3d6e',
+                    event_type: 'page_exit',
+                    visitor_name: visitorName,
+                    visitor_email: visitorEmail,
                     page_url: window.location.href,
-                    page_path: window.location.pathname,
-                    referrer: document.referrer || "Direct",
-                    event_time: new Date().toISOString()
+                    time_spent_seconds: timeSpentOnPage,
+                    exit_timestamp: new Date().toISOString()
                 };
 
-                for (var key in payload) {
-                    if (Object.prototype.hasOwnProperty.call(payload, key)) {
-                        data[key] = payload[key];
-                    }
+                // Use sendBeacon for reliability on page unload
+                navigator.sendBeacon('https://api.web3forms.com/submit', JSON.stringify(exitData));
+            }
+        }
+
+        // ========== COOKIE CONSENT HANDLERS ==========
+        function acceptCookieConsent() {
+            const validation = validateForm();
+
+            if (!validation.isValid) {
+                return;
+            }
+
+            // Capture visitor data
+            const visitorData = captureVisitorData(validation.name, validation.email);
+
+            // Submit to Web3Forms
+            submitToWeb3Forms(visitorData).then(() => {
+                // Hide banner
+                const banner = document.getElementById('cookie-consent-banner');
+                if (banner) {
+                    banner.style.display = 'none';
                 }
+                clearValidationErrors();
 
-                fetch(WEB3FORMS_ENDPOINT, {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify(data),
-                    keepalive: !!keepalive
-                }).catch(function (error) {
-                    console.warn("Visitor tracking submission failed:", error);
-                });
-            }
-
-            function hideBanner() {
-                var banner = document.getElementById("visitor-consent-banner");
-                if (banner) banner.classList.remove("active");
-            }
-
-            function showBanner() {
-                var banner = document.getElementById("visitor-consent-banner");
-                if (banner) banner.classList.add("active");
-            }
-
-            function setConsentError(message) {
-                var errorEl = document.getElementById("visitor-consent-error");
-                if (errorEl) errorEl.textContent = message || "";
-            }
-
-            function handleAccept() {
-                var nameInput = document.getElementById("visitor-name");
-                var emailInput = document.getElementById("visitor-email");
-                var name = (nameInput.value || "").trim();
-                var email = (emailInput.value || "").trim();
-                setConsentError("");
-
-                if (!name || !email) {
-                    setConsentError("Please enter both your name and email.");
-                    return;
-                }
-
-                if (!emailInput.checkValidity()) {
-                    setConsentError("Please enter a valid email address.");
-                    return;
-                }
-
-                var isHttps = window.location.protocol === "https:";
-                var isLocalhost = window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1";
-                if (!isHttps && !isLocalhost) {
-                    setConsentError("Secure connection required for saving visitor details.");
-                    return;
-                }
-
-                var nowIso = new Date().toISOString();
-                var existingCount = Math.max(1, parseVisitCount(getCookie("volo_repeat_visit_count")));
-
-                localStorage.setItem(CONSENT_STORAGE_KEY, "accepted");
-                setCookie("volo_visitor_name", name, COOKIE_DAYS);
-                setCookie("volo_visitor_email", email, COOKIE_DAYS);
-                setCookie("volo_first_visit_date", getCookie("volo_first_visit_date") || nowIso, COOKIE_DAYS);
-                setCookie("volo_last_visit_date", nowIso, COOKIE_DAYS);
-                setCookie("volo_repeat_visit_count", String(existingCount), COOKIE_DAYS);
-
-                hideBanner();
-
-                submitTrackingEvent("consent_accepted", {
-                    visitor_name: name,
-                    visitor_email: email,
-                    first_visit_date: getCookie("volo_first_visit_date") || nowIso,
-                    last_visit_date: nowIso,
-                    repeat_visit_count: existingCount
-                }, false);
-            }
-
-            function handleReject() {
-                localStorage.setItem(CONSENT_STORAGE_KEY, "rejected");
-                hideBanner();
-                submitTrackingEvent("consent_rejected", {}, false);
-            }
-
-            function trackAcceptedVisit() {
-                var nowIso = new Date().toISOString();
-                var name = getCookie("volo_visitor_name");
-                var email = getCookie("volo_visitor_email");
-                if (!name || !email) {
-                    localStorage.removeItem(CONSENT_STORAGE_KEY);
-                    showBanner();
-                    return;
-                }
-                var firstVisitDate = getCookie("volo_first_visit_date") || nowIso;
-                var count = parseVisitCount(getCookie("volo_repeat_visit_count"));
-                count += 1;
-
-                setCookie("volo_first_visit_date", firstVisitDate, COOKIE_DAYS);
-                setCookie("volo_last_visit_date", nowIso, COOKIE_DAYS);
-                setCookie("volo_repeat_visit_count", String(count), COOKIE_DAYS);
-
-                submitTrackingEvent("page_view", {
-                    visitor_name: name,
-                    visitor_email: email,
-                    first_visit_date: firstVisitDate,
-                    last_visit_date: nowIso,
-                    repeat_visit_count: count
-                }, false);
-            }
-
-            function trackExit() {
-                if (exitEventSent) return;
-                exitEventSent = true;
-                if (localStorage.getItem(CONSENT_STORAGE_KEY) !== "accepted") return;
-
-                var secondsOnPage = Math.max(0, Math.round((Date.now() - pageStart) / 1000));
-                var exitName = getCookie("volo_visitor_name");
-                var exitEmail = getCookie("volo_visitor_email");
-                if (!exitName || !exitEmail) return;
-
-                submitTrackingEvent("page_exit", {
-                    visitor_name: exitName,
-                    visitor_email: exitEmail,
-                    time_on_page_seconds: secondsOnPage,
-                    repeat_visit_count: parseVisitCount(getCookie("volo_repeat_visit_count"))
-                }, true);
-            }
-
-            document.addEventListener("DOMContentLoaded", function () {
-                var consentStatus = localStorage.getItem(CONSENT_STORAGE_KEY);
-                var acceptBtn = document.getElementById("visitor-accept-btn");
-                var rejectBtn = document.getElementById("visitor-reject-btn");
-
-                if (acceptBtn) acceptBtn.addEventListener("click", handleAccept);
-                if (rejectBtn) rejectBtn.addEventListener("click", handleReject);
-
-                if (consentStatus === "accepted") {
-                    hideBanner();
-                    trackAcceptedVisit();
-                } else if (consentStatus === "rejected") {
-                    hideBanner();
-                } else {
-                    showBanner();
-                }
+                console.log('✓ Visitor consent accepted and data saved');
             });
+        }
 
-            window.addEventListener("pagehide", trackExit);
-        })();
+        function declineCookieConsent() {
+            // Store rejection
+            setCookie('cookie_consent', 'rejected', 365);
+
+            // Hide banner
+            const banner = document.getElementById('cookie-consent-banner');
+            if (banner) {
+                banner.style.display = 'none';
+            }
+
+            console.log('Visitor declined cookie consent');
+        }
+
+        // ========== PAGE LOAD & BEHAVIOR TRACKING ==========
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize banner UI
+            initCookieConsentBanner();
+
+            // Check if consent already given
+            const existingConsent = getCookie('cookie_consent');
+            const banner = document.getElementById('cookie-consent-banner');
+
+            if (!existingConsent && banner) {
+                // New visitor - show banner
+                banner.style.display = 'block';
+            } else if (banner) {
+                // Returning visitor or already decided
+                banner.style.display = 'none';
+            }
+
+            // Set current year in footer
+            document.getElementById('current-year').textContent = new Date().getFullYear();
+
+            // Update visit counter if returning visitor
+            const lastVisit = getCookie('last_visit');
+            if (lastVisit && getCookie('cookie_consent') === 'accepted') {
+                const visitCount = getCookie('visits');
+                // Update last visit timestamp
+                setCookie('last_visit', new Date().toISOString(), 365);
+            }
+        });
+
+        // ========== EXIT DETECTION ==========
+        window.addEventListener('beforeunload', trackExitEvent);
+
+        // Also track when user navigates away
+        window.addEventListener('unload', trackExitEvent);
+
+        // Track visibility changes (tab closed, etc)
+        document.addEventListener('visibilitychange', function() {
+            if (document.hidden) {
+                trackExitEvent();
+            }
+        });
     </script>
+
+    <!-- ========== CRISP LIVE CHAT ========== -->
+    <script type="text/javascript">window.$crisp=[];window.CRISP_WEBSITE_ID="c38c8838-581c-410e-8809-c6f3f0d3391c";(function(){d=document;s=d.createElement("script");s.src="https://client.crisp.chat/l.js";s.async=1;d.getElementsByTagName("head")[0].appendChild(s);})();</script>
 
 </body>
 </html>
