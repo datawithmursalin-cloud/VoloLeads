@@ -6,6 +6,40 @@ document.addEventListener('DOMContentLoaded', () => {
     initMobileMenu();
     updateCopyrightYear();
     initDarkMode();
+    initContactForm();
+    initFormSecurity();
+    initCounterAnimation();
+    initRevealOnScroll();
+    initScrollAnimations();
+    initScrollToTop();
+    initCounters();
+    initAccordions();
+    initMobilePlansCarousel();
+
+    // Cookie consent banner initialization
+    initCookieConsentBanner();
+
+    // Check if consent already given
+    const existingConsent = getCookie('cookie_consent');
+    const banner = document.getElementById('cookie-consent-banner');
+
+    if (!existingConsent && banner) {
+        banner.style.display = 'block';
+    } else if (banner) {
+        banner.style.display = 'none';
+    }
+
+    // Set current year in footer
+    const currentYearEl = document.getElementById('current-year');
+    if (currentYearEl) {
+        currentYearEl.textContent = new Date().getFullYear();
+    }
+
+    // Update visit counter if returning visitor
+    const lastVisit = getCookie('last_visit');
+    if (lastVisit && getCookie('cookie_consent') === 'accepted') {
+        setCookie('last_visit', new Date().toISOString(), 365);
+    }
 });
 
 /* --- Dark Mode Logic --- */
@@ -219,10 +253,6 @@ window.scrollPricing = function(direction) {
 };
 
 /* --- Contact Form Logic --- */
-document.addEventListener('DOMContentLoaded', () => {
-    initContactForm();
-});
-
 function initContactForm() {
     const serviceSelect = document.getElementById('service-select');
     const dateInput = document.getElementById('preferred-date');
@@ -307,15 +337,80 @@ function initContactForm() {
 }
 
 /* ============================================
+   COUNTER ANIMATION
+   ============================================ */
+function initCounterAnimation() {
+    const counters = document.querySelectorAll('.counter-animate');
+
+    const animateCounter = (counter) => {
+        const target = parseInt(counter.getAttribute('data-target'));
+        const duration = 2000; // 2 seconds
+        const increment = target / (duration / 50);
+        let current = 0;
+
+        const interval = setInterval(() => {
+            current += increment;
+            if (current >= target) {
+                counter.textContent = target.toLocaleString();
+                clearInterval(interval);
+            } else {
+                counter.textContent = Math.floor(current).toLocaleString();
+            }
+        }, 50);
+    };
+
+    // Intersection Observer for triggering animations on scroll
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const counter = entry.target;
+                animateCounter(counter);
+                observer.unobserve(counter);
+            }
+        });
+    }, { threshold: 0.5 });
+
+    counters.forEach(counter => observer.observe(counter));
+}
+
+/* ============================================
+   REVEAL ON SCROLL ANIMATION
+   ============================================ */
+function initRevealOnScroll() {
+    const revealElements = document.querySelectorAll('.reveal-on-scroll');
+    const revealOnScroll = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.style.opacity = '1';
+                entry.target.style.transform = 'translateY(0)';
+                revealOnScroll.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.1 });
+
+    revealElements.forEach(element => {
+        element.style.opacity = '0';
+        element.style.transform = 'translateY(20px)';
+        element.style.transition = 'opacity 0.6s ease-out, transform 0.6s ease-out';
+
+        // Apply delay based on CSS class
+        if (element.classList.contains('delay-100')) {
+            element.style.transitionDelay = '0.1s';
+        } else if (element.classList.contains('delay-200')) {
+            element.style.transitionDelay = '0.2s';
+        } else if (element.classList.contains('delay-300')) {
+            element.style.transitionDelay = '0.3s';
+        } else if (element.classList.contains('delay-400')) {
+            element.style.transitionDelay = '0.4s';
+        }
+
+        revealOnScroll.observe(element);
+    });
+}
+
+/* ============================================
    FUTURE-PROOFING: INTERACTIVE FEATURES
    ============================================ */
-
-document.addEventListener('DOMContentLoaded', () => {
-    initScrollAnimations();
-    initScrollToTop();
-    initCounters();
-    initAccordions();
-});
 
 /* --- 1. Reveal Elements on Scroll --- */
 function initScrollAnimations() {
@@ -563,21 +658,13 @@ function initMobilePlansCarousel() {
     window.addEventListener('resize', updatePlansLayout);
 }
 
-document.addEventListener('DOMContentLoaded', initMobilePlansCarousel);
-
-document.addEventListener('DOMContentLoaded', function() {
-    
-    /* --- Contact Form Security & Handling --- */
+/* --- Form Security & Anti-Bot Checks --- */
+function initFormSecurity() {
     const contactForm = document.getElementById('contact-form');
-    
-    // Only run this logic if the form actually exists on the current page
-    if (contactForm) {
-        
-        // SECURITY LAYER 3: Time-Lock
-        // We record the time when the Javascript loads.
-        // Bots fill forms in < 0.1s. Humans take several seconds.
-        const loadTime = Date.now();
 
+    if (contactForm) {
+        // SECURITY LAYER 3: Time-Lock
+        const loadTime = Date.now();
         const submitBtn = document.getElementById('submit-btn');
         const btnText = document.getElementById('btn-text');
         const btnLoader = document.getElementById('btn-loader');
@@ -588,7 +675,6 @@ document.addEventListener('DOMContentLoaded', function() {
             const timeDifference = submitTime - loadTime;
 
             // Check 1: Honey Trap (Must remain empty)
-            // If a bot filled this hidden field, block the submission.
             if (honeyTrap && honeyTrap.value !== "") {
                 e.preventDefault();
                 console.warn("Bot detected: Honey trap triggered.");
@@ -596,7 +682,6 @@ document.addEventListener('DOMContentLoaded', function() {
             }
 
             // Check 2: Time Trap (Must take > 3 seconds)
-            // If the form is submitted faster than 3 seconds after page load, it's likely a bot.
             if (timeDifference < 3000) {
                 e.preventDefault();
                 console.warn("Bot detected: Form filled too fast.");
@@ -608,16 +693,15 @@ document.addEventListener('DOMContentLoaded', function() {
             if (submitBtn) {
                 submitBtn.disabled = true;
                 submitBtn.classList.add('opacity-75', 'cursor-not-allowed');
-                
+
                 if (btnText) btnText.classList.add('hidden');
                 if (btnLoader) btnLoader.classList.remove('hidden');
             }
 
-            // If all checks pass, allow the form to submit normally
             return true;
         });
     }
-});
+}
 
 /* ========== VISITOR TRACKING SYSTEM WITH COOKIE CONSENT ========== */
 
@@ -982,37 +1066,6 @@ function initCookieConsentBanner() {
 
     document.body.insertAdjacentHTML('beforeend', bannerHTML);
 }
-
-// ========== PAGE LOAD & BEHAVIOR TRACKING ==========
-document.addEventListener('DOMContentLoaded', function() {
-    // Initialize banner UI
-    initCookieConsentBanner();
-
-    // Check if consent already given
-    const existingConsent = getCookie('cookie_consent');
-    const banner = document.getElementById('cookie-consent-banner');
-
-    if (!existingConsent && banner) {
-        // New visitor - show banner
-        banner.style.display = 'block';
-    } else if (banner) {
-        // Returning visitor or already decided
-        banner.style.display = 'none';
-    }
-
-    // Set current year in footer
-    const currentYearEl = document.getElementById('current-year');
-    if (currentYearEl) {
-        currentYearEl.textContent = new Date().getFullYear();
-    }
-
-    // Update visit counter if returning visitor
-    const lastVisit = getCookie('last_visit');
-    if (lastVisit && getCookie('cookie_consent') === 'accepted') {
-        // Update last visit timestamp
-        setCookie('last_visit', new Date().toISOString(), 365);
-    }
-});
 
 // ========== EXIT DETECTION ==========
 window.addEventListener('beforeunload', trackExitEvent);
