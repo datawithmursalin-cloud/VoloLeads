@@ -237,7 +237,7 @@ function initContactForm() {
             if (!quantityRow || !quantitySelect) return;
 
             // Logic: If they pick a service that needs agents...
-            if (service === "Cold Calling VA" || service === "Virtual Drivers" || service === "Both Services") {
+            if (service === "Essential" || service === "Premium" || service === "Custom+") {
                 quantityRow.classList.remove("hidden");
                 quantitySelect.setAttribute("required", "true");
             } else {
@@ -250,11 +250,13 @@ function initContactForm() {
 
     // 2. Date Picker Logic
     if (dateInput) {
-        // Set min date to today
+        // Set min date to tomorrow (not today)
         const today = new Date();
-        const yyyy = today.getFullYear();
-        const mm = String(today.getMonth() + 1).padStart(2, '0');
-        const dd = String(today.getDate()).padStart(2, '0');
+        const tomorrow = new Date(today);
+        tomorrow.setDate(tomorrow.getDate() + 1);
+        const yyyy = tomorrow.getFullYear();
+        const mm = String(tomorrow.getMonth() + 1).padStart(2, '0');
+        const dd = String(tomorrow.getDate()).padStart(2, '0');
         dateInput.min = `${yyyy}-${mm}-${dd}`;
 
         // Handle Date Change -> Show Time Slots
