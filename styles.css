@@ -357,3 +357,75 @@ html {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
 }
+
+/* ========== SWIPE ANIMATION FOR MOBILE PLANS ========== */
+@keyframes swipeInFromRight {
+    from {
+        opacity: 0;
+        transform: translateX(100px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes swipeOutToLeft {
+    from {
+        opacity: 1;
+        transform: translateX(0);
+    }
+    to {
+        opacity: 0;
+        transform: translateX(-100px);
+    }
+}
+
+.swipe-in {
+    animation: swipeInFromRight 0.6s ease-out;
+}
+
+.swipe-out {
+    animation: swipeOutToLeft 0.6s ease-out forwards;
+}
+
+/* ========== HORIZONTAL SCROLL CONTAINER FOR MOBILE PLANS ========== */
+.plans-carousel {
+    display: flex;
+    gap: 2rem;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scroll-behavior: smooth;
+    padding: 1rem 0;
+    -webkit-overflow-scrolling: touch;
+    scroll-snap-type: x mandatory;
+}
+
+.plans-carousel::-webkit-scrollbar {
+    height: 6px;
+}
+
+.plans-carousel::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.plans-carousel::-webkit-scrollbar-thumb {
+    background: rgba(255, 127, 0, 0.3);
+    border-radius: 3px;
+}
+
+.plans-carousel::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 127, 0, 0.6);
+}
+
+.plans-card {
+    flex: 0 0 min(100%, calc(100% - 2rem));
+    scroll-snap-align: start;
+    scroll-snap-stop: always;
+}
+
+@media (max-width: 768px) {
+    .plans-card {
+        flex: 0 0 calc(100% - 1rem);
+    }
+}

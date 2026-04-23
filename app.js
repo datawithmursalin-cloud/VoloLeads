@@ -412,19 +412,19 @@ function updateCountdown(audio) {
     // 1. Find the timer span that matches this audio player
     // We look for an ID like "timer-" + "audio-richard"
     const timerSpan = document.getElementById(`timer-${audio.id}`);
-    
+
     // 2. Ensure we have a valid number to work with
     if (audio.duration) {
         // Calculate remaining time
         const remaining = audio.duration - audio.currentTime;
-        
+
         // Math to convert seconds into Minutes:Seconds
         const minutes = Math.floor(remaining / 60);
         const seconds = Math.floor(remaining % 60);
-        
+
         // Add a "0" if seconds are single digit (e.g. "5:09" instead of "5:9")
         const formattedTime = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
-        
+
         // Update the text on screen
         timerSpan.textContent = formattedTime;
     }
@@ -436,7 +436,7 @@ function resetPlayer(audio) {
     const minutes = Math.floor(audio.duration / 60);
     const seconds = Math.floor(audio.duration % 60);
     timerSpan.textContent = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
-    
+
     // Reset icon to Play
     const btn = audio.nextElementSibling;
     btn.querySelector('i').className = 'fa-solid fa-play ml-0.5';
@@ -450,6 +450,107 @@ function flipCard(cardWrapper) {
         innerCard.classList.toggle('is-flipped');
     }
 }
+
+/* ========== MOBILE PLANS CAROUSEL FUNCTIONALITY ========== */
+function initMobilePlansCarousel() {
+    // Find the plans grid - it has the class "grid grid-cols-1 md:grid-cols-3"
+    const plansGrid = document.querySelector('#plans .grid.grid-cols-1');
+    if (!plansGrid) return;
+
+    let touchStartX = 0;
+    let touchEndX = 0;
+
+    const updatePlansLayout = () => {
+        if (window.innerWidth <= 768) {
+            // Mobile: Convert grid to horizontal scroll carousel
+            plansGrid.style.display = 'flex';
+            plansGrid.style.gap = '1.5rem';
+            plansGrid.style.overflowX = 'auto';
+            plansGrid.style.overflowY = 'hidden';
+            plansGrid.style.scrollBehavior = 'smooth';
+            plansGrid.style.padding = '1rem 0';
+            plansGrid.style.WebkitOverflowScrolling = 'touch';
+            plansGrid.style.scrollSnapType = 'x mandatory';
+            plansGrid.style.paddingLeft = '0.5rem';
+            plansGrid.style.paddingRight = '0.5rem';
+            plansGrid.style.marginLeft = '-0.5rem';
+            plansGrid.style.marginRight = '-0.5rem';
+
+            // Hide the scrollbar
+            plansGrid.classList.add('scrollbar-hide');
+            plansGrid.classList.remove('grid', 'grid-cols-1', 'md:grid-cols-3', 'gap-8');
+
+            // Update each card for carousel layout
+            const cards = plansGrid.querySelectorAll('.perspective-1000');
+            cards.forEach(card => {
+                card.style.flex = '0 0 calc(100% - 2rem)';
+                card.style.minWidth = 'calc(100% - 2rem)';
+                card.style.scrollSnapAlign = 'start';
+                card.style.scrollSnapStop = 'always';
+                card.style.height = '680px';
+            });
+
+            // Add touch event listeners for swipe
+            plansGrid.addEventListener('touchstart', (e) => {
+                touchStartX = e.changedTouches[0].screenX;
+            }, false);
+
+            plansGrid.addEventListener('touchend', (e) => {
+                touchEndX = e.changedTouches[0].screenX;
+                handleSwipe();
+            }, false);
+
+        } else {
+            // Desktop: Restore grid layout
+            plansGrid.style.display = 'grid';
+            plansGrid.style.gridTemplateColumns = 'repeat(3, minmax(0, 1fr))';
+            plansGrid.style.gap = '2rem';
+            plansGrid.style.overflowX = 'visible';
+            plansGrid.style.scrollBehavior = 'auto';
+            plansGrid.style.padding = '1.5rem 0';
+            plansGrid.style.marginLeft = '0';
+            plansGrid.style.marginRight = '0';
+            plansGrid.classList.remove('scrollbar-hide');
+            plansGrid.classList.add('grid', 'grid-cols-1', 'md:grid-cols-3', 'gap-8');
+
+            const cards = plansGrid.querySelectorAll('.perspective-1000');
+            cards.forEach(card => {
+                card.style.flex = 'none';
+                card.style.minWidth = 'auto';
+                card.style.scrollSnapAlign = 'none';
+                card.style.scrollSnapStop = 'none';
+                card.style.height = '660px';
+            });
+
+            // Remove touch listeners on desktop
+            plansGrid.removeEventListener('touchstart', null);
+            plansGrid.removeEventListener('touchend', null);
+        }
+    };
+
+    function handleSwipe() {
+        const difference = touchStartX - touchEndX;
+
+        // Only trigger if swipe distance is significant (more than 50px)
+        if (Math.abs(difference) > 50) {
+            if (difference > 0) {
+                // Swipe left - scroll right to see next card
+                plansGrid.scrollBy({ left: 350, behavior: 'smooth' });
+            } else {
+                // Swipe right - scroll left to see previous card
+                plansGrid.scrollBy({ left: -350, behavior: 'smooth' });
+            }
+        }
+    }
+
+    // Initial call
+    updatePlansLayout();
+
+    // Update on resize
+    window.addEventListener('resize', updatePlansLayout);
+}
+
+document.addEventListener('DOMContentLoaded', initMobilePlansCarousel);
 
 document.addEventListener('DOMContentLoaded', function() {
     
