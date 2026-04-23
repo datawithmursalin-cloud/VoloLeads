@@ -202,13 +202,113 @@ textarea:focus {
    ============================================ */
 @media (max-width: 768px) {
     section:not(#home) {
-        padding-top: 3rem !important;
-        padding-bottom: 3rem !important;
+        padding-top: 2.5rem !important;
+        padding-bottom: 2.5rem !important;
     }
-    
+
     #home {
-        padding-top: 6rem !important;
-        padding-bottom: 5rem !important;
+        padding-top: 3rem !important;
+        padding-bottom: 2.5rem !important;
+    }
+
+    /* Hero section typography scaling for mobile */
+    #home h1 {
+        font-size: 1.5rem !important;
+        line-height: 1.2 !important;
+    }
+
+    #home p {
+        font-size: 0.7rem !important;
+    }
+
+    /* Plans section header scaling */
+    #plans h2 {
+        font-size: 1.3rem !important;
+        line-height: 1.25 !important;
+    }
+
+    #plans > div > div.max-w-5xl p {
+        font-size: 0.75rem !important;
+    }
+
+    /* Reduce COW logo size on mobile */
+    #plans .rounded-full {
+        width: 7rem !important;
+        height: 7rem !important;
+    }
+
+    /* Force plan cards to flexible height on mobile */
+    #plans [class*="perspective-1000"] {
+        height: auto !important;
+    }
+
+    #plans [class*="transform-style-3d"] {
+        min-height: 320px !important;
+    }
+
+    /* Plans grid - reduce gap on mobile */
+    #plans .grid {
+        gap: 1rem !important;
+    }
+
+    /* Reduce plan card text sizes */
+    #plans h3 {
+        font-size: 1.125rem !important;
+    }
+
+    #plans .text-5xl {
+        font-size: 2.25rem !important;
+    }
+
+    #plans .text-2xl,
+    #plans .text-xl {
+        font-size: 1rem !important;
+    }
+
+    /* Spacing adjustments for mobile */
+    #plans .mb-16 {
+        margin-bottom: 1.5rem !important;
+    }
+
+    #plans .pb-12 {
+        padding-bottom: 2rem !important;
+    }
+
+    #plans .gap-12 {
+        gap: 1rem !important;
+    }
+}
+
+/* ============================================
+   Extra Small Mobile Responsiveness (< 640px)
+   ============================================ */
+@media (max-width: 640px) {
+    #home h1 {
+        font-size: 1.25rem !important;
+    }
+
+    #home p {
+        font-size: 0.65rem !important;
+    }
+
+    #plans .rounded-full {
+        width: 6rem !important;
+        height: 6rem !important;
+    }
+
+    #plans h2 {
+        font-size: 1.125rem !important;
+    }
+
+    #plans .text-5xl {
+        font-size: 2rem !important;
+    }
+
+    /* CTA buttons - smaller on small phones */
+    a.rounded-full,
+    button.rounded-full {
+        padding: 0.625rem 1.5rem !important;
+        font-size: 0.875rem !important;
     }
 }
 
@@ -610,12 +710,20 @@ a.rounded-full:hover {
 }
 
 /* Subheading Paragraph - Subtle 3D Effect */
-#home > div > p {
+#home p {
+    font-size: 0.95rem !important;
     text-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
     letter-spacing: 0.3px;
 }
 
 /* Subheading Dark Mode */
-.dark #home > div > p {
+.dark #home p {
     text-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+/* Desktop larger screens - keep subheading proportionate */
+@media (min-width: 1024px) {
+    #home p {
+        font-size: 1rem !important;
+    }
 }
