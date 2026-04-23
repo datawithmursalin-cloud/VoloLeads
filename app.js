@@ -534,11 +534,22 @@ function initMobilePlansCarousel() {
         // Only trigger if swipe distance is significant (more than 50px)
         if (Math.abs(difference) > 50) {
             if (difference > 0) {
-                // Swipe left - scroll right to see next card
-                plansGrid.scrollBy({ left: 350, behavior: 'smooth' });
+                // Swipe left - scroll right to see next card (with boundary check)
+                const maxScroll = plansGrid.scrollWidth - plansGrid.clientWidth;
+                const currentScroll = plansGrid.scrollLeft;
+
+                // Only allow swiping left if not at the end
+                if (currentScroll < maxScroll) {
+                    plansGrid.scrollBy({ left: 350, behavior: 'smooth' });
+                }
             } else {
-                // Swipe right - scroll left to see previous card
-                plansGrid.scrollBy({ left: -350, behavior: 'smooth' });
+                // Swipe right - scroll left to see previous card (with boundary check)
+                const currentScroll = plansGrid.scrollLeft;
+
+                // Only allow swiping right if not at the beginning
+                if (currentScroll > 0) {
+                    plansGrid.scrollBy({ left: -350, behavior: 'smooth' });
+                }
             }
         }
     }
