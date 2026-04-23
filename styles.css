@@ -213,8 +213,8 @@ textarea:focus {
 
     /* Hero section typography scaling for mobile - AGGRESSIVE */
     #home h1 {
-        font-size: 1.125rem !important;
-        line-height: 1.15 !important;
+        font-size: 1.625rem !important;
+        line-height: 1.3 !important;
     }
 
     #home p {
@@ -325,7 +325,8 @@ textarea:focus {
    ============================================ */
 @media (max-width: 640px) {
     #home h1 {
-        font-size: 1rem !important;
+        font-size: 1.375rem !important;
+        line-height: 1.25 !important;
     }
 
     #home p {
@@ -678,6 +679,51 @@ html {
                 0 4px 8px 0 rgba(0, 0, 0, 0.1) !important;
 }
 
+/* Plan Card Text 3D Effects */
+#plans h3 {
+    text-shadow:
+        0 2px 0 rgba(0, 0, 0, 0.08),
+        0 4px 0 rgba(0, 0, 0, 0.06),
+        0 6px 0 rgba(0, 0, 0, 0.04),
+        0 8px 12px rgba(0, 0, 0, 0.1);
+    letter-spacing: -0.02em;
+}
+
+.dark #plans h3 {
+    text-shadow:
+        0 2px 4px rgba(0, 0, 0, 0.3),
+        0 4px 8px rgba(0, 0, 0, 0.2),
+        0 6px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Plan Card Pricing Text 3D Effect */
+#plans .text-5xl {
+    text-shadow:
+        0 2px 0 rgba(0, 0, 0, 0.08),
+        0 4px 0 rgba(0, 0, 0, 0.06),
+        0 6px 0 rgba(0, 0, 0, 0.04),
+        0 8px 12px rgba(0, 0, 0, 0.1);
+}
+
+.dark #plans .text-5xl {
+    text-shadow:
+        0 2px 4px rgba(0, 0, 0, 0.3),
+        0 4px 8px rgba(0, 0, 0, 0.2),
+        0 6px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Plan Card Body Text 3D Effect */
+#plans .text-slate-600,
+#plans .text-slate-500 {
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+    letter-spacing: 0.3px;
+}
+
+.dark #plans .text-slate-600,
+.dark #plans .text-slate-400 {
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
 /* General Button/CTA Hover Pop Effect */
 button.rounded-full,
 a.rounded-full {
@@ -768,6 +814,11 @@ a.rounded-full:hover {
 
 /* Desktop larger screens - keep subheading proportionate */
 @media (min-width: 1024px) {
+    #home h1 {
+        font-size: 3.5rem !important;
+        line-height: 1.2 !important;
+    }
+
     #home p {
         font-size: 1rem !important;
     }
