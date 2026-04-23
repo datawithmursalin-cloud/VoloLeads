@@ -487,14 +487,14 @@ html {
    ============================================ */
 
 /* Audio Cards - Enhanced 3D */
-.group[class*="p-7"][class*="rounded-2xl"] {
+.group.p-7.rounded-2xl {
     box-shadow: 0 15px 35px -10px rgba(0, 0, 0, 0.2),
                 0 8px 15px -8px rgba(0, 0, 0, 0.12),
                 0 2px 4px 0 rgba(0, 0, 0, 0.05) !important;
     transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
-.group[class*="p-7"][class*="rounded-2xl"]:hover {
+.group.p-7.rounded-2xl:hover {
     transform: translateY(-8px) translateZ(0);
     box-shadow: 0 25px 50px -15px rgba(0, 0, 0, 0.3),
                 0 12px 25px -12px rgba(0, 0, 0, 0.18),
@@ -502,18 +502,14 @@ html {
 }
 
 /* Statistics Cards - 3D Effect */
-.text-center[class*="bg-white"][class*="rounded-2xl"],
-.text-center[class*="bg-slate"][class*="rounded-2xl"],
-.text-center[class*="bg-white/50"][class*="rounded-2xl"] {
+.text-center.rounded-2xl.p-8 {
     box-shadow: 0 15px 35px -10px rgba(0, 0, 0, 0.15),
                 0 8px 15px -8px rgba(0, 0, 0, 0.1),
                 inset 0 1px 0 0 rgba(255, 255, 255, 0.2) !important;
     transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
-.text-center[class*="bg-white"][class*="rounded-2xl"]:hover,
-.text-center[class*="bg-slate"][class*="rounded-2xl"]:hover,
-.text-center[class*="bg-white/50"][class*="rounded-2xl"]:hover {
+.text-center.rounded-2xl.p-8:hover {
     transform: translateY(-10px);
     box-shadow: 0 25px 50px -15px rgba(0, 0, 0, 0.25),
                 0 12px 25px -12px rgba(0, 0, 0, 0.15),
@@ -521,16 +517,16 @@ html {
 }
 
 /* Pricing/Plan Cards - 3D Effect */
-[class*="rounded-2xl"][class*="shadow-lg"],
-[class*="rounded-2xl"][class*="shadow-2xl"] {
+.rounded-2xl.shadow-lg,
+.rounded-2xl.shadow-2xl {
     box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.2),
                 0 10px 20px -10px rgba(0, 0, 0, 0.12),
                 0 2px 4px 0 rgba(0, 0, 0, 0.06) !important;
     transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
-[class*="rounded-2xl"][class*="shadow-lg"]:hover,
-[class*="rounded-2xl"][class*="shadow-2xl"]:hover {
+.rounded-2xl.shadow-lg:hover,
+.rounded-2xl.shadow-2xl:hover {
     transform: translateY(-12px);
     box-shadow: 0 30px 60px -20px rgba(0, 0, 0, 0.3),
                 0 15px 30px -15px rgba(0, 0, 0, 0.18),
@@ -538,28 +534,28 @@ html {
 }
 
 /* General Button/CTA Hover Pop Effect */
-button[class*="rounded-full"],
-a[class*="rounded-full"] {
+button.rounded-full,
+a.rounded-full {
     transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
-button[class*="rounded-full"]:hover,
-a[class*="rounded-full"]:hover {
+button.rounded-full:hover,
+a.rounded-full:hover {
     transform: translateY(-4px);
     box-shadow: 0 15px 35px -10px rgba(0, 0, 0, 0.2);
 }
 
 /* General depth to all containers with rounded corners */
-[class*="rounded-xl"],
-[class*="rounded-2xl"],
-[class*="rounded-3xl"] {
+.rounded-xl,
+.rounded-2xl,
+.rounded-3xl {
     perspective: 1000px;
 }
 
 /* ============================================
    3D Effects for Testimonial Cards
    ============================================ */
-#testimonials [class*="rounded-xl"] {
+#testimonials .rounded-xl {
     box-shadow: 0 12px 30px -10px rgba(0, 0, 0, 0.15),
                 0 6px 12px -6px rgba(0, 0, 0, 0.1),
                 inset 0 1px 0 0 rgba(255, 255, 255, 0.1) !important;
@@ -567,7 +563,7 @@ a[class*="rounded-full"]:hover {
     transform-origin: center center;
 }
 
-#testimonials [class*="rounded-xl"]:hover {
+#testimonials .rounded-xl:hover {
     transform: translateY(-12px) translateZ(0);
     box-shadow: 0 25px 50px -15px rgba(0, 0, 0, 0.25),
                 0 12px 25px -12px rgba(0, 0, 0, 0.15),
@@ -577,7 +573,7 @@ a[class*="rounded-full"]:hover {
 /* ============================================
    3D Effects for About Section Cards (100% Wholesale & Daily QA)
    ============================================ */
-#about [class*="border-l-4"] {
+#about .border-l-4 {
     box-shadow: 0 12px 30px -10px rgba(0, 0, 0, 0.15),
                 0 6px 12px -6px rgba(0, 0, 0, 0.1) !important;
     transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
@@ -585,7 +581,7 @@ a[class*="rounded-full"]:hover {
     position: relative;
 }
 
-#about [class*="border-l-4"]:hover {
+#about .border-l-4:hover {
     transform: translateY(-10px) translateZ(0);
     box-shadow: 0 22px 45px -12px rgba(0, 0, 0, 0.25),
                 0 10px 20px -10px rgba(0, 0, 0, 0.15) !important;
