@@ -13,6 +13,15 @@ section:not(#home) {
     padding-bottom: 7rem !important;
 }
 
+/* Section Shadow Effect - 3D Pop Out */
+section {
+    box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.15),
+                0 10px 20px -10px rgba(0, 0, 0, 0.1),
+                0 -2px 4px 0 rgba(0, 0, 0, 0.05);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+}
+
 /* ============================================
    Infinite Scroll Animation (Integration Logos)
    ============================================ */
@@ -450,4 +459,167 @@ html {
     .plans-card {
         flex: 0 0 calc(100% - 1rem);
     }
+}
+
+/* ============================================
+   Card Shadow Enhancement
+   ============================================ */
+
+/* Audio Player Cards - Enhance shadows */
+.group[class*="p-7"][class*="rounded-2xl"] {
+    box-shadow: 0 4px 12px 0 rgba(0, 0, 0, 0.12) !important;
+}
+
+/* General card shadow enhancement */
+[class*="rounded-2xl"][class*="p-7"],
+[class*="rounded-3xl"][class*="p-8"] {
+    box-shadow: 0 4px 15px 0 rgba(0, 0, 0, 0.1) !important;
+}
+
+/* Statistics cards */
+.text-center p[class*="text-4xl"],
+.text-center p[class*="text-5xl"] {
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+/* ============================================
+   3D Pop Out Effects for All Cards
+   ============================================ */
+
+/* Audio Cards - Enhanced 3D */
+.group[class*="p-7"][class*="rounded-2xl"] {
+    box-shadow: 0 15px 35px -10px rgba(0, 0, 0, 0.2),
+                0 8px 15px -8px rgba(0, 0, 0, 0.12),
+                0 2px 4px 0 rgba(0, 0, 0, 0.05) !important;
+    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.group[class*="p-7"][class*="rounded-2xl"]:hover {
+    transform: translateY(-8px) translateZ(0);
+    box-shadow: 0 25px 50px -15px rgba(0, 0, 0, 0.3),
+                0 12px 25px -12px rgba(0, 0, 0, 0.18),
+                0 4px 8px 0 rgba(0, 0, 0, 0.08) !important;
+}
+
+/* Statistics Cards - 3D Effect */
+.text-center[class*="bg-white"][class*="rounded-2xl"],
+.text-center[class*="bg-slate"][class*="rounded-2xl"],
+.text-center[class*="bg-white/50"][class*="rounded-2xl"] {
+    box-shadow: 0 15px 35px -10px rgba(0, 0, 0, 0.15),
+                0 8px 15px -8px rgba(0, 0, 0, 0.1),
+                inset 0 1px 0 0 rgba(255, 255, 255, 0.2) !important;
+    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.text-center[class*="bg-white"][class*="rounded-2xl"]:hover,
+.text-center[class*="bg-slate"][class*="rounded-2xl"]:hover,
+.text-center[class*="bg-white/50"][class*="rounded-2xl"]:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 25px 50px -15px rgba(0, 0, 0, 0.25),
+                0 12px 25px -12px rgba(0, 0, 0, 0.15),
+                inset 0 1px 0 0 rgba(255, 255, 255, 0.3) !important;
+}
+
+/* Pricing/Plan Cards - 3D Effect */
+[class*="rounded-2xl"][class*="shadow-lg"],
+[class*="rounded-2xl"][class*="shadow-2xl"] {
+    box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.2),
+                0 10px 20px -10px rgba(0, 0, 0, 0.12),
+                0 2px 4px 0 rgba(0, 0, 0, 0.06) !important;
+    transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+[class*="rounded-2xl"][class*="shadow-lg"]:hover,
+[class*="rounded-2xl"][class*="shadow-2xl"]:hover {
+    transform: translateY(-12px);
+    box-shadow: 0 30px 60px -20px rgba(0, 0, 0, 0.3),
+                0 15px 30px -15px rgba(0, 0, 0, 0.18),
+                0 4px 8px 0 rgba(0, 0, 0, 0.1) !important;
+}
+
+/* General Button/CTA Hover Pop Effect */
+button[class*="rounded-full"],
+a[class*="rounded-full"] {
+    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+button[class*="rounded-full"]:hover,
+a[class*="rounded-full"]:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 15px 35px -10px rgba(0, 0, 0, 0.2);
+}
+
+/* General depth to all containers with rounded corners */
+[class*="rounded-xl"],
+[class*="rounded-2xl"],
+[class*="rounded-3xl"] {
+    perspective: 1000px;
+}
+
+/* ============================================
+   3D Effects for Testimonial Cards
+   ============================================ */
+#testimonials [class*="rounded-xl"] {
+    box-shadow: 0 12px 30px -10px rgba(0, 0, 0, 0.15),
+                0 6px 12px -6px rgba(0, 0, 0, 0.1),
+                inset 0 1px 0 0 rgba(255, 255, 255, 0.1) !important;
+    transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+    transform-origin: center center;
+}
+
+#testimonials [class*="rounded-xl"]:hover {
+    transform: translateY(-12px) translateZ(0);
+    box-shadow: 0 25px 50px -15px rgba(0, 0, 0, 0.25),
+                0 12px 25px -12px rgba(0, 0, 0, 0.15),
+                inset 0 1px 0 0 rgba(255, 255, 255, 0.15) !important;
+}
+
+/* ============================================
+   3D Effects for About Section Cards (100% Wholesale & Daily QA)
+   ============================================ */
+#about [class*="border-l-4"] {
+    box-shadow: 0 12px 30px -10px rgba(0, 0, 0, 0.15),
+                0 6px 12px -6px rgba(0, 0, 0, 0.1) !important;
+    transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+    transform-origin: center center;
+    position: relative;
+}
+
+#about [class*="border-l-4"]:hover {
+    transform: translateY(-10px) translateZ(0);
+    box-shadow: 0 22px 45px -12px rgba(0, 0, 0, 0.25),
+                0 10px 20px -10px rgba(0, 0, 0, 0.15) !important;
+}
+
+/* ============================================
+   3D Text Effects for Hero Section
+   ============================================ */
+
+/* H1 Heading - Subtle 3D Effect */
+#home h1 {
+    text-shadow:
+        0 2px 0 rgba(0, 0, 0, 0.08),
+        0 4px 0 rgba(0, 0, 0, 0.06),
+        0 6px 0 rgba(0, 0, 0, 0.04),
+        0 8px 12px rgba(0, 0, 0, 0.1);
+    letter-spacing: -0.02em;
+}
+
+/* H1 Heading Dark Mode */
+.dark #home h1 {
+    text-shadow:
+        0 2px 4px rgba(0, 0, 0, 0.3),
+        0 4px 8px rgba(0, 0, 0, 0.2),
+        0 6px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Subheading Paragraph - Subtle 3D Effect */
+#home > div > p {
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+    letter-spacing: 0.3px;
+}
+
+/* Subheading Dark Mode */
+.dark #home > div > p {
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
 }
