@@ -1442,10 +1442,10 @@
                 </div>
 
                 <div class="space-y-1">
-                    <label class="text-xs font-bold text-slate-500 uppercase tracking-wide ml-1">How did you hear about us?</label>
+                    <label class="text-xs font-bold text-slate-500 uppercase tracking-wide ml-1">How did you hear about us? <span class="text-red-500">*</span></label>
                     <div class="relative">
-                        <select id="referral-source" name="referral_source" required class="w-full px-4 py-3 bg-slate-50 border border-slate-200 dark:bg-slate-700 dark:border-slate-600 dark:text-white dark:placeholder-slate-400 rounded-lg text-slate-800 outline-none focus:border-brand-orange focus:ring-1 focus:ring-brand-orange focus:bg-white transition-all text-sm appearance-none cursor-pointer">
-                            <option value="" disabled selected>Select an option...</option>
+                        <select id="referral-source" name="referral_source" required aria-required="true" oninvalid="this.setCustomValidity('Please select how you heard about us')" oninput="this.setCustomValidity('')" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 dark:bg-slate-700 dark:border-slate-600 dark:text-white dark:placeholder-slate-400 rounded-lg text-slate-800 outline-none focus:border-brand-orange focus:ring-1 focus:ring-brand-orange focus:bg-white transition-all text-sm appearance-none cursor-pointer">
+                            <option value="" disabled selected hidden>Select an option...</option>
                             <option value="Discord">Discord</option>
                             <option value="Facebook">Facebook</option>
                             <option value="Skool">Skool</option>
