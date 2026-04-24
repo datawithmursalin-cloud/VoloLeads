@@ -256,6 +256,9 @@ window.scrollPricing = function(direction) {
 function initContactForm() {
     const serviceSelect = document.getElementById('service-select');
     const dateInput = document.getElementById('preferred-date');
+    const referralSelect = document.getElementById('referral-source');
+    const referralOtherRow = document.getElementById('referral-other-row');
+    const referralOtherInput = document.getElementById('referral-source-other');
     
     // 1. Service Selection -> Toggle Quantity Dropdown
     if (serviceSelect) {
@@ -333,6 +336,29 @@ function initContactForm() {
             if (timeRow) timeRow.classList.remove('hidden');
             if (timeSelect) timeSelect.setAttribute('required', 'true');
         });
+    }
+
+    // 3. Referral Source -> Toggle Other Details Input
+    if (referralSelect) {
+        const syncReferralOtherField = function() {
+            const isOther = this.value === 'Other';
+
+            if (referralOtherRow) {
+                referralOtherRow.classList.toggle('hidden', !isOther);
+            }
+
+            if (referralOtherInput) {
+                if (isOther) {
+                    referralOtherInput.setAttribute('required', 'true');
+                } else {
+                    referralOtherInput.removeAttribute('required');
+                    referralOtherInput.value = '';
+                }
+            }
+        };
+
+        referralSelect.addEventListener('change', syncReferralOtherField);
+        syncReferralOtherField.call(referralSelect);
     }
 }
 
