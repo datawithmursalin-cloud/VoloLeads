@@ -1,0 +1,48 @@
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteBase /
+
+  # Redirect all requests to the Node.js app running on a specific port
+  # This assumes you're using a reverse proxy like Apache's mod_proxy
+
+  # If using Passenger, ignore this section
+  # For manual Node.js setup with cPanel, configure the domain to point to Node.js
+
+  # Prevent access to hidden files and directories
+  RewriteRule "^\." - [F]
+
+  # If the request is not for a directory
+  RewriteCond %{REQUEST_FILENAME} !-d
+  # If the request is not for a file
+  RewriteCond %{REQUEST_FILENAME} !-f
+  # Rewrite all other requests to index.php or Node.js app
+  # This line may not be needed if using Passenger
+  # RewriteRule ^ index.php [QSA,L]
+</IfModule>
+
+# Add security headers
+<IfModule mod_headers.c>
+  Header set X-Content-Type-Options "nosniff"
+  Header set X-Frame-Options "SAMEORIGIN"
+  Header set X-XSS-Protection "1; mode=block"
+  Header set Referrer-Policy "strict-origin-when-cross-origin"
+</IfModule>
+
+# Compression
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/plain text/xml text/css text/javascript application/javascript application/json
+</IfModule>
+
+# Set default character encoding
+AddDefaultCharset UTF-8
+
+# Prevent access to sensitive files
+<FilesMatch "\.(env|lock|md|git)$">
+  <IfModule mod_authz_core.c>
+    Require all denied
+  </IfModule>
+  <IfModule !mod_authz_core.c>
+    Order allow,deny
+    Deny from all
+  </IfModule>
+</FilesMatch>
