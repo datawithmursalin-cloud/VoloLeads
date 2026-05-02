@@ -330,8 +330,10 @@ textarea:focus {
         line-height: 1.25 !important;
     }
 
+    /* Ensure readable body text on small devices (WCAG minimum) */
     #home p {
-        font-size: 0.55rem !important;
+        font-size: 0.9rem !important;
+        line-height: 1.4 !important;
     }
 
     #plans .rounded-full {

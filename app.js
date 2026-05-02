@@ -29,6 +29,11 @@ document.addEventListener('DOMContentLoaded', () => {
         banner.style.display = 'none';
     }
 
+    // If consent was already given, load third-party widgets now
+    if (existingConsent === 'accepted') {
+        loadThirdPartyScriptsOnConsent();
+    }
+
     // Set current year in footer
     const currentYearEl = document.getElementById('current-year');
     if (currentYearEl) {
@@ -40,6 +45,25 @@ document.addEventListener('DOMContentLoaded', () => {
     if (lastVisit && getCookie('cookie_consent') === 'accepted') {
         setCookie('last_visit', new Date().toISOString(), 365);
     }
+
+    // Attach loadedmetadata handlers to audio elements to initialize timers safely
+    const audios = document.querySelectorAll('audio');
+    audios.forEach(a => {
+        a.addEventListener('loadedmetadata', () => {
+            try {
+                const timerSpan = document.getElementById(`timer-${a.id}`);
+                if (timerSpan && isFinite(a.duration) && !isNaN(a.duration)) {
+                    const minutes = Math.floor(a.duration / 60);
+                    const seconds = Math.floor(a.duration % 60);
+                    timerSpan.textContent = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+                }
+            } catch (e) {
+                console.warn('Failed to initialize audio timer', e);
+            }
+        });
+
+        a.addEventListener('error', () => handleAudioError(a));
+    });
 });
 
 /* --- Dark Mode Logic --- */
@@ -552,34 +576,41 @@ function updateCountdown(audio) {
     // 1. Find the timer span that matches this audio player
     // We look for an ID like "timer-" + "audio-richard"
     const timerSpan = document.getElementById(`timer-${audio.id}`);
+    // Guard: timer span must exist
+    if (!timerSpan) return;
 
-    // 2. Ensure we have a valid number to work with
-    if (audio.duration) {
-        // Calculate remaining time
-        const remaining = audio.duration - audio.currentTime;
+    // Ensure duration is available and finite
+    if (!isFinite(audio.duration) || isNaN(audio.duration)) return;
 
-        // Math to convert seconds into Minutes:Seconds
-        const minutes = Math.floor(remaining / 60);
-        const seconds = Math.floor(remaining % 60);
+    // Calculate remaining time
+    const remaining = Math.max(0, audio.duration - audio.currentTime);
 
-        // Add a "0" if seconds are single digit (e.g. "5:09" instead of "5:9")
-        const formattedTime = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+    // Math to convert seconds into Minutes:Seconds
+    const minutes = Math.floor(remaining / 60);
+    const seconds = Math.floor(remaining % 60);
 
-        // Update the text on screen
-        timerSpan.textContent = formattedTime;
-    }
+    // Add a "0" if seconds are single digit (e.g. "5:09" instead of "5:9")
+    const formattedTime = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+
+    // Update the text on screen
+    timerSpan.textContent = formattedTime;
 }
 
 // Optional: Resets the timer back to original text when audio finishes
 function resetPlayer(audio) {
     const timerSpan = document.getElementById(`timer-${audio.id}`);
-    const minutes = Math.floor(audio.duration / 60);
-    const seconds = Math.floor(audio.duration % 60);
-    timerSpan.textContent = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+    if (timerSpan && isFinite(audio.duration) && !isNaN(audio.duration)) {
+        const minutes = Math.floor(audio.duration / 60);
+        const seconds = Math.floor(audio.duration % 60);
+        timerSpan.textContent = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+    }
 
-    // Reset icon to Play
+    // Reset icon to Play (safely)
     const btn = audio.nextElementSibling;
-    btn.querySelector('i').className = 'fa-solid fa-play ml-0.5';
+    if (btn) {
+        const icon = btn.querySelector('i');
+        if (icon) icon.className = 'fa-solid fa-play ml-0.5';
+    }
 }
 
 /* --- Flip Card Function --- */
@@ -977,184 +1008,68 @@ function trackExitEvent() {
 
 // ========== COOKIE CONSENT HANDLERS ==========
 function acceptCookieConsent() {
-    const validation = validateForm();
-
-    if (!validation.isValid) {
-        return;
-    }
-
-    // Capture visitor data
-    const visitorData = captureVisitorData(validation.name, validation.email);
-
-    // Submit to Web3Forms
-    submitToWeb3Forms(visitorData).then(() => {
-        // Hide banner
-        const banner = document.getElementById('cookie-consent-banner');
-        if (banner) {
-            banner.style.display = 'none';
-        }
-        clearValidationErrors();
-
-        console.log('✓ Visitor consent accepted and data saved');
-    });
-}
-
-function declineCookieConsent() {
-    // Store rejection
-    setCookie('cookie_consent', 'rejected', 365);
+    // Set consent flag only (do NOT collect PII here)
+    setCookie('cookie_consent', 'accepted', 365);
 
     // Hide banner
     const banner = document.getElementById('cookie-consent-banner');
-    if (banner) {
-        banner.style.display = 'none';
-    }
+    if (banner) banner.style.display = 'none';
+
+    // Load only the third-party scripts that require consent
+    loadThirdPartyScriptsOnConsent();
+
+    console.log('Visitor consent accepted (no PII collected in banner)');
+}
+
+function declineCookieConsent() {
+    // Store rejection and remove any existing visitor PII cookies
+    setCookie('cookie_consent', 'rejected', 365);
+    deleteCookie('visitor_name');
+    deleteCookie('visitor_email');
+
+    // Hide banner
+    const banner = document.getElementById('cookie-consent-banner');
+    if (banner) banner.style.display = 'none';
 
     console.log('Visitor declined cookie consent');
 }
 
 // ========== COOKIE CONSENT BANNER UI ==========
 function initCookieConsentBanner() {
-    // Create banner HTML
+    // Create a minimal, GDPR-friendly banner (no PII collection)
     const bannerHTML = `
-        <div id="cookie-consent-banner" class="cookie-consent-banner" style="
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            z-index: 9999;
-            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
-            border-top: 2px solid #f97316;
-            padding: 20px;
-            box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.3);
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            display: none;
-        ">
-            <div style="max-width: 1200px; margin: 0 auto;">
-                <div style="display: flex; flex-direction: column; gap: 16px;">
-                    <!-- Headline -->
-                    <div style="color: #fff; font-size: 16px; font-weight: 600;">
-                        🔥 Get instant access to off-market deals & exclusive market insights delivered daily!
-                    </div>
-
-                    <!-- Form inputs -->
-                    <div style="display: grid; grid-template-columns: 1fr 1fr auto auto; gap: 12px; align-items: flex-end;">
-                        <!-- Name input -->
-                        <div style="display: flex; flex-direction: column; gap: 4px;">
-                            <input
-                                type="text"
-                                id="cookie-consent-name"
-                                placeholder="Your Name"
-                                style="
-                                    padding: 10px 12px;
-                                    border: 1px solid #475569;
-                                    background-color: #1e293b;
-                                    color: #fff;
-                                    border-radius: 6px;
-                                    font-size: 14px;
-                                    outline: none;
-                                    transition: all 0.2s;
-                                "
-                                onmouseover="this.style.borderColor='#f97316'"
-                                onmouseout="this.style.borderColor='#475569'"
-                                onfocus="this.style.borderColor='#f97316'; this.style.boxShadow='0 0 0 2px rgba(249, 115, 22, 0.2)'"
-                                onblur="this.style.borderColor='#475569'; this.style.boxShadow='none'"
-                            >
-                            <span id="name-error" style="color: #ef4444; font-size: 12px; display: none;"></span>
-                        </div>
-
-                        <!-- Email input -->
-                        <div style="display: flex; flex-direction: column; gap: 4px;">
-                            <input
-                                type="email"
-                                id="cookie-consent-email"
-                                placeholder="Your Email"
-                                style="
-                                    padding: 10px 12px;
-                                    border: 1px solid #475569;
-                                    background-color: #1e293b;
-                                    color: #fff;
-                                    border-radius: 6px;
-                                    font-size: 14px;
-                                    outline: none;
-                                    transition: all 0.2s;
-                                "
-                                onmouseover="this.style.borderColor='#f97316'"
-                                onmouseout="this.style.borderColor='#475569'"
-                                onfocus="this.style.borderColor='#f97316'; this.style.boxShadow='0 0 0 2px rgba(249, 115, 22, 0.2)'"
-                                onblur="this.style.borderColor='#475569'; this.style.boxShadow='none'"
-                            >
-                            <span id="email-error" style="color: #ef4444; font-size: 12px; display: none;"></span>
-                        </div>
-
-                        <!-- Accept button -->
-                        <button
-                            id="cookie-accept-btn"
-                            style="
-                                padding: 10px 20px;
-                                background-color: #f97316;
-                                color: white;
-                                border: none;
-                                border-radius: 6px;
-                                font-weight: 600;
-                                font-size: 14px;
-                                cursor: pointer;
-                                transition: all 0.2s;
-                                white-space: nowrap;
-                            "
-                            onmouseover="this.style.backgroundColor='#ea580c'; this.style.transform='translateY(-1px)'"
-                            onmouseout="this.style.backgroundColor='#f97316'; this.style.transform='translateY(0)'"
-                            onclick="acceptCookieConsent()"
-                        >
-                            Accept & Save
-                        </button>
-
-                        <!-- Decline button -->
-                        <button
-                            id="cookie-decline-btn"
-                            style="
-                                padding: 10px 20px;
-                                background-color: transparent;
-                                color: white;
-                                border: 1px solid white;
-                                border-radius: 6px;
-                                font-weight: 600;
-                                font-size: 14px;
-                                cursor: pointer;
-                                transition: all 0.2s;
-                                white-space: nowrap;
-                            "
-                            onmouseover="this.style.backgroundColor='rgba(255, 255, 255, 0.1)'"
-                            onmouseout="this.style.backgroundColor='transparent'"
-                            onclick="declineCookieConsent()"
-                        >
-                            Decline
-                        </button>
-                    </div>
-
-                    <!-- Mobile responsive view -->
-                    <style>
-                        @media (max-width: 768px) {
-                            #cookie-consent-banner {
-                                padding: 16px !important;
-                            }
-                            #cookie-consent-banner > div > div:last-child {
-                                display: grid !important;
-                                grid-template-columns: 1fr !important;
-                            }
-                            #cookie-consent-banner input {
-                                width: 100% !important;
-                            }
-                            #cookie-consent-banner button {
-                                width: 100% !important;
-                            }
-                        }
-                    </style>
+        <div id="cookie-consent-banner" style="position: fixed;bottom:0;left:0;right:0;z-index:9999;background:#0f172a;color:#fff;padding:16px;display:none;">
+            <div style="max-width:1100px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;">
+                <div style="flex:1;min-width:240px;font-size:15px;">We use cookies for analytics and to improve your experience. Do you consent to optional cookies and third-party widgets?</div>
+                <div style="display:flex;gap:8px;">
+                    <button id="cookie-decline-btn" style="background:transparent;border:1px solid #fff;color:#fff;padding:10px 14px;border-radius:6px;font-weight:600;">Decline</button>
+                    <button id="cookie-accept-btn" style="background:#f97316;color:#fff;padding:10px 14px;border-radius:6px;border:none;font-weight:700;">Accept</button>
                 </div>
             </div>
         </div>
     `;
 
     document.body.insertAdjacentHTML('beforeend', bannerHTML);
+
+    // Attach handlers
+    const acceptBtn = document.getElementById('cookie-accept-btn');
+    const declineBtn = document.getElementById('cookie-decline-btn');
+    if (acceptBtn) acceptBtn.addEventListener('click', acceptCookieConsent);
+    if (declineBtn) declineBtn.addEventListener('click', declineCookieConsent);
+}
+
+// Lazy-load third-party scripts only after consent
+function loadThirdPartyScriptsOnConsent() {
+    // Example: Crisp chat loader ONLY if window.CRISP_WEBSITE_ID is provided by server-side template or env
+    if (window.CRISP_WEBSITE_ID) {
+        (function() {
+            window.$crisp = []; window.CRISP_WEBSITE_ID = window.CRISP_WEBSITE_ID;
+            var d = document; var s = d.createElement("script"); s.src = "https://client.crisp.chat/l.js"; s.async = 1;
+            d.getElementsByTagName("head")[0].appendChild(s);
+        })();
+    }
+
+    // Potentially enable analytics or other widgets here when consented
 }
 
 // ========== EXIT DETECTION ==========
