@@ -16,8 +16,8 @@
     <meta name="author" content="VoloLeads Agency">
 
     <!-- ========== Favicon ========== -->
-    <link rel="icon" type="image/png" href="./png/logo.webp" sizes="any">
-    <link rel="apple-touch-icon" href="./png/logo.webp">
+    <link rel="icon" type="image/png" href="./png/logo.png" sizes="any">
+    <link rel="apple-touch-icon" href="./png/logo.png">
 
     <!-- ========== CSS Framework & Custom Theme ========== -->
     <!-- Tailwind CSS CDN for utility-first styling -->
@@ -890,7 +890,7 @@
                         </div>
                     </div>
                     <div class="bg-slate-50 dark:bg-slate-800 rounded-xl p-4 border border-slate-200 dark:border-slate-700 flex items-center gap-4 shadow-inner">
-                        <audio id="audio-richard" src="audio/hot-lead-murs.mp3" ontimeupdate="updateCountdown(this)" onended="resetPlayer(this)"></audio>
+                        <audio id="audio-richard" src="audio/hot-lead-murs.mp3" ontimeupdate="updateCountdown(this)" onended="resetPlayer(this)" onerror="handleAudioError(this)"></audio>
                         <button onclick="toggleAudio('audio-richard', this)" class="w-11 h-11 flex items-center justify-center bg-brand-navy rounded-full text-white text-xs hover:bg-brand-orange transition-colors cursor-pointer shadow-md flex-shrink-0" aria-label="Play Richard Audio">
                             <i class="fa-solid fa-play ml-0.5"></i>
                         </button>
@@ -915,7 +915,7 @@
                         </div>
                     </div>
                     <div class="bg-slate-50 dark:bg-slate-800 rounded-xl p-4 border border-slate-200 dark:border-slate-700 flex items-center gap-4 shadow-inner">
-                        <audio id="audio-joe" src="audio/wrong-contact.mp3" ontimeupdate="updateCountdown(this)" onended="resetPlayer(this)"></audio>
+                        <audio id="audio-joe" src="audio/wrong-contact.mp3" ontimeupdate="updateCountdown(this)" onended="resetPlayer(this)" onerror="handleAudioError(this)"></audio>
                         <button onclick="toggleAudio('audio-joe', this)" class="w-11 h-11 flex items-center justify-center bg-brand-navy rounded-full text-white text-xs hover:bg-brand-orange transition-colors cursor-pointer shadow-md flex-shrink-0" aria-label="Play Joe Audio">
                             <i class="fa-solid fa-play ml-0.5"></i>
                         </button>
@@ -940,7 +940,7 @@
                         </div>
                     </div>
                     <div class="bg-slate-50 dark:bg-slate-800 rounded-xl p-4 border border-slate-200 dark:border-slate-700 flex items-center gap-4 shadow-inner">
-                        <audio id="audio-3" src="audio/nurture-lead-abeer.mp3" ontimeupdate="updateCountdown(this)" onended="resetPlayer(this)"></audio>
+                        <audio id="audio-3" src="audio/nurture-lead-abeer.mp3" ontimeupdate="updateCountdown(this)" onended="resetPlayer(this)" onerror="handleAudioError(this)"></audio>
                         <button onclick="toggleAudio('audio-3', this)" class="w-11 h-11 flex items-center justify-center bg-brand-navy rounded-full text-white text-xs hover:bg-brand-orange transition-colors cursor-pointer shadow-md flex-shrink-0" aria-label="Play Audio 3">
                             <i class="fa-solid fa-play ml-0.5"></i>
                         </button>
@@ -965,7 +965,7 @@
                         </div>
                     </div>
                     <div class="bg-slate-50 dark:bg-slate-800 rounded-xl p-4 border border-slate-200 dark:border-slate-700 flex items-center gap-4 shadow-inner">
-                        <audio id="audio-4" src="audio/warm-lead-nusrat2.mp3" ontimeupdate="updateCountdown(this)" onended="resetPlayer(this)"></audio>
+                        <audio id="audio-4" src="audio/warm-lead-nusrat2.mp3" ontimeupdate="updateCountdown(this)" onended="resetPlayer(this)" onerror="handleAudioError(this)"></audio>
                         <button onclick="toggleAudio('audio-4', this)" class="w-11 h-11 flex items-center justify-center bg-brand-navy rounded-full text-white text-xs hover:bg-brand-orange transition-colors cursor-pointer shadow-md flex-shrink-0" aria-label="Play Audio 4">
                             <i class="fa-solid fa-play ml-0.5"></i>
                         </button>
@@ -990,7 +990,7 @@
                         </div>
                     </div>
                     <div class="bg-slate-50 dark:bg-slate-800 rounded-xl p-4 border border-slate-200 dark:border-slate-700 flex items-center gap-4 shadow-inner">
-                        <audio id="audio-5" src="audio/warm-lead-faizan.mp3" ontimeupdate="updateCountdown(this)" onended="resetPlayer(this)"></audio>
+                        <audio id="audio-5" src="audio/warm-lead-faizan.mp3" ontimeupdate="updateCountdown(this)" onended="resetPlayer(this)" onerror="handleAudioError(this)"></audio>
                         <button onclick="toggleAudio('audio-5', this)" class="w-11 h-11 flex items-center justify-center bg-brand-navy rounded-full text-white text-xs hover:bg-brand-orange transition-colors cursor-pointer shadow-md flex-shrink-0" aria-label="Play Audio 5">
                             <i class="fa-solid fa-play ml-0.5"></i>
                         </button>
@@ -1339,9 +1339,8 @@
                 </div>
 
                 <!-- Contact Form: Uses Web3Forms for backend submission -->
-                <form id="contact-form" action="https://api.web3forms.com/submit" method="POST" class="space-y-6">
-                <!-- Web3Forms Integration: Backend form submission service -->
-                <input type="hidden" name="access_key" value="3703f014-d164-460f-bb00-1f5897a7e373">
+                <form id="contact-form" class="space-y-6">
+                <!-- Web3Forms Integration: Backend form submission service (moved to server-side for security) -->
                 <!-- Redirect URL after successful form submission -->
                 <input type="hidden" name="redirect" value="https://datawithmursalin-cloud.github.io/VoloLeads/thank-you.html">
 

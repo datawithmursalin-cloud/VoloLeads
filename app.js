@@ -150,7 +150,7 @@ window.toggleAudio = function(audioId, btn) {
     // 1. If we click a new audio while one is playing, stop the old one
     if (currentAudio && currentAudio !== audio) {
         currentAudio.pause();
-        currentAudio.currentTime = 0; 
+        currentAudio.currentTime = 0;
         if (currentButton) {
             const oldIcon = currentButton.querySelector('i');
             if (oldIcon) {
@@ -164,13 +164,13 @@ window.toggleAudio = function(audioId, btn) {
     if (audio.paused) {
         // Attempt to play
         const playPromise = audio.play();
-        
+
         if (playPromise !== undefined) {
             playPromise.then(_ => {
                 // Play started successfully
                 icon.classList.remove('fa-play', 'ml-0.5');
                 icon.classList.add('fa-pause');
-                
+
                 currentAudio = audio;
                 currentButton = btn;
             })
@@ -186,6 +186,23 @@ window.toggleAudio = function(audioId, btn) {
         icon.classList.add('fa-play', 'ml-0.5');
         currentAudio = null;
         currentButton = null;
+    }
+};
+
+// Handle audio errors
+window.handleAudioError = function(audioElement) {
+    console.error(`Audio error for ${audioElement.id}:`, audioElement.error?.message);
+    const btn = audioElement.nextElementSibling;
+    if (btn) {
+        const icon = btn.querySelector('i');
+        if (icon) {
+            icon.classList.add('fa-exclamation-triangle');
+            icon.classList.remove('fa-play', 'fa-pause');
+        }
+        btn.disabled = true;
+        btn.title = 'Audio file unavailable';
+        btn.style.opacity = '0.5';
+        btn.style.cursor = 'not-allowed';
     }
 };
 
@@ -696,20 +713,20 @@ function initFormSecurity() {
         const btnLoader = document.getElementById('btn-loader');
         const honeyTrap = document.getElementById('website_honeypot');
 
-        contactForm.addEventListener('submit', function(e) {
+        contactForm.addEventListener('submit', async function(e) {
+            e.preventDefault();
+
             const submitTime = Date.now();
             const timeDifference = submitTime - loadTime;
 
             // Check 1: Honey Trap (Must remain empty)
             if (honeyTrap && honeyTrap.value !== "") {
-                e.preventDefault();
                 console.warn("Bot detected: Honey trap triggered.");
                 return false;
             }
 
             // Check 2: Time Trap (Must take > 3 seconds)
             if (timeDifference < 3000) {
-                e.preventDefault();
                 console.warn("Bot detected: Form filled too fast.");
                 alert("Please wait a moment before submitting to verify you are human.");
                 return false;
@@ -724,7 +741,49 @@ function initFormSecurity() {
                 if (btnLoader) btnLoader.classList.remove('hidden');
             }
 
-            return true;
+            // Collect form data
+            const formData = new FormData(contactForm);
+            const data = Object.fromEntries(formData);
+
+            try {
+                // Send to your backend endpoint (which will proxy to Web3Forms with secure API key)
+                const response = await fetch('/api/contact-form', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(data)
+                });
+
+                if (response.ok) {
+                    // Redirect to thank you page
+                    window.location.href = '/thank-you.html';
+                } else {
+                    console.error('Form submission failed:', response.status);
+                    alert('Failed to submit form. Please try again.');
+
+                    // Re-enable button
+                    if (submitBtn) {
+                        submitBtn.disabled = false;
+                        submitBtn.classList.remove('opacity-75', 'cursor-not-allowed');
+                    }
+                    if (btnText) btnText.classList.remove('hidden');
+                    if (btnLoader) btnLoader.classList.add('hidden');
+                }
+            } catch (error) {
+                console.error('Form submission error:', error);
+                alert('An error occurred. Please try again.');
+
+                // Re-enable button
+                if (submitBtn) {
+                    submitBtn.disabled = false;
+                    submitBtn.classList.remove('opacity-75', 'cursor-not-allowed');
+                }
+                if (btnText) btnText.classList.remove('hidden');
+                if (btnLoader) btnLoader.classList.add('hidden');
+            }
+
+            return false;
         });
     }
 }
@@ -851,8 +910,9 @@ function captureVisitorData(name, email) {
 
 // ========== DATA SUBMISSION FUNCTIONS ==========
 async function submitToWeb3Forms(visitorData) {
+    // SECURITY: API key should be handled server-side only
+    // For now, submit to your backend endpoint which will add the key
     const payload = {
-        access_key: '13abc37b-f6ed-4d4c-99cc-94b2aade3d6e',
         visitor_name: visitorData.visitor_name,
         visitor_email: visitorData.visitor_email,
         visit_page: window.location.pathname,
@@ -863,7 +923,10 @@ async function submitToWeb3Forms(visitorData) {
     };
 
     try {
-        const response = await fetch('https://api.web3forms.com/submit', {
+        // TODO: Replace with your backend endpoint
+        // For production, your backend should proxy to Web3Forms with the API key
+        // Example: /api/visitors (your backend adds the Web3Forms API key)
+        const response = await fetch('/api/visitors', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -897,7 +960,6 @@ function trackExitEvent() {
 
     if (visitorName && visitorEmail) {
         const exitData = {
-            access_key: '13abc37b-f6ed-4d4c-99cc-94b2aade3d6e',
             event_type: 'page_exit',
             visitor_name: visitorName,
             visitor_email: visitorEmail,
@@ -906,8 +968,10 @@ function trackExitEvent() {
             exit_timestamp: new Date().toISOString()
         };
 
-        // Use sendBeacon for reliability on page unload
-        navigator.sendBeacon('https://api.web3forms.com/submit', JSON.stringify(exitData));
+        // Use sendBeacon to submit to your backend endpoint
+        if (navigator.sendBeacon) {
+            navigator.sendBeacon('/api/events', JSON.stringify(exitData));
+        }
     }
 }
 

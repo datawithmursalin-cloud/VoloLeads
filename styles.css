@@ -218,8 +218,8 @@ textarea:focus {
     }
 
     #home p {
-        font-size: 0.6rem !important;
-        line-height: 1.3 !important;
+        font-size: 0.875rem !important;
+        line-height: 1.5 !important;
     }
 
     /* Plans section header scaling - AGGRESSIVE */
@@ -229,7 +229,8 @@ textarea:focus {
     }
 
     #plans > div > div.max-w-5xl p {
-        font-size: 0.65rem !important;
+        font-size: 0.875rem !important;
+        line-height: 1.5 !important;
     }
 
     /* Reduce COW logo size on mobile */
@@ -274,11 +275,11 @@ textarea:focus {
     }
 
     #plans .text-sm {
-        font-size: 0.65rem !important;
+        font-size: 0.875rem !important;
     }
 
     #plans .text-xs {
-        font-size: 0.55rem !important;
+        font-size: 0.75rem !important;
     }
 
     /* Plan card padding reduction */
