@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const rateLimit = require('express-rate-limit');
 const { submitContactForm, getContactForms, getContactFormById, updateContactFormStatus } = require('../controllers/contactController');
+const verifyTurnstile = require('../middleware/turnstile');
 
 // Rate limiter: 3 submissions per IP per hour
 const contactLimiter = rateLimit({
@@ -15,7 +16,7 @@ const contactLimiter = rateLimit({
   }
 });
 
-router.post('/contact-form', contactLimiter, submitContactForm);
+router.post('/contact-form', contactLimiter, verifyTurnstile, submitContactForm);
 
 router.get('/contact-forms', getContactForms);
 

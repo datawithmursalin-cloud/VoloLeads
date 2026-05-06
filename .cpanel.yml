@@ -1,0 +1,6 @@
+---
+deployment:
+  tasks:
+    - export DEPLOYPATH=/home/vololead/public_html/
+    - /bin/cp -R frontend/* $DEPLOYPATH
+    - /bin/cp frontend/.htaccess $DEPLOYPATH

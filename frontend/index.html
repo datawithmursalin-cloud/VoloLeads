@@ -14,64 +14,28 @@
     <meta name="description" content="VoloLeads provides expert cold callers for real estate wholesalers. Our VAs specialize in objection handling and lead generation to fill your pipeline. Book a call today.">
     <meta name="keywords" content="Real Estate Wholesaling, Cold Calling VA, Lead Generation, Real Estate Drivers for Dollars, Off-Market Deals">
     <meta name="author" content="VoloLeads Agency">
+    <meta name="theme-color" content="#0f172a">
 
     <!-- ========== Favicon ========== -->
-    <link rel="icon" type="image/png" href="./png/logo.png" sizes="any">
-    <link rel="apple-touch-icon" href="./png/logo.png">
+    <link rel="icon" type="image/webp" href="./png/logo.webp" sizes="any">
+    <link rel="apple-touch-icon" href="./png/logo.webp">
 
     <!-- ========== CSS Framework & Custom Theme ========== -->
-    <!-- Tailwind CSS CDN for utility-first styling -->
-    <script src="https://cdn.tailwindcss.com"></script>
-
-    <!-- Custom Tailwind Configuration: Brand Colors & Typography -->
-    <script>
-        tailwind.config = {
-            darkMode: 'class',
-            theme: {
-                extend: {
-                    fontFamily: { sans: ['Inter', 'sans-serif'] },
-                    colors: {
-                        brand: {
-                            navy: '#0f172a',    /* slate-900 - Primary dark color */
-                            light: '#f8fafc',   /* slate-50 - Primary light background */
-                            orange: '#f97316',  /* orange-500 - Primary accent color */
-                            orangeHover: '#ea580c', /* orange-600 - Hover state for orange */
-                        }
-                    },
-                    keyframes: {
-                        fadeInUp: {
-                            '0%': { opacity: '0', transform: 'translateY(10px)' },
-                            '100%': { opacity: '1', transform: 'translateY(0)' },
-                        },
-                        pulse: {
-                            '0%, 100%': { opacity: '1' },
-                            '50%': { opacity: '.5' },
-                        },
-                    },
-                    animation: {
-                        fadeInUp: 'fadeInUp 0.6s ease-out',
-                        pulse: 'pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite',
-                    }
-                }
-            }
-        }
-    </script>
+    <link rel="stylesheet" href="tailwind.css">
 
     <!-- ========== External Stylesheets ========== -->
     <!-- Custom CSS for animations and grid backgrounds -->
     <link rel="stylesheet" href="styles.css">
 
-    <!-- Font Awesome Icons for UI elements -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
     <!-- ========== Google Fonts ========== -->
     <!-- Inter: Primary font for body text and headings -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
-    <!-- Playfair Display: Secondary font for premium typography (future use) -->
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
 
 </head>
-<body class="bg-brand-light dark:bg-slate-900 text-brand-navy dark:text-slate-100 font-sans antialiased relative">
+<body class="site-preload bg-brand-light dark:bg-slate-900 text-brand-navy dark:text-slate-100 font-sans antialiased relative">
+    <a href="#main-content" class="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[9999] focus:px-4 focus:py-3 focus:rounded-lg focus:bg-brand-orange focus:text-white focus:font-bold focus:shadow-xl">Skip to main content</a>
 
     <!-- ========== MAIN NAVIGATION ========== -->
     <!-- Fixed header navigation bar with smooth blur effect and responsive menu -->
@@ -81,12 +45,12 @@
 
                 <!-- Branding: Logo with animated icon -->
                 <a href="#home" class="flex items-center gap-2 cursor-pointer group">
-                    <i class="fa-solid fa-bolt text-brand-orange text-2xl group-hover:animate-pulse"></i>
+                    <i class="fa-solid fa-bolt text-brand-orange text-2xl group-hover:animate-pulse" aria-hidden="true"><svg class="site-icon-svg" viewBox="0 0 24 24" fill="currentColor" focusable="false"><path d="M13 2 4 14h7l-1 8 10-13h-7l0-7Z"/></svg></i>
                     <span class="font-bold text-xl tracking-tight text-brand-navy dark:text-white">VoloLeads</span>
                 </a>
 
                 <!-- Desktop Navigation Menu: Hidden on mobile, visible on md+ screens -->
-                <div class="hidden md:flex space-x-8 items-center text-sm font-semibold">
+                <div class="hidden lg:flex space-x-8 items-center text-sm font-semibold">
                     <a href="#home" class="text-slate-600 dark:text-slate-300 hover:text-brand-orange dark:hover:text-brand-orange transition-colors">Home</a>
                     <a href="#plans" class="text-slate-600 dark:text-slate-300 hover:text-brand-orange dark:hover:text-brand-orange transition-colors">Plans</a>
                     <a href="#insights" class="text-slate-600 dark:text-slate-300 hover:text-brand-orange dark:hover:text-brand-orange transition-colors">Insights</a>
@@ -97,24 +61,24 @@
                 <!-- Right Side Actions: Book Now, Dark Mode Toggle, Mobile Menu -->
                 <div class="flex items-center gap-3">
                     <!-- Desktop CTA Button: Book Now (Hidden on mobile) -->
-                    <a href="#contact" class="hidden md:block px-6 py-2 bg-brand-navy dark:bg-brand-orange hover:bg-slate-800 dark:hover:bg-orange-600 text-white text-sm font-bold rounded-full shadow-lg transition-all transform hover:-translate-y-0.5">
+                    <a href="#contact" class="hidden lg:block px-6 py-2 bg-brand-navy dark:bg-brand-orange hover:bg-slate-800 dark:hover:bg-orange-600 text-white text-sm font-bold rounded-full shadow-lg transition-all transform hover:-translate-y-0.5">
                         Book Now
                     </a>
 
                     <!-- Dark Mode Toggle Button -->
                     <button id="dark-mode-toggle" class="text-slate-600 dark:text-slate-300 text-xl cursor-pointer focus:outline-none transition-colors hover:text-brand-orange dark:hover:text-brand-orange" aria-label="Toggle Dark Mode">
-                        <i class="fa-solid fa-moon" id="dark-mode-icon"></i>
+                        <i class="fa-solid fa-moon" id="dark-mode-icon" aria-hidden="true"></i>
                     </button>
 
                     <!-- Mobile Menu Toggle Button -->
-                    <button id="mobile-menu-btn" class="md:hidden text-slate-600 dark:text-slate-300 text-xl cursor-pointer focus:outline-none" aria-label="Toggle Menu">
-                        <i class="fa-solid fa-bars" id="menu-icon"></i>
+                    <button id="mobile-menu-btn" class="lg:hidden text-slate-600 dark:text-slate-300 text-xl cursor-pointer focus:outline-none" aria-label="Toggle Menu">
+                        <i class="fa-solid fa-bars" id="menu-icon" aria-hidden="true"></i>
                     </button>
                 </div>
         </div>
 
         <!-- Mobile Navigation Menu: Collapsible dropdown for smaller screens -->
-        <div id="mobile-menu" class="hidden md:hidden absolute top-20 left-0 right-0 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl shadow-2xl mx-6 p-6 flex flex-col gap-4 text-center z-50">
+        <div id="mobile-menu" class="hidden lg:hidden absolute top-20 left-0 right-0 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl shadow-2xl mx-6 p-6 flex flex-col gap-4 text-center z-50">
             <a href="#home" class="text-slate-600 dark:text-slate-300 font-bold hover:text-brand-orange dark:hover:text-brand-orange py-2">Home</a>
             <a href="#plans" class="text-slate-600 dark:text-slate-300 font-bold hover:text-brand-orange dark:hover:text-brand-orange py-2">Plans</a>
             <a href="#insights" class="text-slate-600 dark:text-slate-300 font-bold hover:text-brand-orange dark:hover:text-brand-orange py-2">Insights</a>
@@ -123,6 +87,8 @@
             <a href="#contact" class="bg-brand-orange hover:bg-orange-600 text-white py-3 rounded-full font-bold shadow-md">Book Now</a>
         </div>
     </nav>
+
+    <main id="main-content">
 
     <!-- ========== HERO SECTION ========== -->
     <!-- Main landing page section with headline, value proposition, and primary CTAs -->
@@ -156,11 +122,11 @@
                 <!-- Primary CTA: Scroll to contact form - More specific with urgency -->
                 <a href="#contact" class="px-8 py-4 bg-brand-orange hover:bg-orange-600 text-white font-bold rounded-full shadow-lg shadow-orange-400 dark:shadow-orange-900/50 transition-all transform hover:-translate-y-1 flex items-center justify-center gap-2 group">
                     <span>Schedule Free Strategy Call</span>
-                    <i class="fa-solid fa-arrow-right group-hover:translate-x-1 transition-transform"></i>
+                    <i class="fa-solid fa-arrow-right group-hover:translate-x-1 transition-transform" aria-hidden="true"></i>
                 </a>
                 <!-- Secondary CTA: View social proof -->
                 <a href="#insights" class="px-8 py-4 bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm border border-slate-200 dark:border-slate-700 hover:border-brand-orange text-brand-navy dark:text-slate-100 font-bold rounded-full shadow-md transition-all flex items-center justify-center gap-2">
-                    <i class="fa-solid fa-headphones"></i>
+                    <i class="fa-solid fa-headphones" aria-hidden="true"></i>
                     <span>Hear the Quality</span>
                 </a>
             </div>
@@ -271,7 +237,7 @@
                 <div class="flex flex-col md:flex-row items-center justify-center gap-4 md:gap-12">
                     <a href="https://whop.com/collegeofwholesale/" target="_blank" rel="noopener noreferrer" class="w-40 h-40 md:w-56 md:h-56 rounded-full p-2 bg-gradient-to-br from-[#d7c7af] via-[#cfc2b0] to-[#b9ab95] shadow-[0_18px_35px_rgba(15,23,42,0.18)] border border-[#d2c4b2]/80 flex items-center justify-center flex-shrink-0 hover:shadow-[0_18px_35px_rgba(15,23,42,0.3)] transition-shadow duration-300 cursor-pointer">
                         <div class="w-full h-full rounded-full bg-[#efe8dd] border border-[#b8aa96]/60 overflow-hidden flex items-center justify-center">
-                            <img src="png/cow.webp" alt="College of Wholesale logo" class="w-full h-full object-cover" loading="lazy">
+                            <img src="png/cow.webp" alt="College of Wholesale logo" class="w-full h-full object-cover" width="224" height="224" loading="lazy" decoding="async">
                         </div>
                     </a>
 
@@ -296,10 +262,10 @@
             </div>
 
             <!-- Three-column pricing grid with flip cards -->
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 pb-12 pt-6">
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 pb-12 pt-6">
 
                 <!-- ESSENTIAL TIER - FLIP CARD -->
-                <div class="h-[660px] perspective-1000 cursor-pointer group reveal-on-scroll" onclick="flipCard(this)">
+                <div class="h-[660px] perspective-1000 group reveal-on-scroll relative">
                     <div class="transform-style-3d relative w-full h-full transition-transform duration-500 ease-in-out" style="transform-style: preserve-3d;">
 
                         <!-- FRONT: Plan Details -->
@@ -346,9 +312,10 @@
                                 </li>
                             </ul>
 
-                            <a href="#contact" class="block w-full py-3 px-6 bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600 text-brand-navy dark:text-slate-100 font-bold text-center rounded-lg transition-colors">
-                                Get Started
-                            </a>
+                            <button type="button" class="subscribe-btn w-full py-3 px-6 bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600 text-brand-navy dark:text-slate-100 font-bold text-center rounded-lg transition-colors" data-plan="essential">
+                                Subscribe Now
+                            </button>
+                            <p class="text-[11px] text-slate-500 dark:text-slate-400 text-center mt-2">Secure checkout powered by Stripe</p>
 
                             <p class="text-[11px] text-slate-400 dark:text-slate-500 text-center mt-2 group-hover:text-brand-orange transition-colors">
                                 ← Flip to see services →
@@ -421,15 +388,19 @@
                                 </li>
                             </ul>
 
-                            <button onclick="event.stopPropagation(); window.location.href='#contact'" class="w-full py-3 px-4 bg-brand-orange hover:bg-orange-600 text-white font-bold text-center rounded-lg shadow-lg transition-all mt-4">
-                                Get Started
+                            <button type="button" class="subscribe-btn w-full py-3 px-4 bg-brand-orange hover:bg-orange-600 text-white font-bold text-center rounded-lg shadow-lg transition-all mt-4" data-plan="essential">
+                                Subscribe Now
                             </button>
+                            <p class="text-[11px] text-slate-600 dark:text-slate-400 text-center mt-2">Secure checkout powered by Stripe</p>
                         </div>
                     </div>
+                    <button type="button" class="absolute top-4 right-4 z-30 px-3 py-1 rounded-full bg-white/90 dark:bg-slate-900/90 border border-slate-200 dark:border-slate-700 text-[11px] font-bold text-brand-navy dark:text-white shadow-md hover:border-brand-orange hover:text-brand-orange transition-colors" aria-label="Flip Essential plan card" aria-pressed="false" onclick="flipCard(this.closest('.perspective-1000'))">
+                        Flip
+                    </button>
                 </div>
 
                 <!-- PREMIUM TIER - FLIP CARD (MOST POPULAR) -->
-                <div class="h-[660px] md:-translate-y-6 perspective-1000 cursor-pointer group reveal-on-scroll delay-100 relative" onclick="flipCard(this)">
+                <div class="h-[660px] lg:-translate-y-6 perspective-1000 group reveal-on-scroll delay-100 relative">
                     <!-- MOST POPULAR BADGE -->
                     <div class="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-20">
                         <span class="bg-brand-orange text-white text-sm font-bold px-4 py-1.5 rounded-full shadow-md uppercase tracking-wide">MOST POPULAR</span>
@@ -448,7 +419,7 @@
 
                             <div class="mb-6">
                                 <div class="flex items-baseline mb-1">
-                                    <span class="text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-[#6f5c46] via-[#8e775d] to-[#c9a34a]">$1,235</span>
+                                    <span class="text-5xl font-extrabold text-[#8e775d] dark:text-[#c9a34a]">$1,235</span>
                                     <span class="text-slate-500 dark:text-slate-400 ml-1">/month</span>
                                 </div>
                                 <p class="text-xs text-slate-400 dark:text-slate-500">Billed monthly, no long-term contracts</p>
@@ -485,9 +456,10 @@
                                 </li>
                             </ul>
 
-                            <a href="#contact" class="block w-full py-4 px-6 bg-brand-orange hover:bg-orange-600 text-white font-bold text-center rounded-lg shadow-lg hover:shadow-xl transition-all">
-                                Book This Plan
-                            </a>
+                            <button type="button" class="subscribe-btn w-full py-4 px-6 bg-brand-orange hover:bg-orange-600 text-white font-bold text-center rounded-lg shadow-lg hover:shadow-xl transition-all" data-plan="premium">
+                                Subscribe Now
+                            </button>
+                            <p class="text-[11px] text-slate-500 dark:text-slate-400 text-center mt-2">Secure checkout powered by Stripe</p>
 
                             <p class="text-[11px] text-slate-400 dark:text-slate-500 text-center mt-2 group-hover:text-brand-orange transition-colors">
                                 ← Flip to see services →
@@ -580,15 +552,19 @@
                                 </li>
                             </ul>
 
-                            <button onclick="event.stopPropagation(); window.location.href='#contact'" class="w-full py-3 px-4 bg-brand-orange hover:bg-orange-600 text-white font-bold text-center rounded-lg shadow-lg transition-all mt-4">
-                                Get Started
+                            <button type="button" class="subscribe-btn w-full py-3 px-4 bg-brand-orange hover:bg-orange-600 text-white font-bold text-center rounded-lg shadow-lg transition-all mt-4" data-plan="premium">
+                                Subscribe Now
                             </button>
+                            <p class="text-[11px] text-slate-600 dark:text-slate-400 text-center mt-2">Secure checkout powered by Stripe</p>
                         </div>
                     </div>
+                    <button type="button" class="absolute top-4 right-4 z-30 px-3 py-1 rounded-full bg-white/90 dark:bg-slate-900/90 border border-slate-200 dark:border-slate-700 text-[11px] font-bold text-brand-navy dark:text-white shadow-md hover:border-brand-orange hover:text-brand-orange transition-colors" aria-label="Flip Premium plan card" aria-pressed="false" onclick="flipCard(this.closest('.perspective-1000'))">
+                        Flip
+                    </button>
                 </div>
 
                 <!-- CUSTOM+ TIER - FLIP CARD -->
-                <div class="h-[660px] perspective-1000 cursor-pointer group reveal-on-scroll delay-200" onclick="flipCard(this)">
+                <div class="h-[660px] perspective-1000 group reveal-on-scroll delay-200 relative">
                     <div class="transform-style-3d relative w-full h-full transition-transform duration-500 ease-in-out" style="transform-style: preserve-3d;">
 
                         <!-- FRONT: Plan Details -->
@@ -602,7 +578,7 @@
 
                             <div class="mb-6">
                                 <div class="flex items-baseline mb-1">
-                                    <span class="text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-brand-orange to-red-600 drop-shadow-[0_2px_6px_rgba(249,115,22,0.18)]">$2,799</span>
+                                    <span class="text-5xl font-extrabold text-brand-orange">$2,799</span>
                                     <span class="text-slate-500 dark:text-slate-400 ml-1">/month</span>
                                 </div>
                                 <p class="text-xs text-slate-400 dark:text-slate-500">Billed monthly, enterprise support</p>
@@ -647,9 +623,10 @@
                                 </li>
                             </ul>
 
-                            <a href="#contact" class="block w-full py-3 px-6 bg-slate-900 dark:bg-slate-700 hover:bg-slate-800 dark:hover:bg-slate-600 text-white font-bold text-center rounded-lg transition-colors">
-                                Build your Acquisition Team
-                            </a>
+                            <button type="button" class="subscribe-btn w-full py-3 px-6 bg-slate-900 dark:bg-slate-700 hover:bg-slate-800 dark:hover:bg-slate-600 text-white font-bold text-center rounded-lg transition-colors" data-plan="custom_plus">
+                                Subscribe Now
+                            </button>
+                            <p class="text-[11px] text-slate-500 dark:text-slate-400 text-center mt-2">Secure checkout powered by Stripe</p>
 
                             <p class="text-[11px] text-slate-400 dark:text-slate-500 text-center mt-2 group-hover:text-brand-orange transition-colors">
                                 ← Flip to see services →
@@ -753,11 +730,15 @@
                                 </li>
                             </ul>
 
-                            <button onclick="event.stopPropagation(); window.location.href='#contact'" class="w-full py-3 px-4 bg-brand-orange hover:bg-orange-600 text-white font-bold text-center rounded-lg shadow-lg transition-all mt-4">
-                                Build Your Team
+                            <button type="button" class="subscribe-btn w-full py-3 px-4 bg-brand-orange hover:bg-orange-600 text-white font-bold text-center rounded-lg shadow-lg transition-all mt-4" data-plan="custom_plus">
+                                Subscribe Now
                             </button>
+                            <p class="text-[11px] text-slate-600 dark:text-slate-400 text-center mt-2">Secure checkout powered by Stripe</p>
                         </div>
                     </div>
+                    <button type="button" class="absolute top-4 right-4 z-30 px-3 py-1 rounded-full bg-white/90 dark:bg-slate-900/90 border border-slate-200 dark:border-slate-700 text-[11px] font-bold text-brand-navy dark:text-white shadow-md hover:border-brand-orange hover:text-brand-orange transition-colors" aria-label="Flip Custom+ plan card" aria-pressed="false" onclick="flipCard(this.closest('.perspective-1000'))">
+                        Flip
+                    </button>
                 </div>
 
             </div>
@@ -878,7 +859,7 @@
                     <div class="flex items-center justify-between mb-5 gap-4">
                         <div class="flex items-center gap-4 min-w-0">
                             <div class="w-11 h-11 rounded-full bg-gradient-to-br from-brand-orange/15 to-red-500/15 flex items-center justify-center text-brand-orange">
-                                <i class="fa-solid fa-user"></i>
+                                <i class="fa-solid fa-user"><svg class="site-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" focusable="false"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg></i>
                             </div>
                             <div class="min-w-0">
                                 <h4 class="font-bold text-slate-900 dark:text-slate-100 text-sm">Agent: Richard H.</h4>
@@ -886,15 +867,16 @@
                             </div>
                         </div>
                         <div class="w-10 h-10 rounded-full bg-brand-orange/10 flex items-center justify-center">
-                            <i class="fa-solid fa-microphone-lines text-brand-orange"></i>
+                            <i class="fa-solid fa-microphone-lines text-brand-orange"><svg class="site-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" focusable="false"><path d="M12 14a3 3 0 0 0 3-3V5a3 3 0 0 0-6 0v6a3 3 0 0 0 3 3Z"/><path d="M5 11a7 7 0 0 0 14 0M12 18v4M9 22h6"/></svg></i>
                         </div>
                     </div>
-                    <div class="bg-slate-50 dark:bg-slate-800 rounded-xl p-4 border border-slate-200 dark:border-slate-700 flex items-center gap-4 shadow-inner">
-                        <audio id="audio-richard" src="audio/hot-lead-murs.mp3" ontimeupdate="updateCountdown(this)" onended="resetPlayer(this)" onerror="handleAudioError(this)"></audio>
-                        <button onclick="toggleAudio('audio-richard', this)" class="w-11 h-11 flex items-center justify-center bg-brand-navy rounded-full text-white text-xs hover:bg-brand-orange transition-colors cursor-pointer shadow-md flex-shrink-0" aria-label="Play Richard Audio">
-                            <i class="fa-solid fa-play ml-0.5"></i>
+                    <div class="audio-player-panel bg-slate-50 dark:bg-slate-800 rounded-xl p-4 border border-slate-200 dark:border-slate-700 flex items-center gap-4 shadow-inner">
+                        <audio id="audio-richard" data-src="audio/hot-lead-murs.mp3" preload="none" ontimeupdate="updateCountdown(this)" onended="resetPlayer(this)" onerror="handleAudioError(this)"></audio>
+                        <button onclick="toggleAudio('audio-richard', this)" class="w-11 h-11 flex items-center justify-center bg-brand-navy rounded-full text-white text-xs hover:bg-brand-orange transition-colors cursor-pointer shadow-md flex-shrink-0" aria-label="Play Richard H. call sample">
+                            <i class="fa-solid fa-play ml-0.5"><svg class="site-icon-svg" viewBox="0 0 24 24" fill="currentColor" focusable="false"><path d="M8 5v14l11-7L8 5Z"/></svg></i>
                         </button>
                         <span id="timer-audio-richard" class="text-xs font-mono text-slate-500 w-14 text-right">6:29</span>
+                        <input id="seek-audio-richard" class="audio-seek" type="range" min="0" max="100" value="0" step="0.1" aria-label="Seek Richard H. call sample" data-audio-id="audio-richard">
                     </div>
                 </div>
 
@@ -903,7 +885,7 @@
                     <div class="flex items-center justify-between mb-5 gap-4">
                         <div class="flex items-center gap-4 min-w-0">
                             <div class="w-11 h-11 rounded-full bg-gradient-to-br from-brand-orange/15 to-red-500/15 flex items-center justify-center text-brand-orange">
-                                <i class="fa-solid fa-user"></i>
+                                <i class="fa-solid fa-user"><svg class="site-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" focusable="false"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg></i>
                             </div>
                             <div class="min-w-0">
                                 <h4 class="font-bold text-slate-900 dark:text-slate-100 text-sm">Agent: Joe N.</h4>
@@ -911,15 +893,16 @@
                             </div>
                         </div>
                         <div class="w-10 h-10 rounded-full bg-brand-orange/10 flex items-center justify-center">
-                            <i class="fa-solid fa-microphone-lines text-brand-orange"></i>
+                            <i class="fa-solid fa-microphone-lines text-brand-orange"><svg class="site-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" focusable="false"><path d="M12 14a3 3 0 0 0 3-3V5a3 3 0 0 0-6 0v6a3 3 0 0 0 3 3Z"/><path d="M5 11a7 7 0 0 0 14 0M12 18v4M9 22h6"/></svg></i>
                         </div>
                     </div>
-                    <div class="bg-slate-50 dark:bg-slate-800 rounded-xl p-4 border border-slate-200 dark:border-slate-700 flex items-center gap-4 shadow-inner">
-                        <audio id="audio-joe" src="audio/wrong-contact.mp3" ontimeupdate="updateCountdown(this)" onended="resetPlayer(this)" onerror="handleAudioError(this)"></audio>
-                        <button onclick="toggleAudio('audio-joe', this)" class="w-11 h-11 flex items-center justify-center bg-brand-navy rounded-full text-white text-xs hover:bg-brand-orange transition-colors cursor-pointer shadow-md flex-shrink-0" aria-label="Play Joe Audio">
-                            <i class="fa-solid fa-play ml-0.5"></i>
+                    <div class="audio-player-panel bg-slate-50 dark:bg-slate-800 rounded-xl p-4 border border-slate-200 dark:border-slate-700 flex items-center gap-4 shadow-inner">
+                        <audio id="audio-joe" data-src="audio/wrong-contact.mp3" preload="none" ontimeupdate="updateCountdown(this)" onended="resetPlayer(this)" onerror="handleAudioError(this)"></audio>
+                        <button onclick="toggleAudio('audio-joe', this)" class="w-11 h-11 flex items-center justify-center bg-brand-navy rounded-full text-white text-xs hover:bg-brand-orange transition-colors cursor-pointer shadow-md flex-shrink-0" aria-label="Play Joe N. call sample">
+                            <i class="fa-solid fa-play ml-0.5"><svg class="site-icon-svg" viewBox="0 0 24 24" fill="currentColor" focusable="false"><path d="M8 5v14l11-7L8 5Z"/></svg></i>
                         </button>
                         <span id="timer-audio-joe" class="text-xs font-mono text-slate-500 w-14 text-right">5:46</span>
+                        <input id="seek-audio-joe" class="audio-seek" type="range" min="0" max="100" value="0" step="0.1" aria-label="Seek Joe N. call sample" data-audio-id="audio-joe">
                     </div>
                 </div>
 
@@ -928,7 +911,7 @@
                     <div class="flex items-center justify-between mb-5 gap-4">
                         <div class="flex items-center gap-4 min-w-0">
                             <div class="w-11 h-11 rounded-full bg-gradient-to-br from-brand-orange/15 to-red-500/15 flex items-center justify-center text-brand-orange">
-                                <i class="fa-solid fa-user"></i>
+                                <i class="fa-solid fa-user"><svg class="site-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" focusable="false"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg></i>
                             </div>
                             <div class="min-w-0">
                                 <h4 class="font-bold text-slate-900 dark:text-slate-100 text-sm">Agent: Ben S.</h4>
@@ -936,15 +919,16 @@
                             </div>
                         </div>
                         <div class="w-10 h-10 rounded-full bg-brand-orange/10 flex items-center justify-center">
-                            <i class="fa-solid fa-microphone-lines text-brand-orange"></i>
+                            <i class="fa-solid fa-microphone-lines text-brand-orange"><svg class="site-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" focusable="false"><path d="M12 14a3 3 0 0 0 3-3V5a3 3 0 0 0-6 0v6a3 3 0 0 0 3 3Z"/><path d="M5 11a7 7 0 0 0 14 0M12 18v4M9 22h6"/></svg></i>
                         </div>
                     </div>
-                    <div class="bg-slate-50 dark:bg-slate-800 rounded-xl p-4 border border-slate-200 dark:border-slate-700 flex items-center gap-4 shadow-inner">
-                        <audio id="audio-3" src="audio/nurture-lead-abeer.mp3" ontimeupdate="updateCountdown(this)" onended="resetPlayer(this)" onerror="handleAudioError(this)"></audio>
-                        <button onclick="toggleAudio('audio-3', this)" class="w-11 h-11 flex items-center justify-center bg-brand-navy rounded-full text-white text-xs hover:bg-brand-orange transition-colors cursor-pointer shadow-md flex-shrink-0" aria-label="Play Audio 3">
-                            <i class="fa-solid fa-play ml-0.5"></i>
+                    <div class="audio-player-panel bg-slate-50 dark:bg-slate-800 rounded-xl p-4 border border-slate-200 dark:border-slate-700 flex items-center gap-4 shadow-inner">
+                        <audio id="audio-3" data-src="audio/nurture-lead-abeer.mp3" preload="none" ontimeupdate="updateCountdown(this)" onended="resetPlayer(this)" onerror="handleAudioError(this)"></audio>
+                        <button onclick="toggleAudio('audio-3', this)" class="w-11 h-11 flex items-center justify-center bg-brand-navy rounded-full text-white text-xs hover:bg-brand-orange transition-colors cursor-pointer shadow-md flex-shrink-0" aria-label="Play Ben S. call sample">
+                            <i class="fa-solid fa-play ml-0.5"><svg class="site-icon-svg" viewBox="0 0 24 24" fill="currentColor" focusable="false"><path d="M8 5v14l11-7L8 5Z"/></svg></i>
                         </button>
                         <span id="timer-audio-3" class="text-xs font-mono text-slate-500 w-14 text-right">4:04</span>
+                        <input id="seek-audio-3" class="audio-seek" type="range" min="0" max="100" value="0" step="0.1" aria-label="Seek Ben S. call sample" data-audio-id="audio-3">
                     </div>
                 </div>
 
@@ -953,7 +937,7 @@
                     <div class="flex items-center justify-between mb-5 gap-4">
                         <div class="flex items-center gap-4 min-w-0">
                             <div class="w-11 h-11 rounded-full bg-gradient-to-br from-brand-orange/15 to-red-500/15 flex items-center justify-center text-brand-orange">
-                                <i class="fa-solid fa-user"></i>
+                                <i class="fa-solid fa-user"><svg class="site-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" focusable="false"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg></i>
                             </div>
                             <div class="min-w-0">
                                 <h4 class="font-bold text-slate-900 dark:text-slate-100 text-sm">Agent: Anna N.</h4>
@@ -961,15 +945,16 @@
                             </div>
                         </div>
                         <div class="w-10 h-10 rounded-full bg-brand-orange/10 flex items-center justify-center">
-                            <i class="fa-solid fa-microphone-lines text-brand-orange"></i>
+                            <i class="fa-solid fa-microphone-lines text-brand-orange"><svg class="site-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" focusable="false"><path d="M12 14a3 3 0 0 0 3-3V5a3 3 0 0 0-6 0v6a3 3 0 0 0 3 3Z"/><path d="M5 11a7 7 0 0 0 14 0M12 18v4M9 22h6"/></svg></i>
                         </div>
                     </div>
-                    <div class="bg-slate-50 dark:bg-slate-800 rounded-xl p-4 border border-slate-200 dark:border-slate-700 flex items-center gap-4 shadow-inner">
-                        <audio id="audio-4" src="audio/warm-lead-nusrat2.mp3" ontimeupdate="updateCountdown(this)" onended="resetPlayer(this)" onerror="handleAudioError(this)"></audio>
-                        <button onclick="toggleAudio('audio-4', this)" class="w-11 h-11 flex items-center justify-center bg-brand-navy rounded-full text-white text-xs hover:bg-brand-orange transition-colors cursor-pointer shadow-md flex-shrink-0" aria-label="Play Audio 4">
-                            <i class="fa-solid fa-play ml-0.5"></i>
+                    <div class="audio-player-panel bg-slate-50 dark:bg-slate-800 rounded-xl p-4 border border-slate-200 dark:border-slate-700 flex items-center gap-4 shadow-inner">
+                        <audio id="audio-4" data-src="audio/warm-lead-nusrat2.mp3" preload="none" ontimeupdate="updateCountdown(this)" onended="resetPlayer(this)" onerror="handleAudioError(this)"></audio>
+                        <button onclick="toggleAudio('audio-4', this)" class="w-11 h-11 flex items-center justify-center bg-brand-navy rounded-full text-white text-xs hover:bg-brand-orange transition-colors cursor-pointer shadow-md flex-shrink-0" aria-label="Play Anna N. call sample">
+                            <i class="fa-solid fa-play ml-0.5"><svg class="site-icon-svg" viewBox="0 0 24 24" fill="currentColor" focusable="false"><path d="M8 5v14l11-7L8 5Z"/></svg></i>
                         </button>
                         <span id="timer-audio-4" class="text-xs font-mono text-slate-500 w-14 text-right">4:35</span>
+                        <input id="seek-audio-4" class="audio-seek" type="range" min="0" max="100" value="0" step="0.1" aria-label="Seek Anna N. call sample" data-audio-id="audio-4">
                     </div>
                 </div>
 
@@ -978,7 +963,7 @@
                     <div class="flex items-center justify-between mb-5 gap-4">
                         <div class="flex items-center gap-4 min-w-0">
                             <div class="w-11 h-11 rounded-full bg-gradient-to-br from-brand-orange/15 to-red-500/15 flex items-center justify-center text-brand-orange">
-                                <i class="fa-solid fa-user"></i>
+                                <i class="fa-solid fa-user"><svg class="site-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" focusable="false"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg></i>
                             </div>
                             <div class="min-w-0">
                                 <h4 class="font-bold text-slate-900 dark:text-slate-100 text-sm">Agent: Dave F.</h4>
@@ -986,15 +971,16 @@
                             </div>
                         </div>
                         <div class="w-10 h-10 rounded-full bg-brand-orange/10 flex items-center justify-center">
-                            <i class="fa-solid fa-microphone-lines text-brand-orange"></i>
+                            <i class="fa-solid fa-microphone-lines text-brand-orange"><svg class="site-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" focusable="false"><path d="M12 14a3 3 0 0 0 3-3V5a3 3 0 0 0-6 0v6a3 3 0 0 0 3 3Z"/><path d="M5 11a7 7 0 0 0 14 0M12 18v4M9 22h6"/></svg></i>
                         </div>
                     </div>
-                    <div class="bg-slate-50 dark:bg-slate-800 rounded-xl p-4 border border-slate-200 dark:border-slate-700 flex items-center gap-4 shadow-inner">
-                        <audio id="audio-5" src="audio/warm-lead-faizan.mp3" ontimeupdate="updateCountdown(this)" onended="resetPlayer(this)" onerror="handleAudioError(this)"></audio>
-                        <button onclick="toggleAudio('audio-5', this)" class="w-11 h-11 flex items-center justify-center bg-brand-navy rounded-full text-white text-xs hover:bg-brand-orange transition-colors cursor-pointer shadow-md flex-shrink-0" aria-label="Play Audio 5">
-                            <i class="fa-solid fa-play ml-0.5"></i>
+                    <div class="audio-player-panel bg-slate-50 dark:bg-slate-800 rounded-xl p-4 border border-slate-200 dark:border-slate-700 flex items-center gap-4 shadow-inner">
+                        <audio id="audio-5" data-src="audio/warm-lead-faizan.mp3" preload="none" ontimeupdate="updateCountdown(this)" onended="resetPlayer(this)" onerror="handleAudioError(this)"></audio>
+                        <button onclick="toggleAudio('audio-5', this)" class="w-11 h-11 flex items-center justify-center bg-brand-navy rounded-full text-white text-xs hover:bg-brand-orange transition-colors cursor-pointer shadow-md flex-shrink-0" aria-label="Play Dave F. call sample">
+                            <i class="fa-solid fa-play ml-0.5"><svg class="site-icon-svg" viewBox="0 0 24 24" fill="currentColor" focusable="false"><path d="M8 5v14l11-7L8 5Z"/></svg></i>
                         </button>
                         <span id="timer-audio-5" class="text-xs font-mono text-slate-500 w-14 text-right">6:23</span>
+                        <input id="seek-audio-5" class="audio-seek" type="range" min="0" max="100" value="0" step="0.1" aria-label="Seek Dave F. call sample" data-audio-id="audio-5">
                     </div>
                 </div>
 
@@ -1003,7 +989,7 @@
                     <div class="flex items-center justify-between mb-5 gap-4">
                         <div class="flex items-center gap-4 min-w-0">
                             <div class="w-11 h-11 rounded-full bg-gradient-to-br from-brand-orange/15 to-red-500/15 flex items-center justify-center text-brand-orange">
-                                <i class="fa-solid fa-user"></i>
+                                <i class="fa-solid fa-user"><svg class="site-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" focusable="false"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg></i>
                             </div>
                             <div class="min-w-0">
                                 <h4 class="font-bold text-slate-900 dark:text-slate-100 text-sm">Agent: Anna H.</h4>
@@ -1011,15 +997,16 @@
                             </div>
                         </div>
                         <div class="w-10 h-10 rounded-full bg-brand-orange/10 flex items-center justify-center">
-                            <i class="fa-solid fa-microphone-lines text-brand-orange"></i>
+                            <i class="fa-solid fa-microphone-lines text-brand-orange"><svg class="site-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" focusable="false"><path d="M12 14a3 3 0 0 0 3-3V5a3 3 0 0 0-6 0v6a3 3 0 0 0 3 3Z"/><path d="M5 11a7 7 0 0 0 14 0M12 18v4M9 22h6"/></svg></i>
                         </div>
                     </div>
-                    <div class="bg-slate-50 dark:bg-slate-800 rounded-xl p-4 border border-slate-200 dark:border-slate-700 flex items-center gap-4 shadow-inner">
-                        <audio id="audio-6" src="audio/warm-lead-heba.mp3" ontimeupdate="updateCountdown(this)" onended="resetPlayer(this)"></audio>
-                        <button onclick="toggleAudio('audio-6', this)" class="w-11 h-11 flex items-center justify-center bg-brand-navy rounded-full text-white text-xs hover:bg-brand-orange transition-colors cursor-pointer shadow-md flex-shrink-0" aria-label="Play Audio 6">
-                            <i class="fa-solid fa-play ml-0.5"></i>
+                    <div class="audio-player-panel bg-slate-50 dark:bg-slate-800 rounded-xl p-4 border border-slate-200 dark:border-slate-700 flex items-center gap-4 shadow-inner">
+                        <audio id="audio-6" data-src="audio/warm-lead-heba.mp3" preload="none" ontimeupdate="updateCountdown(this)" onended="resetPlayer(this)"></audio>
+                        <button onclick="toggleAudio('audio-6', this)" class="w-11 h-11 flex items-center justify-center bg-brand-navy rounded-full text-white text-xs hover:bg-brand-orange transition-colors cursor-pointer shadow-md flex-shrink-0" aria-label="Play Anna H. call sample">
+                            <i class="fa-solid fa-play ml-0.5"><svg class="site-icon-svg" viewBox="0 0 24 24" fill="currentColor" focusable="false"><path d="M8 5v14l11-7L8 5Z"/></svg></i>
                         </button>
                         <span id="timer-audio-6" class="text-xs font-mono text-slate-500 w-14 text-right">3:42</span>
+                        <input id="seek-audio-6" class="audio-seek" type="range" min="0" max="100" value="0" step="0.1" aria-label="Seek Anna H. call sample" data-audio-id="audio-6">
                     </div>
                 </div>
 
@@ -1042,7 +1029,7 @@
                 
                 <a href="insights-intelligence.html" class="group cursor-pointer block h-full reveal-on-scroll delay-100">
                     <div class="relative overflow-hidden rounded-2xl mb-6 h-72 shadow-lg border border-slate-100 dark:border-slate-700 hover:shadow-2xl transition-all duration-500">
-                        <img src="png/insights-intelligence.webp" alt="Team meeting" loading="lazy" class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500">
+                        <img src="png/insights-intelligence.webp" alt="Team meeting" width="800" height="500" loading="lazy" decoding="async" class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500">
                         <div class="absolute inset-0 bg-gradient-to-t from-brand-navy/80 via-brand-navy/40 to-transparent group-hover:from-brand-navy/60 group-hover:via-brand-navy/20 transition-all duration-500"></div>
                         <div class="absolute top-4 right-4 w-12 h-12 bg-brand-orange/90 rounded-xl flex items-center justify-center text-white shadow-lg group-hover:scale-110 transition-transform duration-300">
                             <i class="fa-solid fa-lightbulb text-lg"></i>
@@ -1059,7 +1046,7 @@
 
                 <a href="insights-deal.html" class="group cursor-pointer block h-full reveal-on-scroll delay-200">
                     <div class="relative overflow-hidden rounded-2xl mb-6 h-72 shadow-lg border border-slate-100 dark:border-slate-700 hover:shadow-2xl transition-all duration-500">
-                        <img src="png/insights-deal.webp" alt="Targeting" loading="lazy" class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500">
+                        <img src="png/insights-deal.webp" alt="Targeting" width="800" height="500" loading="lazy" decoding="async" class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500">
                         <div class="absolute inset-0 bg-gradient-to-t from-brand-navy/80 via-brand-navy/40 to-transparent group-hover:from-brand-navy/60 group-hover:via-brand-navy/20 transition-all duration-500"></div>
                         <div class="absolute top-4 right-4 w-12 h-12 bg-brand-orange/90 rounded-xl flex items-center justify-center text-white shadow-lg group-hover:scale-110 transition-transform duration-300">
                             <i class="fa-solid fa-handshake text-lg"></i>
@@ -1076,7 +1063,7 @@
 
                 <a href="insights-kpi.html" class="group cursor-pointer block h-full reveal-on-scroll delay-300">
                     <div class="relative overflow-hidden rounded-2xl mb-6 h-72 shadow-lg border border-slate-100 dark:border-slate-700 hover:shadow-2xl transition-all duration-500">
-                        <img src="png/insights-kpi.webp" alt="Industry Analysis" loading="lazy" class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500">
+                        <img src="png/insights-kpi.webp" alt="Industry Analysis" width="800" height="500" loading="lazy" decoding="async" class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500">
                         <div class="absolute inset-0 bg-gradient-to-t from-brand-navy/80 via-brand-navy/40 to-transparent group-hover:from-brand-navy/60 group-hover:via-brand-navy/20 transition-all duration-500"></div>
                         <div class="absolute top-4 right-4 w-12 h-12 bg-brand-orange/90 rounded-xl flex items-center justify-center text-white shadow-lg group-hover:scale-110 transition-transform duration-300">
                             <i class="fa-solid fa-chart-line text-lg"></i>
@@ -1093,7 +1080,7 @@
 
                 <a href="insights-market.html" class="group cursor-pointer block h-full reveal-on-scroll delay-400">
                     <div class="relative overflow-hidden rounded-2xl mb-6 h-72 shadow-lg border border-slate-100 dark:border-slate-700 hover:shadow-2xl transition-all duration-500">
-                        <img src="png/insights-market.webp" alt="Social Media vs Calling" loading="lazy" class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500">
+                        <img src="png/insights-market.webp" alt="Social Media vs Calling" width="800" height="500" loading="lazy" decoding="async" class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500">
                         <div class="absolute inset-0 bg-gradient-to-t from-brand-navy/80 via-brand-navy/40 to-transparent group-hover:from-brand-navy/60 group-hover:via-brand-navy/20 transition-all duration-500"></div>
                         <div class="absolute top-4 right-4 w-12 h-12 bg-brand-orange/90 rounded-xl flex items-center justify-center text-white shadow-lg group-hover:scale-110 transition-transform duration-300">
                             <i class="fa-solid fa-calendar-days text-lg"></i>
@@ -1258,7 +1245,7 @@
 
                     <div class="text-center relative z-10 group">
                          <div class="w-28 h-28 sm:w-32 sm:h-32 md:w-52 md:h-52 mx-auto bg-slate-200 rounded-full flex items-center justify-center border-[4px] md:border-[6px] border-white shadow-2xl overflow-hidden mb-3 md:mb-5 group-hover:border-brand-orange/75 transition-all duration-500">
-                            <img src="png/syed.webp" alt="Syed - Founder" loading="lazy" class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500">
+                            <img src="png/syed.webp" alt="Syed - Founder" width="400" height="400" loading="lazy" decoding="async" class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500">
                         </div>
                         <h3 class="font-bold text-lg md:text-2xl text-brand-navy dark:text-white mb-0.5 md:mb-1">Syed</h3>
                         <p class="text-[10px] md:text-sm text-brand-orange font-bold uppercase tracking-widest">Founder</p>
@@ -1266,7 +1253,7 @@
 
                     <div class="text-center relative z-10 group">
                         <div class="w-28 h-28 sm:w-32 sm:h-32 md:w-52 md:h-52 mx-auto bg-slate-200 rounded-full flex items-center justify-center border-[4px] md:border-[6px] border-white shadow-2xl overflow-hidden mb-3 md:mb-5 group-hover:border-brand-orange/75 transition-all duration-500">
-                             <img src="png/ramisa.webp" alt="Ramisa - Co-Founder" loading="lazy" class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500">
+                             <img src="png/ramisa.webp" alt="Ramisa - Co-Founder" width="400" height="400" loading="lazy" decoding="async" class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500">
                         </div>
                          <h3 class="font-bold text-lg md:text-2xl text-brand-navy dark:text-white mb-0.5 md:mb-1">Ramisa</h3>
                         <p class="text-[10px] md:text-sm text-brand-orange font-bold uppercase tracking-widest">Co-Founder</p>
@@ -1342,7 +1329,7 @@
                 <form id="contact-form" class="space-y-6">
                 <!-- Web3Forms Integration: Backend form submission service (moved to server-side for security) -->
                 <!-- Redirect URL after successful form submission -->
-                <input type="hidden" name="redirect" value="https://datawithmursalin-cloud.github.io/VoloLeads/thank-you.html">
+                <input type="hidden" name="redirect" value="thank-you.html">
 
                 <!-- Bot Check: Hidden field to prevent automated submissions -->
                 <input type="checkbox" name="botcheck" class="hidden" style="display: none;">
@@ -1358,7 +1345,7 @@
                     <!-- Full Name Input: Required field -->
                     <div class="space-y-1">
                         <label for="contact-name" class="text-xs font-bold text-slate-500 uppercase tracking-wide ml-1">Full Name <span class="text-red-500">*</span></label>
-                        <input id="contact-name" type="text" name="name" required minlength="2"
+                        <input id="contact-name" type="text" name="name" autocomplete="name" required minlength="2"
                                class="w-full px-4 py-3 bg-slate-50 border border-slate-200 dark:bg-slate-700 dark:border-slate-600 dark:text-white dark:placeholder-slate-400 rounded-lg text-slate-800 outline-none focus:border-brand-orange focus:ring-1 focus:ring-brand-orange focus:bg-white transition-all placeholder-slate-400"
                                placeholder="Jane Smith">
                     </div>
@@ -1366,7 +1353,7 @@
                     <!-- Company Name Input: Optional field -->
                     <div class="space-y-1">
                         <label for="contact-company" class="text-xs font-bold text-slate-500 uppercase tracking-wide ml-1">Company Name</label>
-                        <input id="contact-company" type="text" name="company"
+                        <input id="contact-company" type="text" name="company" autocomplete="organization"
                                class="w-full px-4 py-3 bg-slate-50 border border-slate-200 dark:bg-slate-700 dark:border-slate-600 dark:text-white dark:placeholder-slate-400 rounded-lg text-slate-800 outline-none focus:border-brand-orange focus:ring-1 focus:ring-brand-orange focus:bg-white transition-all placeholder-slate-400"
                                placeholder="XYZ Home Buyers LLC">
                     </div>
@@ -1377,14 +1364,14 @@
                     <!-- Email Input: Required field with email validation -->
                     <div class="space-y-1">
                         <label for="contact-email" class="text-xs font-bold text-slate-500 uppercase tracking-wide ml-1">Work Email <span class="text-red-500">*</span></label>
-                        <input id="contact-email" type="email" name="email" required
+                        <input id="contact-email" type="email" name="email" autocomplete="email" spellcheck="false" required
                                class="w-full px-4 py-3 bg-slate-50 border border-slate-200 dark:bg-slate-700 dark:border-slate-600 dark:text-white dark:placeholder-slate-400 rounded-lg text-slate-800 outline-none focus:border-brand-orange focus:ring-1 focus:ring-brand-orange focus:bg-white transition-all placeholder-slate-400"
                                placeholder="jane@company.com">
                     </div>
                     <!-- Phone Input: Required field with pattern validation -->
                     <div class="space-y-1">
                         <label for="contact-phone" class="text-xs font-bold text-slate-500 uppercase tracking-wide ml-1">Phone Number <span class="text-red-500">*</span></label>
-                        <input id="contact-phone" type="tel" name="phone" required minlength="10" pattern="[0-9+\-\.() ]{10,}"
+                        <input id="contact-phone" type="tel" name="phone" autocomplete="tel" inputmode="tel" required minlength="10" pattern="[0-9+\-\.() ]{10,}"
                                title="Please enter a valid phone number (at least 10 digits)"
                                class="w-full px-4 py-3 bg-slate-50 border border-slate-200 dark:bg-slate-700 dark:border-slate-600 dark:text-white dark:placeholder-slate-400 rounded-lg text-slate-800 outline-none focus:border-brand-orange focus:ring-1 focus:ring-brand-orange focus:bg-white transition-all placeholder-slate-400"
                                placeholder="+1 (555) 000-0000">
@@ -1393,11 +1380,11 @@
 
                 <!-- Service Type Dropdown: Required field with conditional quantity field -->
                 <div class="space-y-1">
-                    <label class="text-xs font-bold text-slate-500 uppercase tracking-wide ml-1">Type of Service <span class="text-red-500">*</span></label>
+                    <label for="service-select" class="text-xs font-bold text-slate-500 uppercase tracking-wide ml-1">Type of Service <span class="text-red-500">*</span></label>
                     <div class="relative">
                         <!-- Select dropdown with service options -->
                         <select id="service-select" name="service" required class="w-full px-4 py-3 bg-slate-50 border border-slate-200 dark:bg-slate-700 dark:border-slate-600 dark:text-white dark:placeholder-slate-400 rounded-lg text-slate-800 outline-none focus:border-brand-orange focus:bg-white appearance-none cursor-pointer font-medium">
-                            <option value="" disabled selected>Select a Service...</option>
+                            <option value="" disabled selected>Select a Service…</option>
                             <option value="Essential">Essential</option>
                             <option value="Premium">Premium</option>
                             <option value="Custom+">Custom+</option>
@@ -1409,10 +1396,10 @@
 
                 <!-- Conditional Quantity Field: Shows for Essential, Premium, and Custom+ -->
                 <div id="quantity-row" class="hidden space-y-1 animate-fade-in-down">
-                    <label class="text-xs font-bold text-brand-orange uppercase tracking-wide ml-1">Number of Cold Callers <span class="text-red-500">*</span></label>
+                    <label for="quantity-select" class="text-xs font-bold text-brand-orange uppercase tracking-wide ml-1">Number of Cold Callers <span class="text-red-500">*</span></label>
                     <div class="relative">
                         <select id="quantity-select" name="quantity" class="w-full px-4 py-3 bg-white-50 border border-white-200 rounded-lg text-brand-navy dark:text-white dark:bg-slate-700 dark:border-slate-600 outline-none focus:border-brand-orange focus:bg-white dark:focus:bg-slate-700 appearance-none cursor-pointer font-bold">
-                            <option value="" disabled selected>Select Quantity...</option>
+                            <option value="" disabled selected>Select Quantity…</option>
                             <option value="1 Seat">Just One</option>
                             <option value="2-3 Seats">Two - Three</option>
                             <option value="4-9 Seats">Four - Nine</option>
@@ -1423,16 +1410,16 @@
                 </div>
 
                 <div class="space-y-1">
-                    <label class="text-xs font-bold text-slate-500 uppercase tracking-wide ml-1">Schedule a Call</label>
+                    <label for="preferred-date" class="text-xs font-bold text-slate-500 uppercase tracking-wide ml-1">Schedule a Call</label>
                     <input type="date" id="preferred-date" name="preferred_date"
                            class="w-full px-4 py-3 bg-slate-50 border border-slate-200 dark:bg-slate-700 dark:border-slate-600 dark:text-white dark:placeholder-slate-400 rounded-lg text-slate-800 outline-none focus:border-brand-orange focus:ring-1 focus:ring-brand-orange focus:bg-white transition-all placeholder-slate-400 text-sm">
                 </div>
 
                 <div id="time-row" class="hidden space-y-1">
-                    <label class="text-xs font-bold text-slate-500 uppercase tracking-wide ml-1">Preferred Time (EST)</label>
+                    <label for="preferred-time" class="text-xs font-bold text-slate-500 uppercase tracking-wide ml-1">Preferred Time (EST)</label>
                     <div class="relative">
                         <select id="preferred-time" name="preferred_time" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 dark:bg-slate-700 dark:border-slate-600 dark:text-white dark:placeholder-slate-400 rounded-lg text-slate-800 outline-none focus:border-brand-orange focus:ring-1 focus:ring-brand-orange focus:bg-white transition-all placeholder-slate-400 text-sm appearance-none cursor-pointer">
-                            <option value="" disabled selected>Select a time...</option>
+                            <option value="" disabled selected>Select a time…</option>
                         </select>
                         <i class="fa-regular fa-clock absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none text-sm"></i>
                     </div>
@@ -1441,10 +1428,10 @@
                 </div>
 
                 <div class="space-y-1">
-                    <label class="text-xs font-bold text-slate-500 uppercase tracking-wide ml-1">How did you hear about us? <span class="text-red-500">*</span></label>
+                    <label for="referral-source" class="text-xs font-bold text-slate-500 uppercase tracking-wide ml-1">How did you hear about us? <span class="text-red-500">*</span></label>
                     <div class="relative">
                         <select id="referral-source" name="referral_source" required aria-required="true" oninvalid="this.setCustomValidity('Please select how you heard about us')" oninput="this.setCustomValidity('')" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 dark:bg-slate-700 dark:border-slate-600 dark:text-white dark:placeholder-slate-400 rounded-lg text-slate-800 outline-none focus:border-brand-orange focus:ring-1 focus:ring-brand-orange focus:bg-white transition-all text-sm appearance-none cursor-pointer">
-                            <option value="" disabled selected hidden>Select an option...</option>
+                            <option value="" disabled selected hidden>Select an option…</option>
                             <option value="Discord">Discord</option>
                             <option value="Facebook">Facebook</option>
                             <option value="Skool">Skool</option>
@@ -1458,7 +1445,7 @@
                 </div>
 
                 <div id="referral-other-row" class="hidden space-y-1 animate-fade-in-down">
-                    <label class="text-xs font-bold text-slate-500 uppercase tracking-wide ml-1">Please tell us where</label>
+                    <label for="referral-source-other" class="text-xs font-bold text-slate-500 uppercase tracking-wide ml-1">Please tell us where</label>
                     <input type="text" id="referral-source-other" name="referral_source_other"
                            class="w-full px-4 py-3 bg-slate-50 border border-slate-200 dark:bg-slate-700 dark:border-slate-600 dark:text-white dark:placeholder-slate-400 rounded-lg text-slate-800 outline-none focus:border-brand-orange focus:ring-1 focus:ring-brand-orange focus:bg-white transition-all placeholder-slate-400 text-sm"
                            placeholder="Tell us where you heard about us">
@@ -1468,12 +1455,16 @@
                     <label for="contact-message" class="text-xs font-bold text-slate-500 uppercase tracking-wide ml-1">Details</label>
                     <textarea id="contact-message" name="message" rows="3"
                            class="w-full px-4 py-3 bg-slate-50 border border-slate-200 dark:bg-slate-700 dark:border-slate-600 dark:text-white dark:placeholder-slate-400 rounded-lg text-slate-800 outline-none focus:border-brand-orange focus:ring-1 focus:ring-brand-orange focus:bg-white transition-all placeholder-slate-400 resize-none" 
-                           placeholder="Briefly tell us your goals..."></textarea>
+                           placeholder="Briefly tell us your goals…"></textarea>
                 </div>
-                
+
+                <div class="flex justify-center">
+                    <div class="cf-turnstile" data-sitekey="0x4AAAAAADKTLan8Zgz02zqw" data-theme="auto"></div>
+                </div>
+
                 <button type="submit" id="submit-btn" class="w-full py-4 mt-4 bg-brand-navy hover:bg-slate-800 text-white font-bold text-lg rounded-xl shadow-xl hover:shadow-2xl transition-all transform hover:-translate-y-1 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed">
                     <span id="btn-text">Secure Your Strategy Call</span>
-                    <span id="btn-loader" class="hidden"><i class="fa-solid fa-spinner fa-spin"></i> Sending...</span>
+                    <span id="btn-loader" class="hidden"><i class="fa-solid fa-spinner fa-spin" aria-hidden="true"></i> Sending…</span>
                 </button>
 
                 <!-- Trust badge -->
@@ -1497,6 +1488,8 @@
         </div>
     </div>
 </section>
+
+    </main>
 
 
     <!-- ========== FOOTER ========== -->
@@ -1551,10 +1544,10 @@
                     <div>
                         <h4 class="text-white font-bold mb-4">Follow Us</h4>
                         <div class="flex gap-4">
-                            <a href="https://www.linkedin.com/company/vololeads" class="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center hover:bg-brand-orange hover:text-white transition-all"><i class="fa-brands fa-linkedin-in"></i></a>
-                            <a href="https://www.facebook.com/vololeads" class="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center hover:bg-brand-orange hover:text-white transition-all"><i class="fa-brands fa-facebook"></i></a>
-                            <a href="https://www.instagram.com/vololeads" class="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center hover:bg-brand-orange hover:text-white transition-all"><i class="fa-brands fa-instagram"></i></a>
-                            <a href="https://x.com/vololeads" class="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center hover:bg-brand-orange hover:text-white transition-all text-lg font-bold">𝕏</a>
+                            <a href="https://www.linkedin.com/company/vololeads" class="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center hover:bg-brand-orange hover:text-white transition-all" aria-label="VoloLeads on LinkedIn"><i class="fa-brands fa-linkedin-in"></i></a>
+                            <a href="https://www.facebook.com/vololeads" class="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center hover:bg-brand-orange hover:text-white transition-all" aria-label="VoloLeads on Facebook"><i class="fa-brands fa-facebook"></i></a>
+                            <a href="https://www.instagram.com/vololeads" class="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center hover:bg-brand-orange hover:text-white transition-all" aria-label="VoloLeads on Instagram"><i class="fa-brands fa-instagram"></i></a>
+                            <a href="https://x.com/vololeads" class="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center hover:bg-brand-orange hover:text-white transition-all text-lg font-bold" aria-label="VoloLeads on X">𝕏</a>
                         </div>
                     </div>
                 </div>
@@ -1568,6 +1561,7 @@
                     <a href="privacy-policy.html" class="hover:text-white transition-colors">Privacy Policy</a>
                     <a href="terms-condition.html" class="hover:text-white transition-colors">Terms of Service</a>
                     <a href="terms-condition.html#refund-policy" class="hover:text-white transition-colors">Refund Policy</a>
+                    <a href="manage-subscription.html" class="hover:text-white transition-colors">Manage Subscription</a>
                     <a href="faqs.html" class="hover:text-white transition-colors">FAQs</a>
                 </div>
             </div>
@@ -1575,6 +1569,7 @@
     </footer>
 
     <!-- JavaScript Application File: Handles interactivity, animations, and visitor tracking -->
+    <script src="icons.js"></script>
     <script src="app.js"></script>
 
     <!-- Third-party widgets (e.g. Crisp) are loaded only after cookie consent. -->

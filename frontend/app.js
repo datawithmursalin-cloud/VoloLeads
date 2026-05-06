@@ -3,6 +3,7 @@
    ============================================ */
 
 document.addEventListener('DOMContentLoaded', () => {
+    initPageLoadAnimation();
     initMobileMenu();
     updateCopyrightYear();
     initDarkMode();
@@ -15,6 +16,11 @@ document.addEventListener('DOMContentLoaded', () => {
     initCounters();
     initAccordions();
     initMobilePlansCarousel();
+    initSubscriptionCheckout();
+    initManageSubscriptionForm();
+    initTurnstileLoader();
+    initAudioSeekBars();
+    initDecorativeIcons();
 
     // Cookie consent banner initialization
     initCookieConsentBanner();
@@ -66,12 +72,45 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 
+function ensureAudioSource(audio) {
+    if (!audio || audio.src) return;
+
+    const audioSrc = audio.dataset.src;
+    if (!audioSrc) {
+        console.error(`Audio source not configured: ${audio.id}`);
+        return;
+    }
+
+    audio.src = audioSrc;
+    audio.load();
+}
+
+function initPageLoadAnimation() {
+    const body = document.body;
+    if (!body) return;
+
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        body.classList.remove('site-preload');
+        return;
+    }
+
+    requestAnimationFrame(() => {
+        body.classList.add('site-loaded');
+        body.classList.remove('site-preload');
+    });
+}
+
 /* --- Dark Mode Logic --- */
 function initDarkMode() {
     const html = document.documentElement;
 
     // Check for saved dark mode preference or default to light mode
-    const isDarkMode = localStorage.getItem('dark-mode') === 'true';
+    let isDarkMode = false;
+    try {
+        isDarkMode = localStorage.getItem('dark-mode') === 'true';
+    } catch (error) {
+        console.warn('Dark mode preference unavailable', error);
+    }
 
     if (isDarkMode) {
         html.classList.add('dark');
@@ -99,9 +138,13 @@ function initDarkMode() {
 
         if (darkModeIcon) updateIcon(darkModeIcon, isNowDark);
         if (mobileDarkModeIcon) updateIcon(mobileDarkModeIcon, isNowDark);
+        if (window.renderSiteIcons) window.renderSiteIcons();
 
-        // Save preference to localStorage
-        localStorage.setItem('dark-mode', isNowDark);
+        try {
+            localStorage.setItem('dark-mode', isNowDark);
+        } catch (error) {
+            console.warn('Could not save dark mode preference', error);
+        }
     };
 
     // Attach click handlers to all dark mode toggle buttons
@@ -122,9 +165,10 @@ function initMobileMenu() {
     const menuBtn = document.getElementById('mobile-menu-btn');
     const mobileMenu = document.getElementById('mobile-menu');
     const menuIcon = document.getElementById('menu-icon');
-    const menuLinks = mobileMenu.querySelectorAll('a'); // Select all links inside menu
 
     if (!menuBtn || !mobileMenu || !menuIcon) return;
+
+    const menuLinks = mobileMenu.querySelectorAll('a');
 
     // Toggle Menu Function
     const toggleMenu = () => {
@@ -161,6 +205,19 @@ function initMobileMenu() {
 let currentAudio = null;
 let currentButton = null;
 
+function setInlineIcon(icon, name) {
+    if (!icon) return;
+
+    const paths = {
+        play: '<path d="M8 5v14l11-7L8 5Z" fill="currentColor" stroke="none"/>',
+        pause: '<path d="M8 5h3v14H8zM13 5h3v14h-3z" fill="currentColor" stroke="none"/>',
+        warning: '<path d="M12 3 2 21h20L12 3Z"/><path d="M12 9v5M12 17h.01"/>'
+    };
+
+    icon.innerHTML = `<svg class="site-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">${paths[name] || paths.play}</svg>`;
+    delete icon.dataset.renderedIcon;
+}
+
 // Attached to window so HTML onclick attributes can find it
 window.toggleAudio = function(audioId, btn) {
     const audio = document.getElementById(audioId);
@@ -171,6 +228,8 @@ window.toggleAudio = function(audioId, btn) {
         return;
     }
 
+    ensureAudioSource(audio);
+
     // 1. If we click a new audio while one is playing, stop the old one
     if (currentAudio && currentAudio !== audio) {
         currentAudio.pause();
@@ -180,6 +239,7 @@ window.toggleAudio = function(audioId, btn) {
             if (oldIcon) {
                 oldIcon.classList.remove('fa-pause');
                 oldIcon.classList.add('fa-play', 'ml-0.5');
+                setInlineIcon(oldIcon, 'play');
             }
         }
     }
@@ -194,6 +254,8 @@ window.toggleAudio = function(audioId, btn) {
                 // Play started successfully
                 icon.classList.remove('fa-play', 'ml-0.5');
                 icon.classList.add('fa-pause');
+                setInlineIcon(icon, 'pause');
+                if (window.renderSiteIcons) window.renderSiteIcons(btn);
 
                 currentAudio = audio;
                 currentButton = btn;
@@ -208,6 +270,8 @@ window.toggleAudio = function(audioId, btn) {
         audio.pause();
         icon.classList.remove('fa-pause');
         icon.classList.add('fa-play', 'ml-0.5');
+        setInlineIcon(icon, 'play');
+        if (window.renderSiteIcons) window.renderSiteIcons(btn);
         currentAudio = null;
         currentButton = null;
     }
@@ -222,6 +286,8 @@ window.handleAudioError = function(audioElement) {
         if (icon) {
             icon.classList.add('fa-exclamation-triangle');
             icon.classList.remove('fa-play', 'fa-pause');
+            setInlineIcon(icon, 'warning');
+            if (window.renderSiteIcons) window.renderSiteIcons(btn);
         }
         btn.disabled = true;
         btn.title = 'Audio file unavailable';
@@ -236,6 +302,8 @@ window.resetIcon = function(audioElement) {
         const icon = currentButton.querySelector('i');
         icon.classList.remove('fa-pause');
         icon.classList.add('fa-play', 'ml-0.5');
+        setInlineIcon(icon, 'play');
+        if (window.renderSiteIcons && currentButton) window.renderSiteIcons(currentButton);
         currentAudio = null;
         currentButton = null;
     }
@@ -448,29 +516,13 @@ function initRevealOnScroll() {
     const revealOnScroll = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
-                entry.target.style.opacity = '1';
-                entry.target.style.transform = 'translateY(0)';
+                entry.target.classList.add('is-visible');
                 revealOnScroll.unobserve(entry.target);
             }
         });
-    }, { threshold: 0.1 });
+    }, { threshold: 0.12, rootMargin: '0px 0px -8% 0px' });
 
     revealElements.forEach(element => {
-        element.style.opacity = '0';
-        element.style.transform = 'translateY(20px)';
-        element.style.transition = 'opacity 0.6s ease-out, transform 0.6s ease-out';
-
-        // Apply delay based on CSS class
-        if (element.classList.contains('delay-100')) {
-            element.style.transitionDelay = '0.1s';
-        } else if (element.classList.contains('delay-200')) {
-            element.style.transitionDelay = '0.2s';
-        } else if (element.classList.contains('delay-300')) {
-            element.style.transitionDelay = '0.3s';
-        } else if (element.classList.contains('delay-400')) {
-            element.style.transitionDelay = '0.4s';
-        }
-
         revealOnScroll.observe(element);
     });
 }
@@ -504,13 +556,18 @@ function initScrollToTop() {
     const btn = document.getElementById('scroll-top-btn');
     if (!btn) return;
 
+    let ticking = false;
+    const updateScrollButton = () => {
+        btn.classList.toggle('show', window.scrollY > 500);
+        ticking = false;
+    };
+
     window.addEventListener('scroll', () => {
-        if (window.scrollY > 500) {
-            btn.classList.add('show');
-        } else {
-            btn.classList.remove('show');
+        if (!ticking) {
+            window.requestAnimationFrame(updateScrollButton);
+            ticking = true;
         }
-    });
+    }, { passive: true });
 
     btn.addEventListener('click', () => {
         window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -594,6 +651,58 @@ function updateCountdown(audio) {
 
     // Update the text on screen
     timerSpan.textContent = formattedTime;
+
+    updateAudioSeekBar(audio);
+}
+
+function updateAudioSeekBar(audio) {
+    const seek = document.querySelector(`.audio-seek[data-audio-id="${audio.id}"]`);
+    if (!seek || seek.dataset.seeking === 'true') return;
+
+    if (!isFinite(audio.duration) || isNaN(audio.duration) || audio.duration <= 0) {
+        seek.value = '0';
+        seek.style.setProperty('--seek-progress', '0%');
+        return;
+    }
+
+    const progress = Math.min(100, Math.max(0, (audio.currentTime / audio.duration) * 100));
+    seek.value = String(progress);
+    seek.style.setProperty('--seek-progress', `${progress}%`);
+}
+
+function initAudioSeekBars() {
+    document.querySelectorAll('.audio-seek').forEach(seek => {
+        const audio = document.getElementById(seek.dataset.audioId);
+        if (!audio) return;
+
+        audio.addEventListener('loadedmetadata', () => updateAudioSeekBar(audio));
+        audio.addEventListener('ended', () => updateAudioSeekBar(audio));
+
+        seek.addEventListener('pointerdown', () => {
+            seek.dataset.seeking = 'true';
+        });
+
+        seek.addEventListener('input', () => {
+            seek.style.setProperty('--seek-progress', `${seek.value}%`);
+        });
+
+        seek.addEventListener('change', () => {
+            const applySeek = () => {
+                if (isFinite(audio.duration) && !isNaN(audio.duration) && audio.duration > 0) {
+                    audio.currentTime = (Number(seek.value) / 100) * audio.duration;
+                    updateCountdown(audio);
+                }
+                seek.dataset.seeking = 'false';
+            };
+
+            ensureAudioSource(audio);
+            if (isFinite(audio.duration) && !isNaN(audio.duration) && audio.duration > 0) {
+                applySeek();
+            } else {
+                audio.addEventListener('loadedmetadata', applySeek, { once: true });
+            }
+        });
+    });
 }
 
 // Optional: Resets the timer back to original text when audio finishes
@@ -609,27 +718,231 @@ function resetPlayer(audio) {
     const btn = audio.nextElementSibling;
     if (btn) {
         const icon = btn.querySelector('i');
-        if (icon) icon.className = 'fa-solid fa-play ml-0.5';
+        if (icon) {
+            icon.className = 'fa-solid fa-play ml-0.5';
+            setInlineIcon(icon, 'play');
+            if (window.renderSiteIcons) window.renderSiteIcons(btn);
+        }
     }
+
+    updateAudioSeekBar(audio);
 }
 
 /* --- Flip Card Function --- */
 function flipCard(cardWrapper) {
+    if (!cardWrapper) return;
+
     // Finds the inner div that holds the front/back faces and toggles the class
     const innerCard = cardWrapper.querySelector('.transform-style-3d');
     if (innerCard) {
         innerCard.classList.toggle('is-flipped');
+        const isFlipped = innerCard.classList.contains('is-flipped');
+        const flipButton = cardWrapper.querySelector('button[aria-label^="Flip"]');
+        if (flipButton) {
+            flipButton.setAttribute('aria-pressed', String(isFlipped));
+        }
+    }
+}
+
+function initDecorativeIcons() {
+    document.querySelectorAll('i[class*="fa-"]').forEach(icon => {
+        if (!icon.hasAttribute('aria-hidden')) {
+            icon.setAttribute('aria-hidden', 'true');
+        }
+    });
+}
+
+/* --- Subscription Checkout Logic --- */
+function initSubscriptionCheckout() {
+    const subscribeButtons = document.querySelectorAll('.subscribe-btn');
+    if (!subscribeButtons.length) return;
+
+    subscribeButtons.forEach(button => {
+        button.addEventListener('click', async event => {
+            event.stopPropagation();
+
+            const plan = button.dataset.plan;
+            if (!plan) {
+                alert('Please choose a valid subscription plan.');
+                return;
+            }
+
+            const originalText = button.textContent;
+            button.disabled = true;
+            button.textContent = 'Redirecting…';
+            button.classList.add('opacity-75', 'cursor-not-allowed');
+
+            try {
+                const response = await fetch('/api/create-checkout-session', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ plan })
+                });
+
+                const data = await response.json().catch(() => ({}));
+
+                if (!response.ok || !data.url) {
+                    throw new Error(data.message || 'Unable to start checkout.');
+                }
+
+                window.location.href = data.url;
+            } catch (error) {
+                console.error('Subscription checkout error:', error);
+                alert('We could not start checkout right now. Please try again or contact support.');
+                button.disabled = false;
+                button.textContent = originalText;
+                button.classList.remove('opacity-75', 'cursor-not-allowed');
+            }
+        });
+    });
+}
+
+/* --- Manage Subscription Request Logic --- */
+function initManageSubscriptionForm() {
+    const form = document.getElementById('manage-subscription-form');
+    if (!form) return;
+
+    const emailInput = document.getElementById('manage-email');
+    const submitButton = document.getElementById('manage-submit-btn');
+    const message = document.getElementById('manage-subscription-message');
+
+    form.addEventListener('submit', async event => {
+        event.preventDefault();
+
+        const email = emailInput ? emailInput.value.trim() : '';
+        const turnstileToken = getTurnstileToken(form);
+        if (!email) {
+            if (message) {
+                message.textContent = 'Please enter the email address used for your subscription.';
+                message.className = 'mt-4 text-sm font-semibold text-red-600 dark:text-red-400';
+            }
+            return;
+        }
+
+        if (!turnstileToken) {
+            if (message) {
+                message.textContent = 'Please complete the security check before continuing.';
+                message.className = 'mt-4 text-sm font-semibold text-red-600 dark:text-red-400';
+            }
+            return;
+        }
+
+        const originalText = submitButton ? submitButton.textContent : '';
+        if (submitButton) {
+            submitButton.disabled = true;
+            submitButton.textContent = 'Sending…';
+            submitButton.classList.add('opacity-75', 'cursor-not-allowed');
+        }
+        if (message) {
+            message.textContent = '';
+            message.className = 'mt-4 text-sm font-semibold';
+        }
+
+        try {
+            const response = await fetch('/api/request-manage-link', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    email,
+                    'cf-turnstile-response': turnstileToken
+                })
+            });
+
+            const data = await response.json().catch(() => ({}));
+
+            if (!response.ok) {
+                throw new Error(data.message || 'Unable to request manage link.');
+            }
+
+            form.reset();
+            if (message) {
+                message.textContent = 'Check your email for a secure manage subscription link.';
+                message.className = 'mt-4 text-sm font-semibold text-green-600 dark:text-green-400';
+            }
+        } catch (error) {
+            console.error('Manage subscription request error:', error);
+            if (message) {
+                message.textContent = 'We could not send the manage link right now. Please try again or contact support.';
+                message.className = 'mt-4 text-sm font-semibold text-red-600 dark:text-red-400';
+            }
+        } finally {
+            resetTurnstile(form);
+            if (submitButton) {
+                submitButton.disabled = false;
+                submitButton.textContent = originalText;
+                submitButton.classList.remove('opacity-75', 'cursor-not-allowed');
+            }
+        }
+    });
+}
+
+function getTurnstileToken(scope) {
+    const tokenInput = scope ? scope.querySelector('[name="cf-turnstile-response"]') : null;
+    return tokenInput ? tokenInput.value : '';
+}
+
+function resetTurnstile(scope) {
+    if (!window.turnstile || !scope) return;
+
+    const widget = scope.querySelector('.cf-turnstile');
+    if (widget) {
+        window.turnstile.reset(widget);
+    }
+}
+
+function initTurnstileLoader() {
+    const widgets = document.querySelectorAll('.cf-turnstile');
+    if (!widgets.length || window.turnstile) return;
+
+    const loadTurnstile = () => {
+        if (document.querySelector('script[data-turnstile-api]')) return;
+
+        const script = document.createElement('script');
+        script.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js';
+        script.async = true;
+        script.defer = true;
+        script.dataset.turnstileApi = 'true';
+        document.head.appendChild(script);
+    };
+
+    if ('IntersectionObserver' in window) {
+        const observer = new IntersectionObserver(entries => {
+            if (entries.some(entry => entry.isIntersecting)) {
+                observer.disconnect();
+                loadTurnstile();
+            }
+        }, { rootMargin: '400px 0px' });
+
+        widgets.forEach(widget => observer.observe(widget));
+    } else {
+        loadTurnstile();
     }
 }
 
 /* ========== MOBILE PLANS CAROUSEL FUNCTIONALITY ========== */
 function initMobilePlansCarousel() {
-    // Find the plans grid - it has the class "grid grid-cols-1 md:grid-cols-3"
+    // Find the plans grid - it has the class "grid grid-cols-1 lg:grid-cols-3"
     const plansGrid = document.querySelector('#plans .grid.grid-cols-1');
     if (!plansGrid) return;
 
     let touchStartX = 0;
     let touchEndX = 0;
+    let touchListenersAttached = false;
+
+    const onTouchStart = (event) => {
+        if (event.target.closest('button, a, input, select, textarea')) return;
+        touchStartX = event.changedTouches[0].screenX;
+    };
+
+    const onTouchEnd = (event) => {
+        if (event.target.closest('button, a, input, select, textarea')) return;
+        touchEndX = event.changedTouches[0].screenX;
+        handleSwipe();
+    };
 
     const updatePlansLayout = () => {
         if (window.innerWidth <= 768) {
@@ -649,7 +962,7 @@ function initMobilePlansCarousel() {
 
             // Hide the scrollbar
             plansGrid.classList.add('scrollbar-hide');
-            plansGrid.classList.remove('grid', 'grid-cols-1', 'md:grid-cols-3', 'gap-8');
+            plansGrid.classList.remove('grid', 'grid-cols-1', 'lg:grid-cols-3', 'gap-8');
 
             // Update each card for carousel layout
             const cards = plansGrid.querySelectorAll('.perspective-1000');
@@ -658,23 +971,20 @@ function initMobilePlansCarousel() {
                 card.style.minWidth = 'calc(100% - 2rem)';
                 card.style.scrollSnapAlign = 'start';
                 card.style.scrollSnapStop = 'always';
-                card.style.height = '680px';
+                card.style.height = 'auto';
+                card.classList.add('is-visible');
             });
 
-            // Add touch event listeners for swipe
-            plansGrid.addEventListener('touchstart', (e) => {
-                touchStartX = e.changedTouches[0].screenX;
-            }, false);
-
-            plansGrid.addEventListener('touchend', (e) => {
-                touchEndX = e.changedTouches[0].screenX;
-                handleSwipe();
-            }, false);
+            if (!touchListenersAttached) {
+                plansGrid.addEventListener('touchstart', onTouchStart, { passive: true });
+                plansGrid.addEventListener('touchend', onTouchEnd, { passive: true });
+                touchListenersAttached = true;
+            }
 
         } else {
             // Desktop: Restore grid layout
             plansGrid.style.display = 'grid';
-            plansGrid.style.gridTemplateColumns = 'repeat(3, minmax(0, 1fr))';
+            plansGrid.style.gridTemplateColumns = '';
             plansGrid.style.gap = '2rem';
             plansGrid.style.overflowX = 'visible';
             plansGrid.style.scrollBehavior = 'auto';
@@ -682,7 +992,7 @@ function initMobilePlansCarousel() {
             plansGrid.style.marginLeft = '0';
             plansGrid.style.marginRight = '0';
             plansGrid.classList.remove('scrollbar-hide');
-            plansGrid.classList.add('grid', 'grid-cols-1', 'md:grid-cols-3', 'gap-8');
+            plansGrid.classList.add('grid', 'grid-cols-1', 'lg:grid-cols-3', 'gap-8');
 
             const cards = plansGrid.querySelectorAll('.perspective-1000');
             cards.forEach(card => {
@@ -693,9 +1003,11 @@ function initMobilePlansCarousel() {
                 card.style.height = '660px';
             });
 
-            // Remove touch listeners on desktop
-            plansGrid.removeEventListener('touchstart', null);
-            plansGrid.removeEventListener('touchend', null);
+            if (touchListenersAttached) {
+                plansGrid.removeEventListener('touchstart', onTouchStart);
+                plansGrid.removeEventListener('touchend', onTouchEnd);
+                touchListenersAttached = false;
+            }
         }
     };
 
@@ -763,6 +1075,11 @@ function initFormSecurity() {
                 return false;
             }
 
+            if (!getTurnstileToken(contactForm)) {
+                alert('Please complete the security check before submitting.');
+                return false;
+            }
+
             // Check 3: UI Feedback (Prevent Double Submit)
             if (submitBtn) {
                 submitBtn.disabled = true;
@@ -800,6 +1117,7 @@ function initFormSecurity() {
                     }
                     if (btnText) btnText.classList.remove('hidden');
                     if (btnLoader) btnLoader.classList.add('hidden');
+                    resetTurnstile(contactForm);
                 }
             } catch (error) {
                 console.error('Form submission error:', error);
@@ -812,6 +1130,7 @@ function initFormSecurity() {
                 }
                 if (btnText) btnText.classList.remove('hidden');
                 if (btnLoader) btnLoader.classList.add('hidden');
+                resetTurnstile(contactForm);
             }
 
             return false;

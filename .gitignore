@@ -1,0 +1,57 @@
+.env
+.env.*
+backend/.env
+backend/.env.*
+!backend/.env.example
+
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+build/
+coverage/
+.next/
+.nuxt/
+.vercel/
+out/
+
+# Logs
+*.log
+logs/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# OS files
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Editor / IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*.tmp
+*.temp
+
+# Runtime / cache
+.cache/
+.parcel-cache/
+.sass-cache/
+.eslintcache
+tmp/
+temp/
+
+# Python local
+__pycache__/
+*.pyc
+
+# Local databases
+*.sqlite
+*.sqlite3
+
+# Stripe CLI / local tooling
+.stripe/

@@ -4,41 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Frequently Asked Questions | VoloLeads</title>
-    <link rel="icon" type="image/png" href="./png/logo.png" sizes="any">
-    <link rel="apple-touch-icon" href="./png/logo.png">
+    <link rel="icon" type="image/webp" href="./png/logo.webp" sizes="any">
+    <link rel="apple-touch-icon" href="./png/logo.webp">
 
     <meta name="robots" content="noindex, nofollow">
-
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            darkMode: 'class',
-            theme: {
-                extend: {
-                    fontFamily: { sans: ['Inter', 'sans-serif'] },
-                    colors: {
-                        brand: {
-                            navy: '#0f172a',
-                            light: '#f8fafc',
-                            orange: '#f97316',
-                            orangeHover: '#ea580c',
-                        }
-                    },
-                    animation: {
-                        blob: "blob 10s infinite",
-                    },
-                    keyframes: {
-                        blob: {
-                            "0%": { transform: "translate(-50%, -50%) scale(1)" },
-                            "33%": { transform: "translate(-50%, -50%) scale(1.1) translate(20px, -30px)" },
-                            "66%": { transform: "translate(-50%, -50%) scale(0.9) translate(-20px, 20px)" },
-                            "100%": { transform: "translate(-50%, -50%) scale(1)" },
-                        },
-                    },
-                }
-            }
-        }
-    </script>
+    <link rel="stylesheet" href="tailwind.css">
 
     <style>
         .animation-delay-2000 { animation-delay: 2s; }
@@ -46,8 +16,6 @@
     </style>
     
     <link rel="stylesheet" href="styles.css">
-    
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
 </head>
 <body class="bg-brand-light text-brand-navy font-sans antialiased flex flex-col min-h-screen">
@@ -286,7 +254,7 @@
             </div>
         </div>
     </footer>
-
+    <script src="icons.js"></script>
     <script src="app.js"></script>
 
 </body>

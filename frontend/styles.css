@@ -2,6 +2,96 @@
    VoloLeads Custom Styles & Animations
    ============================================ */
 
+.fa-solid,
+.fa-regular,
+.fa-brands {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1em;
+    height: 1em;
+    line-height: 1;
+    vertical-align: -0.125em;
+}
+
+.site-icon-svg {
+    width: 1em;
+    height: 1em;
+    display: block;
+}
+
+.fa-spin .site-icon-svg {
+    animation: site-icon-spin 1s linear infinite;
+}
+
+@keyframes site-icon-spin {
+    to { transform: rotate(360deg); }
+}
+
+@keyframes site-shell-in {
+    from {
+        opacity: 0;
+        transform: translateY(-14px) scale(0.985);
+        filter: blur(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+        filter: blur(0);
+    }
+}
+
+@keyframes site-content-in {
+    from {
+        opacity: 0;
+        transform: translateY(22px);
+        filter: blur(8px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+        filter: blur(0);
+    }
+}
+
+@keyframes site-panel-in {
+    from {
+        opacity: 0;
+        transform: translateY(28px) scale(0.985);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+.site-preload nav,
+.site-preload #home > div > * {
+    opacity: 0;
+}
+
+.site-loaded nav {
+    animation: site-shell-in 0.75s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.site-loaded #home > div > * {
+    animation: site-content-in 0.82s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.site-loaded #home > div > :nth-child(1) { animation-delay: 0.08s; }
+.site-loaded #home > div > :nth-child(2) { animation-delay: 0.16s; }
+.site-loaded #home > div > :nth-child(3) { animation-delay: 0.24s; }
+.site-loaded #home > div > :nth-child(4) { animation-delay: 0.32s; }
+.site-loaded #home > div > :nth-child(5) { animation-delay: 0.40s; }
+
+.site-loaded #plans .perspective-1000 {
+    animation: site-panel-in 0.78s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.site-loaded #plans .perspective-1000:nth-child(1) { animation-delay: 0.12s; }
+.site-loaded #plans .perspective-1000:nth-child(2) { animation-delay: 0.22s; }
+.site-loaded #plans .perspective-1000:nth-child(3) { animation-delay: 0.32s; }
+
 /* Section Spacing Normalization */
 section:not(#home) {
     padding-top: 4rem !important;
@@ -18,7 +108,7 @@ section {
     box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.15),
                 0 10px 20px -10px rgba(0, 0, 0, 0.1),
                 0 -2px 4px 0 rgba(0, 0, 0, 0.05);
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1), transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     position: relative;
 }
 
@@ -90,7 +180,7 @@ section {
    Smooth Transitions for Interactive Elements
    ============================================ */
 .transition-smooth {
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: color 0.3s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.3s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.3s cubic-bezier(0.4, 0, 0.2, 1), transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 /* ============================================
@@ -140,7 +230,7 @@ section {
    Audio Player Styles
    ============================================ */
 .audio-player-btn {
-    transition: all 0.2s ease;
+    transition: transform 0.2s ease, background-color 0.2s ease, color 0.2s ease;
 }
 
 .audio-player-btn:hover {
@@ -151,13 +241,52 @@ section {
     transform: scale(0.95);
 }
 
+.audio-player-panel {
+    flex-wrap: wrap;
+}
+
+.audio-seek {
+    --seek-progress: 0%;
+    width: 100%;
+    flex-basis: 100%;
+    height: 0.5rem;
+    margin-top: 0.15rem;
+    border-radius: 9999px;
+    appearance: none;
+    -webkit-appearance: none;
+    cursor: pointer;
+    background: linear-gradient(to right, #f97316 0%, #f97316 var(--seek-progress), #e2e8f0 var(--seek-progress), #e2e8f0 100%);
+}
+
+.audio-seek::-webkit-slider-thumb {
+    width: 1rem;
+    height: 1rem;
+    border: 2px solid #ffffff;
+    border-radius: 9999px;
+    appearance: none;
+    -webkit-appearance: none;
+    background: #f97316;
+}
+
+.audio-seek::-moz-range-thumb {
+    width: 1rem;
+    height: 1rem;
+    border: 2px solid #ffffff;
+    border-radius: 9999px;
+    background: #f97316;
+}
+
+.dark .audio-seek {
+    background: linear-gradient(to right, #f97316 0%, #f97316 var(--seek-progress), #334155 var(--seek-progress), #334155 100%);
+}
+
 /* ============================================
    Form Input Focus States (Enhanced)
    ============================================ */
 input:focus,
 select:focus,
 textarea:focus {
-    outline: none;
+    outline: 2px solid transparent;
     box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.1);
 }
 
@@ -190,7 +319,7 @@ textarea:focus {
    Service Card Hover Effects
    ============================================ */
 .service-card {
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .service-card:hover {
@@ -233,19 +362,60 @@ textarea:focus {
         line-height: 1.5 !important;
     }
 
-    /* Reduce COW logo size on mobile */
-    #plans .rounded-full {
-        width: 6rem !important;
-        height: 6rem !important;
-    }
-
     /* Force plan cards to flexible height on mobile */
     #plans [class*="perspective-1000"] {
         height: auto !important;
     }
 
+    #plans .perspective-1000.reveal-on-scroll {
+        opacity: 1;
+        filter: none;
+    }
+
     #plans [class*="transform-style-3d"] {
-        min-height: 280px !important;
+        min-height: 0 !important;
+    }
+
+    #plans .perspective-1000 {
+        min-height: 0 !important;
+    }
+
+    #plans .transform-style-3d {
+        display: block;
+        transform: none !important;
+        transform-style: flat;
+    }
+
+    #plans .backface-hidden {
+        position: relative !important;
+        inset: auto !important;
+        transform: none !important;
+        backface-visibility: visible;
+        -webkit-backface-visibility: visible;
+        min-height: 100%;
+        animation: mobile-plan-panel-in 0.26s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    #plans .transform-style-3d:not(.is-flipped) > .backface-hidden:nth-child(2),
+    #plans .transform-style-3d.is-flipped > .backface-hidden:first-child {
+        display: none !important;
+    }
+
+    #plans .backface-hidden ul {
+        flex-grow: 0 !important;
+    }
+
+    #plans .perspective-1000 > button[aria-label^="Flip"] {
+        width: auto !important;
+        height: auto !important;
+        min-width: 3.25rem;
+        padding: 0.35rem 0.75rem !important;
+        font-size: 0.7rem !important;
+        line-height: 1rem;
+    }
+
+    #plans .perspective-1000 > button[aria-label^="Flip"]:active {
+        transform: scale(0.98);
     }
 
     /* Plans grid - reduce gap on mobile */
@@ -336,11 +506,6 @@ textarea:focus {
         line-height: 1.4 !important;
     }
 
-    #plans .rounded-full {
-        width: 5rem !important;
-        height: 5rem !important;
-    }
-
     #plans h2 {
         font-size: 0.9rem !important;
     }
@@ -381,6 +546,16 @@ textarea:focus {
    ============================================ */
 html {
     scroll-behavior: smooth;
+    color-scheme: light dark;
+}
+
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+    outline: 3px solid #f97316 !important;
+    outline-offset: 3px !important;
 }
 
 /* Reduce motion for accessibility */
@@ -429,20 +604,28 @@ html {
 /* --- 1. Reveal on Scroll State --- */
 .reveal-on-scroll {
     opacity: 0;
-    transform: translateY(30px);
-    transition: all 0.8s cubic-bezier(0.5, 0, 0, 1);
+    transform: translateY(24px);
+    transition: opacity 0.78s cubic-bezier(0.22, 1, 0.36, 1), transform 0.78s cubic-bezier(0.22, 1, 0.36, 1), filter 0.78s cubic-bezier(0.22, 1, 0.36, 1);
+    filter: blur(6px);
+    will-change: opacity, transform;
 }
 
 .reveal-on-scroll.is-visible {
     opacity: 1;
     transform: translateY(0);
+    filter: blur(0);
 }
+
+.delay-100 { transition-delay: 100ms; }
+.delay-200 { transition-delay: 200ms; }
+.delay-300 { transition-delay: 300ms; }
+.delay-400 { transition-delay: 400ms; }
 
 /* --- 2. Scroll to Top Button --- */
 #scroll-top-btn {
     visibility: hidden;
     opacity: 0;
-    transition: all 0.4s ease;
+    transition: opacity 0.4s ease, visibility 0.4s ease;
 }
 
 #scroll-top-btn.show {
@@ -465,9 +648,6 @@ html {
 }
 
 /* --- 4. Staggered Delays (for lists/grids) --- */
-.delay-100 { transition-delay: 100ms; }
-.delay-200 { transition-delay: 200ms; }
-.delay-300 { transition-delay: 300ms; }
 
 /* --- 5. 3D Flip Card Styles --- */
 .perspective-1000 {
@@ -503,10 +683,64 @@ html {
 
 #plans .perspective-1000 {
     overflow: visible;
+    transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1), filter 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@media (min-width: 1024px) {
+    #plans .perspective-1000 {
+        height: 735px !important;
+    }
+
+    #plans .backface-hidden {
+        min-height: 100%;
+    }
+
+    #plans .grid.lg\:grid-cols-3 {
+        align-items: stretch;
+    }
 }
 
 #plans .transform-style-3d {
     overflow: visible;
+    transition: transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+#plans .perspective-1000 > button[aria-label^="Flip"] {
+    transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.5s cubic-bezier(0.22, 1, 0.36, 1), border-color 0.3s ease, color 0.3s ease, background-color 0.3s ease;
+    will-change: transform;
+}
+
+@media (hover: hover) and (pointer: fine) {
+    #plans .perspective-1000:hover {
+        transform: translateY(-4px);
+        filter: drop-shadow(0 18px 28px rgba(15, 23, 42, 0.10));
+    }
+
+    #plans .perspective-1000 > button[aria-label^="Flip"]:hover {
+        transform: translateY(-2px) scale(1.025);
+        box-shadow: 0 16px 35px -18px rgba(15, 23, 42, 0.45);
+    }
+}
+
+@media (max-width: 768px) {
+    #plans .perspective-1000 > button[aria-label^="Flip"] {
+        top: 0.75rem !important;
+        right: 0.75rem !important;
+        width: auto !important;
+        height: auto !important;
+        min-width: 2.75rem !important;
+        min-height: 1.75rem !important;
+        padding: 0.25rem 0.6rem !important;
+        border-radius: 9999px !important;
+        font-size: 0.68rem !important;
+        line-height: 1rem !important;
+        box-shadow: 0 10px 24px -18px rgba(15, 23, 42, 0.45) !important;
+    }
+
+    #plans .perspective-1000 > button[aria-label^="Flip"]:active {
+        transform: scale(0.98) !important;
+        box-shadow: 0 8px 18px -16px rgba(15, 23, 42, 0.45) !important;
+    }
 }
 
 #plans > div {
@@ -526,6 +760,33 @@ html {
     left: -9999px;
     opacity: 0;
     z-index: -1;
+}
+
+.cf-turnstile {
+    display: block;
+    width: fit-content;
+    max-width: 100%;
+    line-height: 0;
+    background: #2f2f2f;
+    border-radius: 0.85rem !important;
+    overflow: hidden !important;
+    isolation: isolate;
+    transform: translateZ(0);
+    clip-path: inset(0 round 0.85rem);
+    -webkit-mask-image: -webkit-radial-gradient(white, black);
+}
+
+.cf-turnstile > div,
+.cf-turnstile iframe {
+    border-radius: inherit !important;
+    overflow: hidden !important;
+    clip-path: inset(1px round 0.75rem);
+}
+
+.cf-turnstile iframe {
+    border: 0 !important;
+    display: block !important;
+    background: #2f2f2f !important;
 }
 
 /* Optional: Loading Spinner Animation if not already present */
@@ -561,12 +822,39 @@ html {
     }
 }
 
+@keyframes mobile-plan-panel-in {
+    from {
+        opacity: 0;
+        transform: translateY(8px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
 .swipe-in {
     animation: swipeInFromRight 0.6s ease-out;
 }
 
 .swipe-out {
     animation: swipeOutToLeft 0.6s ease-out forwards;
+}
+
+@media (hover: none), (pointer: coarse) {
+    #plans .perspective-1000,
+    #plans .perspective-1000:hover,
+    #plans .rounded-2xl.shadow-lg:hover,
+    #plans .rounded-2xl.shadow-2xl:hover {
+        transform: none !important;
+        filter: none !important;
+    }
+
+    #plans .perspective-1000 > button[aria-label^="Flip"]:hover,
+    button.rounded-full:hover,
+    a.rounded-full:hover {
+        transform: none !important;
+    }
 }
 
 /* ========== HORIZONTAL SCROLL CONTAINER FOR MOBILE PLANS ========== */
@@ -640,7 +928,7 @@ html {
     box-shadow: 0 15px 35px -10px rgba(0, 0, 0, 0.2),
                 0 8px 15px -8px rgba(0, 0, 0, 0.12),
                 0 2px 4px 0 rgba(0, 0, 0, 0.05) !important;
-    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), border-color 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 .group.p-7.rounded-2xl:hover {
@@ -655,7 +943,7 @@ html {
     box-shadow: 0 15px 35px -10px rgba(0, 0, 0, 0.15),
                 0 8px 15px -8px rgba(0, 0, 0, 0.1),
                 inset 0 1px 0 0 rgba(255, 255, 255, 0.2) !important;
-    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), border-color 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 .text-center.rounded-2xl.p-8:hover {
@@ -671,7 +959,7 @@ html {
     box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.2),
                 0 10px 20px -10px rgba(0, 0, 0, 0.12),
                 0 2px 4px 0 rgba(0, 0, 0, 0.06) !important;
-    transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+    transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), border-color 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 .rounded-2xl.shadow-lg:hover,
@@ -730,7 +1018,7 @@ html {
 /* General Button/CTA Hover Pop Effect */
 button.rounded-full,
 a.rounded-full {
-    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), background-color 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), color 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 button.rounded-full:hover,
@@ -753,7 +1041,7 @@ a.rounded-full:hover {
     box-shadow: 0 12px 30px -10px rgba(0, 0, 0, 0.15),
                 0 6px 12px -6px rgba(0, 0, 0, 0.1),
                 inset 0 1px 0 0 rgba(255, 255, 255, 0.1) !important;
-    transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+    transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), border-color 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
     transform-origin: center center;
 }
 
@@ -770,7 +1058,7 @@ a.rounded-full:hover {
 #about .border-l-4 {
     box-shadow: 0 12px 30px -10px rgba(0, 0, 0, 0.15),
                 0 6px 12px -6px rgba(0, 0, 0, 0.1) !important;
-    transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+    transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), border-color 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
     transform-origin: center center;
     position: relative;
 }
@@ -825,4 +1113,60 @@ a.rounded-full:hover {
     #home p {
         font-size: 1rem !important;
     }
+}
+
+/* ============================================
+   Theme-Specific Type Depth
+   ============================================ */
+.dark #home h1,
+.dark #plans h3,
+.dark #plans .text-5xl {
+    text-shadow:
+        0 1px 1px rgba(0, 0, 0, 0.55),
+        0 0 6px rgba(249, 115, 22, 0.12) !important;
+}
+
+.dark #home p,
+.dark #plans .text-slate-600,
+.dark #plans .text-slate-400,
+.dark #plans .text-slate-500 {
+    text-shadow: 0 1px 1px rgba(0, 0, 0, 0.45) !important;
+}
+
+.dark .text-transparent.bg-clip-text {
+    filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.45));
+}
+
+.dark #plans .text-slate-600,
+.dark #plans .text-slate-500,
+.dark #plans .text-slate-400,
+.dark #home p {
+    color: #cbd5e1 !important;
+}
+
+.dark #plans strong,
+.dark #home strong {
+    color: #f8fafc;
+}
+
+html.dark *,
+html.dark *::before,
+html.dark *::after {
+    text-shadow: none !important;
+}
+
+html.dark .shadow-sm,
+html.dark .shadow,
+html.dark .shadow-md,
+html.dark .shadow-lg,
+html.dark .shadow-xl,
+html.dark .shadow-2xl,
+html.dark [class*="shadow-"] {
+    box-shadow: none !important;
+}
+
+html.dark #plans .perspective-1000,
+html.dark #plans .perspective-1000:hover,
+html.dark .text-transparent.bg-clip-text {
+    filter: none !important;
 }
