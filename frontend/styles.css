@@ -418,7 +418,10 @@ textarea:focus {
     }
 
     #plans .perspective-1000 {
-        min-height: 0 !important;
+        width: min(100%, 21rem) !important;
+        min-height: 38.5rem !important;
+        margin-left: auto !important;
+        margin-right: auto !important;
     }
 
     #plans .transform-style-3d {
@@ -433,7 +436,13 @@ textarea:focus {
         transform: none !important;
         backface-visibility: visible;
         -webkit-backface-visibility: visible;
-        min-height: 100%;
+        display: flex !important;
+        flex-direction: column !important;
+        width: 100% !important;
+        min-height: 38.5rem !important;
+        padding: 1.25rem !important;
+        border-radius: 1rem !important;
+        overflow: hidden !important;
         animation: mobile-plan-panel-in 0.26s cubic-bezier(0.22, 1, 0.36, 1);
     }
 
@@ -482,15 +491,6 @@ textarea:focus {
 
     #plans .text-xs {
         font-size: 0.75rem !important;
-    }
-
-    /* Plan card padding reduction */
-    #plans .p-8 {
-        padding: 1rem !important;
-    }
-
-    #plans .p-7 {
-        padding: 0.875rem !important;
     }
 
     /* Spacing adjustments for mobile */
