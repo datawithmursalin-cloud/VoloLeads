@@ -66,7 +66,7 @@
 }
 
 .site-preload nav,
-.site-preload #home > div > * {
+.site-preload #home > div > :not(h1):not(p) {
     opacity: 0;
 }
 
@@ -74,13 +74,11 @@
     animation: site-shell-in 0.75s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
-.site-loaded #home > div > * {
+.site-loaded #home > div > :not(h1):not(p) {
     animation: site-content-in 0.82s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
 .site-loaded #home > div > :nth-child(1) { animation-delay: 0.08s; }
-.site-loaded #home > div > :nth-child(2) { animation-delay: 0.16s; }
-.site-loaded #home > div > :nth-child(3) { animation-delay: 0.24s; }
 .site-loaded #home > div > :nth-child(4) { animation-delay: 0.32s; }
 .site-loaded #home > div > :nth-child(5) { animation-delay: 0.40s; }
 
