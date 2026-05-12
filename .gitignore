@@ -56,3 +56,28 @@ __pycache__/
 
 # Stripe CLI / local tooling
 .stripe/
+
+# cPanel deploy output when repository is checked out in public_html
+/audio/
+/png/
+/.well-known/
+/.htaccess
+/404.html
+/app.js
+/cancel.html
+/faqs.html
+/icons.js
+/index.html
+/insights-deal.html
+/insights-intelligence.html
+/insights-kpi.html
+/insights-market.html
+/manage-subscription.html
+/package.json
+/privacy-policy.html
+/server.js
+/styles.css
+/success.html
+/tailwind.css
+/terms-condition.html
+/thank-you.html
