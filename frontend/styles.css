@@ -32,12 +32,10 @@
     from {
         opacity: 0;
         transform: translateY(-14px) scale(0.985);
-        filter: blur(10px);
     }
     to {
         opacity: 1;
         transform: translateY(0) scale(1);
-        filter: blur(0);
     }
 }
 
@@ -45,12 +43,10 @@
     from {
         opacity: 0;
         transform: translateY(22px);
-        filter: blur(8px);
     }
     to {
         opacity: 1;
         transform: translateY(0);
-        filter: blur(0);
     }
 }
 
@@ -693,6 +689,14 @@ textarea:focus-visible {
     opacity: 1;
     transform: translateY(0);
     filter: blur(0);
+}
+
+#home .reveal-on-scroll {
+    opacity: 1;
+    transform: none;
+    filter: none;
+    transition: none;
+    will-change: auto;
 }
 
 .delay-100 { transition-delay: 100ms; }
