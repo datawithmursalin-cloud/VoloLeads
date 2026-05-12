@@ -40,13 +40,13 @@
     <!-- ========== MAIN NAVIGATION ========== -->
     <!-- Fixed header navigation bar with smooth blur effect and responsive menu -->
     <nav class="fixed top-6 left-0 right-0 z-50 w-[92%] max-w-7xl mx-auto bg-white/90 dark:bg-slate-900/90 backdrop-blur-md border border-slate-200 dark:border-slate-700 rounded-full shadow-2xl transition-all duration-300">
-        <div class="px-6 md:px-8">
+        <div class="px-4 sm:px-6 md:px-8">
             <div class="flex justify-between items-center h-16">
 
                 <!-- Branding: Logo with animated icon -->
-                <a href="#home" class="flex items-center gap-2 cursor-pointer group">
+                <a href="#home" class="flex items-center gap-2 cursor-pointer group flex-shrink-0 min-w-0">
                     <i class="fa-solid fa-bolt text-brand-orange text-2xl group-hover:animate-pulse" aria-hidden="true"><svg class="site-icon-svg" viewBox="0 0 24 24" fill="currentColor" focusable="false"><path d="M13 2 4 14h7l-1 8 10-13h-7l0-7Z"/></svg></i>
-                    <span class="font-bold text-xl tracking-tight text-brand-navy dark:text-white">VoloLeads</span>
+                    <span class="font-bold text-lg sm:text-xl tracking-tight text-brand-navy dark:text-white">VoloLeads</span>
                 </a>
 
                 <!-- Desktop Navigation Menu: Hidden on mobile, visible on md+ screens -->
@@ -59,7 +59,7 @@
                 </div>
 
                 <!-- Right Side Actions: Book Now, Dark Mode Toggle, Mobile Menu -->
-                <div class="flex items-center gap-3">
+                <div class="flex items-center gap-2 sm:gap-3 flex-shrink-0">
                     <!-- Desktop CTA Button: Book Now (Hidden on mobile) -->
                     <a href="#contact" class="hidden lg:block px-6 py-2 bg-brand-navy dark:bg-brand-orange hover:bg-slate-800 dark:hover:bg-orange-600 text-white text-sm font-bold rounded-full shadow-lg transition-all transform hover:-translate-y-0.5">
                         Book Now
@@ -75,6 +75,7 @@
                         <i class="fa-solid fa-bars" id="menu-icon" aria-hidden="true"></i>
                     </button>
                 </div>
+            </div>
         </div>
 
         <!-- Mobile Navigation Menu: Collapsible dropdown for smaller screens -->
@@ -255,7 +256,7 @@
                             <span class="text-[#8e775d] dark:text-[#cfb078] font-bold">no long-term contracts</span>.
                         </p>
                         <p class="text-xs md:text-sm text-slate-500 dark:text-slate-400 italic">
-                            💡 Tip: Flip any plan card to explore the additional services included
+                            💡 Tip: Tap or click any plan card to explore the additional services included
                         </p>
                     </div>
                 </div>
@@ -265,7 +266,7 @@
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 pb-12 pt-6">
 
                 <!-- ESSENTIAL TIER - FLIP CARD -->
-                <div class="h-[660px] perspective-1000 group reveal-on-scroll relative">
+                <div class="h-[660px] perspective-1000 group reveal-on-scroll relative cursor-pointer" role="button" tabindex="0" aria-label="Flip Essential plan card" aria-pressed="false" onclick="flipCard(this)">
                     <div class="transform-style-3d relative w-full h-full transition-transform duration-500 ease-in-out" style="transform-style: preserve-3d;">
 
                         <!-- FRONT: Plan Details -->
@@ -318,7 +319,7 @@
                             <p class="text-[11px] text-slate-500 dark:text-slate-400 text-center mt-2">Secure checkout powered by Stripe</p>
 
                             <p class="text-[11px] text-slate-400 dark:text-slate-500 text-center mt-2 group-hover:text-brand-orange transition-colors">
-                                ← Flip to see services →
+                                Tap card to see services
                             </p>
                         </div>
 
@@ -394,13 +395,10 @@
                             <p class="text-[11px] text-slate-600 dark:text-slate-400 text-center mt-2">Secure checkout powered by Stripe</p>
                         </div>
                     </div>
-                    <button type="button" class="absolute top-4 right-4 z-30 px-3 py-1 rounded-full bg-white/90 dark:bg-slate-900/90 border border-slate-200 dark:border-slate-700 text-[11px] font-bold text-brand-navy dark:text-white shadow-md hover:border-brand-orange hover:text-brand-orange transition-colors" aria-label="Flip Essential plan card" aria-pressed="false" onclick="flipCard(this.closest('.perspective-1000'))">
-                        Flip
-                    </button>
                 </div>
 
                 <!-- PREMIUM TIER - FLIP CARD (MOST POPULAR) -->
-                <div class="h-[660px] lg:-translate-y-6 perspective-1000 group reveal-on-scroll delay-100 relative">
+                <div class="h-[660px] lg:-translate-y-6 perspective-1000 group reveal-on-scroll delay-100 relative cursor-pointer" role="button" tabindex="0" aria-label="Flip Premium plan card" aria-pressed="false" onclick="flipCard(this)">
                     <!-- MOST POPULAR BADGE -->
                     <div class="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-20">
                         <span class="bg-brand-orange text-white text-sm font-bold px-4 py-1.5 rounded-full shadow-md uppercase tracking-wide">MOST POPULAR</span>
@@ -462,7 +460,7 @@
                             <p class="text-[11px] text-slate-500 dark:text-slate-400 text-center mt-2">Secure checkout powered by Stripe</p>
 
                             <p class="text-[11px] text-slate-400 dark:text-slate-500 text-center mt-2 group-hover:text-brand-orange transition-colors">
-                                ← Flip to see services →
+                                Tap card to see services
                             </p>
                         </div>
 
@@ -558,13 +556,10 @@
                             <p class="text-[11px] text-slate-600 dark:text-slate-400 text-center mt-2">Secure checkout powered by Stripe</p>
                         </div>
                     </div>
-                    <button type="button" class="absolute top-4 right-4 z-30 px-3 py-1 rounded-full bg-white/90 dark:bg-slate-900/90 border border-slate-200 dark:border-slate-700 text-[11px] font-bold text-brand-navy dark:text-white shadow-md hover:border-brand-orange hover:text-brand-orange transition-colors" aria-label="Flip Premium plan card" aria-pressed="false" onclick="flipCard(this.closest('.perspective-1000'))">
-                        Flip
-                    </button>
                 </div>
 
                 <!-- CUSTOM+ TIER - FLIP CARD -->
-                <div class="h-[660px] perspective-1000 group reveal-on-scroll delay-200 relative">
+                <div class="h-[660px] perspective-1000 group reveal-on-scroll delay-200 relative cursor-pointer" role="button" tabindex="0" aria-label="Flip Custom Plus plan card" aria-pressed="false" onclick="flipCard(this)">
                     <div class="transform-style-3d relative w-full h-full transition-transform duration-500 ease-in-out" style="transform-style: preserve-3d;">
 
                         <!-- FRONT: Plan Details -->
@@ -629,7 +624,7 @@
                             <p class="text-[11px] text-slate-500 dark:text-slate-400 text-center mt-2">Secure checkout powered by Stripe</p>
 
                             <p class="text-[11px] text-slate-400 dark:text-slate-500 text-center mt-2 group-hover:text-brand-orange transition-colors">
-                                ← Flip to see services →
+                                Tap card to see services
                             </p>
                         </div>
 
@@ -736,9 +731,6 @@
                             <p class="text-[11px] text-slate-600 dark:text-slate-400 text-center mt-2">Secure checkout powered by Stripe</p>
                         </div>
                     </div>
-                    <button type="button" class="absolute top-4 right-4 z-30 px-3 py-1 rounded-full bg-white/90 dark:bg-slate-900/90 border border-slate-200 dark:border-slate-700 text-[11px] font-bold text-brand-navy dark:text-white shadow-md hover:border-brand-orange hover:text-brand-orange transition-colors" aria-label="Flip Custom+ plan card" aria-pressed="false" onclick="flipCard(this.closest('.perspective-1000'))">
-                        Flip
-                    </button>
                 </div>
 
             </div>

@@ -4,6 +4,10 @@ const cors = require('cors');
 const helmet = require('helmet');
 const morgan = require('morgan');
 const path = require('path');
+const connectDB = require('./config/db');
+const { handleStripeWebhook } = require('./controllers/billingController');
+
+connectDB();
 
 const app = express();
 
@@ -22,6 +26,7 @@ app.use(cors({
 }));
 
 app.use(morgan('combined'));
+app.post('/api/stripe/webhook', express.raw({ type: 'application/json' }), handleStripeWebhook);
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ limit: '10mb', extended: true }));
 
@@ -45,6 +50,7 @@ const errorHandler = (err, req, res, next) => {
 app.use('/api/health', require('./routes/health'));
 app.use('/api/auth', require('./routes/auth'));
 app.use('/api/users', require('./routes/users'));
+app.use('/api', require('./routes/billing'));
 app.use('/api', require('./routes/contact'));
 app.use('/api', require('./routes/visitors'));
 

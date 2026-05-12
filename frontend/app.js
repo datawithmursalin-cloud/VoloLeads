@@ -15,6 +15,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initScrollToTop();
     initCounters();
     initAccordions();
+    initFlipCards();
     initMobilePlansCarousel();
     initSubscriptionCheckout();
     initManageSubscriptionForm();
@@ -737,11 +738,20 @@ function flipCard(cardWrapper) {
     if (innerCard) {
         innerCard.classList.toggle('is-flipped');
         const isFlipped = innerCard.classList.contains('is-flipped');
-        const flipButton = cardWrapper.querySelector('button[aria-label^="Flip"]');
-        if (flipButton) {
-            flipButton.setAttribute('aria-pressed', String(isFlipped));
+        if (cardWrapper.hasAttribute('aria-pressed')) {
+            cardWrapper.setAttribute('aria-pressed', String(isFlipped));
         }
     }
+}
+
+function initFlipCards() {
+    document.querySelectorAll('.perspective-1000[role="button"]').forEach(card => {
+        card.addEventListener('keydown', event => {
+            if (event.key !== 'Enter' && event.key !== ' ') return;
+            event.preventDefault();
+            flipCard(card);
+        });
+    });
 }
 
 function initDecorativeIcons() {
