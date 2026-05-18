@@ -20,6 +20,31 @@
     display: block;
 }
 
+.site-nav-logo {
+    width: 2rem !important;
+    height: 2rem !important;
+    min-width: 2rem;
+    flex: 0 0 2rem;
+    display: block;
+    object-fit: contain;
+    transition: transform 0.3s ease;
+}
+
+.group:hover .site-nav-logo {
+    transform: scale(1.05);
+}
+
+.site-brand-logo {
+    display: block;
+    object-fit: contain;
+    flex: 0 0 auto;
+}
+
+.site-brand-logo-sm {
+    width: 1.25rem;
+    height: 1.25rem;
+}
+
 .fa-spin .site-icon-svg {
     animation: site-icon-spin 1s linear infinite;
 }
