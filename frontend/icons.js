@@ -2,7 +2,7 @@
   const paths = {
     'arrow-down': '<path d="M12 5v12m0 0 5-5m-5 5-5-5"/>',
     'arrow-right': '<path d="M5 12h14m0 0-5-5m5 5-5 5"/>',
-    'arrow-rotate-left': '<path d="M4 8v6h6"/><path d="M5 14a7 7 0 1 0 2-8"/>',
+    'arrow-rotate-left': '<path d="M9 14 4 9l5-5"/><path d="M4 9h10a6 6 0 1 1-5.3 8.8"/>',
     'bars': '<path d="M4 7h16M4 12h16M4 17h16"/>',
     'bolt': '<path d="M13 2 4 14h7l-1 8 10-13h-7l0-7Z"/>',
     'book-open': '<path d="M4 5.5A3.5 3.5 0 0 1 7.5 2H20v17H8a4 4 0 0 0-4 4V5.5Z"/><path d="M20 2v17"/>',

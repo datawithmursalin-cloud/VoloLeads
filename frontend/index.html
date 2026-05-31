@@ -34,7 +34,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
 
 </head>
-<body class="site-preload bg-brand-light dark:bg-slate-900 text-brand-navy dark:text-slate-100 font-sans antialiased relative">
+<body class="site-preload bg-brand-light dark:bg-slate-950 text-brand-navy dark:text-slate-100 font-sans antialiased flex flex-col min-h-screen relative">
     <a href="#main-content" class="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[9999] focus:px-4 focus:py-3 focus:rounded-lg focus:bg-brand-orange focus:text-white focus:font-bold focus:shadow-xl">Skip to main content</a>
 
     <!-- ========== MAIN NAVIGATION ========== -->
@@ -42,14 +42,11 @@
     <nav class="fixed top-6 left-0 right-0 z-50 w-[92%] max-w-7xl mx-auto bg-white/90 dark:bg-slate-900/90 backdrop-blur-md border border-slate-200 dark:border-slate-700 rounded-full shadow-2xl transition-all duration-300">
         <div class="px-4 sm:px-6 md:px-8">
             <div class="flex justify-between items-center h-16">
-
-                <!-- Branding: Logo with animated icon -->
                 <a href="#home" class="flex items-center gap-2 cursor-pointer group flex-shrink-0 min-w-0">
                     <img src="./png/logo.webp" alt="" aria-hidden="true" class="site-nav-logo">
                     <span class="font-bold text-lg sm:text-xl tracking-tight text-brand-navy dark:text-white">VoloLeads</span>
                 </a>
 
-                <!-- Desktop Navigation Menu: Hidden on mobile, visible on md+ screens -->
                 <div class="hidden lg:flex space-x-8 items-center text-sm font-semibold">
                     <a href="#home" class="text-slate-600 dark:text-slate-300 hover:text-brand-orange dark:hover:text-brand-orange transition-colors">Home</a>
                     <a href="#plans" class="text-slate-600 dark:text-slate-300 hover:text-brand-orange dark:hover:text-brand-orange transition-colors">Plans</a>
@@ -58,19 +55,13 @@
                     <a href="#about" class="text-slate-600 dark:text-slate-300 hover:text-brand-orange dark:hover:text-brand-orange transition-colors">About Us</a>
                 </div>
 
-                <!-- Right Side Actions: Book Now, Dark Mode Toggle, Mobile Menu -->
                 <div class="flex items-center gap-2 sm:gap-3 flex-shrink-0">
-                    <!-- Desktop CTA Button: Book Now (Hidden on mobile) -->
                     <a href="#contact" class="hidden lg:block px-6 py-2 bg-brand-navy dark:bg-brand-orange hover:bg-slate-800 dark:hover:bg-orange-600 text-white text-sm font-bold rounded-full shadow-lg transition-all transform hover:-translate-y-0.5">
                         Book Now
                     </a>
-
-                    <!-- Dark Mode Toggle Button -->
                     <button id="dark-mode-toggle" class="text-slate-600 dark:text-slate-300 text-xl cursor-pointer focus:outline-none transition-colors hover:text-brand-orange dark:hover:text-brand-orange" aria-label="Toggle Dark Mode">
                         <i class="fa-solid fa-moon" id="dark-mode-icon" aria-hidden="true"></i>
                     </button>
-
-                    <!-- Mobile Menu Toggle Button -->
                     <button id="mobile-menu-btn" class="lg:hidden text-slate-600 dark:text-slate-300 text-xl cursor-pointer focus:outline-none" aria-label="Toggle Menu">
                         <i class="fa-solid fa-bars" id="menu-icon" aria-hidden="true"></i>
                     </button>
@@ -78,7 +69,6 @@
             </div>
         </div>
 
-        <!-- Mobile Navigation Menu: Collapsible dropdown for smaller screens -->
         <div id="mobile-menu" class="hidden lg:hidden absolute top-20 left-0 right-0 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl shadow-2xl mx-6 p-6 flex flex-col gap-4 text-center z-50">
             <a href="#home" class="text-slate-600 dark:text-slate-300 font-bold hover:text-brand-orange dark:hover:text-brand-orange py-2">Home</a>
             <a href="#plans" class="text-slate-600 dark:text-slate-300 font-bold hover:text-brand-orange dark:hover:text-brand-orange py-2">Plans</a>
@@ -243,11 +233,11 @@
                     </a>
 
                     <div class="text-center md:text-left max-w-3xl">
-                        <h2 class="text-2xl md:text-4xl font-extrabold text-brand-navy dark:text-white mb-4 leading-tight">
-                            <span class="font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-[#6f5c46] via-[#8e775d] to-[#c9a34a]">College of Wholesale</span>
-                            <span class="text-black dark:text-white font-extrabold px-1">x</span>
-                            <span class="font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-brand-orange to-red-600">VoloLeads</span>
-                            <br>Lead Generation System
+                        <h2 class="plans-partnership-heading text-2xl md:text-4xl font-extrabold text-brand-navy dark:text-white mb-4 leading-tight">
+                            <span class="plans-partnership-line font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-[#6f5c46] via-[#8e775d] to-[#c9a34a]">College of Wholesale</span>
+                            <span class="plans-partnership-line text-black dark:text-white font-extrabold">x</span>
+                            <span class="plans-partnership-line font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-brand-orange to-red-600">VoloLeads</span>
+                            <span class="plans-partnership-line">Lead Generation System</span>
                         </h2>
                         <p class="text-sm md:text-lg text-slate-600 dark:text-slate-400 mb-4">
                             Choose the tier that fits your business. All plans include
@@ -263,10 +253,10 @@
             </div>
 
             <!-- Three-column pricing grid with flip cards -->
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 pb-12 pt-6">
+            <div class="plans-pricing-grid grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-4 gap-8 pb-12 pt-6">
 
                 <!-- ESSENTIAL TIER - FLIP CARD -->
-                <div class="h-[660px] perspective-1000 group reveal-on-scroll relative cursor-pointer" role="button" tabindex="0" aria-label="Flip Essential plan card" aria-pressed="false" onclick="flipCard(this)">
+                <div class="h-[660px] perspective-1000 group reveal-on-scroll relative cursor-pointer" role="button" tabindex="0" aria-label="Flip Starter plan card" aria-pressed="false" onclick="flipCard(this)">
                     <div class="transform-style-3d relative w-full h-full transition-transform duration-500 ease-in-out" style="transform-style: preserve-3d;">
 
                         <!-- FRONT: Plan Details -->
@@ -274,19 +264,19 @@
                             <div class="mb-4">
                                 <span class="inline-block px-3 py-1 bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 text-xs font-bold rounded-full uppercase tracking-wide">Staffing & Training</span>
                             </div>
-                            <h3 class="text-2xl font-bold text-brand-navy dark:text-white mb-2">Essential</h3>
+                            <h3 class="plan-title text-2xl font-bold text-brand-navy dark:text-white mb-2">Starter</h3>
                             <p class="text-slate-500 dark:text-slate-400 text-sm mb-2 font-semibold">Dedicated Cold Calling Support</p>
                             <p class="text-slate-600 dark:text-slate-300 text-xs mb-6 leading-relaxed">Staffing & training service for investors with existing tech stack.</p>
 
-                            <div class="mb-6">
+                            <div class="plan-price-block mb-6">
                                 <div class="flex items-baseline mb-1">
-                                    <span class="text-5xl font-extrabold text-brand-navy dark:text-white">$6</span>
-                                    <span class="text-slate-500 dark:text-slate-400 ml-1">/hour</span>
+                                    <span class="plan-price text-5xl font-extrabold text-brand-navy dark:text-white">$6</span>
+                                    <span class="plan-price-unit text-slate-500 dark:text-slate-400 ml-1">/hour</span>
                                 </div>
-                                <p class="text-xs text-slate-400 dark:text-slate-500">Billed weekly, with just 1 week's payment as a set-up fee deposit.</p>
+                                <p class="plan-billing-note text-xs text-slate-400 dark:text-slate-500">Billed weekly, with just 1 week's payment as a set-up fee deposit.</p>
                             </div>
 
-                            <ul class="space-y-1.5 mb-5 flex-grow text-xs">
+                            <ul class="plan-feature-list space-y-1.5 mb-5 flex-grow text-xs">
                                 <li class="flex items-start">
                                     <i class="fa-solid fa-circle text-brand-orange mt-1.5 mr-2 flex-shrink-0" style="font-size: 0.4rem;"></i>
                                     <span class="text-slate-600 dark:text-slate-400"><strong>You very own personal VA</strong></span>
@@ -398,7 +388,7 @@
                 </div>
 
                 <!-- PREMIUM TIER - FLIP CARD (MOST POPULAR) -->
-                <div class="h-[660px] lg:-translate-y-6 perspective-1000 group reveal-on-scroll delay-100 relative cursor-pointer" role="button" tabindex="0" aria-label="Flip Premium plan card" aria-pressed="false" onclick="flipCard(this)">
+                <div class="h-[660px] lg:-translate-y-6 perspective-1000 group reveal-on-scroll delay-100 relative cursor-pointer" role="button" tabindex="0" aria-label="Flip Growth plan card" aria-pressed="false" onclick="flipCard(this)">
                     <!-- MOST POPULAR BADGE -->
                     <div class="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-20">
                         <span class="bg-brand-orange text-white text-sm font-bold px-4 py-1.5 rounded-full shadow-md uppercase tracking-wide">MOST POPULAR</span>
@@ -411,19 +401,19 @@
                             <div class="mb-4 mt-6">
                                 <span class="inline-block px-3 py-1 bg-orange-100 dark:bg-orange-900/30 text-brand-orange dark:text-orange-400 text-xs font-bold rounded-full uppercase tracking-wide">Done-For-You System</span>
                             </div>
-                            <h3 class="text-3xl font-bold text-brand-navy dark:text-white mb-2">Premium</h3>
+                            <h3 class="plan-title text-3xl font-bold text-brand-navy dark:text-white mb-2">Growth</h3>
                             <p class="text-slate-600 dark:text-slate-400 text-sm mb-2 font-semibold">The "Outbound Machine"</p>
                             <p class="text-slate-600 dark:text-slate-400 text-xs mb-6">Complete plug-and-play system that removes technical burden.</p>
 
-                            <div class="mb-6">
+                            <div class="plan-price-block mb-6">
                                 <div class="flex items-baseline mb-1">
-                                    <span class="text-5xl font-extrabold text-[#8e775d] dark:text-[#c9a34a]">$1,235</span>
-                                    <span class="text-slate-500 dark:text-slate-400 ml-1">/month</span>
+                                    <span class="plan-price text-5xl font-extrabold text-[#8e775d] dark:text-[#c9a34a]">$1,235</span>
+                                    <span class="plan-price-unit text-slate-500 dark:text-slate-400 ml-1">/month</span>
                                 </div>
-                                <p class="text-xs text-slate-400 dark:text-slate-500">Billed monthly, no long-term contracts</p>
+                                <p class="plan-billing-note text-xs text-slate-400 dark:text-slate-500">Billed monthly, no long-term contracts</p>
                             </div>
 
-                            <ul class="space-y-1.5 mb-5 flex-grow text-xs">
+                            <ul class="plan-feature-list space-y-1.5 mb-5 flex-grow text-xs">
                                 <li class="flex items-start">
                                     <i class="fa-solid fa-circle text-brand-orange mt-1.5 mr-2 flex-shrink-0" style="font-size: 0.4rem;"></i>
                                     <span class="text-slate-600 dark:text-slate-400"><strong>1 dedicated cold caller</strong> assigned to your campaign</span>
@@ -567,19 +557,19 @@
                             <div class="mb-4">
                                 <span class="inline-block px-3 py-1 bg-slate-900 dark:bg-slate-700 text-white dark:text-slate-100 text-xs font-bold rounded-full uppercase tracking-wide">Advanced Scaling</span>
                             </div>
-                            <h3 class="text-2xl font-bold text-brand-navy dark:text-white mb-2">Custom+</h3>
+                            <h3 class="plan-title text-2xl font-bold text-brand-navy dark:text-white mb-2">Scale</h3>
                             <p class="text-slate-600 dark:text-slate-400 text-sm mb-2 font-semibold">Scale Mode & Advanced Optimization</p>
                             <p class="text-slate-600 dark:text-slate-400 text-xs mb-6">For high-volume operators with data-driven execution.</p>
 
-                            <div class="mb-6">
+                            <div class="plan-price-block mb-6">
                                 <div class="flex items-baseline mb-1">
-                                    <span class="text-5xl font-extrabold text-brand-orange">$2,799</span>
-                                    <span class="text-slate-500 dark:text-slate-400 ml-1">/month</span>
+                                    <span class="plan-price text-5xl font-extrabold text-brand-orange">$2,799</span>
+                                    <span class="plan-price-unit text-slate-500 dark:text-slate-400 ml-1">/month</span>
                                 </div>
-                                <p class="text-xs text-slate-400 dark:text-slate-500">Billed monthly, enterprise support</p>
+                                <p class="plan-billing-note text-xs text-slate-400 dark:text-slate-500">Billed monthly, enterprise support</p>
                             </div>
 
-                            <ul class="space-y-1.5 mb-5 flex-grow text-[11px]">
+                            <ul class="plan-feature-list space-y-1.5 mb-5 flex-grow text-[11px]">
                                 <li class="flex items-start">
                                     <i class="fa-solid fa-circle text-brand-orange mt-1.5 mr-2 flex-shrink-0" style="font-size: 0.4rem;"></i>
                                     <span class="text-slate-600 dark:text-slate-400"><strong>Increased calling volume</strong> + priority routing</span>
@@ -729,6 +719,156 @@
                                 Subscribe Now
                             </button>
                             <p class="text-[11px] text-slate-600 dark:text-slate-400 text-center mt-2">Secure checkout powered by Stripe</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- CUSTOM TIER - CONTACT CTA -->
+                <div class="h-[660px] perspective-1000 group reveal-on-scroll delay-300 relative cursor-pointer" role="button" tabindex="0" aria-label="Flip Custom plan card" aria-pressed="false" onclick="flipCard(this)">
+                    <div class="transform-style-3d relative w-full h-full transition-transform duration-500 ease-in-out" style="transform-style: preserve-3d;">
+                        <div class="backface-hidden absolute w-full h-full bg-white dark:bg-slate-800 rounded-2xl shadow-lg p-8 border border-slate-200 dark:border-slate-700 flex flex-col" style="backface-visibility: hidden; overflow: visible;">
+                            <div class="mb-4">
+                                <span class="inline-block px-3 py-1 bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 text-xs font-bold rounded-full uppercase tracking-wide">Custom Build</span>
+                            </div>
+                            <h3 class="plan-title text-2xl font-bold text-brand-navy dark:text-white mb-2">Custom</h3>
+                            <p class="text-slate-600 dark:text-slate-400 text-sm mb-2 font-semibold">Everything tailored to your operation</p>
+                            <p class="text-slate-600 dark:text-slate-300 text-xs mb-6 leading-relaxed">For teams that need custom caller volume, markets, reporting, tech stack, or fulfillment scope.</p>
+
+                            <div class="plan-price-block mb-6">
+                                <div class="flex items-baseline mb-1">
+                                    <span class="plan-price text-5xl font-extrabold text-brand-navy dark:text-white">Custom</span>
+                                </div>
+                                <p class="plan-billing-note text-xs text-slate-400 dark:text-slate-500">Request a custom quote based on your workflow.</p>
+                            </div>
+
+                            <ul class="plan-feature-list space-y-1.5 mb-5 flex-grow text-xs">
+                                <li class="flex items-start">
+                                    <i class="fa-solid fa-circle text-brand-orange mt-1.5 mr-2 flex-shrink-0" style="font-size: 0.4rem;"></i>
+                                    <span class="text-slate-600 dark:text-slate-400"><strong>Custom caller count</strong> and campaign capacity</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fa-solid fa-circle text-brand-orange mt-1.5 mr-2 flex-shrink-0" style="font-size: 0.4rem;"></i>
+                                    <span class="text-slate-600 dark:text-slate-400"><strong>Increased calling volume</strong> + priority routing</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fa-solid fa-circle text-brand-orange mt-1.5 mr-2 flex-shrink-0" style="font-size: 0.4rem;"></i>
+                                    <span class="text-slate-600 dark:text-slate-400"><strong>List stacking</strong> + priority targeting</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fa-solid fa-circle text-brand-orange mt-1.5 mr-2 flex-shrink-0" style="font-size: 0.4rem;"></i>
+                                    <span class="text-slate-600 dark:text-slate-400"><strong>Advanced KPI analytics</strong> + custom dashboards</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fa-solid fa-circle text-brand-orange mt-1.5 mr-2 flex-shrink-0" style="font-size: 0.4rem;"></i>
+                                    <span class="text-slate-600 dark:text-slate-400"><strong>Closer support</strong> to maximize conversions</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fa-solid fa-circle text-brand-orange mt-1.5 mr-2 flex-shrink-0" style="font-size: 0.4rem;"></i>
+                                    <span class="text-slate-600 dark:text-slate-400"><strong>Dedicated cold callers</strong> assigned to your operation</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fa-solid fa-circle text-brand-orange mt-1.5 mr-2 flex-shrink-0" style="font-size: 0.4rem;"></i>
+                                    <span class="text-slate-600 dark:text-slate-400"><strong>Pipeline & CRM support</strong> for follow-up and tracking</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fa-solid fa-circle text-brand-orange mt-1.5 mr-2 flex-shrink-0" style="font-size: 0.4rem;"></i>
+                                    <span class="text-slate-600 dark:text-slate-400"><strong>Running comps</strong> on qualified leads</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fa-solid fa-circle text-brand-orange mt-1.5 mr-2 flex-shrink-0" style="font-size: 0.4rem;"></i>
+                                    <span class="text-slate-600 dark:text-slate-400"><strong>Targeted marketing campaigns</strong> using Redfin Data Center by market analysis</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fa-solid fa-circle text-brand-orange mt-1.5 mr-2 flex-shrink-0" style="font-size: 0.4rem;"></i>
+                                    <span class="text-slate-600 dark:text-slate-400"><strong>AI agent automation</strong> for SMS handling + AI voice receptionist for inbound calls</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fa-solid fa-circle text-brand-orange mt-1.5 mr-2 flex-shrink-0" style="font-size: 0.4rem;"></i>
+                                    <span class="text-slate-600 dark:text-slate-400"><strong>Custom tech stack</strong> and CRM workflows</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fa-solid fa-info text-amber-500 mt-1.5 mr-2 flex-shrink-0" style="font-size: 0.75rem;"></i>
+                                    <span class="text-slate-500 dark:text-slate-400 italic">Built after a strategy call with your team.</span>
+                                </li>
+                            </ul>
+
+                            <a href="custom-quote.html" onclick="event.stopPropagation()" class="custom-quote-btn w-full py-3 px-6 bg-brand-orange hover:bg-orange-600 text-white font-bold text-center rounded-lg shadow-lg hover:shadow-xl transition-all">
+                                Request Custom Quote
+                            </a>
+                            <p class="text-[11px] text-slate-400 dark:text-slate-500 text-center mt-2 group-hover:text-brand-orange transition-colors">
+                                Tap card to see options
+                            </p>
+                        </div>
+
+                        <!-- BACK: Custom Services -->
+                        <div class="backface-hidden absolute w-full h-full overflow-hidden bg-gradient-to-br from-orange-50 to-orange-100 dark:from-orange-900/20 dark:to-orange-800/20 rounded-2xl shadow-lg p-8 border-2 border-brand-orange dark:border-orange-600 flex flex-col" style="backface-visibility: hidden; transform: rotateY(180deg);">
+                            <h3 class="text-xl font-bold text-brand-navy dark:text-white mb-3">Custom Options</h3>
+
+                            <ul class="space-y-1.5 flex-grow text-[11px]">
+                                <li class="flex items-start gap-2">
+                                    <div class="w-5 h-5 bg-brand-orange rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                                        <i class="fa-solid fa-check text-white text-xs"></i>
+                                    </div>
+                                    <div>
+                                        <p class="font-bold text-brand-navy dark:text-white">Calling Volume</p>
+                                        <p class="text-slate-600 dark:text-slate-400">Caller count, hours, routing, and campaign capacity matched to your market.</p>
+                                    </div>
+                                </li>
+
+                                <li class="flex items-start gap-2">
+                                    <div class="w-5 h-5 bg-brand-orange rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                                        <i class="fa-solid fa-check text-white text-xs"></i>
+                                    </div>
+                                    <div>
+                                        <p class="font-bold text-brand-navy dark:text-white">Data & Targeting</p>
+                                        <p class="text-slate-600 dark:text-slate-400">List stacking, market filters, priority targeting, and lead source planning.</p>
+                                    </div>
+                                </li>
+
+                                <li class="flex items-start gap-2">
+                                    <div class="w-5 h-5 bg-brand-orange rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                                        <i class="fa-solid fa-check text-white text-xs"></i>
+                                    </div>
+                                    <div>
+                                        <p class="font-bold text-brand-navy dark:text-white">KPI Reporting</p>
+                                        <p class="text-slate-600 dark:text-slate-400">Daily, weekly, or custom dashboards for performance and QA visibility.</p>
+                                    </div>
+                                </li>
+
+                                <li class="flex items-start gap-2">
+                                    <div class="w-5 h-5 bg-brand-orange rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                                        <i class="fa-solid fa-check text-white text-xs"></i>
+                                    </div>
+                                    <div>
+                                        <p class="font-bold text-brand-navy dark:text-white">Pipeline & CRM</p>
+                                        <p class="text-slate-600 dark:text-slate-400">Setup support, follow-up workflow, tagging, stages, and tracking.</p>
+                                    </div>
+                                </li>
+
+                                <li class="flex items-start gap-2">
+                                    <div class="w-5 h-5 bg-brand-orange rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                                        <i class="fa-solid fa-check text-white text-xs"></i>
+                                    </div>
+                                    <div>
+                                        <p class="font-bold text-brand-navy dark:text-white">Comps & Campaigns</p>
+                                        <p class="text-slate-600 dark:text-slate-400">Running comps, Redfin market analysis, and targeted marketing campaigns.</p>
+                                    </div>
+                                </li>
+
+                                <li class="flex items-start gap-2">
+                                    <div class="w-5 h-5 bg-brand-orange rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                                        <i class="fa-solid fa-check text-white text-xs"></i>
+                                    </div>
+                                    <div>
+                                        <p class="font-bold text-brand-navy dark:text-white">AI Automation</p>
+                                        <p class="text-slate-600 dark:text-slate-400">SMS handling and AI voice receptionist options for inbound calls.</p>
+                                    </div>
+                                </li>
+                            </ul>
+
+                            <a href="custom-quote.html" onclick="event.stopPropagation()" class="custom-quote-btn w-full py-3 px-4 bg-brand-orange hover:bg-orange-600 text-white font-bold text-center rounded-lg shadow-lg transition-all mt-4">
+                                Request Custom Quote
+                            </a>
                         </div>
                     </div>
                 </div>
@@ -1131,7 +1271,7 @@
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
 
                 <!-- Testimonial 1 -->
-                <div class="bg-slate-50 dark:bg-slate-700 rounded-xl p-8 border border-slate-200 dark:border-slate-600 hover:border-brand-orange/50 transition-all duration-300 shadow-sm hover:shadow-lg reveal-on-scroll delay-100">
+                <div class="testimonial-card bg-slate-50 dark:bg-slate-700 rounded-xl p-8 border border-slate-200 dark:border-slate-600 hover:border-brand-orange/50 transition-all duration-300 shadow-sm hover:shadow-lg reveal-on-scroll delay-100">
                     <!-- Star Rating -->
                     <div class="flex gap-1 mb-4">
                         <i class="fa-solid fa-star text-brand-orange text-sm"></i>
@@ -1142,12 +1282,12 @@
                     </div>
 
                     <!-- Quote -->
-                    <p class="text-slate-700 dark:text-slate-300 mb-6 leading-relaxed font-medium">
+                    <p class="testimonial-quote text-slate-700 dark:text-slate-300 mb-6 leading-relaxed font-medium">
                         "Working with VoloLeads was a game-changer for our acquisition pipeline. Their cold calling and VA team bring in motivated seller leads, stay professional, and communicate clearly. In our first month, Syed has helped me generate a $28,000 deal. If you want a team that understands real estate wholesaling and delivers real opportunities - not just random leads - I highly recommend them."
                     </p>
 
                     <!-- Client Info -->
-                    <div class="flex items-center gap-3 pt-4 border-t border-slate-200 dark:border-slate-700">
+                    <div class="testimonial-author flex items-center gap-3 pt-4 border-t border-slate-200 dark:border-slate-700">
                         <div class="w-12 h-12 rounded-full bg-brand-orange/10 flex items-center justify-center">
                             <span class="text-brand-orange font-bold">AS</span>
                         </div>
@@ -1159,7 +1299,7 @@
                 </div>
 
                 <!-- Testimonial 2 -->
-                <div class="bg-slate-50 dark:bg-slate-700 rounded-xl p-8 border border-slate-200 dark:border-slate-600 hover:border-brand-orange/50 transition-all duration-300 shadow-sm hover:shadow-lg reveal-on-scroll delay-200">
+                <div class="testimonial-card bg-slate-50 dark:bg-slate-700 rounded-xl p-8 border border-slate-200 dark:border-slate-600 hover:border-brand-orange/50 transition-all duration-300 shadow-sm hover:shadow-lg reveal-on-scroll delay-200">
                     <!-- Star Rating -->
                     <div class="flex gap-1 mb-4">
                         <i class="fa-solid fa-star text-brand-orange text-sm"></i>
@@ -1170,12 +1310,12 @@
                     </div>
 
                     <!-- Quote -->
-                    <p class="text-slate-700 dark:text-slate-300 mb-6 leading-relaxed font-medium">
+                    <p class="testimonial-quote text-slate-700 dark:text-slate-300 mb-6 leading-relaxed font-medium">
                         "In 6 months, we went from struggling to find deals to having a real pipeline. ROI was insane. Best investment decision I made for my business."
                     </p>
 
                     <!-- Client Info -->
-                    <div class="flex items-center gap-3 pt-4 border-t border-slate-200 dark:border-slate-700">
+                    <div class="testimonial-author flex items-center gap-3 pt-4 border-t border-slate-200 dark:border-slate-700">
                         <div class="w-12 h-12 rounded-full bg-brand-orange/10 flex items-center justify-center">
                             <span class="text-brand-orange font-bold">SJ</span>
                         </div>
@@ -1187,7 +1327,7 @@
                 </div>
 
                 <!-- Testimonial 3 -->
-                <div class="bg-slate-50 dark:bg-slate-700 rounded-xl p-8 border border-slate-200 dark:border-slate-600 hover:border-brand-orange/50 transition-all duration-300 shadow-sm hover:shadow-lg reveal-on-scroll delay-300">
+                <div class="testimonial-card bg-slate-50 dark:bg-slate-700 rounded-xl p-8 border border-slate-200 dark:border-slate-600 hover:border-brand-orange/50 transition-all duration-300 shadow-sm hover:shadow-lg reveal-on-scroll delay-300">
                     <!-- Star Rating -->
                     <div class="flex gap-1 mb-4">
                         <i class="fa-solid fa-star text-brand-orange text-sm"></i>
@@ -1198,12 +1338,12 @@
                     </div>
 
                     <!-- Quote -->
-                    <p class="text-slate-700 dark:text-slate-300 mb-6 leading-relaxed font-medium">
+                    <p class="testimonial-quote text-slate-700 dark:text-slate-300 mb-6 leading-relaxed font-medium">
                         "The quality of training their VAs receive is unmatched. They sound like seasoned pros, not entry-level. Worth every penny."
                     </p>
 
                     <!-- Client Info -->
-                    <div class="flex items-center gap-3 pt-4 border-t border-slate-200 dark:border-slate-700">
+                    <div class="testimonial-author flex items-center gap-3 pt-4 border-t border-slate-200 dark:border-slate-700">
                         <div class="w-12 h-12 rounded-full bg-brand-orange/10 flex items-center justify-center">
                             <span class="text-brand-orange font-bold">RK</span>
                         </div>
@@ -1393,16 +1533,17 @@
                         <!-- Select dropdown with service options -->
                         <select id="service-select" name="service" required class="w-full px-4 py-3 bg-slate-50 border border-slate-200 dark:bg-slate-700 dark:border-slate-600 dark:text-white dark:placeholder-slate-400 rounded-lg text-slate-800 outline-none focus:border-brand-orange focus:bg-white appearance-none cursor-pointer font-medium">
                             <option value="" disabled selected>Select a Service…</option>
-                            <option value="Essential">Essential</option>
-                            <option value="Premium">Premium</option>
-                            <option value="Custom+">Custom+</option>
+                            <option value="Starter">Starter</option>
+                            <option value="Growth">Growth</option>
+                            <option value="Scale">Scale</option>
+                            <option value="Custom Quote">Custom Quote</option>
                         </select>
                         <!-- Chevron icon for dropdown indicator -->
                         <i class="fa-solid fa-chevron-down absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none text-sm"></i>
                     </div>
                 </div>
 
-                <!-- Conditional Quantity Field: Shows for Essential, Premium, and Custom+ -->
+                <!-- Conditional Quantity Field: Shows for Starter, Growth, and Scale -->
                 <div id="quantity-row" class="hidden space-y-1 animate-fade-in-down">
                     <label for="quantity-select" class="text-xs font-bold text-brand-orange uppercase tracking-wide ml-1">Number of Cold Callers <span class="text-red-500">*</span></label>
                     <div class="relative">
@@ -1502,13 +1643,10 @@
 
     <!-- ========== FOOTER ========== -->
     <!-- Site footer with navigation, contact info, and social links -->
-    <footer id="contact" class="bg-brand-navy text-slate-400 py-12 border-t border-slate-800 scroll-mt-32">
+    <footer class="bg-brand-navy text-slate-400 py-12 border-t border-slate-800 scroll-mt-32">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <!-- 4-column grid layout for footer content -->
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
-
-                <!-- Column 1: Company branding & tagline -->
-                <div class="col-span-1 md:col-span-1">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-8 mb-8">
+                <div>
                     <div class="flex items-center gap-2 mb-4">
                         <img src="./png/logo.webp" alt="" aria-hidden="true" class="site-brand-logo site-brand-logo-sm">
                         <span class="font-bold text-xl text-white">VoloLeads</span>
@@ -1518,60 +1656,55 @@
                     </p>
                 </div>
 
-                <!-- Columns 2-4: Navigation, Contact, & Social Links -->
-                <div class="col-span-1 md:col-span-3 flex flex-col md:flex-row md:justify-end md:items-start gap-8 md:gap-12">
-                    <!-- Navigation Links -->
-                    <div>
-                        <h4 class="text-white font-bold mb-4">Navigate</h4>
-                        <ul class="space-y-2 text-sm">
-                            <li><a href="#about" class="hover:text-brand-orange transition-colors">About Us</a></li>
-                            <li><a href="#services" class="hover:text-brand-orange transition-colors">Services</a></li>
-                            <li><a href="#plans" class="hover:text-brand-orange transition-colors">Plans</a></li>
-                            <li><a href="#insights" class="hover:text-brand-orange transition-colors">Insights</a></li>
-                            <li><a href="#testimonials" class="hover:text-brand-orange transition-colors">Testimonials</a></li>
-                            <li><a href="#contact" class="hover:text-brand-orange transition-colors">Contact</a></li>
-                        </ul>
-                    </div>
-
-                    <!-- Contact Information -->
-                    <div>
-                        <h4 class="text-white font-bold mb-4">Contact</h4>
-                        <ul class="space-y-2 text-sm">
-                            <li class="flex items-center gap-2">
-                                <span class="w-5 flex items-center justify-center text-brand-orange"><i class="fa-solid fa-envelope"></i></span>
-                                <span class="break-words">syed@vololeads.com</span>
-                            </li>
-                            <li class="flex items-center gap-2">
-                                <span class="w-5 flex items-center justify-center text-brand-orange"><i class="fa-brands fa-whatsapp"></i></span>
-                                <a href="https://wa.me/8801793716608" target="_blank" class="hover:text-brand-orange transition-colors">WhatsApp Support</a>
-                            </li>
-                        </ul>
-                    </div>
-
-                    <!-- Social Media Links -->
-                    <div>
-                        <h4 class="text-white font-bold mb-4">Follow Us</h4>
-                        <div class="flex gap-4">
-                            <a href="https://www.linkedin.com/company/vololeads" class="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center hover:bg-brand-orange hover:text-white transition-all" aria-label="VoloLeads on LinkedIn"><i class="fa-brands fa-linkedin-in"></i></a>
-                            <a href="https://www.facebook.com/vololeads" class="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center hover:bg-brand-orange hover:text-white transition-all" aria-label="VoloLeads on Facebook"><i class="fa-brands fa-facebook"></i></a>
-                            <a href="https://www.instagram.com/vololeads" class="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center hover:bg-brand-orange hover:text-white transition-all" aria-label="VoloLeads on Instagram"><i class="fa-brands fa-instagram"></i></a>
-                            <a href="https://x.com/vololeads" class="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center hover:bg-brand-orange hover:text-white transition-all text-lg font-bold" aria-label="VoloLeads on X">𝕏</a>
-                        </div>
-                    </div>
+                <div>
+                    <h4 class="text-white font-bold mb-4">Navigate</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="index.html#about" class="hover:text-brand-orange transition-colors">About Us</a></li>
+                        <li><a href="index.html#services" class="hover:text-brand-orange transition-colors">Services</a></li>
+                        <li><a href="index.html#plans" class="hover:text-brand-orange transition-colors">Plans</a></li>
+                        <li><a href="index.html#insights" class="hover:text-brand-orange transition-colors">Insights</a></li>
+                        <li><a href="index.html#testimonials" class="hover:text-brand-orange transition-colors">Testimonials</a></li>
+                        <li><a href="index.html#contact" class="hover:text-brand-orange transition-colors">Contact</a></li>
+                    </ul>
                 </div>
 
+                <div>
+                    <h4 class="text-white font-bold mb-4">Legal</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="privacy-policy.html" class="hover:text-brand-orange transition-colors">Privacy Policy</a></li>
+                        <li><a href="terms-condition.html" class="hover:text-brand-orange transition-colors">Terms of Service</a></li>
+                        <li><a href="refund-policy.html" class="hover:text-brand-orange transition-colors">Refund Policy</a></li>
+                        <li><a href="faqs.html" class="hover:text-brand-orange transition-colors">FAQs</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="text-white font-bold mb-4">Contact</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li class="flex items-center gap-2">
+                            <span class="w-5 flex items-center justify-center text-brand-orange"><i class="fa-solid fa-envelope"></i></span>
+                            <span class="break-words">syed@vololeads.com</span>
+                        </li>
+                        <li class="flex items-center gap-2">
+                            <span class="w-5 flex items-center justify-center text-brand-orange"><i class="fa-brands fa-whatsapp"></i></span>
+                            <a href="https://wa.me/8801793716608" target="_blank" class="hover:text-brand-orange transition-colors">WhatsApp Support</a>
+                        </li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="text-white font-bold mb-4">Follow Us</h4>
+                    <div class="flex gap-4">
+                        <a href="https://www.linkedin.com/company/vololeads" class="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center hover:bg-brand-orange hover:text-white transition-all" aria-label="VoloLeads on LinkedIn"><i class="fa-brands fa-linkedin-in"></i></a>
+                        <a href="https://www.facebook.com/vololeads" class="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center hover:bg-brand-orange hover:text-white transition-all" aria-label="VoloLeads on Facebook"><i class="fa-brands fa-facebook"></i></a>
+                        <a href="https://www.instagram.com/vololeads" class="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center hover:bg-brand-orange hover:text-white transition-all" aria-label="VoloLeads on Instagram"><i class="fa-brands fa-instagram"></i></a>
+                        <a href="https://x.com/vololeads" class="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center hover:bg-brand-orange hover:text-white transition-all text-lg font-bold" aria-label="VoloLeads on X">X</a>
+                    </div>
+                </div>
             </div>
 
-            <!-- Bottom section: Copyright & Legal Links -->
-            <div class="border-t border-slate-800 pt-8 flex flex-col md:flex-row justify-between items-center text-xs">
+            <div class="border-t border-slate-800 pt-8 text-xs">
                 <p>&copy; <span id="current-year">2025</span> VoloLeads Agency. All rights reserved.</p>
-                <div class="flex gap-4 mt-4 md:mt-0">
-                    <a href="privacy-policy.html" class="hover:text-white transition-colors">Privacy Policy</a>
-                    <a href="terms-condition.html" class="hover:text-white transition-colors">Terms of Service</a>
-                    <a href="terms-condition.html#refund-policy" class="hover:text-white transition-colors">Refund Policy</a>
-                    <a href="manage-subscription.html" class="hover:text-white transition-colors">Manage Subscription</a>
-                    <a href="faqs.html" class="hover:text-white transition-colors">FAQs</a>
-                </div>
             </div>
         </div>
     </footer>

@@ -18,7 +18,7 @@
     <link rel="stylesheet" href="styles.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
 </head>
-<body class="bg-brand-light text-brand-navy font-sans antialiased flex flex-col min-h-screen">
+<body class="bg-brand-light dark:bg-slate-950 text-brand-navy dark:text-slate-100 font-sans antialiased flex flex-col min-h-screen">
 
     <!-- ================================================
          NAVIGATION BAR (HEADER)
@@ -27,14 +27,14 @@
          - Dark mode toggle with desktop and mobile variants
          ================================================ -->
     <nav class="fixed top-6 left-0 right-0 z-50 w-[92%] max-w-7xl mx-auto bg-white/90 dark:bg-slate-900/90 backdrop-blur-md border border-slate-200 dark:border-slate-700 rounded-full shadow-2xl transition-all duration-300">
-        <div class="px-6 md:px-8">
+        <div class="px-4 sm:px-6 md:px-8">
             <div class="flex justify-between items-center h-16">
-                <a href="index.html" class="flex items-center gap-2 cursor-pointer group">
+                <a href="index.html#home" class="flex items-center gap-2 cursor-pointer group flex-shrink-0 min-w-0">
                     <img src="./png/logo.webp" alt="" aria-hidden="true" class="site-nav-logo">
-                    <span class="font-bold text-xl tracking-tight text-brand-navy dark:text-white">VoloLeads</span>
+                    <span class="font-bold text-lg sm:text-xl tracking-tight text-brand-navy dark:text-white">VoloLeads</span>
                 </a>
 
-                <div class="hidden md:flex space-x-8 items-center text-sm font-semibold">
+                <div class="hidden lg:flex space-x-8 items-center text-sm font-semibold">
                     <a href="index.html#home" class="text-slate-600 dark:text-slate-300 hover:text-brand-orange dark:hover:text-brand-orange transition-colors">Home</a>
                     <a href="index.html#plans" class="text-slate-600 dark:text-slate-300 hover:text-brand-orange dark:hover:text-brand-orange transition-colors">Plans</a>
                     <a href="index.html#insights" class="text-slate-600 dark:text-slate-300 hover:text-brand-orange dark:hover:text-brand-orange transition-colors">Insights</a>
@@ -42,28 +42,21 @@
                     <a href="index.html#about" class="text-slate-600 dark:text-slate-300 hover:text-brand-orange dark:hover:text-brand-orange transition-colors">About Us</a>
                 </div>
 
-                <!-- Right Side Actions: Book Now, Dark Mode Toggle, Mobile Menu -->
-                <div class="flex items-center gap-3">
-                    <!-- Desktop CTA Button: Book Now (Hidden on mobile) -->
-                    <a href="index.html#contact" class="hidden md:block px-6 py-2 bg-brand-navy dark:bg-slate-800 hover:bg-slate-800 text-white text-sm font-bold rounded-full shadow-lg transition-all transform hover:-translate-y-0.5">
+                <div class="flex items-center gap-2 sm:gap-3 flex-shrink-0">
+                    <a href="index.html#contact" class="hidden lg:block px-6 py-2 bg-brand-navy dark:bg-brand-orange hover:bg-slate-800 dark:hover:bg-orange-600 text-white text-sm font-bold rounded-full shadow-lg transition-all transform hover:-translate-y-0.5">
                         Book Now
                     </a>
-
-                    <!-- Dark Mode Toggle Button -->
                     <button id="dark-mode-toggle" class="text-slate-600 dark:text-slate-300 text-xl cursor-pointer focus:outline-none transition-colors hover:text-brand-orange dark:hover:text-brand-orange" aria-label="Toggle Dark Mode">
-                        <i id="dark-mode-icon" class="fa-solid fa-moon"></i>
+                        <i class="fa-solid fa-moon" id="dark-mode-icon" aria-hidden="true"></i>
                     </button>
-
-                    <!-- Mobile Menu Toggle Button -->
-                    <button id="mobile-menu-btn" class="md:hidden text-slate-600 dark:text-slate-300 text-xl cursor-pointer focus:outline-none" aria-label="Toggle Menu">
-                        <i class="fa-solid fa-bars" id="menu-icon"></i>
+                    <button id="mobile-menu-btn" class="lg:hidden text-slate-600 dark:text-slate-300 text-xl cursor-pointer focus:outline-none" aria-label="Toggle Menu">
+                        <i class="fa-solid fa-bars" id="menu-icon" aria-hidden="true"></i>
                     </button>
                 </div>
             </div>
         </div>
 
-        <!-- Mobile Navigation Menu (Hidden on desktop) -->
-        <div id="mobile-menu" class="hidden md:hidden absolute top-20 left-0 right-0 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl shadow-2xl mx-6 p-6 flex flex-col gap-4 text-center z-50">
+        <div id="mobile-menu" class="hidden lg:hidden absolute top-20 left-0 right-0 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl shadow-2xl mx-6 p-6 flex flex-col gap-4 text-center z-50">
             <a href="index.html#home" class="text-slate-600 dark:text-slate-300 font-bold hover:text-brand-orange dark:hover:text-brand-orange py-2">Home</a>
             <a href="index.html#plans" class="text-slate-600 dark:text-slate-300 font-bold hover:text-brand-orange dark:hover:text-brand-orange py-2">Plans</a>
             <a href="index.html#insights" class="text-slate-600 dark:text-slate-300 font-bold hover:text-brand-orange dark:hover:text-brand-orange py-2">Insights</a>
@@ -181,13 +174,10 @@
          - Contact information and social media
          - Copyright and legal links
          ================================================ -->
-    <footer id="contact" class="bg-brand-navy text-slate-400 py-12 border-t border-slate-800 scroll-mt-32">
+    <footer class="bg-brand-navy text-slate-400 py-12 border-t border-slate-800 scroll-mt-32">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <!-- 4-column grid layout for footer content -->
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
-
-                <!-- Column 1: Company branding & tagline -->
-                <div class="col-span-1 md:col-span-1">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-8 mb-8">
+                <div>
                     <div class="flex items-center gap-2 mb-4">
                         <img src="./png/logo.webp" alt="" aria-hidden="true" class="site-brand-logo site-brand-logo-sm">
                         <span class="font-bold text-xl text-white">VoloLeads</span>
@@ -197,60 +187,55 @@
                     </p>
                 </div>
 
-                <!-- Columns 2-4: Navigation, Contact, & Social Links -->
-                <div class="col-span-1 md:col-span-3 flex flex-col md:flex-row md:justify-end md:items-start gap-8 md:gap-12">
-                    <!-- Navigation Links -->
-                    <div>
-                        <h4 class="text-white font-bold mb-4">Navigate</h4>
-                        <ul class="space-y-2 text-sm">
-                            <li><a href="index.html#about" class="hover:text-brand-orange transition-colors">About Us</a></li>
-
-                            <li><a href="index.html#plans" class="hover:text-brand-orange transition-colors">Plans</a></li>
-                            <li><a href="index.html#insights" class="hover:text-brand-orange transition-colors">Insights</a></li>
-                            <li><a href="index.html#testimonials" class="hover:text-brand-orange transition-colors">Testimonials</a></li>
-                            <li><a href="index.html#contact" class="hover:text-brand-orange transition-colors">Contact</a></li>
-                        </ul>
-                    </div>
-
-                    <!-- Contact Information -->
-                    <div>
-                        <h4 class="text-white font-bold mb-4">Contact</h4>
-                        <ul class="space-y-2 text-sm">
-                            <li class="flex items-center gap-2">
-                                <span class="w-5 flex items-center justify-center text-brand-orange"><i class="fa-solid fa-envelope"></i></span>
-                                <span class="break-words">syed@vololeads.com</span>
-                            </li>
-                            <li class="flex items-center gap-2">
-                                <span class="w-5 flex items-center justify-center text-brand-orange"><i class="fa-brands fa-whatsapp"></i></span>
-                                <a href="https://wa.me/8801793716608" target="_blank" class="hover:text-brand-orange transition-colors">WhatsApp Support</a>
-                            </li>
-                            </li>
-                        </ul>
-                    </div>
-
-                    <!-- Social Media Links -->
-                    <div>
-                        <h4 class="text-white font-bold mb-4">Follow Us</h4>
-                        <div class="flex gap-4">
-                            <a href="https://www.linkedin.com/company/vololeads" class="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center hover:bg-brand-orange hover:text-white transition-all"><i class="fa-brands fa-linkedin-in"></i></a>
-                            <a href="https://www.facebook.com/vololeads" class="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center hover:bg-brand-orange hover:text-white transition-all"><i class="fa-brands fa-facebook"></i></a>
-                            <a href="https://www.instagram.com/vololeads" class="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center hover:bg-brand-orange hover:text-white transition-all"><i class="fa-brands fa-instagram"></i></a>
-                            <a href="https://x.com/vololeads" class="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center hover:bg-brand-orange hover:text-white transition-all text-lg font-bold">𝕏</a>
-                        </div>
-                    </div>
+                <div>
+                    <h4 class="text-white font-bold mb-4">Navigate</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="index.html#about" class="hover:text-brand-orange transition-colors">About Us</a></li>
+                        <li><a href="index.html#services" class="hover:text-brand-orange transition-colors">Services</a></li>
+                        <li><a href="index.html#plans" class="hover:text-brand-orange transition-colors">Plans</a></li>
+                        <li><a href="index.html#insights" class="hover:text-brand-orange transition-colors">Insights</a></li>
+                        <li><a href="index.html#testimonials" class="hover:text-brand-orange transition-colors">Testimonials</a></li>
+                        <li><a href="index.html#contact" class="hover:text-brand-orange transition-colors">Contact</a></li>
+                    </ul>
                 </div>
 
+                <div>
+                    <h4 class="text-white font-bold mb-4">Legal</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="privacy-policy.html" class="hover:text-brand-orange transition-colors">Privacy Policy</a></li>
+                        <li><a href="terms-condition.html" class="hover:text-brand-orange transition-colors">Terms of Service</a></li>
+                        <li><a href="refund-policy.html" class="hover:text-brand-orange transition-colors">Refund Policy</a></li>
+                        <li><a href="faqs.html" class="hover:text-brand-orange transition-colors">FAQs</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="text-white font-bold mb-4">Contact</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li class="flex items-center gap-2">
+                            <span class="w-5 flex items-center justify-center text-brand-orange"><i class="fa-solid fa-envelope"></i></span>
+                            <span class="break-words">syed@vololeads.com</span>
+                        </li>
+                        <li class="flex items-center gap-2">
+                            <span class="w-5 flex items-center justify-center text-brand-orange"><i class="fa-brands fa-whatsapp"></i></span>
+                            <a href="https://wa.me/8801793716608" target="_blank" class="hover:text-brand-orange transition-colors">WhatsApp Support</a>
+                        </li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="text-white font-bold mb-4">Follow Us</h4>
+                    <div class="flex gap-4">
+                        <a href="https://www.linkedin.com/company/vololeads" class="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center hover:bg-brand-orange hover:text-white transition-all" aria-label="VoloLeads on LinkedIn"><i class="fa-brands fa-linkedin-in"></i></a>
+                        <a href="https://www.facebook.com/vololeads" class="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center hover:bg-brand-orange hover:text-white transition-all" aria-label="VoloLeads on Facebook"><i class="fa-brands fa-facebook"></i></a>
+                        <a href="https://www.instagram.com/vololeads" class="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center hover:bg-brand-orange hover:text-white transition-all" aria-label="VoloLeads on Instagram"><i class="fa-brands fa-instagram"></i></a>
+                        <a href="https://x.com/vololeads" class="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center hover:bg-brand-orange hover:text-white transition-all text-lg font-bold" aria-label="VoloLeads on X">X</a>
+                    </div>
+                </div>
             </div>
 
-            <!-- Bottom section: Copyright & Legal Links -->
-            <div class="border-t border-slate-800 pt-8 flex flex-col md:flex-row justify-between items-center text-xs">
+            <div class="border-t border-slate-800 pt-8 text-xs">
                 <p>&copy; <span id="current-year">2025</span> VoloLeads Agency. All rights reserved.</p>
-                <div class="flex gap-4 mt-4 md:mt-0">
-                    <a href="privacy-policy.html" class="hover:text-white transition-colors">Privacy Policy</a>
-                    <a href="terms-condition.html" class="hover:text-white transition-colors">Terms of Service</a>
-                    <a href="terms-condition.html#refund-policy" class="hover:text-white transition-colors">Refund Policy</a>
-                    <a href="faqs.html" class="hover:text-white transition-colors">FAQs</a>
-                </div>
             </div>
         </div>
     </footer>

@@ -45,6 +45,102 @@
     height: 1.25rem;
 }
 
+.utility-shell,
+.utility-form-card,
+.utility-status-card,
+.utility-success-shell,
+.utility-soft-card,
+.utility-field {
+    overflow: hidden;
+}
+
+.utility-shell {
+    border-radius: clamp(2rem, 4vw, 4rem);
+    border: 1px solid rgba(226, 232, 240, 0.82);
+    background: rgba(255, 255, 255, 0.9);
+    box-shadow: 0 40px 100px rgba(15, 23, 42, 0.14);
+    backdrop-filter: blur(24px);
+}
+
+.utility-form-card {
+    border-radius: clamp(1.75rem, 3vw, 2.75rem);
+    border: 1px solid rgba(226, 232, 240, 0.78);
+    background: rgba(255, 255, 255, 0.78);
+    box-shadow: 0 24px 60px rgba(15, 23, 42, 0.08);
+    backdrop-filter: blur(18px);
+}
+
+.utility-status-card,
+.utility-success-shell {
+    border-radius: clamp(1.75rem, 3.4vw, 3rem);
+    border: 1px solid rgba(226, 232, 240, 0.82);
+    background: rgba(255, 255, 255, 0.88);
+    box-shadow: 0 32px 84px rgba(15, 23, 42, 0.13);
+    backdrop-filter: blur(18px);
+}
+
+.utility-soft-card {
+    border-radius: 2rem;
+    border: 1px solid rgba(226, 232, 240, 0.78);
+    background: rgba(248, 250, 252, 0.86);
+}
+
+.utility-field {
+    border-radius: 1.6rem;
+}
+
+.manage-subscription-field {
+    display: block;
+    width: 100%;
+    min-height: 4rem;
+    padding: 1rem 1.55rem;
+    border: 1px solid #cbd5e1;
+    border-radius: 1.6rem;
+    background: #ffffff;
+    color: #0f172a;
+    line-height: 1.35;
+    text-indent: 0;
+}
+
+.manage-subscription-field::placeholder {
+    color: #94a3b8;
+    opacity: 1;
+}
+
+.dark .utility-shell {
+    border-color: rgba(30, 41, 59, 0.9);
+    background: rgba(11, 21, 40, 0.96);
+    box-shadow: 0 40px 100px rgba(2, 6, 23, 0.62);
+}
+
+.dark .utility-form-card {
+    border-color: rgba(51, 65, 85, 0.82);
+    background: rgba(17, 28, 51, 0.9);
+    box-shadow: 0 24px 60px rgba(2, 6, 23, 0.45);
+}
+
+.dark .utility-status-card,
+.dark .utility-success-shell {
+    border-color: rgba(51, 65, 85, 0.82);
+    background: rgba(15, 23, 42, 0.9);
+    box-shadow: 0 32px 84px rgba(2, 6, 23, 0.55);
+}
+
+.dark .utility-soft-card {
+    border-color: rgba(51, 65, 85, 0.82);
+    background: rgba(23, 35, 60, 0.88);
+}
+
+.dark .manage-subscription-field {
+    border-color: rgba(71, 85, 105, 0.9);
+    background: #091224;
+    color: #ffffff;
+}
+
+.dark .manage-subscription-field::placeholder {
+    color: #94a3b8;
+}
+
 .fa-spin .site-icon-svg {
     animation: site-icon-spin 1s linear infinite;
 }
@@ -470,10 +566,6 @@ textarea:focus {
         display: none !important;
     }
 
-    #plans .backface-hidden ul {
-        flex-grow: 1 !important;
-    }
-
     #plans .subscribe-btn {
         margin-top: auto !important;
     }
@@ -789,6 +881,12 @@ textarea:focus-visible {
     overflow: visible;
 }
 
+#plans .plans-pricing-grid {
+    display: grid !important;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 19rem), 1fr)) !important;
+    align-items: stretch;
+}
+
 #plans .perspective-1000 {
     overflow: visible;
     transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1), filter 0.45s cubic-bezier(0.22, 1, 0.36, 1);
@@ -796,15 +894,90 @@ textarea:focus-visible {
 
 @media (min-width: 1024px) {
     #plans .perspective-1000 {
-        height: 735px !important;
+        height: 940px !important;
     }
 
     #plans .backface-hidden {
         min-height: 100%;
+        overflow: hidden !important;
     }
 
-    #plans .grid.lg\:grid-cols-3 {
-        align-items: stretch;
+    #plans .plans-pricing-grid {
+        padding-top: 4rem !important;
+        padding-bottom: 5.5rem !important;
+    }
+}
+
+@media (max-width: 1023px) {
+    #plans {
+        padding-top: calc(var(--nav-clearance) + 1.5rem) !important;
+    }
+
+    #plans .plans-pricing-grid {
+        gap: 1.5rem !important;
+        padding-top: 2rem !important;
+        padding-bottom: 3rem !important;
+    }
+
+    #plans .perspective-1000 {
+        width: min(100%, 52rem) !important;
+        height: auto !important;
+        min-height: 0 !important;
+        margin-left: auto !important;
+        margin-right: auto !important;
+        overflow: visible !important;
+    }
+
+    #plans .transform-style-3d,
+    #plans .transform-style-3d.is-flipped {
+        display: block !important;
+        height: auto !important;
+        transform: none !important;
+        transform-style: flat !important;
+    }
+
+    #plans .backface-hidden {
+        position: relative !important;
+        inset: auto !important;
+        display: flex !important;
+        flex-direction: column !important;
+        height: auto !important;
+        min-height: clamp(43rem, 82vh, 50rem) !important;
+        transform: none !important;
+        overflow: visible !important;
+        backface-visibility: visible !important;
+        -webkit-backface-visibility: visible !important;
+    }
+
+    #plans .transform-style-3d:not(.is-flipped) > .backface-hidden:nth-child(2),
+    #plans .transform-style-3d.is-flipped > .backface-hidden:first-child {
+        display: none !important;
+    }
+
+    #plans .plan-feature-list {
+        flex-grow: 0 !important;
+    }
+
+    #plans .subscribe-btn {
+        margin-top: auto !important;
+        white-space: normal !important;
+        overflow-wrap: anywhere;
+    }
+}
+
+@media (max-width: 720px) {
+    #plans .plans-pricing-grid {
+        grid-template-columns: minmax(0, 1fr) !important;
+    }
+
+    #plans .perspective-1000 {
+        width: 100% !important;
+        max-width: 100% !important;
+    }
+
+    #plans .backface-hidden {
+        padding-left: clamp(1.25rem, 5vw, 1.75rem) !important;
+        padding-right: clamp(1.25rem, 5vw, 1.75rem) !important;
     }
 }
 
@@ -856,10 +1029,131 @@ textarea:focus-visible {
     z-index: 5;
 }
 
+#plans {
+    scroll-margin-top: var(--nav-clearance);
+    overflow: visible;
+}
+
 #plans .mt-16 {
     position: relative;
     z-index: 0;
-    margin-top: 4rem;
+    margin-top: 5rem;
+}
+
+#plans .plans-partnership-heading {
+    text-align: center;
+    font-size: clamp(2rem, 5vw, 3.5rem) !important;
+    line-height: 1.08 !important;
+    letter-spacing: 0 !important;
+}
+
+#plans .plans-partnership-line {
+    display: inline;
+}
+
+#plans .plans-partnership-line:last-child {
+    display: block;
+}
+
+#plans .plan-title {
+    font-size: clamp(2.25rem, 5vw, 3rem) !important;
+    line-height: 1.05 !important;
+    letter-spacing: 0 !important;
+    margin-bottom: 0.85rem !important;
+}
+
+#plans .plan-price {
+    font-size: clamp(2.75rem, 4.2vw, 3.65rem) !important;
+    line-height: 0.95 !important;
+    letter-spacing: 0 !important;
+}
+
+#plans .plan-price-unit {
+    font-size: clamp(1rem, 1.4vw, 1.15rem) !important;
+    line-height: 1.2 !important;
+    margin-left: 0.25rem !important;
+    white-space: nowrap;
+}
+
+#plans .plan-billing-note {
+    font-size: clamp(0.9rem, 1.6vw, 1rem) !important;
+    line-height: 1.45 !important;
+}
+
+#plans .plan-feature-list {
+    display: grid;
+    align-content: start;
+    gap: 0.48rem;
+    font-size: 0.9rem !important;
+    line-height: 1.35 !important;
+    flex-grow: 0 !important;
+}
+
+#plans .plan-feature-list > li {
+    display: grid !important;
+    grid-template-columns: 0.85rem minmax(0, 1fr);
+    align-items: start;
+    column-gap: 0.35rem;
+}
+
+#plans .plan-feature-list > li > i {
+    width: 0.85rem !important;
+    margin: 0 !important;
+    padding-top: 0.45em;
+    justify-content: center;
+}
+
+#plans .plan-feature-list > li > span {
+    min-width: 0;
+}
+
+#plans .plan-price-block > .flex {
+    align-items: baseline;
+    flex-wrap: wrap;
+    column-gap: 0;
+    row-gap: 0.2rem;
+    min-width: 0;
+    max-width: 100%;
+}
+
+@media (min-width: 1024px) {
+    #plans .plan-price {
+        font-size: clamp(2.75rem, 3.25vw, 3.45rem) !important;
+    }
+
+    #plans .plan-price-unit {
+        font-size: 1rem !important;
+    }
+
+    #plans .plan-feature-list {
+        gap: 0.4rem !important;
+        font-size: 0.86rem !important;
+        line-height: 1.28 !important;
+        margin-bottom: 1rem !important;
+    }
+
+    #plans .plan-feature-list > li > i {
+        padding-top: 0.42em;
+    }
+
+    #plans .subscribe-btn {
+        margin-top: auto !important;
+    }
+
+    #plans .backface-hidden > ul.space-y-1\.5 {
+        font-size: 0.72rem !important;
+        line-height: 1.25 !important;
+    }
+}
+
+@media (min-width: 1280px) {
+    #plans .plan-price {
+        font-size: clamp(3.15rem, 3.5vw, 3.9rem) !important;
+    }
+
+    #plans .plan-price-unit {
+        font-size: 1.08rem !important;
+    }
 }
 
 /* --- Security & Spam Protection --- */
@@ -1160,6 +1454,20 @@ a.rounded-full:hover {
                 inset 0 1px 0 0 rgba(255, 255, 255, 0.15) !important;
 }
 
+#testimonials .testimonial-card {
+    display: flex;
+    flex-direction: column;
+    min-height: 100%;
+}
+
+#testimonials .testimonial-quote {
+    flex: 1 1 auto;
+}
+
+#testimonials .testimonial-author {
+    margin-top: auto;
+}
+
 /* ============================================
    3D Effects for About Section Cards (100% Wholesale & Daily QA)
    ============================================ */
@@ -1277,4 +1585,365 @@ html.dark #plans .perspective-1000,
 html.dark #plans .perspective-1000:hover,
 html.dark .text-transparent.bg-clip-text {
     filter: none !important;
+}
+/* ============================================
+   Site-Wide Responsive Spacing System
+   ============================================ */
+:root {
+    --site-edge: clamp(1rem, 4vw, 2rem);
+    --nav-clearance: clamp(7rem, 11vw, 9.5rem);
+    --page-bottom-space: clamp(3.5rem, 8vw, 6rem);
+    --section-y: clamp(4rem, 7vw, 6rem);
+    --card-pad: clamp(1.35rem, 4vw, 3rem);
+    --card-gap: clamp(1.1rem, 3vw, 1.75rem);
+}
+
+html,
+body {
+    overflow-x: hidden;
+}
+
+html.dark,
+html.dark body {
+    background: #020617 !important;
+}
+
+body > main:not(#main-content),
+body > section {
+    isolation: isolate;
+    background:
+        radial-gradient(circle at 50% 0%, rgba(249, 115, 22, 0.09), transparent 32rem),
+        linear-gradient(135deg, #fff7ed 0%, #ffffff 52%, #f8fafc 100%);
+}
+
+html.dark body > main:not(#main-content),
+html.dark body > section {
+    background: #020617 !important;
+}
+
+html.dark body > main:not(#main-content) > .absolute[class*="blur-"],
+html.dark body > section > .absolute[class*="blur-"],
+html.dark .animate-blob,
+html.dark .mix-blend-screen,
+html.dark .mix-blend-multiply {
+    display: none !important;
+}
+
+html.dark .strategic-grid-bg,
+html.dark .contact-strategic-grid-bg {
+    background-image: none !important;
+    mask-image: none !important;
+    -webkit-mask-image: none !important;
+}
+
+nav.fixed.top-6 {
+    top: calc(clamp(0.75rem, 1.6vw, 1.5rem) + env(safe-area-inset-top, 0px)) !important;
+    width: min(calc(100% - (var(--site-edge) * 2)), 80rem) !important;
+}
+
+#mobile-menu {
+    max-height: calc(100vh - var(--nav-clearance));
+    overflow-y: auto;
+    overscroll-behavior: contain;
+}
+
+body > main:not(#main-content),
+body > section {
+    padding-top: var(--nav-clearance) !important;
+    padding-bottom: var(--page-bottom-space) !important;
+    padding-left: var(--site-edge) !important;
+    padding-right: var(--site-edge) !important;
+}
+
+#main-content > section {
+    padding-top: var(--section-y) !important;
+    padding-bottom: var(--section-y) !important;
+}
+
+#main-content > #home {
+    padding-top: calc(var(--nav-clearance) + clamp(1.25rem, 3vw, 4rem)) !important;
+    padding-bottom: clamp(3.5rem, 8vw, 7rem) !important;
+}
+
+.utility-shell,
+.utility-success-shell,
+.utility-status-card {
+    width: min(100%, 64rem);
+    padding: var(--card-pad) !important;
+}
+
+.utility-form-card {
+    width: min(100%, 42rem);
+}
+
+.utility-form-card > div {
+    padding: clamp(1.4rem, 4vw, 2.75rem) !important;
+}
+
+#manage-subscription-form {
+    display: grid;
+    gap: var(--card-gap);
+}
+
+#manage-subscription-form .grid {
+    gap: clamp(0.9rem, 3vw, 1.25rem) !important;
+}
+
+.custom-quote-form {
+    display: grid;
+    gap: clamp(1.15rem, 2.2vw, 1.75rem) !important;
+}
+
+.custom-quote-field-grid {
+    column-gap: clamp(1.25rem, 3vw, 2rem) !important;
+    row-gap: clamp(1rem, 2.5vw, 1.5rem) !important;
+}
+
+.custom-quote-form input,
+.custom-quote-form select,
+.custom-quote-form textarea {
+    min-height: 3.35rem;
+}
+
+.custom-quote-form textarea {
+    min-height: 8.5rem;
+}
+
+.custom-quote-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: auto;
+    white-space: normal;
+    overflow-wrap: anywhere;
+}
+
+.utility-soft-card {
+    padding: clamp(1rem, 3vw, 1.35rem) !important;
+}
+
+.utility-field {
+    min-height: clamp(3.25rem, 8vw, 4rem);
+}
+
+.utility-action-row {
+    align-items: stretch;
+}
+
+.utility-action-btn {
+    min-height: 3.5rem;
+    min-width: 11rem;
+    padding: 0.9rem 1.75rem !important;
+    font-size: 1rem !important;
+    line-height: 1.2 !important;
+    gap: 0.5rem;
+    white-space: nowrap;
+}
+
+.utility-shell h1,
+.utility-success-shell h1,
+.utility-status-card h1,
+body > section h1 {
+    font-size: clamp(2.3rem, 7vw, 4rem) !important;
+    line-height: 1.06 !important;
+    text-wrap: balance;
+}
+
+.utility-shell p,
+.utility-success-shell p,
+.utility-status-card p {
+    text-wrap: pretty;
+}
+
+footer {
+    padding-top: clamp(2.75rem, 6vw, 4rem) !important;
+    padding-bottom: clamp(2.75rem, 6vw, 4rem) !important;
+}
+
+footer .grid {
+    gap: clamp(1.75rem, 4vw, 3rem) !important;
+}
+
+@media (max-width: 768px) {
+    :root {
+        --site-edge: clamp(0.85rem, 4vw, 1.25rem);
+        --nav-clearance: clamp(6.5rem, 22vw, 8rem);
+        --page-bottom-space: clamp(2.75rem, 10vw, 4.25rem);
+        --section-y: clamp(3rem, 10vw, 4.75rem);
+        --card-pad: clamp(1.15rem, 5vw, 1.75rem);
+        --card-gap: clamp(0.95rem, 4vw, 1.35rem);
+    }
+
+    nav.fixed.top-6 {
+        border-radius: 9999px !important;
+    }
+
+    #main-content > #home {
+        padding-top: calc(var(--nav-clearance) + 0.5rem) !important;
+    }
+
+    .utility-shell,
+    .utility-success-shell,
+    .utility-status-card {
+        border-radius: clamp(1.75rem, 8vw, 2.5rem);
+    }
+
+    .utility-form-card,
+    .utility-soft-card {
+        border-radius: clamp(1.35rem, 7vw, 2rem);
+    }
+
+    .utility-shell h1,
+    .utility-success-shell h1,
+    .utility-status-card h1,
+    body > section h1 {
+        font-size: clamp(2.15rem, 10vw, 3rem) !important;
+    }
+
+    .utility-shell .w-20,
+    .utility-success-shell .w-24,
+    .utility-status-card .w-24 {
+        width: clamp(4rem, 18vw, 5rem) !important;
+        height: clamp(4rem, 18vw, 5rem) !important;
+    }
+}
+
+@media (max-width: 480px) {
+    :root {
+        --site-edge: 0.75rem;
+        --nav-clearance: 6.25rem;
+    }
+
+    nav.fixed.top-6 {
+        width: calc(100% - 0.75rem) !important;
+    }
+
+    nav.fixed.top-6 .h-16 {
+        height: 3.25rem !important;
+    }
+
+    nav.fixed.top-6 .site-nav-logo {
+        width: 1.2rem !important;
+        height: 1.2rem !important;
+        min-width: 1.2rem !important;
+        flex-basis: 1.2rem !important;
+    }
+
+    nav.fixed.top-6 a span {
+        font-size: 1.05rem !important;
+    }
+
+    #mobile-menu {
+        left: 0.25rem !important;
+        right: 0.25rem !important;
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+        padding: 1rem !important;
+    }
+
+    .utility-shell,
+    .utility-success-shell,
+    .utility-status-card {
+        padding: 1.1rem !important;
+    }
+
+    body > main:not(#main-content) .utility-status-card {
+        margin-top: 1rem !important;
+    }
+
+    .utility-form-card > div {
+        padding: 1.1rem !important;
+    }
+
+    .utility-field,
+    #manage-submit-btn {
+        border-radius: 1.25rem !important;
+    }
+
+    .utility-action-row {
+        width: min(100%, 22rem);
+        margin-left: auto;
+        margin-right: auto;
+        gap: 0.85rem !important;
+    }
+
+    .utility-action-btn {
+        width: 100%;
+        min-height: 3.25rem;
+        padding: 0.85rem 1.25rem !important;
+        font-size: 1rem !important;
+        border-radius: 9999px !important;
+    }
+
+    .utility-action-btn .fa-solid,
+    .utility-action-btn svg {
+        width: 1rem;
+        height: 1rem;
+        flex: 0 0 auto;
+    }
+
+    .manage-subscription-field {
+        min-height: 3.75rem;
+        padding: 0.9rem 1.2rem;
+    }
+
+    #manage-subscription-form .grid {
+        grid-template-columns: 1fr !important;
+    }
+
+    .utility-status-card .grid {
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+        margin-bottom: 0 !important;
+    }
+
+    footer .grid {
+        grid-template-columns: 1fr !important;
+    }
+}
+
+@media (max-width: 768px) {
+    #plans .plans-partnership-heading {
+        font-size: clamp(1.8rem, 8vw, 2.45rem) !important;
+        line-height: 1.02 !important;
+        margin-bottom: 1rem !important;
+    }
+
+    #plans .plans-partnership-line {
+        display: block !important;
+    }
+
+    #plans .plan-title {
+        font-size: clamp(2rem, 10vw, 2.75rem) !important;
+        line-height: 1 !important;
+    }
+
+    #plans .plan-price {
+        font-size: clamp(3.35rem, 16vw, 4.25rem) !important;
+    }
+
+    #plans .plan-price-unit {
+        font-size: clamp(1rem, 4.8vw, 1.3rem) !important;
+    }
+
+    #plans .plan-billing-note {
+        font-size: clamp(0.88rem, 3.8vw, 1rem) !important;
+    }
+
+    #plans .plan-feature-list {
+        font-size: 0.95rem !important;
+        gap: 0.55rem !important;
+        margin-bottom: 1.25rem !important;
+    }
+}
+
+@media (max-width: 640px) {
+    a.utility-action-btn,
+    button.utility-action-btn {
+        font-size: 1rem !important;
+        line-height: 1.25 !important;
+        font-weight: 800 !important;
+        min-height: 3.5rem !important;
+        padding: 1rem 1.35rem !important;
+    }
 }

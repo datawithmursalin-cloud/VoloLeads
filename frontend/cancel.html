@@ -14,22 +14,160 @@
 </head>
 <body class="bg-brand-light dark:bg-slate-950 text-brand-navy dark:text-slate-100 font-sans antialiased flex flex-col min-h-screen">
     <nav class="fixed top-6 left-0 right-0 z-50 w-[92%] max-w-7xl mx-auto bg-white/90 dark:bg-slate-900/90 backdrop-blur-md border border-slate-200 dark:border-slate-700 rounded-full shadow-2xl transition-all duration-300">
-        <div class="px-6 md:px-8"><div class="flex justify-between items-center h-16"><a href="index.html" class="flex items-center gap-2 cursor-pointer group"><img src="./png/logo.webp" alt="" aria-hidden="true" class="site-nav-logo"><span class="font-bold text-xl tracking-tight text-brand-navy dark:text-white">VoloLeads</span></a><div class="hidden md:flex space-x-8 items-center text-sm font-semibold"><a href="index.html#plans" class="text-slate-600 dark:text-slate-300 hover:text-brand-orange transition-colors">Plans</a><a href="index.html#contact" class="text-slate-600 dark:text-slate-300 hover:text-brand-orange transition-colors">Contact</a></div><div class="flex items-center gap-3"><button id="dark-mode-toggle" class="text-slate-600 dark:text-slate-300 text-xl cursor-pointer focus:outline-none transition-colors hover:text-brand-orange dark:hover:text-brand-orange" aria-label="Toggle Dark Mode"><i id="dark-mode-icon" class="fa-solid fa-moon" aria-hidden="true"></i></button><button id="mobile-menu-btn" class="md:hidden text-slate-600 dark:text-slate-300 text-xl cursor-pointer focus:outline-none" aria-label="Toggle Menu"><i class="fa-solid fa-bars" id="menu-icon" aria-hidden="true"></i></button></div></div></div>
-        <div id="mobile-menu" class="hidden md:hidden absolute top-20 left-0 right-0 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl shadow-2xl mx-6 p-6 flex flex-col gap-4 text-center"><a href="index.html#plans" class="text-slate-600 dark:text-slate-300 font-bold hover:text-brand-orange py-2">Plans</a><a href="index.html#contact" class="bg-brand-orange text-white py-3 rounded-full font-bold shadow-md">Contact Support</a></div>
+        <div class="px-4 sm:px-6 md:px-8">
+            <div class="flex justify-between items-center h-16">
+                <a href="index.html#home" class="flex items-center gap-2 cursor-pointer group flex-shrink-0 min-w-0">
+                    <img src="./png/logo.webp" alt="" aria-hidden="true" class="site-nav-logo">
+                    <span class="font-bold text-lg sm:text-xl tracking-tight text-brand-navy dark:text-white">VoloLeads</span>
+                </a>
+
+                <div class="hidden lg:flex space-x-8 items-center text-sm font-semibold">
+                    <a href="index.html#home" class="text-slate-600 dark:text-slate-300 hover:text-brand-orange dark:hover:text-brand-orange transition-colors">Home</a>
+                    <a href="index.html#plans" class="text-slate-600 dark:text-slate-300 hover:text-brand-orange dark:hover:text-brand-orange transition-colors">Plans</a>
+                    <a href="index.html#insights" class="text-slate-600 dark:text-slate-300 hover:text-brand-orange dark:hover:text-brand-orange transition-colors">Insights</a>
+                    <a href="index.html#testimonials" class="text-slate-600 dark:text-slate-300 hover:text-brand-orange dark:hover:text-brand-orange transition-colors">Testimonials</a>
+                    <a href="index.html#about" class="text-slate-600 dark:text-slate-300 hover:text-brand-orange dark:hover:text-brand-orange transition-colors">About Us</a>
+                </div>
+
+                <div class="flex items-center gap-2 sm:gap-3 flex-shrink-0">
+                    <a href="index.html#contact" class="hidden lg:block px-6 py-2 bg-brand-navy dark:bg-brand-orange hover:bg-slate-800 dark:hover:bg-orange-600 text-white text-sm font-bold rounded-full shadow-lg transition-all transform hover:-translate-y-0.5">
+                        Book Now
+                    </a>
+                    <button id="dark-mode-toggle" class="text-slate-600 dark:text-slate-300 text-xl cursor-pointer focus:outline-none transition-colors hover:text-brand-orange dark:hover:text-brand-orange" aria-label="Toggle Dark Mode">
+                        <i class="fa-solid fa-moon" id="dark-mode-icon" aria-hidden="true"></i>
+                    </button>
+                    <button id="mobile-menu-btn" class="lg:hidden text-slate-600 dark:text-slate-300 text-xl cursor-pointer focus:outline-none" aria-label="Toggle Menu">
+                        <i class="fa-solid fa-bars" id="menu-icon" aria-hidden="true"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div id="mobile-menu" class="hidden lg:hidden absolute top-20 left-0 right-0 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl shadow-2xl mx-6 p-6 flex flex-col gap-4 text-center z-50">
+            <a href="index.html#home" class="text-slate-600 dark:text-slate-300 font-bold hover:text-brand-orange dark:hover:text-brand-orange py-2">Home</a>
+            <a href="index.html#plans" class="text-slate-600 dark:text-slate-300 font-bold hover:text-brand-orange dark:hover:text-brand-orange py-2">Plans</a>
+            <a href="index.html#insights" class="text-slate-600 dark:text-slate-300 font-bold hover:text-brand-orange dark:hover:text-brand-orange py-2">Insights</a>
+            <a href="index.html#testimonials" class="text-slate-600 dark:text-slate-300 font-bold hover:text-brand-orange dark:hover:text-brand-orange py-2">Testimonials</a>
+            <a href="index.html#about" class="text-slate-600 dark:text-slate-300 font-bold hover:text-brand-orange dark:hover:text-brand-orange py-2">About Us</a>
+            <a href="index.html#contact" class="bg-brand-orange hover:bg-orange-600 text-white py-3 rounded-full font-bold shadow-md">Book Now</a>
+        </div>
     </nav>
 
-    <main class="relative flex-grow flex items-center px-4 overflow-hidden" style="padding-top: 12rem; padding-bottom: 6rem;">
-        <div class="absolute inset-0 bg-gradient-to-br from-orange-50 dark:from-slate-900 via-white dark:via-slate-900 to-slate-50 dark:to-slate-800 -z-20"></div>
-        <section class="max-w-2xl mx-auto text-center relative z-10">
-            <div class="w-24 h-24 mx-auto mb-8 rounded-full bg-orange-100 dark:bg-orange-900/30 flex items-center justify-center"><i class="fa-solid fa-arrow-rotate-left text-brand-orange text-4xl" aria-hidden="true"></i></div>
-            <h1 class="text-4xl md:text-5xl font-extrabold text-brand-navy dark:text-white mb-4">Checkout Canceled</h1>
-            <p class="text-lg text-slate-600 dark:text-slate-300 mb-6 leading-relaxed">No payment was taken. You can return to the pricing section whenever you are ready to choose a plan.</p>
-            <p class="text-sm text-slate-500 dark:text-slate-400 mb-8">Need help? Email <a href="mailto:contact@vololeads.com" class="font-bold text-brand-orange hover:text-orange-600">contact@vololeads.com</a>.</p>
-            <a href="index.html#plans" class="inline-flex items-center px-8 py-4 bg-brand-orange hover:bg-orange-600 text-white font-bold rounded-full shadow-xl transition-all transform hover:-translate-y-1"><i class="fa-solid fa-layer-group mr-2" aria-hidden="true"></i> Back to Plans</a>
+    <main class="relative flex-grow overflow-hidden pt-40 pb-20 px-4">
+        <div class="absolute top-20 left-1/2 -translate-x-1/2 w-[34rem] h-[34rem] bg-orange-200/40 dark:bg-brand-orange/10 rounded-full blur-3xl -z-10 pointer-events-none"></div>
+        <div class="absolute bottom-12 right-1/4 w-80 h-80 bg-slate-200/40 dark:bg-cyan-400/5 rounded-full blur-3xl -z-10 pointer-events-none"></div>
+
+        <section class="max-w-5xl mx-auto">
+            <div class="utility-status-card max-w-3xl mx-auto">
+                <div class="px-8 md:px-14 pt-12 md:pt-16 pb-8 md:pb-10 text-center">
+                    <div class="w-24 h-24 mx-auto mb-8 rounded-full bg-orange-100 dark:bg-orange-500/12 flex items-center justify-center ring-8 ring-orange-50 dark:ring-orange-500/10">
+                        <i class="fa-solid fa-arrow-rotate-left text-brand-orange text-4xl" aria-hidden="true"></i>
+                    </div>
+                    <p class="inline-flex items-center gap-2 px-4 py-2 rounded-full text-xs font-bold uppercase tracking-[0.24em] bg-orange-50 dark:bg-orange-950/40 text-brand-orange mb-6">Checkout Update</p>
+                    <h1 class="text-4xl md:text-6xl font-extrabold text-brand-navy dark:text-white mb-5">Checkout Canceled</h1>
+                    <p class="text-lg md:text-xl text-slate-600 dark:text-slate-300 leading-relaxed max-w-2xl mx-auto mb-8">
+                        No payment was taken. You can return to the pricing section whenever you are ready to choose the setup that fits your team.
+                    </p>
+                    <p class="text-sm text-slate-500 dark:text-slate-400 mb-10">
+                        Need help choosing a plan? Email
+                        <a href="mailto:syed@vololeads.com" class="font-bold text-brand-orange hover:text-orange-600">syed@vololeads.com</a>.
+                    </p>
+
+                    <div class="utility-action-row flex flex-col sm:flex-row justify-center gap-4 mb-8 md:mb-10">
+                        <a href="index.html#plans" class="utility-action-btn utility-action-btn-primary inline-flex items-center justify-center px-8 py-4 bg-brand-orange hover:bg-orange-600 text-white font-bold rounded-full shadow-xl transition-all transform hover:-translate-y-1">
+                            <i class="fa-solid fa-layer-group mr-2" aria-hidden="true"></i>
+                            Back to Plans
+                        </a>
+                        <a href="index.html#contact" class="utility-action-btn utility-action-btn-secondary inline-flex items-center justify-center px-8 py-4 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:border-brand-orange text-brand-navy dark:text-white font-bold rounded-full shadow-md transition-all transform hover:-translate-y-1">
+                            Contact Support
+                        </a>
+                    </div>
+                </div>
+
+                <div class="grid md:grid-cols-3 gap-4 mx-6 md:mx-8 mb-8">
+                    <div class="utility-soft-card">
+                        <p class="text-xs font-bold uppercase tracking-[0.2em] text-slate-500 dark:text-slate-400 mb-2">What happened</p>
+                        <p class="text-sm text-slate-600 dark:text-slate-300">Your checkout session was not completed, so no subscription or charge was created.</p>
+                    </div>
+                    <div class="utility-soft-card">
+                        <p class="text-xs font-bold uppercase tracking-[0.2em] text-slate-500 dark:text-slate-400 mb-2">Next step</p>
+                        <p class="text-sm text-slate-600 dark:text-slate-300">Review your plan options and restart checkout whenever you are ready to continue.</p>
+                    </div>
+                    <div class="utility-soft-card">
+                        <p class="text-xs font-bold uppercase tracking-[0.2em] text-slate-500 dark:text-slate-400 mb-2">Need a hand</p>
+                        <p class="text-sm text-slate-600 dark:text-slate-300">We can help you choose the right caller setup before you try again.</p>
+                    </div>
+                </div>
+            </div>
         </section>
     </main>
 
-    <footer class="bg-brand-navy text-slate-400 py-8 px-4 mt-auto"><div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center text-xs gap-4"><p>&copy; <span id="current-year">2025</span> VoloLeads Agency. All rights reserved.</p><div class="flex gap-4"><a href="privacy-policy.html" class="hover:text-white transition-colors">Privacy Policy</a><a href="terms-condition.html" class="hover:text-white transition-colors">Terms</a><a href="faqs.html" class="hover:text-white transition-colors">FAQs</a></div></div></footer>
+    <footer class="bg-brand-navy text-slate-400 py-12 border-t border-slate-800 scroll-mt-32">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-8 mb-8">
+                <div>
+                    <div class="flex items-center gap-2 mb-4">
+                        <img src="./png/logo.webp" alt="" aria-hidden="true" class="site-brand-logo site-brand-logo-sm">
+                        <span class="font-bold text-xl text-white">VoloLeads</span>
+                    </div>
+                    <p class="text-xs text-slate-500">
+                        High-velocity virtual assistants for real estate wholesalers. We hunt, you close.
+                    </p>
+                </div>
+
+                <div>
+                    <h4 class="text-white font-bold mb-4">Navigate</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="index.html#about" class="hover:text-brand-orange transition-colors">About Us</a></li>
+                        <li><a href="index.html#services" class="hover:text-brand-orange transition-colors">Services</a></li>
+                        <li><a href="index.html#plans" class="hover:text-brand-orange transition-colors">Plans</a></li>
+                        <li><a href="index.html#insights" class="hover:text-brand-orange transition-colors">Insights</a></li>
+                        <li><a href="index.html#testimonials" class="hover:text-brand-orange transition-colors">Testimonials</a></li>
+                        <li><a href="index.html#contact" class="hover:text-brand-orange transition-colors">Contact</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="text-white font-bold mb-4">Legal</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="privacy-policy.html" class="hover:text-brand-orange transition-colors">Privacy Policy</a></li>
+                        <li><a href="terms-condition.html" class="hover:text-brand-orange transition-colors">Terms of Service</a></li>
+                        <li><a href="refund-policy.html" class="hover:text-brand-orange transition-colors">Refund Policy</a></li>
+                        <li><a href="faqs.html" class="hover:text-brand-orange transition-colors">FAQs</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="text-white font-bold mb-4">Contact</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li class="flex items-center gap-2">
+                            <span class="w-5 flex items-center justify-center text-brand-orange"><i class="fa-solid fa-envelope"></i></span>
+                            <span class="break-words">syed@vololeads.com</span>
+                        </li>
+                        <li class="flex items-center gap-2">
+                            <span class="w-5 flex items-center justify-center text-brand-orange"><i class="fa-brands fa-whatsapp"></i></span>
+                            <a href="https://wa.me/8801793716608" target="_blank" class="hover:text-brand-orange transition-colors">WhatsApp Support</a>
+                        </li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="text-white font-bold mb-4">Follow Us</h4>
+                    <div class="flex gap-4">
+                        <a href="https://www.linkedin.com/company/vololeads" class="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center hover:bg-brand-orange hover:text-white transition-all" aria-label="VoloLeads on LinkedIn"><i class="fa-brands fa-linkedin-in"></i></a>
+                        <a href="https://www.facebook.com/vololeads" class="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center hover:bg-brand-orange hover:text-white transition-all" aria-label="VoloLeads on Facebook"><i class="fa-brands fa-facebook"></i></a>
+                        <a href="https://www.instagram.com/vololeads" class="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center hover:bg-brand-orange hover:text-white transition-all" aria-label="VoloLeads on Instagram"><i class="fa-brands fa-instagram"></i></a>
+                        <a href="https://x.com/vololeads" class="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center hover:bg-brand-orange hover:text-white transition-all text-lg font-bold" aria-label="VoloLeads on X">X</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="border-t border-slate-800 pt-8 text-xs">
+                <p>&copy; <span id="current-year">2025</span> VoloLeads Agency. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
     <script src="icons.js"></script>
     <script src="app.js"></script>
 </body>

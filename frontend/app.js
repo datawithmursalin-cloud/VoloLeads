@@ -380,7 +380,7 @@ function initContactForm() {
             if (!quantityRow || !quantitySelect) return;
 
             // Logic: If they pick a service that needs agents...
-            if (service === "Essential" || service === "Premium" || service === "Custom+") {
+            if (service === "Starter" || service === "Growth" || service === "Scale") {
                 quantityRow.classList.remove("hidden");
                 quantitySelect.setAttribute("required", "true");
             } else {
@@ -764,7 +764,7 @@ function initDecorativeIcons() {
 
 /* --- Subscription Checkout Logic --- */
 function initSubscriptionCheckout() {
-    const subscribeButtons = document.querySelectorAll('.subscribe-btn');
+    const subscribeButtons = document.querySelectorAll('.subscribe-btn[data-plan]');
     if (!subscribeButtons.length) return;
 
     subscribeButtons.forEach(button => {

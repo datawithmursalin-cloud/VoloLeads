@@ -14,32 +14,166 @@
 </head>
 <body class="bg-brand-light dark:bg-slate-950 text-brand-navy dark:text-slate-100 font-sans antialiased flex flex-col min-h-screen">
     <nav class="fixed top-6 left-0 right-0 z-50 w-[92%] max-w-7xl mx-auto bg-white/90 dark:bg-slate-900/90 backdrop-blur-md border border-slate-200 dark:border-slate-700 rounded-full shadow-2xl transition-all duration-300">
-        <div class="px-6 md:px-8"><div class="flex justify-between items-center h-16"><a href="index.html" class="flex items-center gap-2 cursor-pointer group"><img src="./png/logo.webp" alt="" aria-hidden="true" class="site-nav-logo"><span class="font-bold text-xl tracking-tight text-brand-navy dark:text-white">VoloLeads</span></a><div class="hidden md:flex space-x-8 items-center text-sm font-semibold"><a href="index.html" class="text-slate-600 dark:text-slate-300 hover:text-brand-orange transition-colors">Home</a><a href="index.html#plans" class="text-slate-600 dark:text-slate-300 hover:text-brand-orange transition-colors">Plans</a><a href="index.html#contact" class="text-slate-600 dark:text-slate-300 hover:text-brand-orange transition-colors">Contact</a></div><div class="flex items-center gap-3"><button id="dark-mode-toggle" class="text-slate-600 dark:text-slate-300 text-xl cursor-pointer focus:outline-none transition-colors hover:text-brand-orange dark:hover:text-brand-orange" aria-label="Toggle Dark Mode"><i id="dark-mode-icon" class="fa-solid fa-moon" aria-hidden="true"></i></button><button id="mobile-menu-btn" class="md:hidden text-slate-600 dark:text-slate-300 text-xl cursor-pointer focus:outline-none" aria-label="Toggle Menu"><i class="fa-solid fa-bars" id="menu-icon" aria-hidden="true"></i></button></div></div></div>
-        <div id="mobile-menu" class="hidden md:hidden absolute top-20 left-0 right-0 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl shadow-2xl mx-6 p-6 flex flex-col gap-4 text-center"><a href="index.html" class="text-slate-600 dark:text-slate-300 font-bold hover:text-brand-orange py-2">Home</a><a href="index.html#plans" class="text-slate-600 dark:text-slate-300 font-bold hover:text-brand-orange py-2">Plans</a><a href="index.html#contact" class="bg-brand-orange text-white py-3 rounded-full font-bold shadow-md">Contact Support</a></div>
+        <div class="px-4 sm:px-6 md:px-8">
+            <div class="flex justify-between items-center h-16">
+                <a href="index.html#home" class="flex items-center gap-2 cursor-pointer group flex-shrink-0 min-w-0">
+                    <img src="./png/logo.webp" alt="" aria-hidden="true" class="site-nav-logo">
+                    <span class="font-bold text-lg sm:text-xl tracking-tight text-brand-navy dark:text-white">VoloLeads</span>
+                </a>
+
+                <div class="hidden lg:flex space-x-8 items-center text-sm font-semibold">
+                    <a href="index.html#home" class="text-slate-600 dark:text-slate-300 hover:text-brand-orange dark:hover:text-brand-orange transition-colors">Home</a>
+                    <a href="index.html#plans" class="text-slate-600 dark:text-slate-300 hover:text-brand-orange dark:hover:text-brand-orange transition-colors">Plans</a>
+                    <a href="index.html#insights" class="text-slate-600 dark:text-slate-300 hover:text-brand-orange dark:hover:text-brand-orange transition-colors">Insights</a>
+                    <a href="index.html#testimonials" class="text-slate-600 dark:text-slate-300 hover:text-brand-orange dark:hover:text-brand-orange transition-colors">Testimonials</a>
+                    <a href="index.html#about" class="text-slate-600 dark:text-slate-300 hover:text-brand-orange dark:hover:text-brand-orange transition-colors">About Us</a>
+                </div>
+
+                <div class="flex items-center gap-2 sm:gap-3 flex-shrink-0">
+                    <a href="index.html#contact" class="hidden lg:block px-6 py-2 bg-brand-navy dark:bg-brand-orange hover:bg-slate-800 dark:hover:bg-orange-600 text-white text-sm font-bold rounded-full shadow-lg transition-all transform hover:-translate-y-0.5">
+                        Book Now
+                    </a>
+                    <button id="dark-mode-toggle" class="text-slate-600 dark:text-slate-300 text-xl cursor-pointer focus:outline-none transition-colors hover:text-brand-orange dark:hover:text-brand-orange" aria-label="Toggle Dark Mode">
+                        <i class="fa-solid fa-moon" id="dark-mode-icon" aria-hidden="true"></i>
+                    </button>
+                    <button id="mobile-menu-btn" class="lg:hidden text-slate-600 dark:text-slate-300 text-xl cursor-pointer focus:outline-none" aria-label="Toggle Menu">
+                        <i class="fa-solid fa-bars" id="menu-icon" aria-hidden="true"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div id="mobile-menu" class="hidden lg:hidden absolute top-20 left-0 right-0 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl shadow-2xl mx-6 p-6 flex flex-col gap-4 text-center z-50">
+            <a href="index.html#home" class="text-slate-600 dark:text-slate-300 font-bold hover:text-brand-orange dark:hover:text-brand-orange py-2">Home</a>
+            <a href="index.html#plans" class="text-slate-600 dark:text-slate-300 font-bold hover:text-brand-orange dark:hover:text-brand-orange py-2">Plans</a>
+            <a href="index.html#insights" class="text-slate-600 dark:text-slate-300 font-bold hover:text-brand-orange dark:hover:text-brand-orange py-2">Insights</a>
+            <a href="index.html#testimonials" class="text-slate-600 dark:text-slate-300 font-bold hover:text-brand-orange dark:hover:text-brand-orange py-2">Testimonials</a>
+            <a href="index.html#about" class="text-slate-600 dark:text-slate-300 font-bold hover:text-brand-orange dark:hover:text-brand-orange py-2">About Us</a>
+            <a href="index.html#contact" class="bg-brand-orange hover:bg-orange-600 text-white py-3 rounded-full font-bold shadow-md">Book Now</a>
+        </div>
     </nav>
 
-    <main class="relative flex-grow flex items-center px-4 overflow-hidden" style="padding-top: 12rem; padding-bottom: 6rem;">
-        <div class="absolute inset-0 bg-gradient-to-br from-orange-50 dark:from-slate-900 via-white dark:via-slate-900 to-slate-50 dark:to-slate-800 -z-20"></div>
-        <div class="max-w-2xl mx-auto relative z-10 w-full">
-            <div class="text-center mb-8">
-                <div class="w-20 h-20 mx-auto mb-6 rounded-full bg-orange-100 dark:bg-orange-900/30 flex items-center justify-center"><i class="fa-solid fa-credit-card text-brand-orange text-3xl" aria-hidden="true"></i></div>
-                <h1 class="text-4xl md:text-5xl font-extrabold text-brand-navy dark:text-white mb-4">Manage Subscription</h1>
-                <p class="text-lg text-slate-600 dark:text-slate-300 leading-relaxed">Enter the email address used at checkout. We will email a secure Stripe billing portal link when your subscription is found.</p>
-            </div>
-            <form id="manage-subscription-form" class="bg-white dark:bg-slate-800 rounded-2xl shadow-xl border border-slate-200 dark:border-slate-700 p-8">
-                <label for="manage-email" class="block text-sm font-bold text-brand-navy dark:text-white mb-2">Subscription Email</label>
-                <input id="manage-email" name="email" type="email" autocomplete="email" spellcheck="false" required placeholder="customer@example.com" class="w-full px-4 py-3 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900 text-brand-navy dark:text-white focus:outline-none focus:ring-2 focus:ring-brand-orange focus:border-transparent">
-                <div class="mt-5 flex justify-center">
-                    <div class="cf-turnstile" data-sitekey="0x4AAAAAADKTLan8Zgz02zqw" data-theme="auto"></div>
+    <main class="relative flex-grow overflow-hidden pt-36 pb-24 px-4">
+        <div class="absolute top-20 left-1/2 -translate-x-1/2 w-[34rem] h-[34rem] bg-orange-200/45 dark:bg-brand-orange/10 rounded-full blur-3xl -z-10 pointer-events-none"></div>
+        <div class="absolute bottom-12 right-1/4 w-80 h-80 bg-slate-200/40 dark:bg-cyan-400/5 rounded-full blur-3xl -z-10 pointer-events-none"></div>
+
+        <section class="utility-shell max-w-4xl mx-auto px-6 md:px-10 py-10 md:py-12">
+            <div class="text-center max-w-3xl mx-auto mb-8">
+                <div class="w-20 h-20 mx-auto mb-6 rounded-full bg-orange-100 dark:bg-orange-900/30 flex items-center justify-center ring-8 ring-orange-50 dark:ring-orange-950/40">
+                    <i class="fa-solid fa-credit-card text-brand-orange text-3xl" aria-hidden="true"></i>
                 </div>
-                <button id="manage-submit-btn" type="submit" class="mt-5 w-full py-3 px-6 bg-brand-orange hover:bg-orange-600 text-white font-bold text-center rounded-lg shadow-lg transition-all">Email Manage Link</button>
-                <p id="manage-subscription-message" class="mt-4 text-sm font-semibold" aria-live="polite"></p>
-                <p class="mt-5 text-xs text-slate-500 dark:text-slate-400 leading-relaxed">For security, this page does not show Stripe customer IDs or redirect directly to Stripe. The billing portal link is sent by email.</p>
-            </form>
-        </div>
+                <p class="inline-flex items-center gap-2 px-4 py-2 rounded-full text-xs font-bold uppercase tracking-[0.24em] bg-orange-50 dark:bg-orange-950/40 text-brand-orange mb-5">Billing Access</p>
+                <h1 class="text-4xl md:text-5xl font-extrabold text-brand-navy dark:text-white mb-4">Manage Subscription</h1>
+                <p class="text-base md:text-lg text-slate-600 dark:text-slate-300 leading-relaxed">
+                    Enter the email address you used at checkout and we will send a secure Stripe billing portal link if a matching subscription is found.
+                </p>
+            </div>
+
+            <div class="utility-form-card max-w-2xl mx-auto">
+                <div class="px-6 md:px-9 pt-8 md:pt-9 pb-10 md:pb-11">
+                    <form id="manage-subscription-form" class="space-y-5">
+                        <div>
+                            <label for="manage-email" class="block text-sm font-bold text-brand-navy dark:text-white mb-3">Subscription Email</label>
+                            <input id="manage-email" name="email" type="email" autocomplete="email" spellcheck="false" required placeholder="customer@example.com" class="utility-field manage-subscription-field focus:outline-none focus:ring-2 focus:ring-brand-orange focus:border-transparent text-base md:text-lg">
+                        </div>
+
+                        <div class="utility-soft-card p-5">
+                            <p class="text-sm text-slate-600 dark:text-slate-300 mb-4">
+                                We verify each request before emailing the billing portal link.
+                            </p>
+                            <div class="flex justify-center">
+                                <div class="cf-turnstile" data-sitekey="0x4AAAAAADKTLan8Zgz02zqw" data-theme="auto"></div>
+                            </div>
+                        </div>
+
+                        <button id="manage-submit-btn" type="submit" class="utility-field w-full py-4 px-6 bg-brand-orange hover:bg-orange-600 text-white font-bold text-center shadow-lg transition-all transform hover:-translate-y-0.5">
+                            Email Manage Link
+                        </button>
+
+                        <p id="manage-subscription-message" class="text-sm font-semibold min-h-[1.5rem]" aria-live="polite"></p>
+
+                        <div class="grid md:grid-cols-2 gap-4 pt-1">
+                            <div class="utility-soft-card p-5">
+                                <p class="text-xs font-bold uppercase tracking-[0.2em] text-slate-500 dark:text-slate-400 mb-2">How it works</p>
+                                <p class="text-sm text-slate-600 dark:text-slate-300">If we find your subscription, we send a secure Stripe billing portal link directly to your inbox.</p>
+                            </div>
+                            <div class="utility-soft-card p-5">
+                                <p class="text-xs font-bold uppercase tracking-[0.2em] text-slate-500 dark:text-slate-400 mb-2">Security note</p>
+                                <p class="text-sm text-slate-600 dark:text-slate-300">This page does not expose Stripe customer IDs or redirect directly to billing for your protection.</p>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </section>
     </main>
 
-    <footer class="bg-brand-navy text-slate-400 py-8 px-4 mt-auto"><div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center text-xs gap-4"><p>&copy; <span id="current-year">2025</span> VoloLeads Agency. All rights reserved.</p><div class="flex gap-4"><a href="privacy-policy.html" class="hover:text-white transition-colors">Privacy Policy</a><a href="terms-condition.html" class="hover:text-white transition-colors">Terms</a><a href="faqs.html" class="hover:text-white transition-colors">FAQs</a></div></div></footer>
+    <footer class="bg-brand-navy text-slate-400 py-12 border-t border-slate-800 scroll-mt-32">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-8 mb-8">
+                <div>
+                    <div class="flex items-center gap-2 mb-4">
+                        <img src="./png/logo.webp" alt="" aria-hidden="true" class="site-brand-logo site-brand-logo-sm">
+                        <span class="font-bold text-xl text-white">VoloLeads</span>
+                    </div>
+                    <p class="text-xs text-slate-500">
+                        High-velocity virtual assistants for real estate wholesalers. We hunt, you close.
+                    </p>
+                </div>
+
+                <div>
+                    <h4 class="text-white font-bold mb-4">Navigate</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="index.html#about" class="hover:text-brand-orange transition-colors">About Us</a></li>
+                        <li><a href="index.html#services" class="hover:text-brand-orange transition-colors">Services</a></li>
+                        <li><a href="index.html#plans" class="hover:text-brand-orange transition-colors">Plans</a></li>
+                        <li><a href="index.html#insights" class="hover:text-brand-orange transition-colors">Insights</a></li>
+                        <li><a href="index.html#testimonials" class="hover:text-brand-orange transition-colors">Testimonials</a></li>
+                        <li><a href="index.html#contact" class="hover:text-brand-orange transition-colors">Contact</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="text-white font-bold mb-4">Legal</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="privacy-policy.html" class="hover:text-brand-orange transition-colors">Privacy Policy</a></li>
+                        <li><a href="terms-condition.html" class="hover:text-brand-orange transition-colors">Terms of Service</a></li>
+                        <li><a href="refund-policy.html" class="hover:text-brand-orange transition-colors">Refund Policy</a></li>
+                        <li><a href="faqs.html" class="hover:text-brand-orange transition-colors">FAQs</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="text-white font-bold mb-4">Contact</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li class="flex items-center gap-2">
+                            <span class="w-5 flex items-center justify-center text-brand-orange"><i class="fa-solid fa-envelope"></i></span>
+                            <span class="break-words">syed@vololeads.com</span>
+                        </li>
+                        <li class="flex items-center gap-2">
+                            <span class="w-5 flex items-center justify-center text-brand-orange"><i class="fa-brands fa-whatsapp"></i></span>
+                            <a href="https://wa.me/8801793716608" target="_blank" class="hover:text-brand-orange transition-colors">WhatsApp Support</a>
+                        </li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="text-white font-bold mb-4">Follow Us</h4>
+                    <div class="flex gap-4">
+                        <a href="https://www.linkedin.com/company/vololeads" class="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center hover:bg-brand-orange hover:text-white transition-all" aria-label="VoloLeads on LinkedIn"><i class="fa-brands fa-linkedin-in"></i></a>
+                        <a href="https://www.facebook.com/vololeads" class="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center hover:bg-brand-orange hover:text-white transition-all" aria-label="VoloLeads on Facebook"><i class="fa-brands fa-facebook"></i></a>
+                        <a href="https://www.instagram.com/vololeads" class="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center hover:bg-brand-orange hover:text-white transition-all" aria-label="VoloLeads on Instagram"><i class="fa-brands fa-instagram"></i></a>
+                        <a href="https://x.com/vololeads" class="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center hover:bg-brand-orange hover:text-white transition-all text-lg font-bold" aria-label="VoloLeads on X">X</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="border-t border-slate-800 pt-8 text-xs">
+                <p>&copy; <span id="current-year">2025</span> VoloLeads Agency. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
     <script src="icons.js"></script>
     <script src="app.js"></script>
 </body>
