@@ -1756,12 +1756,38 @@ body > section h1 {
 }
 
 footer {
-    padding-top: clamp(2.75rem, 6vw, 4rem) !important;
-    padding-bottom: clamp(2.75rem, 6vw, 4rem) !important;
+    padding-top: clamp(2rem, 4vw, 3rem) !important;
+    padding-bottom: clamp(2rem, 4vw, 3rem) !important;
 }
 
 footer .grid {
-    gap: clamp(1.75rem, 4vw, 3rem) !important;
+    gap: clamp(1.5rem, 3vw, 2.25rem) !important;
+}
+
+@media (min-width: 1024px) {
+    footer {
+        padding-top: 2.5rem !important;
+        padding-bottom: 2rem !important;
+    }
+
+    footer .grid {
+        grid-template-columns: minmax(18rem, 2fr) repeat(4, minmax(8rem, 1fr)) !important;
+        gap: 2rem !important;
+        align-items: start;
+        margin-bottom: 2rem !important;
+    }
+
+    footer h4 {
+        margin-bottom: 0.75rem !important;
+    }
+
+    footer ul.space-y-2 > :not([hidden]) ~ :not([hidden]) {
+        margin-top: 0.35rem !important;
+    }
+
+    footer .border-t {
+        padding-top: 1.5rem !important;
+    }
 }
 
 @media (max-width: 768px) {
