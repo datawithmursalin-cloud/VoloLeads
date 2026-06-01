@@ -21,11 +21,11 @@
     <link rel="apple-touch-icon" href="./png/logo.webp">
 
     <!-- ========== CSS Framework & Custom Theme ========== -->
-    <link rel="stylesheet" href="tailwind.css?v=20260601-6">
+    <link rel="stylesheet" href="tailwind.css?v=20260601-10">
 
     <!-- ========== External Stylesheets ========== -->
     <!-- Custom CSS for animations and grid backgrounds -->
-    <link rel="stylesheet" href="styles.css?v=20260601-6">
+    <link rel="stylesheet" href="styles.css?v=20260601-10">
 
     <!-- ========== Google Fonts ========== -->
     <!-- Inter: Primary font for body text and headings -->
@@ -252,8 +252,13 @@
                 </div>
             </div>
 
-            <!-- Three-column pricing grid with flip cards -->
-            <div class="plans-pricing-grid grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-4 gap-8 pb-12 pt-6">
+            <!-- Pricing carousel with flip cards -->
+            <div class="plans-carousel-shell relative">
+                <button type="button" class="pricing-nav-btn pricing-nav-prev" aria-label="Previous pricing plan" onclick="event.stopPropagation(); scrollPricing('left')">
+                    <span class="pricing-nav-symbol" aria-hidden="true">&lsaquo;</span>
+                </button>
+
+                <div id="pricing-slider" class="plans-pricing-grid scrollbar-hide pb-12 pt-6">
 
                 <!-- ESSENTIAL TIER - FLIP CARD -->
                 <div class="h-[660px] perspective-1000 group reveal-on-scroll relative cursor-pointer" role="button" tabindex="0" aria-label="Flip Starter plan card" aria-pressed="false" onclick="flipCard(this)">
@@ -436,11 +441,7 @@
                                 </li>
                                 <li class="flex items-start">
                                     <i class="fa-solid fa-circle text-brand-orange mt-1.5 mr-2 flex-shrink-0" style="font-size: 0.4rem;"></i>
-                                    <span class="text-slate-600 dark:text-slate-400"><strong>Pipeline management support</strong> to keep leads moving</span>
-                                </li>
-                                <li class="flex items-start">
-                                    <i class="fa-solid fa-circle text-brand-orange mt-1.5 mr-2 flex-shrink-0" style="font-size: 0.4rem;"></i>
-                                    <span class="text-slate-600 dark:text-slate-400"><strong>CRM support</strong> for setup, updates, and tracking</span>
+                                    <span class="text-slate-600 dark:text-slate-400"><strong>Pipeline & CRM support</strong> for setup, updates, and tracking</span>
                                 </li>
                             </ul>
 
@@ -596,15 +597,11 @@
                                 </li>
                                 <li class="flex items-start">
                                     <i class="fa-solid fa-circle text-brand-orange mt-1.5 mr-2 flex-shrink-0" style="font-size: 0.4rem;"></i>
-                                    <span class="text-slate-600 dark:text-slate-400"><strong>Running comps</strong> on qualified leads</span>
+                                    <span class="text-slate-600 dark:text-slate-400"><strong>Comps + targeted campaigns</strong> using Redfin market analysis</span>
                                 </li>
                                 <li class="flex items-start">
                                     <i class="fa-solid fa-circle text-brand-orange mt-1.5 mr-2 flex-shrink-0" style="font-size: 0.4rem;"></i>
-                                    <span class="text-slate-600 dark:text-slate-400"><strong>Targeted marketing campaigns</strong> using Redfin Data Center by market analysis</span>
-                                </li>
-                                <li class="flex items-start">
-                                    <i class="fa-solid fa-circle text-brand-orange mt-1.5 mr-2 flex-shrink-0" style="font-size: 0.4rem;"></i>
-                                    <span class="text-slate-600 dark:text-slate-400"><strong>AI agent automation</strong> for SMS handling + AI voice receptionist for inbound calls</span>
+                                    <span class="text-slate-600 dark:text-slate-400"><strong>AI automation</strong> for SMS and inbound voice reception</span>
                                 </li>
                             </ul>
 
@@ -741,7 +738,7 @@
                                 <p class="plan-billing-note text-xs text-slate-400 dark:text-slate-500">Request a custom quote based on your workflow.</p>
                             </div>
 
-                            <ul class="plan-feature-list space-y-1.5 mb-5 flex-grow text-xs">
+                            <ul class="plan-feature-list space-y-1.5 mb-5 flex-grow text-xs" aria-label="Custom plan included options">
                                 <li class="flex items-start">
                                     <i class="fa-solid fa-circle text-brand-orange mt-1.5 mr-2 flex-shrink-0" style="font-size: 0.4rem;"></i>
                                     <span class="text-slate-600 dark:text-slate-400"><strong>Custom caller count</strong> and campaign capacity</span>
@@ -763,30 +760,6 @@
                                     <span class="text-slate-600 dark:text-slate-400"><strong>Closer support</strong> to maximize conversions</span>
                                 </li>
                                 <li class="flex items-start">
-                                    <i class="fa-solid fa-circle text-brand-orange mt-1.5 mr-2 flex-shrink-0" style="font-size: 0.4rem;"></i>
-                                    <span class="text-slate-600 dark:text-slate-400"><strong>Dedicated cold callers</strong> assigned to your operation</span>
-                                </li>
-                                <li class="flex items-start">
-                                    <i class="fa-solid fa-circle text-brand-orange mt-1.5 mr-2 flex-shrink-0" style="font-size: 0.4rem;"></i>
-                                    <span class="text-slate-600 dark:text-slate-400"><strong>Pipeline & CRM support</strong> for follow-up and tracking</span>
-                                </li>
-                                <li class="flex items-start">
-                                    <i class="fa-solid fa-circle text-brand-orange mt-1.5 mr-2 flex-shrink-0" style="font-size: 0.4rem;"></i>
-                                    <span class="text-slate-600 dark:text-slate-400"><strong>Running comps</strong> on qualified leads</span>
-                                </li>
-                                <li class="flex items-start">
-                                    <i class="fa-solid fa-circle text-brand-orange mt-1.5 mr-2 flex-shrink-0" style="font-size: 0.4rem;"></i>
-                                    <span class="text-slate-600 dark:text-slate-400"><strong>Targeted marketing campaigns</strong> using Redfin Data Center by market analysis</span>
-                                </li>
-                                <li class="flex items-start">
-                                    <i class="fa-solid fa-circle text-brand-orange mt-1.5 mr-2 flex-shrink-0" style="font-size: 0.4rem;"></i>
-                                    <span class="text-slate-600 dark:text-slate-400"><strong>AI agent automation</strong> for SMS handling + AI voice receptionist for inbound calls</span>
-                                </li>
-                                <li class="flex items-start">
-                                    <i class="fa-solid fa-circle text-brand-orange mt-1.5 mr-2 flex-shrink-0" style="font-size: 0.4rem;"></i>
-                                    <span class="text-slate-600 dark:text-slate-400"><strong>Custom tech stack</strong> and CRM workflows</span>
-                                </li>
-                                <li class="flex items-start">
                                     <i class="fa-solid fa-info text-amber-500 mt-1.5 mr-2 flex-shrink-0" style="font-size: 0.75rem;"></i>
                                     <span class="text-slate-500 dark:text-slate-400 italic">Built after a strategy call with your team.</span>
                                 </li>
@@ -804,7 +777,7 @@
                         <div class="backface-hidden absolute w-full h-full overflow-hidden bg-gradient-to-br from-orange-50 to-orange-100 dark:from-orange-900/20 dark:to-orange-800/20 rounded-2xl shadow-lg p-8 border-2 border-brand-orange dark:border-orange-600 flex flex-col" style="backface-visibility: hidden; transform: rotateY(180deg);">
                             <h3 class="text-xl font-bold text-brand-navy dark:text-white mb-3">Custom Options</h3>
 
-                            <ul class="space-y-1.5 flex-grow text-[11px]">
+                            <ul class="space-y-1.5 flex-grow text-[11px]" aria-label="Custom service options">
                                 <li class="flex items-start gap-2">
                                     <div class="w-5 h-5 bg-brand-orange rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
                                         <i class="fa-solid fa-check text-white text-xs"></i>
@@ -873,6 +846,11 @@
                     </div>
                 </div>
 
+                </div>
+
+                <button type="button" class="pricing-nav-btn pricing-nav-next" aria-label="Next pricing plan" onclick="event.stopPropagation(); scrollPricing('right')">
+                    <span class="pricing-nav-symbol" aria-hidden="true">&rsaquo;</span>
+                </button>
             </div>
 
             <!-- DIY BASELINE COMPARISON -->
@@ -1710,8 +1688,8 @@
     </footer>
 
     <!-- JavaScript Application File: Handles interactivity, animations, and visitor tracking -->
-    <script src="icons.js?v=20260601-6"></script>
-    <script src="app.js?v=20260601-6"></script>
+    <script src="icons.js?v=20260601-10"></script>
+    <script src="app.js?v=20260601-10"></script>
 
     <!-- Third-party widgets (e.g. Crisp) are loaded only after cookie consent. -->
 

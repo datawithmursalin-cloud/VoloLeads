@@ -345,8 +345,9 @@ window.scrollPricing = function(direction) {
     const slider = document.getElementById('pricing-slider');
     if (!slider) return;
 
-    // Scroll width roughly equal to card width + gap
-    const scrollAmount = 400; 
+    const card = slider.querySelector('.perspective-1000');
+    const gap = parseFloat(window.getComputedStyle(slider).columnGap) || 32;
+    const scrollAmount = card ? card.getBoundingClientRect().width + gap : 400;
     const currentScroll = slider.scrollLeft;
     
     if (direction === 'left') {
@@ -935,13 +936,11 @@ function initTurnstileLoader() {
 
 /* ========== MOBILE PLANS CAROUSEL FUNCTIONALITY ========== */
 function initMobilePlansCarousel() {
-    // Find the plans grid - it has the class "grid grid-cols-1 lg:grid-cols-3"
-    const plansGrid = document.querySelector('#plans .grid.grid-cols-1');
+    const plansGrid = document.getElementById('pricing-slider') || document.querySelector('#plans .plans-pricing-grid');
     if (!plansGrid) return;
 
     let touchStartX = 0;
     let touchEndX = 0;
-    let touchListenersAttached = false;
 
     const onTouchStart = (event) => {
         if (event.target.closest('button, a, input, select, textarea')) return;
@@ -954,104 +953,21 @@ function initMobilePlansCarousel() {
         handleSwipe();
     };
 
-    const updatePlansLayout = () => {
-        if (window.innerWidth <= 768) {
-            // Mobile: Convert grid to horizontal scroll carousel
-            plansGrid.style.display = 'flex';
-            plansGrid.style.gap = '1.5rem';
-            plansGrid.style.overflowX = 'auto';
-            plansGrid.style.overflowY = 'hidden';
-            plansGrid.style.scrollBehavior = 'smooth';
-            plansGrid.style.padding = '1rem 0';
-            plansGrid.style.WebkitOverflowScrolling = 'touch';
-            plansGrid.style.scrollSnapType = 'x mandatory';
-            plansGrid.style.paddingLeft = '0.5rem';
-            plansGrid.style.paddingRight = '0.5rem';
-            plansGrid.style.marginLeft = '-0.5rem';
-            plansGrid.style.marginRight = '-0.5rem';
+    plansGrid.classList.add('scrollbar-hide');
+    plansGrid.querySelectorAll('.perspective-1000').forEach(card => {
+        card.classList.add('is-visible');
+    });
 
-            // Hide the scrollbar
-            plansGrid.classList.add('scrollbar-hide');
-            plansGrid.classList.remove('grid', 'grid-cols-1', 'lg:grid-cols-3', 'gap-8');
-
-            // Update each card for carousel layout
-            const cards = plansGrid.querySelectorAll('.perspective-1000');
-            cards.forEach(card => {
-                card.style.flex = '0 0 calc(100% - 2rem)';
-                card.style.minWidth = 'calc(100% - 2rem)';
-                card.style.scrollSnapAlign = 'start';
-                card.style.scrollSnapStop = 'always';
-                card.style.height = 'auto';
-                card.classList.add('is-visible');
-            });
-
-            if (!touchListenersAttached) {
-                plansGrid.addEventListener('touchstart', onTouchStart, { passive: true });
-                plansGrid.addEventListener('touchend', onTouchEnd, { passive: true });
-                touchListenersAttached = true;
-            }
-
-        } else {
-            // Desktop: Restore grid layout
-            plansGrid.style.display = 'grid';
-            plansGrid.style.gridTemplateColumns = '';
-            plansGrid.style.gap = '2rem';
-            plansGrid.style.overflowX = 'visible';
-            plansGrid.style.scrollBehavior = 'auto';
-            plansGrid.style.padding = '1.5rem 0';
-            plansGrid.style.marginLeft = '0';
-            plansGrid.style.marginRight = '0';
-            plansGrid.classList.remove('scrollbar-hide');
-            plansGrid.classList.add('grid', 'grid-cols-1', 'lg:grid-cols-3', 'gap-8');
-
-            const cards = plansGrid.querySelectorAll('.perspective-1000');
-            cards.forEach(card => {
-                card.style.flex = 'none';
-                card.style.minWidth = 'auto';
-                card.style.scrollSnapAlign = 'none';
-                card.style.scrollSnapStop = 'none';
-                card.style.height = '660px';
-            });
-
-            if (touchListenersAttached) {
-                plansGrid.removeEventListener('touchstart', onTouchStart);
-                plansGrid.removeEventListener('touchend', onTouchEnd);
-                touchListenersAttached = false;
-            }
-        }
-    };
+    plansGrid.addEventListener('touchstart', onTouchStart, { passive: true });
+    plansGrid.addEventListener('touchend', onTouchEnd, { passive: true });
 
     function handleSwipe() {
         const difference = touchStartX - touchEndX;
 
-        // Only trigger if swipe distance is significant (more than 50px)
         if (Math.abs(difference) > 50) {
-            if (difference > 0) {
-                // Swipe left - scroll right to see next card (with boundary check)
-                const maxScroll = plansGrid.scrollWidth - plansGrid.clientWidth;
-                const currentScroll = plansGrid.scrollLeft;
-
-                // Only allow swiping left if not at the end
-                if (currentScroll < maxScroll) {
-                    plansGrid.scrollBy({ left: 350, behavior: 'smooth' });
-                }
-            } else {
-                // Swipe right - scroll left to see previous card (with boundary check)
-                const currentScroll = plansGrid.scrollLeft;
-
-                // Only allow swiping right if not at the beginning
-                if (currentScroll > 0) {
-                    plansGrid.scrollBy({ left: -350, behavior: 'smooth' });
-                }
-            }
+            window.scrollPricing(difference > 0 ? 'right' : 'left');
         }
     }
-
-    // Initial call
-    updatePlansLayout();
-
-    // Update on resize
-    window.addEventListener('resize', updatePlansLayout);
 }
 
 /* --- Form Security & Anti-Bot Checks --- */
