@@ -315,8 +315,11 @@ section {
 .dark .strategic-grid-bg {
     background-color: #0f172a;
     background-image:
-        linear-gradient(to right, #475569 1px, transparent 1px),
-        linear-gradient(to bottom, #475569 1px, transparent 1px);
+        linear-gradient(to right, rgba(148, 163, 184, 0.16) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(148, 163, 184, 0.12) 1px, transparent 1px);
+    background-size: 14px 24px;
+    mask-image: radial-gradient(ellipse 68% 54% at 50% 0%, #000 68%, transparent 100%);
+    -webkit-mask-image: radial-gradient(ellipse 68% 54% at 50% 0%, #000 68%, transparent 100%);
 }
 
 /* ============================================
@@ -1621,6 +1624,46 @@ html.dark body > section {
     background: #020617 !important;
 }
 
+body:not(.site-preload) > main:not(#main-content),
+body:not(.site-preload) > header,
+body:not(.site-preload) > article {
+    position: relative;
+    isolation: isolate;
+}
+
+body:not(.site-preload) > main:not(#main-content)::before,
+body:not(.site-preload) > header::before,
+body:not(.site-preload) > article::before {
+    content: "";
+    position: absolute;
+    inset: 0 0 auto;
+    height: min(32rem, 100%);
+    pointer-events: none;
+    z-index: 0;
+    background-image:
+        linear-gradient(to right, rgba(203, 213, 225, 0.72) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(203, 213, 225, 0.54) 1px, transparent 1px);
+    background-size: 14px 24px;
+    background-position: center top;
+    mask-image: linear-gradient(to bottom, #000 0%, rgba(0, 0, 0, 0.72) 46%, transparent 100%);
+    -webkit-mask-image: linear-gradient(to bottom, #000 0%, rgba(0, 0, 0, 0.72) 46%, transparent 100%);
+}
+
+body:not(.site-preload) > main:not(#main-content) > *,
+body:not(.site-preload) > header > *,
+body:not(.site-preload) > article > * {
+    position: relative;
+    z-index: 1;
+}
+
+html.dark body:not(.site-preload) > main:not(#main-content)::before,
+html.dark body:not(.site-preload) > header::before,
+html.dark body:not(.site-preload) > article::before {
+    background-image:
+        linear-gradient(to right, rgba(148, 163, 184, 0.16) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(148, 163, 184, 0.12) 1px, transparent 1px);
+}
+
 html.dark body > main:not(#main-content) > .absolute[class*="blur-"],
 html.dark body > section > .absolute[class*="blur-"],
 html.dark .animate-blob,
@@ -1629,11 +1672,20 @@ html.dark .mix-blend-multiply {
     display: none !important;
 }
 
-html.dark .strategic-grid-bg,
 html.dark .contact-strategic-grid-bg {
     background-image: none !important;
     mask-image: none !important;
     -webkit-mask-image: none !important;
+}
+
+html.dark .strategic-grid-bg {
+    background-color: #0f172a !important;
+    background-image:
+        linear-gradient(to right, rgba(148, 163, 184, 0.16) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(148, 163, 184, 0.12) 1px, transparent 1px) !important;
+    background-size: 14px 24px !important;
+    mask-image: radial-gradient(ellipse 68% 54% at 50% 0%, #000 68%, transparent 100%) !important;
+    -webkit-mask-image: radial-gradient(ellipse 68% 54% at 50% 0%, #000 68%, transparent 100%) !important;
 }
 
 nav.fixed.top-6 {
