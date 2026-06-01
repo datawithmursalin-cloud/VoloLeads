@@ -1637,16 +1637,17 @@ body:not(.site-preload) > article::before {
     content: "";
     position: absolute;
     inset: 0 0 auto;
-    height: min(32rem, 100%);
+    height: min(34rem, 100%);
     pointer-events: none;
     z-index: 0;
+    opacity: 0.92;
     background-image:
-        linear-gradient(to right, rgba(203, 213, 225, 0.72) 1px, transparent 1px),
-        linear-gradient(to bottom, rgba(203, 213, 225, 0.54) 1px, transparent 1px);
+        linear-gradient(to right, rgba(148, 163, 184, 0.62) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(148, 163, 184, 0.48) 1px, transparent 1px);
     background-size: 14px 24px;
     background-position: center top;
-    mask-image: linear-gradient(to bottom, #000 0%, rgba(0, 0, 0, 0.72) 46%, transparent 100%);
-    -webkit-mask-image: linear-gradient(to bottom, #000 0%, rgba(0, 0, 0, 0.72) 46%, transparent 100%);
+    mask-image: linear-gradient(to bottom, #000 0%, rgba(0, 0, 0, 0.82) 42%, transparent 100%);
+    -webkit-mask-image: linear-gradient(to bottom, #000 0%, rgba(0, 0, 0, 0.82) 42%, transparent 100%);
 }
 
 body:not(.site-preload) > main:not(#main-content) > *,
@@ -1659,9 +1660,10 @@ body:not(.site-preload) > article > * {
 html.dark body:not(.site-preload) > main:not(#main-content)::before,
 html.dark body:not(.site-preload) > header::before,
 html.dark body:not(.site-preload) > article::before {
+    opacity: 1;
     background-image:
-        linear-gradient(to right, rgba(148, 163, 184, 0.16) 1px, transparent 1px),
-        linear-gradient(to bottom, rgba(148, 163, 184, 0.12) 1px, transparent 1px);
+        linear-gradient(to right, rgba(148, 163, 184, 0.28) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(148, 163, 184, 0.2) 1px, transparent 1px);
 }
 
 html.dark body > main:not(#main-content) > .absolute[class*="blur-"],
