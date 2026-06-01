@@ -5,6 +5,7 @@
 document.addEventListener('DOMContentLoaded', () => {
     initPageLoadAnimation();
     initMobileMenu();
+    renderUniversalFooter();
     updateCopyrightYear();
     initDarkMode();
     initContactForm();
@@ -311,6 +312,78 @@ window.resetIcon = function(audioElement) {
 };
 
 /* --- Utilities --- */
+function renderUniversalFooter() {
+    const footer = document.querySelector('footer');
+    if (!footer) return;
+
+    footer.className = 'bg-brand-navy text-slate-400 py-12 border-t border-slate-800 scroll-mt-32';
+    footer.innerHTML = `
+        <div class="container mx-auto px-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8 mb-8">
+                <div class="lg:col-span-2">
+                    <a href="index.html#home" class="flex items-center space-x-2 mb-4">
+                        <i class="fa-solid fa-bolt text-brand-orange"></i>
+                        <span class="text-white text-xl font-bold">VoloLeads</span>
+                    </a>
+                    <p class="text-sm max-w-sm">High-velocity virtual assistants for real estate wholesalers. We hunt, you close.</p>
+                </div>
+                <div>
+                    <h4 class="text-white font-bold mb-4">Navigate</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="index.html#about" class="hover:text-brand-orange transition-colors">About Us</a></li>
+                        <li><a href="index.html#services" class="hover:text-brand-orange transition-colors">Services</a></li>
+                        <li><a href="index.html#plans" class="hover:text-brand-orange transition-colors">Plans</a></li>
+                        <li><a href="index.html#insights" class="hover:text-brand-orange transition-colors">Insights</a></li>
+                        <li><a href="index.html#testimonials" class="hover:text-brand-orange transition-colors">Testimonials</a></li>
+                        <li><a href="index.html#contact" class="hover:text-brand-orange transition-colors">Contact</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-white font-bold mb-4">Legal</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="privacy-policy.html" class="hover:text-brand-orange transition-colors">Privacy Policy</a></li>
+                        <li><a href="terms-condition.html" class="hover:text-brand-orange transition-colors">Terms of Service</a></li>
+                        <li><a href="refund-policy.html" class="hover:text-brand-orange transition-colors">Refund Policy</a></li>
+                        <li><a href="manage-subscription.html" class="hover:text-brand-orange transition-colors">Manage Subscription</a></li>
+                        <li><a href="faqs.html" class="hover:text-brand-orange transition-colors">FAQs</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-white font-bold mb-4">Contact</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li>
+                            <a href="mailto:syed@vololeads.com" class="hover:text-brand-orange transition-colors">
+                                <i class="fa-regular fa-envelope mr-2 text-brand-orange"></i> syed@vololeads.com
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://wa.me/15551234567" class="hover:text-brand-orange transition-colors">
+                                <i class="fa-brands fa-whatsapp mr-2 text-brand-orange"></i> WhatsApp Support
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-white font-bold mb-4">Follow Us</h4>
+                    <div class="flex gap-3">
+                        <a href="https://www.linkedin.com/" aria-label="LinkedIn" class="w-10 h-10 rounded-full bg-slate-800 hover:bg-brand-orange flex items-center justify-center transition-colors"><i class="fa-brands fa-linkedin-in"></i></a>
+                        <a href="https://www.facebook.com/" aria-label="Facebook" class="w-10 h-10 rounded-full bg-slate-800 hover:bg-brand-orange flex items-center justify-center transition-colors"><i class="fa-brands fa-facebook-f"></i></a>
+                        <a href="https://www.instagram.com/" aria-label="Instagram" class="w-10 h-10 rounded-full bg-slate-800 hover:bg-brand-orange flex items-center justify-center transition-colors"><i class="fa-brands fa-instagram"></i></a>
+                        <a href="https://x.com/" aria-label="X" class="w-10 h-10 rounded-full bg-slate-800 hover:bg-brand-orange flex items-center justify-center transition-colors"><i class="fa-brands fa-x-twitter"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="border-t border-slate-800 pt-6 text-sm">
+                <p>&copy; <span id="current-year"></span> VoloLeads Agency. All rights reserved.</p>
+            </div>
+        </div>
+    `;
+
+    if (window.renderSiteIcons) {
+        window.renderSiteIcons(footer);
+    }
+}
+
 function updateCopyrightYear() {
     const yearSpan = document.getElementById('current-year');
     if (yearSpan) {
@@ -934,40 +1007,15 @@ function initTurnstileLoader() {
     }
 }
 
-/* ========== MOBILE PLANS CAROUSEL FUNCTIONALITY ========== */
+/* ========== PLANS VISIBILITY HELPERS ========== */
 function initMobilePlansCarousel() {
     const plansGrid = document.getElementById('pricing-slider') || document.querySelector('#plans .plans-pricing-grid');
     if (!plansGrid) return;
-
-    let touchStartX = 0;
-    let touchEndX = 0;
-
-    const onTouchStart = (event) => {
-        if (event.target.closest('button, a, input, select, textarea')) return;
-        touchStartX = event.changedTouches[0].screenX;
-    };
-
-    const onTouchEnd = (event) => {
-        if (event.target.closest('button, a, input, select, textarea')) return;
-        touchEndX = event.changedTouches[0].screenX;
-        handleSwipe();
-    };
 
     plansGrid.classList.add('scrollbar-hide');
     plansGrid.querySelectorAll('.perspective-1000').forEach(card => {
         card.classList.add('is-visible');
     });
-
-    plansGrid.addEventListener('touchstart', onTouchStart, { passive: true });
-    plansGrid.addEventListener('touchend', onTouchEnd, { passive: true });
-
-    function handleSwipe() {
-        const difference = touchStartX - touchEndX;
-
-        if (Math.abs(difference) > 50) {
-            window.scrollPricing(difference > 0 ? 'right' : 'left');
-        }
-    }
 }
 
 /* --- Form Security & Anti-Bot Checks --- */

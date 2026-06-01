@@ -315,11 +315,11 @@ section {
 .dark .strategic-grid-bg {
     background-color: #0f172a;
     background-image:
-        linear-gradient(to right, rgba(148, 163, 184, 0.28) 1px, transparent 1px),
-        linear-gradient(to bottom, rgba(148, 163, 184, 0.2) 1px, transparent 1px);
+        linear-gradient(to right, rgba(148, 163, 184, 0.14) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(148, 163, 184, 0.1) 1px, transparent 1px);
     background-size: 14px 24px;
-    mask-image: linear-gradient(to bottom, #000 0%, rgba(0, 0, 0, 0.82) 58%, transparent 100%);
-    -webkit-mask-image: linear-gradient(to bottom, #000 0%, rgba(0, 0, 0, 0.82) 58%, transparent 100%);
+    mask-image: linear-gradient(to bottom, #000 0%, rgba(0, 0, 0, 0.42) 28%, transparent 62%);
+    -webkit-mask-image: linear-gradient(to bottom, #000 0%, rgba(0, 0, 0, 0.42) 28%, transparent 62%);
 }
 
 /* ============================================
@@ -341,6 +341,26 @@ section {
     background-image:
         linear-gradient(to right, #475569 1px, transparent 1px),
         linear-gradient(to bottom, #475569 1px, transparent 1px);
+}
+
+.legal-blueprint-bg {
+    background:
+        linear-gradient(to bottom, rgba(248, 250, 252, 0.14) 0%, rgba(248, 250, 252, 0.86) 14rem, #f8fafc 24rem),
+        linear-gradient(to right, rgba(148, 163, 184, 0.22) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(148, 163, 184, 0.16) 1px, transparent 1px),
+        #f8fafc !important;
+    background-size: auto, 14px 24px, 14px 24px, auto !important;
+    background-position: center top !important;
+}
+
+.dark .legal-blueprint-bg {
+    background:
+        linear-gradient(to bottom, rgba(2, 6, 23, 0.12) 0%, rgba(2, 6, 23, 0.82) 13rem, #020617 22rem),
+        linear-gradient(to right, rgba(148, 163, 184, 0.08) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(148, 163, 184, 0.06) 1px, transparent 1px),
+        #020617 !important;
+    background-size: auto, 14px 24px, 14px 24px, auto !important;
+    background-position: center top !important;
 }
 
 
@@ -486,7 +506,7 @@ textarea:focus {
 /* ============================================
    Mobile Responsiveness Helpers
    ============================================ */
-@media (max-width: 768px) {
+@media (max-width: 1023px) {
     section:not(#home) {
         padding-top: 2rem !important;
         padding-bottom: 2rem !important;
@@ -1685,9 +1705,9 @@ html.dark body:not(.site-preload) > main:not(#main-content),
 html.dark body:not(.site-preload) > header,
 html.dark body:not(.site-preload) > article {
     background:
-        linear-gradient(to bottom, rgba(2, 6, 23, 0.16) 0%, rgba(2, 6, 23, 0.72) 21rem, #020617 32rem),
-        linear-gradient(to right, rgba(148, 163, 184, 0.14) 1px, transparent 1px),
-        linear-gradient(to bottom, rgba(148, 163, 184, 0.1) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(2, 6, 23, 0.18) 0%, rgba(2, 6, 23, 0.78) 13rem, #020617 22rem),
+        linear-gradient(to right, rgba(148, 163, 184, 0.08) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(148, 163, 184, 0.06) 1px, transparent 1px),
         #020617 !important;
     background-size: auto, 14px 24px, 14px 24px, auto !important;
     background-position: center top !important;
@@ -1729,10 +1749,10 @@ body:not(.site-preload) > article > * {
 html.dark body:not(.site-preload) > main:not(#main-content)::before,
 html.dark body:not(.site-preload) > header::before,
 html.dark body:not(.site-preload) > article::before {
-    opacity: 1;
+    opacity: 0.65;
     background-image:
-        linear-gradient(to right, rgba(148, 163, 184, 0.28) 1px, transparent 1px),
-        linear-gradient(to bottom, rgba(148, 163, 184, 0.2) 1px, transparent 1px);
+        linear-gradient(to right, rgba(148, 163, 184, 0.12) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(148, 163, 184, 0.08) 1px, transparent 1px);
 }
 
 html.dark body > main:not(#main-content) > .absolute[class*="blur-"],
@@ -1752,11 +1772,11 @@ html.dark .contact-strategic-grid-bg {
 html.dark .strategic-grid-bg {
     background-color: #0f172a !important;
     background-image:
-        linear-gradient(to right, rgba(148, 163, 184, 0.14) 1px, transparent 1px),
-        linear-gradient(to bottom, rgba(148, 163, 184, 0.1) 1px, transparent 1px) !important;
+        linear-gradient(to right, rgba(148, 163, 184, 0.08) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(148, 163, 184, 0.06) 1px, transparent 1px) !important;
     background-size: 14px 24px !important;
-    mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.72) 0%, rgba(0, 0, 0, 0.4) 50%, transparent 100%) !important;
-    -webkit-mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.72) 0%, rgba(0, 0, 0, 0.4) 50%, transparent 100%) !important;
+    mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.72) 0%, rgba(0, 0, 0, 0.34) 28%, transparent 58%) !important;
+    -webkit-mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.72) 0%, rgba(0, 0, 0, 0.34) 28%, transparent 58%) !important;
 }
 
 nav.fixed.top-6 {
@@ -1913,7 +1933,7 @@ footer .grid {
     }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 1023px) {
     :root {
         --site-edge: clamp(0.85rem, 4vw, 1.25rem);
         --nav-clearance: clamp(6.5rem, 22vw, 8rem);
@@ -2184,37 +2204,32 @@ html.dark #plans .pricing-nav-btn {
 
 @media (max-width: 768px) {
     #plans .plans-carousel-shell {
-        padding-left: 3rem;
-        padding-right: 3rem;
+        padding-left: 0;
+        padding-right: 0;
     }
 
     #plans .plans-pricing-grid {
-        gap: 1rem !important;
-        padding: 1.5rem 0.25rem 3rem !important;
+        display: grid !important;
+        grid-template-columns: minmax(0, 1fr) !important;
+        gap: 1.5rem !important;
+        max-width: min(100%, 26rem) !important;
+        margin-left: auto !important;
+        margin-right: auto !important;
+        overflow: visible !important;
+        scroll-snap-type: none !important;
+        padding: 1.5rem 0 2rem !important;
     }
 
     #plans .plans-pricing-grid > .perspective-1000 {
-        flex-basis: min(82vw, 23rem) !important;
-        min-width: min(82vw, 23rem) !important;
-        max-width: min(82vw, 23rem) !important;
+        flex-basis: auto !important;
+        min-width: 0 !important;
+        max-width: 100% !important;
+        width: 100% !important;
         height: auto !important;
+        scroll-snap-align: none;
     }
 
     #plans .pricing-nav-btn {
-        width: 2.65rem;
-        height: 2.65rem;
-        top: 47%;
-    }
-
-    #plans .pricing-nav-symbol {
-        font-size: 1.75rem;
-    }
-
-    #plans .pricing-nav-prev {
-        left: 0.35rem;
-    }
-
-    #plans .pricing-nav-next {
-        right: 0.35rem;
+        display: none !important;
     }
 }
