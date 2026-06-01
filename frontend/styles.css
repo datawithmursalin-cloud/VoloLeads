@@ -1627,6 +1627,30 @@ html.dark body > section {
 body:not(.site-preload) > main:not(#main-content),
 body:not(.site-preload) > header,
 body:not(.site-preload) > article {
+    background:
+        linear-gradient(to bottom, rgba(248, 250, 252, 0) 0%, rgba(248, 250, 252, 0.72) 22rem, #f8fafc 35rem),
+        linear-gradient(to right, rgba(148, 163, 184, 0.58) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(148, 163, 184, 0.42) 1px, transparent 1px),
+        linear-gradient(135deg, #fff7ed 0%, #ffffff 52%, #f8fafc 100%) !important;
+    background-size: auto, 14px 24px, 14px 24px, auto !important;
+    background-position: center top !important;
+}
+
+html.dark body:not(.site-preload) > main:not(#main-content),
+html.dark body:not(.site-preload) > header,
+html.dark body:not(.site-preload) > article {
+    background:
+        linear-gradient(to bottom, rgba(2, 6, 23, 0) 0%, rgba(2, 6, 23, 0.72) 22rem, #020617 35rem),
+        linear-gradient(to right, rgba(148, 163, 184, 0.3) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(148, 163, 184, 0.22) 1px, transparent 1px),
+        #020617 !important;
+    background-size: auto, 14px 24px, 14px 24px, auto !important;
+    background-position: center top !important;
+}
+
+body:not(.site-preload) > main:not(#main-content),
+body:not(.site-preload) > header,
+body:not(.site-preload) > article {
     position: relative;
     isolation: isolate;
 }
@@ -1634,7 +1658,7 @@ body:not(.site-preload) > article {
 body:not(.site-preload) > main:not(#main-content)::before,
 body:not(.site-preload) > header::before,
 body:not(.site-preload) > article::before {
-    content: "";
+    content: none;
     position: absolute;
     inset: 0 0 auto;
     height: min(34rem, 100%);
