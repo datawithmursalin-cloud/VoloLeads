@@ -1616,22 +1616,22 @@ body::before {
     position: fixed;
     inset: 0 0 auto;
     width: 100%;
-    height: min(38rem, 72vh);
+    height: min(34rem, 68vh);
     pointer-events: none;
     z-index: 0;
     background-image:
-        linear-gradient(to right, rgba(148, 163, 184, 0.64) 1px, transparent 1px),
-        linear-gradient(to bottom, rgba(148, 163, 184, 0.46) 1px, transparent 1px);
+        linear-gradient(to right, rgba(148, 163, 184, 0.24) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(148, 163, 184, 0.16) 1px, transparent 1px);
     background-size: 14px 24px;
     background-position: center top;
-    mask-image: linear-gradient(to bottom, #000 0%, rgba(0, 0, 0, 0.78) 52%, transparent 100%);
-    -webkit-mask-image: linear-gradient(to bottom, #000 0%, rgba(0, 0, 0, 0.78) 52%, transparent 100%);
+    mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.72) 0%, rgba(0, 0, 0, 0.42) 42%, transparent 100%);
+    -webkit-mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.72) 0%, rgba(0, 0, 0, 0.42) 42%, transparent 100%);
 }
 
 html.dark body::before {
     background-image:
-        linear-gradient(to right, rgba(148, 163, 184, 0.34) 1px, transparent 1px),
-        linear-gradient(to bottom, rgba(148, 163, 184, 0.24) 1px, transparent 1px);
+        linear-gradient(to right, rgba(148, 163, 184, 0.14) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(148, 163, 184, 0.1) 1px, transparent 1px);
 }
 
 body > nav,
@@ -1665,9 +1665,9 @@ body:not(.site-preload) > main:not(#main-content),
 body:not(.site-preload) > header,
 body:not(.site-preload) > article {
     background:
-        linear-gradient(to bottom, rgba(248, 250, 252, 0) 0%, rgba(248, 250, 252, 0.64) 25rem, #f8fafc 38rem),
-        linear-gradient(to right, rgba(148, 163, 184, 0.64) 1px, transparent 1px),
-        linear-gradient(to bottom, rgba(148, 163, 184, 0.46) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(248, 250, 252, 0.18) 0%, rgba(248, 250, 252, 0.76) 21rem, #f8fafc 32rem),
+        linear-gradient(to right, rgba(148, 163, 184, 0.22) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(148, 163, 184, 0.16) 1px, transparent 1px),
         linear-gradient(135deg, #fff7ed 0%, #ffffff 52%, #f8fafc 100%) !important;
     background-size: auto, 14px 24px, 14px 24px, auto !important;
     background-position: center top !important;
@@ -1677,9 +1677,9 @@ html.dark body:not(.site-preload) > main:not(#main-content),
 html.dark body:not(.site-preload) > header,
 html.dark body:not(.site-preload) > article {
     background:
-        linear-gradient(to bottom, rgba(2, 6, 23, 0) 0%, rgba(2, 6, 23, 0.62) 25rem, #020617 38rem),
-        linear-gradient(to right, rgba(148, 163, 184, 0.34) 1px, transparent 1px),
-        linear-gradient(to bottom, rgba(148, 163, 184, 0.24) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(2, 6, 23, 0.16) 0%, rgba(2, 6, 23, 0.72) 21rem, #020617 32rem),
+        linear-gradient(to right, rgba(148, 163, 184, 0.14) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(148, 163, 184, 0.1) 1px, transparent 1px),
         #020617 !important;
     background-size: auto, 14px 24px, 14px 24px, auto !important;
     background-position: center top !important;
@@ -1744,11 +1744,11 @@ html.dark .contact-strategic-grid-bg {
 html.dark .strategic-grid-bg {
     background-color: #0f172a !important;
     background-image:
-        linear-gradient(to right, rgba(148, 163, 184, 0.28) 1px, transparent 1px),
-        linear-gradient(to bottom, rgba(148, 163, 184, 0.2) 1px, transparent 1px) !important;
+        linear-gradient(to right, rgba(148, 163, 184, 0.14) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(148, 163, 184, 0.1) 1px, transparent 1px) !important;
     background-size: 14px 24px !important;
-    mask-image: linear-gradient(to bottom, #000 0%, rgba(0, 0, 0, 0.82) 58%, transparent 100%) !important;
-    -webkit-mask-image: linear-gradient(to bottom, #000 0%, rgba(0, 0, 0, 0.82) 58%, transparent 100%) !important;
+    mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.72) 0%, rgba(0, 0, 0, 0.4) 50%, transparent 100%) !important;
+    -webkit-mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.72) 0%, rgba(0, 0, 0, 0.4) 50%, transparent 100%) !important;
 }
 
 nav.fixed.top-6 {
