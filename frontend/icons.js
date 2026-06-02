@@ -58,11 +58,13 @@
     'warning': '<path d="M12 3 2 21h20L12 3Z"/><path d="M12 9v5M12 17h.01"/>',
     'wave-square': '<path d="M3 12h4l2-6 6 12 2-6h4"/>',
     'whatsapp': '<path d="M5 19 6.5 15A8 8 0 1 1 10 18.5L5 19Z"/><path d="M9 8c1 4 3 6 7 7"/>',
+    'x-twitter': '<path d="M4 4l16 16M20 4 4 20"/><path d="M8.5 4H4l7.5 9.5M15.5 20H20l-7.5-9.5"/>',
     'xmark': '<path d="M6 6l12 12M18 6 6 18"/>'
   };
 
   const aliases = {
-    'exclamation-triangle': 'warning'
+    'exclamation-triangle': 'warning',
+    'facebook-f': 'facebook'
   };
 
   function getIconName(el) {

@@ -366,10 +366,10 @@ function renderUniversalFooter() {
                 <div>
                     <h4 class="text-white font-bold mb-4">Follow Us</h4>
                     <div class="flex gap-3">
-                        <a href="https://www.linkedin.com/" aria-label="LinkedIn" class="w-10 h-10 rounded-full bg-slate-800 hover:bg-brand-orange flex items-center justify-center transition-colors"><i class="fa-brands fa-linkedin-in"></i></a>
-                        <a href="https://www.facebook.com/" aria-label="Facebook" class="w-10 h-10 rounded-full bg-slate-800 hover:bg-brand-orange flex items-center justify-center transition-colors"><i class="fa-brands fa-facebook-f"></i></a>
-                        <a href="https://www.instagram.com/" aria-label="Instagram" class="w-10 h-10 rounded-full bg-slate-800 hover:bg-brand-orange flex items-center justify-center transition-colors"><i class="fa-brands fa-instagram"></i></a>
-                        <a href="https://x.com/" aria-label="X" class="w-10 h-10 rounded-full bg-slate-800 hover:bg-brand-orange flex items-center justify-center transition-colors"><i class="fa-brands fa-x-twitter"></i></a>
+                        <a href="https://www.linkedin.com/company/vololeads" aria-label="LinkedIn" class="w-10 h-10 rounded-full bg-slate-800 hover:bg-brand-orange flex items-center justify-center transition-colors"><i class="fa-brands fa-linkedin-in"></i></a>
+                        <a href="https://www.facebook.com/vololeads" aria-label="Facebook" class="w-10 h-10 rounded-full bg-slate-800 hover:bg-brand-orange flex items-center justify-center transition-colors"><i class="fa-brands fa-facebook-f"></i></a>
+                        <a href="https://www.instagram.com/vololeads" aria-label="Instagram" class="w-10 h-10 rounded-full bg-slate-800 hover:bg-brand-orange flex items-center justify-center transition-colors"><i class="fa-brands fa-instagram"></i></a>
+                        <a href="https://x.com/vololeads" aria-label="X" class="w-10 h-10 rounded-full bg-slate-800 hover:bg-brand-orange flex items-center justify-center transition-colors"><i class="fa-brands fa-x-twitter"></i></a>
                     </div>
                 </div>
             </div>
