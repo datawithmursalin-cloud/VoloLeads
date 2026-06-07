@@ -1068,7 +1068,7 @@ function initFormSecurity() {
             const data = Object.fromEntries(formData);
 
             try {
-                // Send to your backend endpoint (which will proxy to Web3Forms with secure API key)
+                // Send to backend API (stores submission and emails admin via cPanel SMTP)
                 const response = await fetch('/api/contact-form', {
                     method: 'POST',
                     headers: {
@@ -1233,9 +1233,7 @@ function captureVisitorData(name, email) {
 }
 
 // ========== DATA SUBMISSION FUNCTIONS ==========
-async function submitToWeb3Forms(visitorData) {
-    // SECURITY: API key should be handled server-side only
-    // For now, submit to your backend endpoint which will add the key
+async function submitVisitorData(visitorData) {
     const payload = {
         visitor_name: visitorData.visitor_name,
         visitor_email: visitorData.visitor_email,
@@ -1247,9 +1245,6 @@ async function submitToWeb3Forms(visitorData) {
     };
 
     try {
-        // TODO: Replace with your backend endpoint
-        // For production, your backend should proxy to Web3Forms with the API key
-        // Example: /api/visitors (your backend adds the Web3Forms API key)
         const response = await fetch('/api/visitors', {
             method: 'POST',
             headers: {
