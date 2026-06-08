@@ -22,7 +22,7 @@ const PLAN_CONFIG = {
     billingInterval: 'month',
     pricing: {
       listDisplay: '$480/month',
-      listDisplayAlt: '$5.75/hour, billed monthly',
+      listDisplayAlt: '$6/hour, billed monthly',
       promoCode: 'COW2026E',
       promoDiscountCents: 2000,
       promoDisplay: '$460/month',
