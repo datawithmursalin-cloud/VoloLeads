@@ -189,7 +189,7 @@ Covers:
 
 **Problem:** "Payment not saved to database"
 **Solution:**
-- Verify MongoDB connection
+- Verify PostgreSQL connection
 - Check Payment model import
 - Check logs for errors
 
@@ -222,3 +222,4 @@ Questions? Check:
 ---
 
 Ready to add payments with email confirmations! 💳✉️
+

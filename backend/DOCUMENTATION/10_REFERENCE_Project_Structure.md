@@ -11,7 +11,7 @@ backend/
 │   │   ├── health.js
 │   │   ├── auth.js
 │   │   └── users.js
-│   ├── models/                   # Database models (MongoDB)
+│   ├── models/                   # Database models (PostgreSQL)
 │   │   └── User.js
 │   ├── middleware/               # Express middleware
 │   │   ├── authenticate.js      # JWT verification
@@ -111,8 +111,8 @@ Static files served by Express (HTML, CSS, JS, images).
 
 ### Add a New Model
 1. Create `src/models/FeatureModel.js`
-2. Define Mongoose schema
-3. Export model: `module.exports = mongoose.model('Feature', schema);`
+2. Define repository layer schema
+3. Export model: `module.exports = repository layer.model('Feature', schema);`
 
 ### Add a New Controller
 1. Create `src/controllers/featureController.js`
@@ -130,7 +130,7 @@ Static files served by Express (HTML, CSS, JS, images).
 NODE_ENV              # development | production
 PORT                  # Server port (default: 5000)
 JWT_SECRET            # JWT signing secret
-DATABASE_URL          # MongoDB connection string
+DATABASE_URL          # PostgreSQL connection string
 API_BASE_URL          # API base URL
 CORS_ORIGIN           # Allowed frontend URL
 LOG_LEVEL             # debug | info | warn | error
@@ -216,7 +216,7 @@ npm install
 
 ### Database Connection Failed
 - Check CONNECTION_URL is correct
-- Verify MongoDB is running
+- Verify PostgreSQL is running
 - Check firewall rules
 
 ### CORS Errors
@@ -224,3 +224,4 @@ npm install
 - Verify frontend domain matches CORS_ORIGIN
 
 For more details, see CPANEL_DEPLOYMENT.md and MONITORING_GUIDE.md
+

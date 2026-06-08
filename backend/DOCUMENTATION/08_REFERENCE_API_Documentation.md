@@ -249,3 +249,4 @@ Allowed Headers: Content-Type, Authorization
 Current API Version: v1 (implied in URLs)
 
 For future versioning, prefix routes with `/api/v2/`
+

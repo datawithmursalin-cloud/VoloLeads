@@ -146,9 +146,9 @@ See `CPANEL_DEPLOYMENT.md` for complete instructions, or quick summary:
 ## Common First Steps
 
 1. **Database Setup** (optional)
-   - Install MongoDB locally or use MongoDB Atlas
+   - Install PostgreSQL locally or use managed PostgreSQL
    - Update `DATABASE_URL` in .env
-   - Uncomment MongoDB connection in `src/server.js`
+   - Uncomment PostgreSQL connection in `src/server.js`
 
 2. **Add Your First Feature**
    - Create route in `src/routes/yourfeature.js`
@@ -171,3 +171,4 @@ See `CPANEL_DEPLOYMENT.md` for complete instructions, or quick summary:
 See deployment checklist in SETUP_COMPLETE.md
 
 Happy coding! 🚀
+

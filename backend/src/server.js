@@ -7,21 +7,31 @@ const path = require('path');
 const connectDB = require('./config/db');
 const { handleStripeWebhook } = require('./controllers/billingController');
 
-connectDB();
+connectDB().catch(error => {
+  console.error(`Database startup error: ${error.message}`);
+  process.exit(1);
+});
 
 const app = express();
+app.set('trust proxy', 1);
+
+const defaultCorsOrigins = [
+  'http://localhost:3000',
+  'https://vololeads.com',
+  'https://www.vololeads.com'
+];
 
 app.use(helmet());
 
 // Configure CORS for multiple origins
 const corsOrigins = process.env.CORS_ORIGIN
   ? process.env.CORS_ORIGIN.split(',').map(origin => origin.trim())
-  : ['http://localhost:3000'];
+  : defaultCorsOrigins;
 
 app.use(cors({
   origin: corsOrigins,
   methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
-  allowedHeaders: ['Content-Type', 'Authorization'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Sync-Api-Key'],
   credentials: true
 }));
 
@@ -53,6 +63,7 @@ app.use('/api/users', require('./routes/users'));
 app.use('/api', require('./routes/billing'));
 app.use('/api', require('./routes/contact'));
 app.use('/api', require('./routes/visitors'));
+app.use('/api', require('./routes/export'));
 
 // 404 handler
 app.use((req, res) => {

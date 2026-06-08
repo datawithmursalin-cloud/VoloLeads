@@ -62,9 +62,9 @@ ps aux | grep node
 ```
 
 ### Database Connection Monitoring
-Monitor MongoDB connections:
+Monitor PostgreSQL connections:
 ```bash
-mongosh
+psql
 > db.currentOp()
 > db.killOp(12345)
 ```
@@ -75,8 +75,8 @@ mongosh
 
 ### Database Backups
 ```bash
-# MongoDB backup
-mongodump --uri="your-connection-string" --out=/backups/mongo-backup-$(date +%Y%m%d)
+# PostgreSQL backup
+postgresump --uri="your-connection-string" --out=/backups/mongo-backup-$(date +%Y%m%d)
 
 # Restore
 mongorestore --uri="your-connection-string" --dir=/backups/mongo-backup-20240502
@@ -102,8 +102,8 @@ DATE=$(date +%Y%m%d_%H%M%S)
 # Create backup directory
 mkdir -p $BACKUP_DIR
 
-# Backup MongoDB
-mongodump --uri="your-connection-string" --out=$BACKUP_DIR/mongo-$DATE
+# Backup PostgreSQL
+postgresump --uri="your-connection-string" --out=$BACKUP_DIR/mongo-$DATE
 
 # Backup application
 tar -czf $BACKUP_DIR/api-$DATE.tar.gz /home/username/api/
@@ -167,10 +167,10 @@ pm2 restart app
 
 ## Database Maintenance
 
-### MongoDB
+### PostgreSQL
 ```bash
-# Connect to MongoDB
-mongosh "your-connection-string"
+# Connect to PostgreSQL
+psql "your-connection-string"
 
 # Rebuild indexes
 db.users.reIndex()
@@ -278,8 +278,8 @@ wrk -t4 -c100 -d30s https://api.yourdomain.com/api/health
 
 ### Database Connection Issues
 1. Verify connection string
-2. Check MongoDB is running: `ps aux | grep mongod`
-3. Test connectivity: `mongosh "connection-string"`
+2. Check PostgreSQL is running: `ps aux | grep postgres`
+3. Test connectivity: `psql "connection-string"`
 
 ### SSL Certificate Issues
 1. Check expiration: cPanel → SSL/TLS Status
@@ -317,3 +317,4 @@ wrk -t4 -c100 -d30s https://api.yourdomain.com/api/health
 
 ## Contact & Support
 For issues, refer to [CPANEL_DEPLOYMENT.md](./CPANEL_DEPLOYMENT.md)
+

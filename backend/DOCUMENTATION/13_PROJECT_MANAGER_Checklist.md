@@ -9,11 +9,11 @@ I've built the complete codebase and documentation. Now **you** need to:
 ## 🧪 PHASE 1: LOCAL TESTING & VERIFICATION (You)
 
 ### Backend Setup & Testing
-- [ ] **Start MongoDB locally**
+- [ ] **Start PostgreSQL locally**
   ```bash
   docker-compose up
   # or
-  brew services start mongodb-community
+  brew services start postgresql-community
   ```
 
 - [ ] **Start the backend server**
@@ -185,7 +185,7 @@ I've built the complete codebase and documentation. Now **you** need to:
 
 ### Pre-Production Checklist
 - [ ] **Database**
-  - [ ] MongoDB production instance set up
+  - [ ] PostgreSQL production instance set up
   - [ ] Automated backups configured
   - [ ] Connection pooling set up
   - [ ] User authentication configured
@@ -219,7 +219,7 @@ I've built the complete codebase and documentation. Now **you** need to:
 - [ ] **Server Preparation**
   - [ ] Production server ready
   - [ ] Node.js installed
-  - [ ] MongoDB running
+  - [ ] PostgreSQL running
   - [ ] Ports open (80, 443, 5000 or your port)
 
 - [ ] **Deploy Code**
@@ -230,7 +230,7 @@ I've built the complete codebase and documentation. Now **you** need to:
 
 - [ ] **Start Services**
   - [ ] Backend running (`npm start`)
-  - [ ] MongoDB running
+  - [ ] PostgreSQL running
   - [ ] Monitoring/logging started
   - [ ] Health check passing
 
@@ -373,7 +373,7 @@ I've built the complete codebase and documentation. Now **you** need to:
 
 1. **This Week:**
    - [ ] Get Web3Forms API key
-   - [ ] Start MongoDB locally
+   - [ ] Start PostgreSQL locally
    - [ ] Run backend with `npm run dev`
    - [ ] Run verification tests
    - [ ] Start frontend on localhost:3000
@@ -399,3 +399,4 @@ All documentation is in:
 - `backend/FRONTEND_INTEGRATION_RESPONSE.md` - Integration tests
 
 Everything is ready. Now it's your turn to execute! 🚀
+

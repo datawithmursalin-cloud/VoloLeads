@@ -65,7 +65,7 @@ app.use(cors({
 Before frontend testing, confirm:
 
 - [ ] Backend running with `npm run dev`
-- [ ] Database (MongoDB) is running
+- [ ] Database (PostgreSQL) is running
 - [ ] `.env` file created with correct values:
   - [ ] `WEB3FORMS_API_KEY` set
   - [ ] `CONTACT_EMAIL` set
@@ -251,3 +251,4 @@ Share these if they need clarification:
 5. They'll start integration testing
 
 **Backend is production-ready. Ready to ship!** 🚀
+

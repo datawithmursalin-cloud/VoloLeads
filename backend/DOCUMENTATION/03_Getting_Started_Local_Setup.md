@@ -49,7 +49,7 @@ JWT_SECRET=your-generated-secret-here
 HASH_SALT=your-generated-salt-here
 
 # Database
-DATABASE_URL=mongodb://localhost:27017/vololeads
+DATABASE_URL=postgresql://postgres:postgres@localhost:5432/vololeads
 
 # Frontend
 CORS_ORIGIN=http://localhost:3000
@@ -85,7 +85,7 @@ The contact form feature securely collects submissions from the website and forw
 ### Key Components
 
 **Model:** `src/models/ContactForm.js`
-- Stores form submissions in MongoDB
+- Stores form submissions in PostgreSQL
 - Encrypts sensitive PII before storage
 - Implements retention policies
 
@@ -306,7 +306,7 @@ curl -X DELETE http://localhost:5000/api/visitors/VISITOR_HASH \
 
 ## Database Setup
 
-### MongoDB Collections
+### PostgreSQL Collections
 
 The backend creates two main collections:
 
@@ -367,21 +367,21 @@ The backend creates two main collections:
 - `pageUrl` + `timestamp` - For page analytics
 - TTL index on `timestamp` - Auto-deletes old events
 
-### Local MongoDB Setup
+### Local PostgreSQL Setup
 
 **Mac (using Homebrew):**
 ```bash
-brew tap mongodb/brew
-brew install mongodb-community
-brew services start mongodb-community
+brew tap postgresql/brew
+brew install postgresql-community
+brew services start postgresql-community
 ```
 
 **Docker:**
 ```bash
 docker run -d \
-  --name mongodb \
+  --name postgresql \
   -p 27017:27017 \
-  -v mongodb_data:/data/db \
+  -v postgresql_data:/data/db \
   mongo:latest
 ```
 
@@ -393,7 +393,7 @@ docker-compose up
 ### Verify Connection
 
 ```bash
-mongosh "mongodb://localhost:27017/vololeads"
+psql "postgresql://postgres:postgres@localhost:5432/vololeads"
 ```
 
 ---
@@ -511,11 +511,11 @@ Error: connect ECONNREFUSED 127.0.0.1:27017
 
 **Fix:**
 ```bash
-# Check if MongoDB is running
-pgrep mongod
+# Check if PostgreSQL is running
+pgrep postgres
 
-# Start MongoDB
-brew services start mongodb-community
+# Start PostgreSQL
+brew services start postgresql-community
 
 # Or use Docker
 docker run -d -p 27017:27017 mongo:latest
@@ -585,7 +585,7 @@ echo $HASH_SALT
 ### 1. Local Testing
 
 ```bash
-# Terminal 1: Start MongoDB
+# Terminal 1: Start PostgreSQL
 docker-compose up
 
 # Terminal 2: Start backend
@@ -600,8 +600,8 @@ curl -X POST http://localhost:5000/api/contact-form \
 ### 2. Check Logs
 
 ```bash
-# View MongoDB logs
-docker-compose logs mongodb
+# View PostgreSQL logs
+docker-compose logs postgresql
 
 # View backend logs
 npm run dev
@@ -610,8 +610,8 @@ npm run dev
 ### 3. Database Inspection
 
 ```bash
-# Connect to MongoDB
-mongosh "mongodb://localhost:27017/vololeads"
+# Connect to PostgreSQL
+psql "postgresql://postgres:postgres@localhost:5432/vololeads"
 
 # View contact forms
 db.contact_forms.find().limit(5)
@@ -672,3 +672,4 @@ For issues or questions:
 2. Review `ENDPOINTS.md` for API reference
 3. Check server logs: `npm run dev`
 4. Contact the backend team
+

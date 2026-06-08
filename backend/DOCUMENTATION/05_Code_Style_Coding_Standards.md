@@ -79,13 +79,13 @@ const MAXSUBMISSIONS = 3;
 ```javascript
 // Good
 class Logger { }
-const ContactFormSchema = new mongoose.Schema();
-const User = mongoose.model('User', userSchema);
+const ContactFormSchema = new repository layer.Schema();
+const User = repository layer.model('User', userSchema);
 
 // Avoid
 class logger { }
-const contactFormSchema = new mongoose.Schema();
-const user = mongoose.model('user', userSchema);
+const contactFormSchema = new repository layer.Schema();
+const user = repository layer.model('user', userSchema);
 ```
 
 ### Boolean Variables
@@ -179,9 +179,9 @@ module.exports = router;
 **Pattern:** Schema → Indexes → Export
 
 ```javascript
-const mongoose = require('mongoose');
+const repository layer = require('repository layer');
 
-const contactFormSchema = new mongoose.Schema(
+const contactFormSchema = new repository layer.Schema(
   {
     name: {
       type: String,
@@ -207,7 +207,7 @@ const contactFormSchema = new mongoose.Schema(
 contactFormSchema.index({ email: 1 });
 contactFormSchema.index({ createdAt: -1 });
 
-module.exports = mongoose.model('ContactForm', contactFormSchema);
+module.exports = repository layer.model('ContactForm', contactFormSchema);
 ```
 
 ---
@@ -650,3 +650,4 @@ Refer to:
 4. Git history for similar features
 
 Maintain consistency with existing code patterns!
+

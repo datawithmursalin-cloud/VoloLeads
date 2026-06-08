@@ -1008,6 +1008,50 @@ function initTurnstileLoader() {
 }
 
 /* ========== PLANS VISIBILITY HELPERS ========== */
+function equalizePlanCardHeights() {
+    const plansRoot = document.getElementById('plans');
+    const plansGrid = document.getElementById('pricing-slider') || document.querySelector('#plans .plans-pricing-grid');
+    if (!plansRoot || !plansGrid) return;
+
+    const cards = [...plansGrid.querySelectorAll(':scope > .perspective-1000')];
+    let maxContentHeight = 0;
+
+    cards.forEach(card => {
+        card.style.setProperty('height', 'auto', 'important');
+        card.style.setProperty('min-height', '0', 'important');
+
+        const frontFace = card.querySelector('.transform-style-3d > .backface-hidden:first-child');
+        if (frontFace) {
+            frontFace.style.setProperty('position', 'static', 'important');
+            frontFace.style.setProperty('min-height', '0', 'important');
+            frontFace.style.setProperty('height', 'auto', 'important');
+        }
+    });
+
+    cards.forEach(card => {
+        const frontFace = card.querySelector('.transform-style-3d > .backface-hidden:first-child');
+        if (!frontFace) return;
+        maxContentHeight = Math.max(maxContentHeight, frontFace.scrollHeight);
+    });
+
+    cards.forEach(card => {
+        card.style.removeProperty('height');
+        card.style.removeProperty('min-height');
+
+        const frontFace = card.querySelector('.transform-style-3d > .backface-hidden:first-child');
+        if (frontFace) {
+            frontFace.style.removeProperty('position');
+            frontFace.style.removeProperty('min-height');
+            frontFace.style.removeProperty('height');
+        }
+    });
+
+    if (maxContentHeight <= 0) return;
+
+    const cardHeight = Math.ceil(maxContentHeight + 40);
+    plansRoot.style.setProperty('--plan-card-height', `${cardHeight}px`);
+}
+
 function initMobilePlansCarousel() {
     const plansGrid = document.getElementById('pricing-slider') || document.querySelector('#plans .plans-pricing-grid');
     if (!plansGrid) return;
@@ -1016,6 +1060,17 @@ function initMobilePlansCarousel() {
     plansGrid.querySelectorAll('.perspective-1000').forEach(card => {
         card.classList.add('is-visible');
     });
+
+    equalizePlanCardHeights();
+
+    if (!window.__planCardHeightResizeBound) {
+        window.__planCardHeightResizeBound = true;
+        let resizeTimer;
+        window.addEventListener('resize', () => {
+            clearTimeout(resizeTimer);
+            resizeTimer = setTimeout(equalizePlanCardHeights, 150);
+        });
+    }
 }
 
 /* --- Form Security & Anti-Bot Checks --- */

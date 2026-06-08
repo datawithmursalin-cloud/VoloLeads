@@ -114,7 +114,7 @@ Copy `.env.example` to `.env` and configure:
 NODE_ENV=development          # development or production
 PORT=5000                    # Server port
 JWT_SECRET=your-secret-key   # JWT signing secret
-DATABASE_URL=mongodb://localhost:27017/vololeads
+DATABASE_URL=postgresql://postgres:postgres@localhost:5432/vololeads
 CORS_ORIGIN=http://localhost:3000
 LOG_LEVEL=debug
 ```
@@ -186,7 +186,7 @@ npm run lint:fix    # Fix style issues
 ```bash
 docker-compose up
 # API runs on http://localhost:5000
-# MongoDB on http://localhost:27017
+# PostgreSQL on http://localhost:27017
 ```
 
 ### Production Docker
@@ -194,7 +194,7 @@ docker-compose up
 docker build -t vololeads-api .
 docker run -p 5000:5000 \
   -e JWT_SECRET=your-secret \
-  -e DATABASE_URL=mongodb://... \
+  -e DATABASE_URL=postgresql://... \
   vololeads-api
 ```
 
@@ -207,7 +207,7 @@ docker run -p 5000:5000 \
 3. **Error Handling**: Centralized error management
 4. **Validation**: Input validation middleware
 5. **Logging**: Request logging with Morgan
-6. **Database Ready**: MongoDB integration included
+6. **Database Ready**: PostgreSQL integration included
 7. **Testing**: Jest test suite configured
 8. **Code Quality**: ESLint configured
 9. **Scalable**: MVC architecture ready for growth
@@ -251,7 +251,7 @@ npm install
 
 **Database Connection Failed**
 - Check connection string in .env
-- Verify MongoDB is running
+- Verify PostgreSQL is running
 - Check firewall rules
 
 See `CPANEL_DEPLOYMENT.md` for more troubleshooting.
@@ -276,3 +276,4 @@ npm run dev
 ```
 
 Happy coding! 🚀
+

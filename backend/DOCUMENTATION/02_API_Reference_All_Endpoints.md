@@ -572,7 +572,7 @@ NODE_ENV=development
 PORT=5000
 
 # Database
-DATABASE_URL=mongodb://localhost:27017/vololeads
+DATABASE_URL=postgresql://postgres:postgres@localhost:5432/vololeads
 
 # Security
 JWT_SECRET=your-super-secret-jwt-key-change-this
@@ -686,3 +686,4 @@ For more information:
 - See `PROJECT_STRUCTURE.md` for codebase organization
 
 For questions, contact the backend team or create an issue in the repository.
+

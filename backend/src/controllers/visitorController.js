@@ -1,4 +1,4 @@
-const VisitorEvent = require('../models/VisitorEvent');
+const VisitorEvents = require('../repositories/visitorEvents');
 const { hashIP, getClientIP, isValidURL } = require('../utils/helpers');
 const logger = require('../utils/logger');
 
@@ -41,10 +41,7 @@ exports.trackVisitorEvent = async (req, res) => {
 
     // Rate limiting: max 100 events per visitor per hour
     const oneHourAgo = new Date(Date.now() - 60 * 60 * 1000);
-    const recentEvents = await VisitorEvent.countDocuments({
-      visitorHash: visitorHash,
-      timestamp: { $gte: oneHourAgo }
-    });
+    const recentEvents = await VisitorEvents.countRecentByVisitor(visitorHash, oneHourAgo);
 
     if (recentEvents >= 100) {
       logger.warn(`Rate limit exceeded for visitor: ${visitorHash}`);
@@ -52,8 +49,7 @@ exports.trackVisitorEvent = async (req, res) => {
     }
 
     // Store visitor event
-    const visitorEvent = new VisitorEvent(eventData);
-    await visitorEvent.save();
+    await VisitorEvents.create(eventData);
 
     logger.debug(`Visitor event tracked: ${event_type} from ${visitorHash}`);
 
@@ -74,21 +70,12 @@ exports.getVisitorEvents = async (req, res) => {
   try {
     const { limit = 100, skip = 0, eventType, startDate, endDate } = req.query;
 
-    const query = {};
-    if (eventType) query.eventType = eventType;
-    if (startDate || endDate) {
-      query.timestamp = {};
-      if (startDate) query.timestamp.$gte = new Date(startDate);
-      if (endDate) query.timestamp.$lte = new Date(endDate);
-    }
+    const numericLimit = parseInt(limit, 10);
+    const numericSkip = parseInt(skip, 10);
+    const filters = { eventType, startDate, endDate, limit: numericLimit, skip: numericSkip };
 
-    const events = await VisitorEvent
-      .find(query)
-      .limit(parseInt(limit))
-      .skip(parseInt(skip))
-      .sort({ timestamp: -1 });
-
-    const total = await VisitorEvent.countDocuments(query);
+    const events = await VisitorEvents.findAll(filters);
+    const total = await VisitorEvents.countAll(filters);
 
     return res.status(200).json({
       success: true,
@@ -97,8 +84,8 @@ exports.getVisitorEvents = async (req, res) => {
         events,
         pagination: {
           total,
-          limit: parseInt(limit),
-          skip: parseInt(skip)
+          limit: numericLimit,
+          skip: numericSkip
         }
       }
     });
@@ -115,43 +102,17 @@ exports.getVisitorAnalytics = async (req, res) => {
   try {
     const { startDate, endDate } = req.query;
 
-    const query = {};
-    if (startDate || endDate) {
-      query.timestamp = {};
-      if (startDate) query.timestamp.$gte = new Date(startDate);
-      if (endDate) query.timestamp.$lte = new Date(endDate);
-    }
-
-    // Get analytics aggregations
-    const totalEvents = await VisitorEvent.countDocuments(query);
-    const uniqueVisitors = await VisitorEvent.distinct('visitorHash', query);
-    const eventTypeCounts = await VisitorEvent.aggregate([
-      { $match: query },
-      { $group: { _id: '$eventType', count: { $sum: 1 } } },
-      { $sort: { count: -1 } }
-    ]);
-
-    const browserCounts = await VisitorEvent.aggregate([
-      { $match: query },
-      { $group: { _id: '$browser', count: { $sum: 1 } } },
-      { $sort: { count: -1 } },
-      { $limit: 10 }
-    ]);
-
-    const avgTimeSpent = await VisitorEvent.aggregate([
-      { $match: query },
-      { $group: { _id: null, average: { $avg: '$timeSpentSeconds' } } }
-    ]);
+    const analytics = await VisitorEvents.getAnalytics({ startDate, endDate });
 
     return res.status(200).json({
       success: true,
       message: 'Analytics retrieved',
       data: {
-        totalEvents,
-        uniqueVisitors: uniqueVisitors.length,
-        eventTypes: eventTypeCounts,
-        topBrowsers: browserCounts,
-        avgTimeSpentSeconds: Math.round(avgTimeSpent[0]?.average || 0)
+        totalEvents: analytics.totalEvents,
+        uniqueVisitors: analytics.uniqueVisitors,
+        eventTypes: analytics.eventTypes,
+        topBrowsers: analytics.topBrowsers,
+        avgTimeSpentSeconds: analytics.avgTimeSpentSeconds
       }
     });
   } catch (error) {
@@ -167,17 +128,15 @@ exports.deleteVisitorData = async (req, res) => {
   try {
     const { visitorHash } = req.params;
 
-    const result = await VisitorEvent.deleteMany({
-      visitorHash: visitorHash
-    });
+    const deletedCount = await VisitorEvents.deleteByVisitorHash(visitorHash);
 
-    logger.info(`Deleted ${result.deletedCount} events for visitor: ${visitorHash}`);
+    logger.info(`Deleted ${deletedCount} events for visitor: ${visitorHash}`);
 
     return res.status(200).json({
       success: true,
       message: 'Visitor data deleted (GDPR erasure)',
       data: {
-        deletedCount: result.deletedCount
+        deletedCount
       }
     });
   } catch (error) {

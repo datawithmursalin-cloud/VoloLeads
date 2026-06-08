@@ -65,7 +65,7 @@ Welcome! This folder contains all the documentation your team needs to understan
 **What you'll learn:**
 - Installation instructions
 - Environment variable setup
-- Local database setup (MongoDB)
+- Local database setup (PostgreSQL)
 - How to start the server
 - Testing endpoints locally
 - Troubleshooting common issues
@@ -238,7 +238,7 @@ STEP 0 → STEP 6
 | "CORS errors" | STEP 2: Configure CORS_ORIGIN |
 | "Rate limited" | STEP 1: Rate limiting details |
 | "Email not sending" | STEP 2: Troubleshooting section |
-| "Database connection error" | STEP 2: MongoDB setup |
+| "Database connection error" | STEP 2: PostgreSQL setup |
 | "Invalid token" | STEP 5: API Key Security |
 | "What should I code?" | STEP 4: Code patterns |
 
@@ -257,7 +257,7 @@ HASH_SALT=your-salt (generate with: openssl rand -base64 32)
 # Recommended
 CORS_ORIGIN=http://localhost:3000
 NODE_ENV=development
-DATABASE_URL=mongodb://localhost:27017/vololeads
+DATABASE_URL=postgresql://postgres:postgres@localhost:5432/vololeads
 ```
 
 ### Key Commands
@@ -302,7 +302,7 @@ curl -X POST http://localhost:5000/api/contact-form \
 
 ### External Resources
 - [Express.js Documentation](https://expressjs.com/)
-- [MongoDB Documentation](https://docs.mongodb.com/)
+- [PostgreSQL Documentation](https://docs.postgresql.com/)
 - [GDPR Compliance Guide](https://gdpr-info.eu/)
 - [OWASP Security Cheat Sheet](https://cheatsheetseries.owasp.org/)
 
@@ -372,3 +372,4 @@ Start with STEP 0 and follow the path for your role. Everything you need to know
 *Last updated: 2026-05-02*  
 *Status: ✅ Production Ready*  
 *For questions or feedback: [Contact Backend Team]*
+

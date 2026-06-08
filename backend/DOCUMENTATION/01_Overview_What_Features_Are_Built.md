@@ -275,7 +275,7 @@ HASH_SALT=your-generated-salt-here
 # Recommended
 CORS_ORIGIN=http://localhost:3000
 NODE_ENV=development
-DATABASE_URL=mongodb://localhost:27017/vololeads
+DATABASE_URL=postgresql://postgres:postgres@localhost:5432/vololeads
 ```
 
 ---
@@ -311,7 +311,7 @@ A: Update the schema in `src/models/ContactForm.js` and controller
 - Rate limits reset hourly
 
 ### Database connection errors
-- Ensure MongoDB is running: `docker-compose up`
+- Ensure PostgreSQL is running: `docker-compose up`
 - Check `DATABASE_URL` in `.env`
 
 ### CORS errors in browser
@@ -352,3 +352,4 @@ The backend is production-ready. Your team can:
 **Status:** ✅ Complete & Production-Ready  
 **Last Updated:** 2026-05-02  
 **Version:** 1.0.0
+

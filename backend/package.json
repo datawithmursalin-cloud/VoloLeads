@@ -6,6 +6,11 @@
   "scripts": {
     "start": "node src/server.js",
     "dev": "nodemon src/server.js",
+    "send:renewal-reminders": "node scripts/sendRenewalReminders.js",
+    "send:renewal-reminders:dry-run": "node scripts/sendRenewalReminders.js --dry-run",
+    "send:renewal-reminders:test-clock": "node scripts/sendRenewalReminders.js --dry-run --at",
+    "backfill:stripe-subscriptions": "node scripts/backfillStripeSubscriptions.js",
+    "preview:subscription-emails": "node scripts/previewSubscriptionEmails.js",
     "test": "jest --detectOpenHandles",
     "lint": "eslint src/",
     "lint:fix": "eslint src/ --fix"
@@ -28,10 +33,10 @@
     "helmet": "^7.0.0",
     "joi": "^17.9.2",
     "jsonwebtoken": "^9.0.0",
-    "mongoose": "^7.1.0",
     "morgan": "^1.10.0",
     "multer": "^1.4.5-lts.1",
     "nodemailer": "^6.9.3",
+    "pg": "^8.13.1",
     "stripe": "^17.7.0",
     "ua-parser-js": "^1.0.37",
     "uuid": "^9.0.0"

@@ -634,7 +634,7 @@ textarea:focus {
 
     #plans .perspective-1000 {
         width: min(100%, 21rem) !important;
-        min-height: 38.5rem !important;
+        min-height: var(--plan-card-height) !important;
         margin-left: auto !important;
         margin-right: auto !important;
     }
@@ -654,7 +654,7 @@ textarea:focus {
         display: flex !important;
         flex-direction: column !important;
         width: 100% !important;
-        min-height: 38.5rem !important;
+        min-height: var(--plan-card-height) !important;
         padding: 1.25rem !important;
         border-radius: 1rem !important;
         overflow: hidden !important;
@@ -1002,7 +1002,7 @@ textarea:focus-visible {
     }
 
     #plans .perspective-1000 {
-        height: 760px !important;
+        height: var(--plan-card-height) !important;
     }
 
     #plans .backface-hidden {
@@ -1050,7 +1050,7 @@ textarea:focus-visible {
         display: flex !important;
         flex-direction: column !important;
         height: auto !important;
-        min-height: clamp(43rem, 82vh, 50rem) !important;
+        min-height: var(--plan-card-height) !important;
         transform: none !important;
         overflow: visible !important;
         backface-visibility: visible !important;
@@ -1138,6 +1138,7 @@ textarea:focus-visible {
 }
 
 #plans {
+    --plan-card-height: 850px;
     scroll-margin-top: var(--nav-clearance);
     overflow: visible;
 }
@@ -2343,11 +2344,16 @@ html.dark body > main.utility-page-main {
     width: auto !important;
     min-width: clamp(20.5rem, 28vw, 23.5rem) !important;
     max-width: 23.5rem !important;
-    height: 790px !important;
+    height: var(--plan-card-height) !important;
     margin-left: 0 !important;
     margin-right: 0 !important;
     scroll-snap-align: center;
     scroll-snap-stop: always;
+}
+
+#plans .plans-pricing-grid > .perspective-1000 .backface-hidden {
+    min-height: 100%;
+    overflow: hidden !important;
 }
 
 #plans .pricing-nav-btn {
@@ -2420,6 +2426,7 @@ html.dark #plans .pricing-nav-btn {
         max-width: 100% !important;
         width: 100% !important;
         height: auto !important;
+        min-height: var(--plan-card-height) !important;
         scroll-snap-align: none;
     }
 

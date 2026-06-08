@@ -288,7 +288,7 @@ const { browser, os } = parseUserAgent(userAgent);
 // Currently: Stored as-is
 // TODO: Implement encryption for production
 // Options:
-// 1. MongoDB field-level encryption
+// 1. PostgreSQL field-level encryption
 // 2. Application-level encryption
 // 3. HSM (Hardware Security Module)
 
@@ -325,7 +325,7 @@ const form = new ContactForm({
 - GDPR erasure endpoint: `DELETE /api/contact-forms/:id`
 
 **Visitor Events:**
-- Auto-delete after 180 days (TTL index on MongoDB)
+- Auto-delete after 180 days (TTL index on PostgreSQL)
 - Manually accessible for GDPR request
 - GDPR erasure endpoint: `DELETE /api/visitors/:visitorHash`
 
@@ -409,7 +409,7 @@ if (!response.ok) {
 // ❌ Wrong - injection vulnerability (if using SQL)
 db.query(`SELECT * FROM users WHERE email = '${req.body.email}'`);
 
-// ❌ Wrong - MongoDB injection
+// ❌ Wrong - PostgreSQL injection
 db.collection('users').find({
   email: req.body.email // Might contain operators
 });
@@ -417,7 +417,7 @@ db.collection('users').find({
 
 **Solution:**
 ```javascript
-// ✅ Correct - use Mongoose (prevents injection)
+// ✅ Correct - use repository layer (prevents injection)
 const user = await User.findOne({ email: req.body.email });
 
 // ✅ Correct - sanitize before query
@@ -485,7 +485,7 @@ Before deploying to production:
 - [ ] Remove `.env` from Git history if accidentally committed
 
 ### Database
-- [ ] Enable MongoDB authentication
+- [ ] Enable PostgreSQL authentication
 - [ ] Use strong password for DB
 - [ ] Enable encryption at rest
 - [ ] Set up automated backups
@@ -552,3 +552,4 @@ Refer to:
 - Step 6 - Verification Checklist
 
 Always prioritize security over convenience!
+

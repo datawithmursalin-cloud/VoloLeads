@@ -12,7 +12,8 @@
 - [ ] Stripe live webhook secret
 - [ ] Stripe live price IDs
 - [ ] SMTP username and password
-- [ ] Web3Forms key if contact form is used
+- [ ] `CONTACT_EMAIL` set for contact form admin alerts (uses cPanel SMTP)
+- [ ] `SUBSCRIPTION_NOTIFY_EMAIL=vololeads@gmail.com` for new subscription alerts
 
 ## cPanel database
 

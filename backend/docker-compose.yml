@@ -9,27 +9,28 @@ services:
       NODE_ENV: production
       PORT: 5000
       JWT_SECRET: ${JWT_SECRET}
-      DATABASE_URL: mongodb://mongo:27017/vololeads
-      CORS_ORIGIN: http://localhost:3000
+      DATABASE_URL: postgresql://postgres:postgres@postgres:5432/vololeads
+      CORS_ORIGIN: http://localhost:3000,https://vololeads.com,https://www.vololeads.com
     depends_on:
-      - mongo
+      - postgres
     networks:
       - app-network
 
-  mongo:
-    image: mongo:6
+  postgres:
+    image: postgres:16-alpine
     ports:
-      - "27017:27017"
+      - "5432:5432"
     volumes:
-      - mongo-data:/data/db
+      - postgres-data:/var/lib/postgresql/data
     environment:
-      MONGO_INITDB_ROOT_USERNAME: root
-      MONGO_INITDB_ROOT_PASSWORD: password
+      POSTGRES_DB: vololeads
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
     networks:
       - app-network
 
 volumes:
-  mongo-data:
+  postgres-data:
 
 networks:
   app-network:

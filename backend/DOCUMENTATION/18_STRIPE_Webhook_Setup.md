@@ -18,9 +18,9 @@ npm install stripe
 Create `src/models/Payment.js`:
 
 ```javascript
-const mongoose = require('mongoose');
+const repository layer = require('repository layer');
 
-const paymentSchema = new mongoose.Schema(
+const paymentSchema = new repository layer.Schema(
   {
     stripePaymentId: {
       type: String,
@@ -51,14 +51,14 @@ const paymentSchema = new mongoose.Schema(
     customerPhone: String,
     service: String,
     description: String,
-    metadata: mongoose.Schema.Types.Mixed,
+    metadata: repository layer.Schema.Types.Mixed,
     receiptUrl: String,
     failureReason: String
   },
   { timestamps: true, collection: 'payments' }
 );
 
-module.exports = mongoose.model('Payment', paymentSchema);
+module.exports = repository layer.model('Payment', paymentSchema);
 ```
 
 ---
@@ -636,10 +636,11 @@ module.exports = router;
 - Use `stripe listen` for local testing
 
 **Payment not saving:**
-- Check MongoDB connection
+- Check PostgreSQL connection
 - Verify Payment model is imported
 - Check logs for database errors
 
 ---
 
 This setup ensures customers get instant confirmation emails after payment! 🎉
+

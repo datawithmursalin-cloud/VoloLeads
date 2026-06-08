@@ -6,7 +6,7 @@ let transport;
 function getTransport() {
   if (transport) return transport;
 
-  const { SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_PASS } = process.env;
+  const { SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_PASS, SMTP_TLS_SERVERNAME } = process.env;
   if (!SMTP_HOST || !SMTP_PORT || !SMTP_USER || !SMTP_PASS) {
     return null;
   }
@@ -18,7 +18,12 @@ function getTransport() {
     auth: {
       user: SMTP_USER,
       pass: SMTP_PASS
-    }
+    },
+    ...(SMTP_TLS_SERVERNAME ? {
+      tls: {
+        servername: SMTP_TLS_SERVERNAME
+      }
+    } : {})
   });
 
   return transport;
