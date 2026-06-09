@@ -6,7 +6,10 @@ backend/.env.*
 # Never commit real env files — only backend/.env.example is tracked
 backend/.env.production
 backend/.env.local
-/backend/
+backend/node_modules/
+backend/*.log
+backend/backend.zip
+backend/.env.production.example
 
 # Dependencies
 node_modules/
