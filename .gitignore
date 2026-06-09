@@ -3,6 +3,9 @@
 backend/.env
 backend/.env.*
 !backend/.env.example
+# Never commit real env files — only backend/.env.example is tracked
+backend/.env.production
+backend/.env.local
 /backend/
 
 # Dependencies

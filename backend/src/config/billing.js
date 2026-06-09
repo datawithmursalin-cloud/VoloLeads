@@ -21,11 +21,11 @@ const PLAN_CONFIG = {
     graceDaysAfterCancel: 7,
     billingInterval: 'month',
     pricing: {
-      listDisplay: '$480/month',
-      listDisplayAlt: '$6/hour, billed monthly',
+      listDisplay: '$500/month',
+      listDisplayAlt: '$6.25/hour, billed monthly',
       promoCode: 'COW2026E',
       promoDiscountCents: 2000,
-      promoDisplay: '$460/month',
+      promoDisplay: '$480/month',
       promoExpiresLabel: COW_PROMO_EXPIRES_LABEL
     }
   },

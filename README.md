@@ -1,36 +1,26 @@
 # VoloLeads
 
-VoloLeads is a two-part web application:
+[VoloLeads](https://vololeads.com) is a lead-generation platform for US real estate wholesalers. The site pairs a static marketing frontend with a Node/Express API for contact forms, visitor tracking, and Stripe subscription billing.
 
-- a static frontend in `frontend/`
-- a Node/Express backend in `backend/`
-
-The current live architecture is:
-
-- PostgreSQL for persistent data
-- Stripe Checkout + webhooks for subscription billing
-- SMTP for transactional email
-- a cron-driven renewal reminder script
-
-## Project Structure
+## Repository layout
 
 ```text
 VoloLeads-current-site/
-  frontend/   static website files
-  backend/    Node/Express API, Stripe webhook handling, PostgreSQL logic
+  frontend/   Static HTML/CSS/JS site (served on vololeads.com)
+  backend/    Express API, Stripe webhooks, PostgreSQL, SMTP email
 ```
 
-## Current Backend Behavior
+## Stack
 
-- checkout redirects customers to Stripe-hosted Checkout
-- successful checkout emails are sent from `checkout.session.completed`
-- subscription renewals are synchronized from `invoice.paid`
-- failed renewal emails are sent from `invoice.payment_failed`
-- renewal reminder emails are sent by `backend/scripts/sendRenewalReminders.js`
+- **Frontend:** static files + Express static server for local dev (`frontend/server.js`)
+- **Backend:** Node.js, Express, PostgreSQL
+- **Billing:** Stripe Checkout + webhooks
+- **Email:** SMTP (contact alerts, subscription notifications, renewal reminders)
+- **Security:** Cloudflare Turnstile, rate limiting, honeypot on contact form
 
-## Local Development
+## Local development
 
-Frontend:
+### Frontend
 
 ```bash
 cd frontend
@@ -38,55 +28,64 @@ npm install
 npm start
 ```
 
-Backend:
+Runs at `http://localhost:3000` and proxies `/api/*` to the backend.
+
+### Backend
 
 ```bash
 cd backend
 npm install
 cp .env.example .env
+# Edit .env with your local Postgres, Stripe test keys, and SMTP settings
 npm run dev
 ```
 
-Expected local URLs:
+Runs at `http://localhost:5000`.
 
-- frontend: `http://localhost:3000`
-- backend: `http://localhost:5000`
-
-For local Stripe webhook forwarding:
+### Stripe webhooks (local)
 
 ```bash
 stripe listen --forward-to localhost:5000/api/stripe/webhook
 ```
 
-## Live Website Deployment
+Copy the webhook signing secret into `STRIPE_WEBHOOK_SECRET` in `backend/.env`.
 
-For the real website deployment flow, start here:
+## Environment variables
 
-- [LIVE_WEBSITE_DEPLOYMENT_STEPS.md](F:\Github\VoloLeads-current-site\LIVE_WEBSITE_DEPLOYMENT_STEPS.md)
+**Only `backend/.env.example` is committed to this repo.**
 
-That guide covers:
+Do not commit real secrets. Copy the example file locally:
 
-- cPanel PostgreSQL setup
-- frontend publishing
-- Node.js app setup in cPanel
-- production environment variables
-- Stripe live webhook setup
-- renewal reminder cron setup
-- live verification steps
+```bash
+cp backend/.env.example backend/.env
+```
 
-## Database Reference
+Set production values on the server (cPanel Node.js app environment or a server-side `.env` that is never pushed). Files such as `.env`, `.env.production`, and `.env.*` are gitignored.
 
-For manual database inspection and schema reference:
+See `backend/.env.example` for the full variable list (database, Stripe prices, SMTP, Turnstile, CORS, etc.).
 
-- [CPANEL_DATABASE_INSTRUCTIONS.md](F:\Github\VoloLeads-current-site\CPANEL_DATABASE_INSTRUCTIONS.md)
-- [POSTGRES_SCHEMA.sql](F:\Github\VoloLeads-current-site\POSTGRES_SCHEMA.sql)
+## Deployment
 
-## Backend Reference
+- [LIVE_WEBSITE_DEPLOYMENT_STEPS.md](LIVE_WEBSITE_DEPLOYMENT_STEPS.md) — end-to-end production setup
+- [DEPLOYMENT_CHECKLIST.md](DEPLOYMENT_CHECKLIST.md) — pre-launch checklist
+- [CPANEL_DATABASE_INSTRUCTIONS.md](CPANEL_DATABASE_INSTRUCTIONS.md) — PostgreSQL on cPanel
+- [POSTGRES_SCHEMA.sql](POSTGRES_SCHEMA.sql) — database schema reference
 
-Backend-specific notes live here:
+## Backend documentation
 
-- [backend/DOCUMENTATION/14_MAIN_Backend_README.md](F:\Github\VoloLeads-current-site\backend\DOCUMENTATION\14_MAIN_Backend_README.md)
+Detailed API and operations docs live under `backend/DOCUMENTATION/`. Start with [backend/DOCUMENTATION/00_START_HERE_Navigation_Guide.md](backend/DOCUMENTATION/00_START_HERE_Navigation_Guide.md).
 
-## Important Note
+## Plans (Stripe)
 
-This repo now uses PostgreSQL. MongoDB/Mongoose is no longer part of the active application architecture.
+| Plan       | Request key   | Billing        |
+|-----------|---------------|----------------|
+| Essential | `essential`   | Monthly + setup fee |
+| Growth    | `premium`     | Monthly        |
+| Scale     | `custom_plus` | Monthly        |
+
+Price IDs and promo codes are configured in `backend/.env` and `backend/src/config/billing.js`.
+
+## Notes
+
+- This project uses **PostgreSQL**. MongoDB/Mongoose is no longer part of the active stack.
+- Renewal reminder emails are sent by `backend/scripts/sendRenewalReminders.js` (configure as a cron job in production).
