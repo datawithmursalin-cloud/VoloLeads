@@ -23,6 +23,7 @@ const PLAN_CONFIG = {
     pricing: {
       listDisplay: '$500/month',
       listDisplayAlt: '$6.25/hour, billed monthly',
+      setupDisplay: '1 week of cost is used as a one-time setup fee at checkout',
       promoCode: 'COW2026E',
       promoDiscountCents: 2000,
       promoDisplay: '$480/month',
