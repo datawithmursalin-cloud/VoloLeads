@@ -20,6 +20,8 @@ document.addEventListener('DOMContentLoaded', () => {
     initMobilePlansCarousel();
     initSubscriptionCheckout();
     initManageSubscriptionForm();
+    initScheduleOnboardingPage();
+    initSubscriptionSuccessPage();
     initTurnstileLoader();
     initAudioSeekBars();
     initDecorativeIcons();
@@ -962,6 +964,209 @@ function initManageSubscriptionForm() {
             }
         }
     });
+}
+
+function populateSubscriberTimeSlots(timeSelect) {
+    if (!timeSelect || timeSelect.options.length > 1) return;
+
+    const startHour = 9;
+    const endHour = 16;
+
+    for (let h = startHour; h <= endHour; h += 1) {
+        for (let m = 0; m < 60; m += 30) {
+            if (h === 16 && m > 30) continue;
+
+            const value = `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}`;
+            const ampm = h < 12 ? 'AM' : 'PM';
+            const displayHour = ((h + 11) % 12) + 1;
+            const text = `${displayHour}:${String(m).padStart(2, '0')} ${ampm} EST`;
+
+            const opt = document.createElement('option');
+            opt.value = value;
+            opt.text = text;
+            timeSelect.appendChild(opt);
+        }
+    }
+}
+
+function initScheduleOnboardingPage() {
+    const loading = document.getElementById('schedule-access-loading');
+    const denied = document.getElementById('schedule-access-denied');
+    const deniedMessage = document.getElementById('schedule-access-denied-message');
+    const complete = document.getElementById('schedule-access-complete');
+    const shell = document.getElementById('schedule-onboarding-shell');
+    const form = document.getElementById('schedule-onboarding-form');
+
+    if (!loading || !denied || !shell || !form) return;
+
+    const params = new URLSearchParams(window.location.search);
+    const sessionId = params.get('session_id');
+    let bookingToken = null;
+
+    const showDenied = (message) => {
+        loading.classList.add('hidden');
+        shell.classList.add('hidden');
+        complete.classList.add('hidden');
+        denied.classList.remove('hidden');
+        if (deniedMessage && message) {
+            deniedMessage.textContent = message;
+        }
+    };
+
+    const showComplete = () => {
+        loading.classList.add('hidden');
+        denied.classList.add('hidden');
+        shell.classList.add('hidden');
+        complete.classList.remove('hidden');
+    };
+
+    const showForm = (data) => {
+        loading.classList.add('hidden');
+        denied.classList.add('hidden');
+        complete.classList.add('hidden');
+        shell.classList.remove('hidden');
+
+        const emailInput = document.getElementById('subscriber-email');
+        const planBadge = document.getElementById('schedule-plan-badge');
+        const dateInput = document.getElementById('subscriber-date');
+        const timeRow = document.getElementById('subscriber-time-row');
+        const timeSelect = document.getElementById('subscriber-time');
+
+        if (emailInput) emailInput.value = data.email || '';
+        if (planBadge) planBadge.textContent = `Plan: ${data.planDisplayName || 'Subscriber'}`;
+
+        if (dateInput) {
+            const tomorrow = new Date();
+            tomorrow.setDate(tomorrow.getDate() + 1);
+            dateInput.min = tomorrow.toISOString().slice(0, 10);
+
+            dateInput.addEventListener('change', function handleDateChange() {
+                if (!this.value) {
+                    if (timeRow) timeRow.classList.add('hidden');
+                    if (timeSelect) {
+                        timeSelect.removeAttribute('required');
+                        timeSelect.value = '';
+                    }
+                    return;
+                }
+
+                populateSubscriberTimeSlots(timeSelect);
+                if (timeRow) timeRow.classList.remove('hidden');
+                if (timeSelect) timeSelect.setAttribute('required', 'true');
+            });
+        }
+    };
+
+    const verifyAccess = async () => {
+        if (!sessionId) {
+            showDenied('This page requires a valid checkout session. Use the link from your subscription confirmation email.');
+            return;
+        }
+
+        try {
+            const response = await fetch(`/api/verify-subscriber-access?session_id=${encodeURIComponent(sessionId)}`);
+            const data = await response.json().catch(() => ({}));
+
+            if (response.status === 409) {
+                showComplete();
+                return;
+            }
+
+            if (!response.ok || !data.data?.bookingToken) {
+                throw new Error(data.message || 'Unable to verify subscription access.');
+            }
+
+            bookingToken = data.data.bookingToken;
+            showForm(data.data);
+        } catch (error) {
+            console.error('Subscriber access verification error:', error);
+            showDenied(error.message || 'Unable to verify subscription access.');
+        }
+    };
+
+    const submitButton = document.getElementById('schedule-submit-btn');
+    const btnText = document.getElementById('schedule-btn-text');
+    const btnLoader = document.getElementById('schedule-btn-loader');
+    const message = document.getElementById('schedule-onboarding-message');
+
+    form.addEventListener('submit', async (event) => {
+        event.preventDefault();
+
+        if (!bookingToken) {
+            if (message) {
+                message.textContent = 'Subscription access has expired. Please reopen the link from your confirmation email.';
+                message.className = 'text-sm font-semibold text-red-600 dark:text-red-400 text-center';
+            }
+            return;
+        }
+
+        const turnstileToken = getTurnstileToken(form);
+        if (!turnstileToken) {
+            if (message) {
+                message.textContent = 'Please complete the security check before scheduling.';
+                message.className = 'text-sm font-semibold text-red-600 dark:text-red-400 text-center';
+            }
+            return;
+        }
+
+        const formData = new FormData(form);
+        const payload = Object.fromEntries(formData.entries());
+        payload['cf-turnstile-response'] = turnstileToken;
+
+        if (submitButton) submitButton.disabled = true;
+        if (btnText) btnText.classList.add('hidden');
+        if (btnLoader) btnLoader.classList.remove('hidden');
+        if (message) {
+            message.textContent = '';
+            message.className = 'text-sm font-semibold text-center';
+        }
+
+        try {
+            const response = await fetch('/api/subscriber/schedule-meeting', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${bookingToken}`
+                },
+                body: JSON.stringify(payload)
+            });
+
+            const data = await response.json().catch(() => ({}));
+
+            if (!response.ok) {
+                throw new Error(data.message || 'Unable to schedule onboarding call.');
+            }
+
+            showComplete();
+        } catch (error) {
+            console.error('Schedule onboarding error:', error);
+            if (message) {
+                message.textContent = error.message || 'We could not schedule your call right now. Please try again or contact support.';
+                message.className = 'text-sm font-semibold text-red-600 dark:text-red-400 text-center';
+            }
+        } finally {
+            resetTurnstile(form);
+            if (submitButton) submitButton.disabled = false;
+            if (btnText) btnText.classList.remove('hidden');
+            if (btnLoader) btnLoader.classList.add('hidden');
+        }
+    });
+
+    verifyAccess();
+}
+
+function initSubscriptionSuccessPage() {
+    const scheduleLink = document.getElementById('schedule-onboarding-link');
+    if (!scheduleLink) return;
+
+    const params = new URLSearchParams(window.location.search);
+    const sessionId = params.get('session_id');
+    if (!sessionId) {
+        scheduleLink.classList.add('hidden');
+        return;
+    }
+
+    scheduleLink.href = `schedule-onboarding.html?session_id=${encodeURIComponent(sessionId)}`;
 }
 
 function getTurnstileToken(scope) {
