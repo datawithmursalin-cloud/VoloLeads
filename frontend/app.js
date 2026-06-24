@@ -439,6 +439,63 @@ window.scrollPricing = function(direction) {
 };
 
 /* --- Contact Form Logic --- */
+function formatMeetingSlotLabel(value) {
+    const [hourPart, minutePart] = value.split(':');
+    const hour = Number(hourPart);
+    const minute = Number(minutePart);
+    const ampm = hour < 12 ? 'AM' : 'PM';
+    const displayHour = ((hour + 11) % 12) + 1;
+    return `${displayHour}:${String(minute).padStart(2, '0')} EST`;
+}
+
+function resetTimeSelect(timeSelect, placeholder) {
+    if (!timeSelect) return;
+    timeSelect.innerHTML = '';
+    const placeholderOption = document.createElement('option');
+    placeholderOption.value = '';
+    placeholderOption.textContent = placeholder || 'Select a time';
+    timeSelect.appendChild(placeholderOption);
+}
+
+async function loadAvailableMeetingSlots({
+    date,
+    timeSelect,
+    timeRow,
+    timezone = 'EST',
+    timezoneInput
+}) {
+    const preferredTimezone = timezoneInput?.value || timezone;
+
+    resetTimeSelect(timeSelect, 'Loading times...');
+    if (timeRow) timeRow.classList.remove('hidden');
+    if (timeSelect) timeSelect.setAttribute('required', 'true');
+
+    try {
+        const response = await fetch(
+            `/api/meeting-availability?date=${encodeURIComponent(date)}&timezone=${encodeURIComponent(preferredTimezone)}`
+        );
+        const payload = await response.json().catch(() => ({}));
+        const slots = payload.data?.slots || [];
+
+        resetTimeSelect(timeSelect, slots.length ? 'Select a time' : 'No times available');
+
+        slots.forEach((slot) => {
+            const opt = document.createElement('option');
+            opt.value = slot;
+            opt.textContent = formatMeetingSlotLabel(slot);
+            timeSelect.appendChild(opt);
+        });
+
+        if (!slots.length && timeSelect) {
+            timeSelect.removeAttribute('required');
+        }
+    } catch (error) {
+        console.error('Meeting availability error:', error);
+        resetTimeSelect(timeSelect, 'Unable to load times');
+        if (timeSelect) timeSelect.removeAttribute('required');
+    }
+}
+
 function initContactForm() {
     const serviceSelect = document.getElementById('service-select');
     const dateInput = document.getElementById('preferred-date');
@@ -478,10 +535,11 @@ function initContactForm() {
         const dd = String(tomorrow.getDate()).padStart(2, '0');
         dateInput.min = `${yyyy}-${mm}-${dd}`;
 
-        // Handle Date Change -> Show Time Slots
+        // Handle Date Change -> Show available time slots
         dateInput.addEventListener('change', function() {
             const timeRow = document.getElementById('time-row');
             const timeSelect = document.getElementById('preferred-time');
+            const timezoneInput = document.getElementById('preferred-timezone');
             
             if (!this.value) {
                 if (timeRow) timeRow.classList.add('hidden');
@@ -492,35 +550,12 @@ function initContactForm() {
                 return;
             }
 
-            // Populate time slots (9:00 AM - 4:30 PM EST)
-            if (timeSelect && timeSelect.options.length <= 1) {
-                const startHour = 9; 
-                const endHour = 16; 
-                
-                for (let h = startHour; h <= endHour; h++) {
-                    for (let m = 0; m < 60; m += 30) {
-                        // Stop loop after 4:30 PM
-                        if (h === 16 && m > 30) continue;
-
-                        const hour = h;
-                        const minute = m;
-                        // Format Value (24h)
-                        const value = String(hour).padStart(2, '0') + ':' + String(minute).padStart(2, '0');
-                        // Format Display (12h)
-                        const ampm = hour < 12 ? 'AM' : 'PM';
-                        const displayHour = ((hour + 11) % 12) + 1; 
-                        const text = `${displayHour}:${String(minute).padStart(2, '0')} ${ampm} EST`;
-                        
-                        const opt = document.createElement('option');
-                        opt.value = value;
-                        opt.text = text;
-                        timeSelect.appendChild(opt);
-                    }
-                }
-            }
-
-            if (timeRow) timeRow.classList.remove('hidden');
-            if (timeSelect) timeSelect.setAttribute('required', 'true');
+            loadAvailableMeetingSlots({
+                date: this.value,
+                timeSelect,
+                timeRow,
+                timezoneInput
+            });
         });
     }
 
@@ -966,27 +1001,14 @@ function initManageSubscriptionForm() {
     });
 }
 
-function populateSubscriberTimeSlots(timeSelect) {
-    if (!timeSelect || timeSelect.options.length > 1) return;
-
-    const startHour = 9;
-    const endHour = 16;
-
-    for (let h = startHour; h <= endHour; h += 1) {
-        for (let m = 0; m < 60; m += 30) {
-            if (h === 16 && m > 30) continue;
-
-            const value = `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}`;
-            const ampm = h < 12 ? 'AM' : 'PM';
-            const displayHour = ((h + 11) % 12) + 1;
-            const text = `${displayHour}:${String(m).padStart(2, '0')} ${ampm} EST`;
-
-            const opt = document.createElement('option');
-            opt.value = value;
-            opt.text = text;
-            timeSelect.appendChild(opt);
-        }
-    }
+function populateSubscriberTimeSlots(timeSelect, date, timeRow, timezoneInput) {
+    if (!date || !timeSelect) return;
+    loadAvailableMeetingSlots({
+        date,
+        timeSelect,
+        timeRow,
+        timezoneInput
+    });
 }
 
 function initScheduleOnboardingPage() {
@@ -1031,6 +1053,7 @@ function initScheduleOnboardingPage() {
         const dateInput = document.getElementById('subscriber-date');
         const timeRow = document.getElementById('subscriber-time-row');
         const timeSelect = document.getElementById('subscriber-time');
+        const timezoneInput = document.getElementById('subscriber-timezone');
 
         if (emailInput) emailInput.value = data.email || '';
         if (planBadge) planBadge.textContent = `Plan: ${data.planDisplayName || 'Subscriber'}`;
@@ -1050,9 +1073,7 @@ function initScheduleOnboardingPage() {
                     return;
                 }
 
-                populateSubscriberTimeSlots(timeSelect);
-                if (timeRow) timeRow.classList.remove('hidden');
-                if (timeSelect) timeSelect.setAttribute('required', 'true');
+                populateSubscriberTimeSlots(timeSelect, this.value, timeRow, timezoneInput);
             });
         }
     };
@@ -1341,8 +1362,13 @@ function initFormSecurity() {
                     // Redirect to thank you page
                     window.location.href = '/thank-you.html';
                 } else {
-                    console.error('Form submission failed:', response.status);
-                    alert('Failed to submit form. Please try again.');
+                    const payload = await response.json().catch(() => ({}));
+                    const errorMessage = payload.message
+                        || (response.status === 409
+                            ? 'That meeting time is no longer available. Please choose another time.'
+                            : 'Failed to submit form. Please try again.');
+                    console.error('Form submission failed:', response.status, errorMessage);
+                    alert(errorMessage);
 
                     // Re-enable button
                     if (submitBtn) {
