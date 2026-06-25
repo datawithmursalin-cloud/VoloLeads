@@ -1022,7 +1022,10 @@ function initScheduleOnboardingPage() {
     if (!loading || !denied || !shell || !form) return;
 
     const params = new URLSearchParams(window.location.search);
+    const hashParams = new URLSearchParams(window.location.hash.replace(/^#/, ''));
+    const accessToken = hashParams.get('access_token') || params.get('access_token');
     const sessionId = params.get('session_id');
+    const legacyEmail = params.get('email');
     let bookingToken = null;
 
     const showDenied = (message) => {
@@ -1033,6 +1036,60 @@ function initScheduleOnboardingPage() {
         if (deniedMessage && message) {
             deniedMessage.textContent = message;
         }
+    };
+
+    const verifyWithSessionAndEmail = async (email) => {
+        try {
+            const query = new URLSearchParams({
+                session_id: sessionId,
+                email
+            });
+            const response = await fetch(`/api/verify-subscriber-access?${query.toString()}`);
+            const data = await response.json().catch(() => ({}));
+
+            if (response.status === 409) {
+                showComplete();
+                return;
+            }
+
+            if (!response.ok || !data.data?.bookingToken) {
+                throw new Error(data.message || 'Unable to verify subscription access.');
+            }
+
+            bookingToken = data.data.bookingToken;
+            showForm(data.data);
+        } catch (error) {
+            console.error('Subscriber access verification error:', error);
+            showDenied(error.message || 'Unable to verify subscription access.');
+        }
+    };
+
+    const showLegacyEmailPrompt = () => {
+        loading.innerHTML = `
+            <div class="w-20 h-20 mx-auto mb-6 rounded-full bg-orange-100 dark:bg-orange-900/30 flex items-center justify-center ring-8 ring-orange-50 dark:ring-orange-950/40">
+                <i class="fa-solid fa-envelope text-brand-orange text-3xl" aria-hidden="true"></i>
+            </div>
+            <h1 class="text-3xl font-extrabold text-brand-navy dark:text-white mb-3">Confirm your subscription email</h1>
+            <p class="text-slate-600 dark:text-slate-300 mb-6">Enter the email address you used at checkout to continue scheduling.</p>
+            <form id="legacy-subscriber-email-form" class="max-w-md mx-auto space-y-4 text-left">
+                <div class="space-y-1">
+                    <label for="legacy-subscriber-email" class="text-xs font-bold text-slate-500 uppercase tracking-wide ml-1">Checkout email</label>
+                    <input id="legacy-subscriber-email" type="email" required autocomplete="email" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 dark:bg-slate-700 dark:border-slate-600 dark:text-white rounded-lg outline-none focus:border-brand-orange focus:ring-1 focus:ring-brand-orange" placeholder="you@company.com">
+                </div>
+                <button type="submit" class="w-full py-3 bg-brand-orange hover:bg-orange-600 text-white font-bold rounded-xl shadow-lg transition-all">Continue</button>
+            </form>
+        `;
+
+        const legacyForm = document.getElementById('legacy-subscriber-email-form');
+        legacyForm?.addEventListener('submit', async (event) => {
+            event.preventDefault();
+            const emailInput = document.getElementById('legacy-subscriber-email');
+            const email = emailInput?.value.trim().toLowerCase();
+            if (!email) return;
+
+            loading.querySelector('button[type="submit"]')?.setAttribute('disabled', 'disabled');
+            await verifyWithSessionAndEmail(email);
+        });
     };
 
     const showComplete = () => {
@@ -1079,30 +1136,40 @@ function initScheduleOnboardingPage() {
     };
 
     const verifyAccess = async () => {
-        if (!sessionId) {
-            showDenied('This page requires a valid checkout session. Use the link from your subscription confirmation email.');
+        if (accessToken) {
+            try {
+                const response = await fetch(`/api/verify-subscriber-access?access_token=${encodeURIComponent(accessToken)}`);
+                const data = await response.json().catch(() => ({}));
+
+                if (response.status === 409) {
+                    showComplete();
+                    return;
+                }
+
+                if (!response.ok || !data.data?.bookingToken) {
+                    throw new Error(data.message || 'Unable to verify subscription access.');
+                }
+
+                bookingToken = data.data.bookingToken;
+                showForm(data.data);
+            } catch (error) {
+                console.error('Subscriber access verification error:', error);
+                showDenied(error.message || 'Unable to verify subscription access.');
+            }
             return;
         }
 
-        try {
-            const response = await fetch(`/api/verify-subscriber-access?session_id=${encodeURIComponent(sessionId)}`);
-            const data = await response.json().catch(() => ({}));
-
-            if (response.status === 409) {
-                showComplete();
+        if (!sessionId || !legacyEmail) {
+            if (sessionId && !legacyEmail) {
+                showLegacyEmailPrompt();
                 return;
             }
 
-            if (!response.ok || !data.data?.bookingToken) {
-                throw new Error(data.message || 'Unable to verify subscription access.');
-            }
-
-            bookingToken = data.data.bookingToken;
-            showForm(data.data);
-        } catch (error) {
-            console.error('Subscriber access verification error:', error);
-            showDenied(error.message || 'Unable to verify subscription access.');
+            showDenied('This page requires a valid onboarding link. Use the link from your subscription confirmation email.');
+            return;
         }
+
+        await verifyWithSessionAndEmail(legacyEmail);
     };
 
     const submitButton = document.getElementById('schedule-submit-btn');
@@ -1180,14 +1247,15 @@ function initSubscriptionSuccessPage() {
     const scheduleLink = document.getElementById('schedule-onboarding-link');
     if (!scheduleLink) return;
 
-    const params = new URLSearchParams(window.location.search);
-    const sessionId = params.get('session_id');
-    if (!sessionId) {
+    const hashParams = new URLSearchParams(window.location.hash.replace(/^#/, ''));
+    const accessToken = hashParams.get('access_token');
+
+    if (!accessToken) {
         scheduleLink.classList.add('hidden');
         return;
     }
 
-    scheduleLink.href = `schedule-onboarding.html?session_id=${encodeURIComponent(sessionId)}`;
+    scheduleLink.href = `schedule-onboarding.html#access_token=${encodeURIComponent(accessToken)}`;
 }
 
 function getTurnstileToken(scope) {
