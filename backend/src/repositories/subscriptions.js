@@ -19,10 +19,64 @@ function mapSubscription(row) {
     reminderWeek3SentAt: row.reminder_week3_sent_at,
     reminderDay3SentAt: row.reminder_day3_sent_at,
     reminderDay1SentAt: row.reminder_day1_sent_at,
+    onboardingMeetLink: row.onboarding_meet_link,
+    onboardingCalendarEventId: row.onboarding_calendar_event_id,
+    onboardingMeetingScheduledAt: row.onboarding_meeting_scheduled_at,
     metadata: row.metadata || {},
     createdAt: row.created_at,
     updatedAt: row.updated_at
   };
+}
+
+async function findById(id) {
+  const result = await query(
+    `SELECT *
+     FROM subscriptions
+     WHERE id = $1
+     LIMIT 1`,
+    [id]
+  );
+
+  return mapSubscription(result.rows[0]);
+}
+
+async function findByCheckoutSessionId(stripeCheckoutSessionId) {
+  const result = await query(
+    `SELECT *
+     FROM subscriptions
+     WHERE stripe_checkout_session_id = $1
+     LIMIT 1`,
+    [stripeCheckoutSessionId]
+  );
+
+  return mapSubscription(result.rows[0]);
+}
+
+async function findByStripeSubscriptionId(stripeSubscriptionId) {
+  const result = await query(
+    `SELECT *
+     FROM subscriptions
+     WHERE stripe_subscription_id = $1
+     LIMIT 1`,
+    [stripeSubscriptionId]
+  );
+
+  return mapSubscription(result.rows[0]);
+}
+
+async function markOnboardingMeetingScheduled(id, { meetLink, calendarEventId }) {
+  const result = await query(
+    `UPDATE subscriptions
+     SET onboarding_meet_link = $2,
+         onboarding_calendar_event_id = $3,
+         onboarding_meeting_scheduled_at = NOW(),
+         updated_at = NOW()
+     WHERE id = $1
+     RETURNING *`,
+    [id, meetLink || null, calendarEventId || null]
+  );
+
+  return mapSubscription(result.rows[0]);
 }
 
 async function findLatestByEmail(email) {
@@ -267,9 +321,13 @@ async function markReminderSent(id, reminderType, sentAt = new Date()) {
 }
 
 module.exports = {
+  findById,
+  findByCheckoutSessionId,
+  findByStripeSubscriptionId,
   findLatestByEmail,
   findAfterId,
   findDueRenewalReminders,
+  markOnboardingMeetingScheduled,
   markReminderSent,
   touchPortalLinkSentAt,
   upsertByCheckoutSessionId,

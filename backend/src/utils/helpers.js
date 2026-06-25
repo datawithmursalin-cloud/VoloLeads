@@ -1,18 +1,32 @@
 const jwt = require('jsonwebtoken');
 const crypto = require('crypto');
+const { getJwtSecret } = require('../config/secrets');
 
 const generateToken = (payload, expiresIn = '7d') => {
-  return jwt.sign(payload, process.env.JWT_SECRET || 'your-secret-key', {
+  return jwt.sign(payload, getJwtSecret(), {
     expiresIn
   });
 };
 
 const verifyToken = (token) => {
   try {
-    return jwt.verify(token, process.env.JWT_SECRET || 'your-secret-key');
+    return jwt.verify(token, getJwtSecret());
   } catch (error) {
     return null;
   }
+};
+
+const escapeHtml = (value) => {
+  if (value == null) {
+    return '';
+  }
+
+  return String(value)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
 };
 
 const formatResponse = (success, message, data = null, statusCode = 200) => {
@@ -96,6 +110,7 @@ const sanitizeContactForm = (data) => {
 module.exports = {
   generateToken,
   verifyToken,
+  escapeHtml,
   formatResponse,
   generateId,
   isValidEmail,

@@ -17,6 +17,8 @@ function mapContactForm(row) {
     referralSource: row.referral_source,
     referralSourceOther: row.referral_source_other,
     message: row.message,
+    meetLink: row.meet_link,
+    calendarEventId: row.calendar_event_id,
     ipAddress: row.ip_address,
     userAgent: row.user_agent,
     source: row.source,
@@ -43,11 +45,11 @@ async function create(data) {
     `INSERT INTO contact_forms (
        name, email, phone, company, service, quantity, preferred_date,
        preferred_time, preferred_timezone, referral_source, referral_source_other,
-       message, ip_address, user_agent, source, status, notes, created_at, updated_at
+       message, meet_link, calendar_event_id, ip_address, user_agent, source, status, notes, created_at, updated_at
      ) VALUES (
        $1, $2, $3, $4, $5, $6, $7,
        $8, $9, $10, $11,
-       $12, $13, $14, $15, $16, $17, NOW(), NOW()
+       $12, $13, $14, $15, $16, $17, $18, $19, NOW(), NOW()
      )
      RETURNING *`,
     [
@@ -63,6 +65,8 @@ async function create(data) {
       data.referralSource,
       data.referralSourceOther || null,
       data.message || null,
+      data.meetLink || null,
+      data.calendarEventId || null,
       data.ipAddress || null,
       data.userAgent || null,
       data.source,
@@ -149,8 +153,46 @@ async function updateStatus(id, { status, notes }) {
   return mapContactForm(result.rows[0]);
 }
 
+async function countBookedSlot({ preferredDate, preferredTime }) {
+  const date = String(preferredDate).trim();
+  const time = String(preferredTime).trim();
+
+  const result = await query(
+    `SELECT COUNT(*)::int AS count
+     FROM contact_forms
+     WHERE preferred_time = $2
+       AND preferred_date::date = $1::date
+       AND meet_link IS NOT NULL
+       AND status <> 'spam'`,
+    [date, time]
+  );
+
+  return result.rows[0]?.count || 0;
+}
+
+async function withMeetingSlotLock(preferredDate, preferredTime, callback) {
+  const pool = require('../config/db').getPool();
+  const client = await pool.connect();
+  const lockKey = `${preferredDate}:${preferredTime}`;
+
+  try {
+    await client.query('BEGIN');
+    await client.query('SELECT pg_advisory_xact_lock(hashtext($1))', [lockKey]);
+    const result = await callback(client);
+    await client.query('COMMIT');
+    return result;
+  } catch (error) {
+    await client.query('ROLLBACK');
+    throw error;
+  } finally {
+    client.release();
+  }
+}
+
 module.exports = {
   countRecentByIp,
+  countBookedSlot,
+  withMeetingSlotLock,
   create,
   findAll,
   findAfterId,

@@ -38,6 +38,9 @@ async function initSchema() {
     ALTER TABLE subscriptions ADD COLUMN IF NOT EXISTS reminder_week3_sent_at TIMESTAMPTZ;
     ALTER TABLE subscriptions ADD COLUMN IF NOT EXISTS reminder_day3_sent_at TIMESTAMPTZ;
     ALTER TABLE subscriptions ADD COLUMN IF NOT EXISTS reminder_day1_sent_at TIMESTAMPTZ;
+    ALTER TABLE subscriptions ADD COLUMN IF NOT EXISTS onboarding_meet_link TEXT;
+    ALTER TABLE subscriptions ADD COLUMN IF NOT EXISTS onboarding_calendar_event_id TEXT;
+    ALTER TABLE subscriptions ADD COLUMN IF NOT EXISTS onboarding_meeting_scheduled_at TIMESTAMPTZ;
 
     CREATE INDEX IF NOT EXISTS subscriptions_email_idx ON subscriptions (email);
     CREATE INDEX IF NOT EXISTS subscriptions_updated_at_idx ON subscriptions (updated_at DESC);
@@ -71,6 +74,9 @@ async function initSchema() {
     CREATE INDEX IF NOT EXISTS contact_forms_created_at_idx ON contact_forms (created_at DESC);
     CREATE INDEX IF NOT EXISTS contact_forms_status_idx ON contact_forms (status);
     CREATE INDEX IF NOT EXISTS contact_forms_ip_address_idx ON contact_forms (ip_address);
+
+    ALTER TABLE contact_forms ADD COLUMN IF NOT EXISTS meet_link TEXT;
+    ALTER TABLE contact_forms ADD COLUMN IF NOT EXISTS calendar_event_id TEXT;
 
     CREATE TABLE IF NOT EXISTS visitor_events (
       id BIGSERIAL PRIMARY KEY,

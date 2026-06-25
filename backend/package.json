@@ -10,7 +10,9 @@
     "send:renewal-reminders:dry-run": "node scripts/sendRenewalReminders.js --dry-run",
     "send:renewal-reminders:test-clock": "node scripts/sendRenewalReminders.js --dry-run --at",
     "backfill:stripe-subscriptions": "node scripts/backfillStripeSubscriptions.js",
+    "import:stripe-subscriptions": "node scripts/importStripeSubscriptions.js",
     "preview:subscription-emails": "node scripts/previewSubscriptionEmails.js",
+    "setup:google-calendar": "node scripts/setupGoogleCalendarAuth.js",
     "test": "jest --detectOpenHandles",
     "lint": "eslint src/",
     "lint:fix": "eslint src/ --fix"
@@ -30,6 +32,7 @@
     "express": "^4.18.2",
     "express-rate-limit": "^6.7.0",
     "express-validator": "^7.0.0",
+    "googleapis": "^173.0.0",
     "helmet": "^7.0.0",
     "joi": "^17.9.2",
     "jsonwebtoken": "^9.0.0",

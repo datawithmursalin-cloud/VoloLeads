@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
+const { getJwtSecret } = require('../config/secrets');
 
 const users = [];
 
@@ -37,7 +38,7 @@ router.post('/register', async (req, res) => {
 
     const token = jwt.sign(
       { id: user.id, email: user.email },
-      process.env.JWT_SECRET || 'your-secret-key',
+      getJwtSecret(),
       { expiresIn: '7d' }
     );
 
@@ -84,7 +85,7 @@ router.post('/login', async (req, res) => {
 
     const token = jwt.sign(
       { id: user.id, email: user.email },
-      process.env.JWT_SECRET || 'your-secret-key',
+      getJwtSecret(),
       { expiresIn: '7d' }
     );
 

@@ -9,10 +9,16 @@ const {
 } = require('../emails/subscriptionConfirmationEmail');
 const SubscriptionStore = require('../repositories/subscriptions');
 const { sendEmail } = require('../utils/mailer');
+const { escapeHtml } = require('../utils/helpers');
+const { issueOnboardingAccessToken, isSubscriptionActive, delay } = require('../utils/subscriptionAccess');
 const logger = require('../utils/logger');
 
 function getAppBaseUrl() {
   return (process.env.APP_BASE_URL || 'http://localhost:3000').replace(/\/$/, '');
+}
+
+function getApiBaseUrl() {
+  return (process.env.API_BASE_URL || 'http://localhost:5000').replace(/\/$/, '');
 }
 
 function getEmailBaseUrl() {
@@ -93,8 +99,8 @@ function buildAdminNewSubscriptionHtml({ email, planDisplayName, planCode, statu
   ].filter(Boolean);
 
   const rows = lines.map(([label, value]) => (
-    `<tr><td style="padding:8px 12px 8px 0;color:#94a3b8;vertical-align:top;">${label}</td>`
-    + `<td style="padding:8px 0;color:#f8fafc;"><strong>${value}</strong></td></tr>`
+    `<tr><td style="padding:8px 12px 8px 0;color:#94a3b8;vertical-align:top;">${escapeHtml(label)}</td>`
+    + `<td style="padding:8px 0;color:#f8fafc;"><strong>${escapeHtml(value)}</strong></td></tr>`
   )).join('');
 
   return `<div style="font-family:Arial,sans-serif;background:#0f172a;color:#e2e8f0;padding:24px;">
@@ -182,7 +188,7 @@ function buildLifecycleEmailHtml({ eyebrow, headline, summary, email, accentLabe
               <td style="padding:0 0 18px 0;"><div style="display:inline-block;padding:8px 12px;background:${accentBackground};border:1px solid ${accentColor};border-radius:999px;font-size:12px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:${accentColor};">${accentLabel}</div></td>
             </tr>
             <tr>
-              <td style="padding:0 0 10px 0;font-size:16px;line-height:1.7;color:#dbe4f0;">Subscription email: <strong style="color:#ffffff;">${email}</strong></td>
+              <td style="padding:0 0 10px 0;font-size:16px;line-height:1.7;color:#dbe4f0;">Subscription email: <strong style="color:#ffffff;">${escapeHtml(email)}</strong></td>
             </tr>
           </table>
         </td>
@@ -254,6 +260,32 @@ function getInvoiceSubscriptionId(invoice) {
     || (invoice.parent
       && invoice.parent.subscription_details
       && invoice.parent.subscription_details.subscription)
+    || null;
+}
+
+async function resolveCheckoutSessionEmail(stripe, session) {
+  let email = (session.customer_details && session.customer_details.email)
+    || session.customer_email
+    || null;
+
+  if (!email && session.customer) {
+    const customer = await stripe.customers.retrieve(session.customer);
+    if (customer && !customer.deleted) {
+      email = customer.email || null;
+    }
+  }
+
+  return email;
+}
+
+function resolveCheckoutSessionPlanCode(session, stripeSubscription) {
+  const sessionPlanCode = session.metadata && session.metadata.planCode;
+  if (sessionPlanCode) return sessionPlanCode;
+
+  if (!stripeSubscription) return null;
+
+  return (stripeSubscription.metadata && stripeSubscription.metadata.planCode)
+    || inferPlanCodeFromStripeSubscription(stripeSubscription)
     || null;
 }
 
@@ -361,7 +393,7 @@ async function createCheckoutSession(req, res) {
     const session = await stripe.checkout.sessions.create({
       mode: 'subscription',
       line_items: buildCheckoutLineItems(planCode),
-      success_url: `${appBaseUrl}/success.html?session_id={CHECKOUT_SESSION_ID}`,
+      success_url: `${getApiBaseUrl()}/api/billing/checkout-success?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${appBaseUrl}/cancel.html`,
       billing_address_collection: 'auto',
       allow_promotion_codes: true,
@@ -429,6 +461,59 @@ async function requestManageLink(req, res) {
   }
 }
 
+async function findSubscriptionForCheckoutSession(sessionId) {
+  for (let attempt = 0; attempt < 4; attempt += 1) {
+    const subscription = await SubscriptionStore.findByCheckoutSessionId(sessionId);
+    if (subscription && isSubscriptionActive(subscription)) {
+      return subscription;
+    }
+
+    if (attempt < 3) {
+      await delay(750);
+    }
+  }
+
+  return null;
+}
+
+async function redirectCheckoutSuccess(req, res) {
+  try {
+    const sessionId = (req.query.session_id || '').trim();
+    if (!sessionId) {
+      return res.redirect(302, `${getAppBaseUrl()}/cancel.html`);
+    }
+
+    const stripe = getStripeClient();
+    const session = await stripe.checkout.sessions.retrieve(sessionId);
+
+    if (
+      session.mode !== 'subscription'
+      || session.payment_status !== 'paid'
+      || session.status !== 'complete'
+    ) {
+      return res.redirect(302, `${getAppBaseUrl()}/cancel.html`);
+    }
+
+    let subscription = await findSubscriptionForCheckoutSession(sessionId);
+
+    if (!subscription && session.subscription) {
+      subscription = await SubscriptionStore.findByStripeSubscriptionId(session.subscription);
+    }
+
+    if (!subscription || !isSubscriptionActive(subscription)) {
+      return res.redirect(302, `${getAppBaseUrl()}/success.html`);
+    }
+
+    const onboardingAccessToken = issueOnboardingAccessToken(subscription, sessionId);
+    const redirectUrl = `${getAppBaseUrl()}/success.html#access_token=${encodeURIComponent(onboardingAccessToken)}`;
+
+    return res.redirect(302, redirectUrl);
+  } catch (error) {
+    logger.error(`Checkout success redirect error: ${error.message}`);
+    return res.redirect(302, `${getAppBaseUrl()}/success.html`);
+  }
+}
+
 async function handleStripeWebhook(req, res) {
   const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
   if (!webhookSecret) {
@@ -450,11 +535,10 @@ async function handleStripeWebhook(req, res) {
     switch (event.type) {
       case 'checkout.session.completed': {
         const session = event.data.object;
-        if (session.mode !== 'subscription') break;
-
-        const planCode = session.metadata && session.metadata.planCode;
-        const email = session.customer_details && session.customer_details.email;
-        if (!planCode || !email) break;
+        if (session.mode !== 'subscription') {
+          logger.debug(`Skipping checkout.session.completed ${session.id}: mode=${session.mode}`);
+          break;
+        }
 
         const stripe = getStripeClient();
         const stripeSubscription = session.subscription
@@ -462,7 +546,17 @@ async function handleStripeWebhook(req, res) {
             expand: ['discount.promotion_code', 'discount.coupon']
           })
           : null;
-        const discountInfo = await resolveCheckoutDiscount(stripe, session, stripeSubscription);
+
+        const planCode = resolveCheckoutSessionPlanCode(session, stripeSubscription);
+        const email = await resolveCheckoutSessionEmail(stripe, session);
+
+        if (!planCode || !email) {
+          logger.warn(
+            `Skipping checkout.session.completed ${session.id}: missing ${!planCode ? 'planCode' : 'email'}`
+          );
+          break;
+        }
+
         const currentPeriodStart = stripeSubscription && stripeSubscription.current_period_start
           ? new Date(stripeSubscription.current_period_start * 1000)
           : null;
@@ -486,21 +580,39 @@ async function handleStripeWebhook(req, res) {
             : null
         });
 
+        let discountInfo = { hasDiscount: false, promoCode: null, discountCents: 0 };
+        try {
+          discountInfo = await resolveCheckoutDiscount(stripe, session, stripeSubscription);
+        } catch (error) {
+          logger.warn(`Could not resolve checkout discount for ${session.id}: ${error.message}`);
+        }
+
         const plan = getPlanConfig(planCode);
         const appBaseUrl = getEmailBaseUrl();
         const emailSubject = getSubscriptionEmailSubject(discountInfo);
+        const onboardingAccessToken = issueOnboardingAccessToken(record, session.id);
 
-        await sendEmail({
-          to: email,
-          subject: emailSubject,
-          text: getSubscriptionEmailText({
-            displayName: plan.displayName,
-            email,
-            discountInfo,
-            planCode
-          }),
-          html: buildSubscriptionEmailHtml({ email, planCode, appBaseUrl, discountInfo })
-        });
+        try {
+          await sendEmail({
+            to: email,
+            subject: emailSubject,
+            text: getSubscriptionEmailText({
+              displayName: plan.displayName,
+              email,
+              discountInfo,
+              planCode
+            }),
+            html: buildSubscriptionEmailHtml({
+              email,
+              planCode,
+              appBaseUrl,
+              discountInfo,
+              onboardingAccessToken
+            })
+          });
+        } catch (error) {
+          logger.error(`Subscription confirmation email failed for ${email}: ${error.message}`);
+        }
 
         await notifyAdminNewSubscription({
           email,
@@ -512,6 +624,16 @@ async function handleStripeWebhook(req, res) {
         });
 
         logger.info(`Stripe checkout completed for ${record.email}`);
+        break;
+      }
+
+      case 'customer.subscription.created': {
+        const eventSubscription = event.data.object;
+        await upsertSubscriptionFromStripe(
+          eventSubscription.id,
+          eventSubscription.customer_email || null
+        );
+        logger.info(`Stripe subscription created for ${eventSubscription.id}`);
         break;
       }
 
@@ -598,5 +720,7 @@ module.exports = {
   createCheckoutSession,
   processRenewalReminders,
   requestManageLink,
-  handleStripeWebhook
+  redirectCheckoutSuccess,
+  handleStripeWebhook,
+  inferPlanCodeFromStripeSubscription
 };

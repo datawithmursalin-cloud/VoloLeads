@@ -1,10 +1,21 @@
 const ContactForms = require('../repositories/contactForms');
-const { isValidEmail, validatePhone, getClientIP, sanitizeContactForm } = require('../utils/helpers');
+const { isValidEmail, validatePhone, getClientIP, sanitizeContactForm, escapeHtml } = require('../utils/helpers');
 const { sendEmail } = require('../utils/mailer');
+const { createMeetEvent } = require('../utils/googleMeet');
+const {
+  hasScheduledMeeting,
+  normalizePreferredDate,
+  normalizePreferredTime
+} = require('../utils/meetingSchedule');
+const {
+  getMeetingEmailSubject,
+  getMeetingEmailText,
+  buildMeetingEmailHtml
+} = require('../emails/meetingConfirmationEmail');
 const logger = require('../utils/logger');
 
-function buildContactFormNotificationText(sanitized) {
-  return [
+function buildContactFormNotificationText(sanitized, meeting = null) {
+  const lines = [
     'New VoloLeads contact form submission.',
     '',
     `Name: ${sanitized.name}`,
@@ -20,10 +31,16 @@ function buildContactFormNotificationText(sanitized) {
     `Message: ${sanitized.message || '(no message)'}`,
     '',
     `Time (UTC): ${new Date().toISOString()}`
-  ].join('\n');
+  ];
+
+  if (meeting && meeting.meetLink) {
+    lines.splice(lines.length - 2, 0, '', `Google Meet: ${meeting.meetLink}`);
+  }
+
+  return lines.join('\n');
 }
 
-function buildContactFormNotificationHtml(sanitized) {
+function buildContactFormNotificationHtml(sanitized, meeting = null) {
   const lines = [
     ['Name', sanitized.name],
     ['Email', sanitized.email],
@@ -39,9 +56,13 @@ function buildContactFormNotificationHtml(sanitized) {
     ['Time (UTC)', new Date().toISOString()]
   ];
 
+  if (meeting && meeting.meetLink) {
+    lines.splice(lines.length - 1, 0, ['Google Meet', meeting.meetLink]);
+  }
+
   const rows = lines.map(([label, value]) => (
-    `<tr><td style="padding:8px 12px 8px 0;color:#94a3b8;vertical-align:top;">${label}</td>`
-    + `<td style="padding:8px 0;color:#f8fafc;"><strong>${value}</strong></td></tr>`
+    `<tr><td style="padding:8px 12px 8px 0;color:#94a3b8;vertical-align:top;">${escapeHtml(label)}</td>`
+    + `<td style="padding:8px 0;color:#f8fafc;"><strong>${escapeHtml(value)}</strong></td></tr>`
   )).join('');
 
   return `<div style="font-family:Arial,sans-serif;background:#0f172a;color:#e2e8f0;padding:24px;">
@@ -51,7 +72,7 @@ function buildContactFormNotificationHtml(sanitized) {
   </div>`;
 }
 
-async function notifyAdminContactForm(sanitized) {
+async function notifyAdminContactForm(sanitized, meeting = null) {
   const notifyTo = process.env.CONTACT_EMAIL;
   if (!notifyTo) {
     logger.warn('CONTACT_EMAIL is not set; skipping contact form notification');
@@ -62,8 +83,8 @@ async function notifyAdminContactForm(sanitized) {
     const result = await sendEmail({
       to: notifyTo,
       subject: `VoloLeads Contact: ${sanitized.service} — ${sanitized.name}`,
-      text: buildContactFormNotificationText(sanitized),
-      html: buildContactFormNotificationHtml(sanitized)
+      text: buildContactFormNotificationText(sanitized, meeting),
+      html: buildContactFormNotificationHtml(sanitized, meeting)
     });
 
     if (!result || !result.sent) {
@@ -74,6 +95,77 @@ async function notifyAdminContactForm(sanitized) {
     logger.info(`Contact form notification sent to ${notifyTo} for ${sanitized.email}`);
   } catch (error) {
     logger.error(`Contact form notification failed: ${error.message}`);
+  }
+}
+
+async function notifyCustomerMeeting(sanitized, meeting) {
+  if (!meeting || !meeting.meetLink) {
+    return;
+  }
+
+  try {
+    const result = await sendEmail({
+      to: sanitized.email,
+      subject: getMeetingEmailSubject(),
+      text: getMeetingEmailText({
+        name: sanitized.name,
+        meetLink: meeting.meetLink,
+        preferredDate: sanitized.preferredDate,
+        preferredTime: sanitized.preferredTime,
+        preferredTimezone: sanitized.preferredTimezone,
+        service: sanitized.service
+      }),
+      html: buildMeetingEmailHtml({
+        name: sanitized.name,
+        meetLink: meeting.meetLink,
+        preferredDate: sanitized.preferredDate,
+        preferredTime: sanitized.preferredTime,
+        preferredTimezone: sanitized.preferredTimezone,
+        service: sanitized.service
+      })
+    });
+
+    if (!result || !result.sent) {
+      logger.warn(`Meeting confirmation was not sent to ${sanitized.email}`);
+      return;
+    }
+
+    logger.info(`Meeting confirmation sent to ${sanitized.email}`);
+  } catch (error) {
+    logger.error(`Meeting confirmation email failed: ${error.message}`);
+  }
+}
+
+async function scheduleMeetingIfRequested(sanitized) {
+  if (!hasScheduledMeeting(sanitized)) {
+    return null;
+  }
+
+  const slotDate = normalizePreferredDate(sanitized.preferredDate);
+  const slotTime = normalizePreferredTime(sanitized.preferredTime);
+
+  try {
+    return await ContactForms.withMeetingSlotLock(slotDate, slotTime, async () => {
+      const meeting = await createMeetEvent({
+        name: sanitized.name,
+        email: sanitized.email,
+        service: sanitized.service,
+        preferredDate: sanitized.preferredDate,
+        preferredTime: sanitized.preferredTime,
+        preferredTimezone: sanitized.preferredTimezone,
+        message: sanitized.message
+      });
+
+      if (!meeting.created) {
+        logger.warn(`Google Meet was not created for ${sanitized.email}: ${meeting.reason}`);
+        return meeting;
+      }
+
+      return meeting;
+    });
+  } catch (error) {
+    logger.error(`Google Meet creation failed for ${sanitized.email}: ${error.message}`);
+    return { created: false, reason: 'calendar_error' };
   }
 }
 
@@ -107,6 +199,21 @@ exports.submitContactForm = async (req, res) => {
 
     // Sanitize input data
     const sanitized = sanitizeContactForm(req.body);
+
+    if (sanitized.preferredDate && !sanitized.preferredTime) {
+      return res.status(400).json({
+        success: false,
+        message: 'Preferred time is required when a meeting date is selected'
+      });
+    }
+
+    if (sanitized.preferredTime && !sanitized.preferredDate) {
+      return res.status(400).json({
+        success: false,
+        message: 'Preferred date is required when a meeting time is selected'
+      });
+    }
+
     const clientIP = getClientIP(req);
 
     // Check for spam patterns
@@ -120,26 +227,48 @@ exports.submitContactForm = async (req, res) => {
       });
     }
 
+    const meeting = await scheduleMeetingIfRequested(sanitized);
+
+    if (
+      hasScheduledMeeting(sanitized)
+      && meeting
+      && !meeting.created
+      && (meeting.reason === 'slot_unavailable' || meeting.reason === 'availability_check_failed')
+    ) {
+      return res.status(409).json({
+        success: false,
+        message: 'That meeting time is no longer available. Please choose another time.'
+      });
+    }
+
+    const scheduledMeeting = meeting && meeting.created ? meeting : null;
+
     // Prepare contact form record
     const contactFormData = {
       ...sanitized,
       ipAddress: clientIP,
       userAgent: req.headers['user-agent'],
-      source: 'website'
+      source: 'website',
+      meetLink: scheduledMeeting ? scheduledMeeting.meetLink : null,
+      calendarEventId: scheduledMeeting ? scheduledMeeting.eventId : null
     };
 
     // Store in database for record-keeping
     const savedForm = await ContactForms.create(contactFormData);
     logger.info(`Contact form saved: ${savedForm.id}`);
 
-    await notifyAdminContactForm(sanitized);
+    await notifyAdminContactForm(sanitized, scheduledMeeting);
+    await notifyCustomerMeeting(sanitized, scheduledMeeting);
 
     return res.status(201).json({
       success: true,
-      message: 'Form submitted successfully',
+      message: scheduledMeeting && scheduledMeeting.meetLink
+        ? 'Form submitted successfully. Check your email for the Google Meet link.'
+        : 'Form submitted successfully',
       data: {
         id: savedForm.id,
-        email: sanitized.email
+        email: sanitized.email,
+        meetScheduled: Boolean(scheduledMeeting && scheduledMeeting.meetLink)
       }
     });
   } catch (error) {

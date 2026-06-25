@@ -3,6 +3,7 @@ const {
   getPlanPricing,
   getPromoPricingByCode
 } = require('../config/billing');
+const { escapeHtml } = require('../utils/helpers');
 
 function getSubscriptionEmailSubject(discountInfo = null) {
   return discountInfo && discountInfo.hasDiscount
@@ -162,13 +163,19 @@ function buildSubscriptionPriceMarkup(details) {
   return `<tr><td style="padding:0 0 20px 0;font-size:28px;line-height:1.2;font-weight:800;color:#ffffff;">${details.price}</td></tr>`;
 }
 
-function buildSubscriptionEmailHtml({ email, planCode, appBaseUrl, discountInfo = null }) {
+function buildSubscriptionEmailHtml({ email, planCode, appBaseUrl, discountInfo = null, onboardingAccessToken = null }) {
   const details = getPlanEmailDetails(planCode, discountInfo);
   const bulletMarkup = details.bullets
     .map(item => `<tr><td style="padding:0 0 12px 0;font-size:15px;line-height:1.6;color:#dbe4f0;"><span style="display:inline-block;width:20px;color:#f97316;font-weight:700;">&#8226;</span>${item}</td></tr>`)
     .join('');
   const priceMarkup = buildSubscriptionPriceMarkup(details);
   const statusLabel = details.promoCode ? 'Partner discount applied' : 'Payment successful';
+  const scheduleHref = onboardingAccessToken
+    ? `${appBaseUrl}/schedule-onboarding.html#access_token=${encodeURIComponent(onboardingAccessToken)}`
+    : `${appBaseUrl}/success.html`;
+  const scheduleCta = onboardingAccessToken
+    ? `<tr><td style="padding:0 12px 0 0;"><table role="presentation" cellpadding="0" cellspacing="0" border="0"><tr><td style="border-radius:999px;background:#f97316;"><a href="${scheduleHref}" style="display:inline-block;padding:14px 22px;font-size:14px;font-weight:700;color:#ffffff;text-decoration:none;">Schedule Onboarding Call</a></td></tr></table></td></tr>`
+    : '';
 
   return `
   <div style="margin:0;background:#0f172a;padding:32px 16px;font-family:Arial,sans-serif;color:#e2e8f0;">
@@ -189,7 +196,7 @@ function buildSubscriptionEmailHtml({ email, planCode, appBaseUrl, discountInfo 
               </td>
             </tr>
             <tr>
-              <td style="padding:0 0 10px 0;font-size:16px;line-height:1.7;color:#dbe4f0;">Thanks for choosing VoloLeads. Your subscription for <strong style="color:#ffffff;">${email}</strong> is now active.</td>
+              <td style="padding:0 0 10px 0;font-size:16px;line-height:1.7;color:#dbe4f0;">Thanks for choosing VoloLeads. Your subscription for <strong style="color:#ffffff;">${escapeHtml(email)}</strong> is now active.</td>
             </tr>
             ${priceMarkup}
             ${details.note ? `<tr><td style="padding:0 0 24px 0;font-size:14px;line-height:1.7;color:#94a3b8;">${details.note}</td></tr>` : ''}
@@ -209,8 +216,9 @@ function buildSubscriptionEmailHtml({ email, planCode, appBaseUrl, discountInfo 
       <tr>
         <td style="padding:24px 32px 32px 32px;">
           <table role="presentation" cellpadding="0" cellspacing="0" border="0">
+            ${scheduleCta}
             <tr>
-              <td style="border-radius:999px;background:#f97316;">
+              <td style="border-radius:999px;background:#1e293b;border:1px solid #334155;">
                 <a href="${appBaseUrl}/manage-subscription.html" style="display:inline-block;padding:14px 22px;font-size:14px;font-weight:700;color:#ffffff;text-decoration:none;">Manage Subscription</a>
               </td>
             </tr>

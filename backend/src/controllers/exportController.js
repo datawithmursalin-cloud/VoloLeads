@@ -29,6 +29,7 @@ function contactFormRowForSheet(row) {
     referralSource: row.referralSource,
     referralSourceOther: row.referralSourceOther || '',
     message: row.message || '',
+    meetLink: row.meetLink || '',
     status: row.status,
     source: row.source,
     createdAt: row.createdAt,
