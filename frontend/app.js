@@ -346,6 +346,7 @@ function renderUniversalFooter() {
                         <li><a href="privacy-policy.html" class="hover:text-brand-orange transition-colors">Privacy Policy</a></li>
                         <li><a href="terms-condition.html" class="hover:text-brand-orange transition-colors">Terms of Service</a></li>
                         <li><a href="refund-policy.html" class="hover:text-brand-orange transition-colors">Refund Policy</a></li>
+                        <li><a href="disclaimer.html" class="hover:text-brand-orange transition-colors">Disclaimer</a></li>
                         <li><a href="manage-subscription.html" class="hover:text-brand-orange transition-colors">Manage Subscription</a></li>
                         <li><a href="faqs.html" class="hover:text-brand-orange transition-colors">FAQs</a></li>
                     </ul>
