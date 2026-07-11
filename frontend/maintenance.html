@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="theme-color" content="#0f172a">
+  <title>Maintenance in Progress | VoloLeads</title>
+  <meta name="description" content="VoloLeads is briefly offline for scheduled maintenance. We will be back shortly.">
+  <link rel="icon" type="image/webp" href="./png/logo.webp">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root { --navy:#0f172a; --navy-2:#162238; --orange:#f97316; --orange-2:#ea580c; --muted:#64748b; --line:rgba(15,23,42,.075); }
+    * { box-sizing: border-box; }
+    html, body { margin:0; min-height:100%; }
+    body {
+      min-height:100vh; min-height:100svh; overflow:hidden; color:var(--navy);
+      font-family:Inter, ui-sans-serif, sans-serif; -webkit-font-smoothing:antialiased;
+      background-color:#f8fafc;
+      background-image:
+        linear-gradient(rgba(248,250,252,.1), rgba(248,250,252,.76)),
+        linear-gradient(to right, var(--line) 1px, transparent 1px),
+        linear-gradient(to bottom, var(--line) 1px, transparent 1px);
+      background-size:auto, 24px 24px, 24px 24px;
+    }
+    body::before { content:""; position:fixed; inset:-35%; pointer-events:none; background:radial-gradient(circle at 50% 48%, rgba(249,115,22,.13), transparent 31%); }
+    .shell { position:relative; min-height:100vh; min-height:100svh; display:grid; grid-template-rows:auto 1fr auto; padding:clamp(20px,4vw,42px); }
+    header, footer { width:min(1160px,100%); margin-inline:auto; }
+    header { display:flex; align-items:center; justify-content:space-between; }
+    .brand { display:inline-flex; align-items:center; gap:11px; color:var(--navy); text-decoration:none; font-weight:800; font-size:1.08rem; letter-spacing:-.025em; }
+    .brand img { width:34px; height:34px; object-fit:contain; }
+    .status { display:flex; align-items:center; gap:9px; color:#475569; font-size:.76rem; font-weight:700; letter-spacing:.09em; text-transform:uppercase; }
+    .status i { width:9px; height:9px; border-radius:50%; background:var(--orange); box-shadow:0 0 0 6px rgba(249,115,22,.12); animation:pulse 2.2s ease-in-out infinite; }
+    main { display:grid; place-items:center; padding:42px 0; }
+    .card { position:relative; width:min(760px,100%); padding:clamp(34px,7vw,72px); text-align:center; overflow:hidden; border:1px solid rgba(226,232,240,.92); border-radius:clamp(28px,5vw,48px); background:rgba(255,255,255,.86); box-shadow:0 36px 100px rgba(15,23,42,.13); backdrop-filter:blur(22px); animation:arrive .75s cubic-bezier(.2,.8,.2,1) both; }
+    .card::after { content:"MAINTENANCE"; position:absolute; left:50%; bottom:-.16em; transform:translateX(-50%); font-size:clamp(4.4rem,13vw,8rem); font-weight:800; letter-spacing:-.08em; color:rgba(15,23,42,.027); white-space:nowrap; pointer-events:none; }
+    .mark { width:68px; height:68px; margin:0 auto 28px; display:grid; place-items:center; border-radius:22px; color:white; background:var(--orange); box-shadow:0 18px 36px rgba(249,115,22,.28); transform:rotate(-4deg); }
+    .mark svg { width:31px; height:31px; }
+    .eyebrow { margin:0 0 15px; color:var(--orange-2); font-size:.74rem; font-weight:800; letter-spacing:.18em; text-transform:uppercase; }
+    h1 { margin:0; font-size:clamp(2.45rem,7vw,5.1rem); line-height:.98; letter-spacing:-.065em; font-weight:800; }
+    h1 span { color:var(--orange); }
+    .copy { max-width:545px; margin:25px auto 0; color:var(--muted); font-size:clamp(.98rem,2vw,1.12rem); line-height:1.75; }
+    .note { position:relative; z-index:1; display:inline-flex; align-items:center; gap:10px; margin-top:31px; padding:12px 17px; border:1px solid #e2e8f0; border-radius:999px; background:#f8fafc; color:#475569; font-size:.82rem; font-weight:600; }
+    .note svg { width:17px; height:17px; color:var(--orange); }
+    footer { display:flex; justify-content:space-between; gap:20px; color:#94a3b8; font-size:.72rem; font-weight:600; }
+    footer a { color:#64748b; text-decoration:none; } footer a:hover { color:var(--orange); }
+    @keyframes arrive { from { opacity:0; transform:translateY(18px) scale(.985); } to { opacity:1; transform:none; } }
+    @keyframes pulse { 50% { opacity:.45; box-shadow:0 0 0 9px rgba(249,115,22,.05); } }
+    @media (max-width:520px) { .status span { display:none; } footer { justify-content:center; } footer span:last-child { display:none; } .card { padding-inline:24px; } }
+    @media (prefers-reduced-motion:reduce) { *, *::before, *::after { animation:none !important; } }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <header>
+      <div class="brand"><img src="./png/logo.webp" alt="VoloLeads logo"><span>VoloLeads</span></div>
+      <div class="status" role="status"><i aria-hidden="true"></i><span>Scheduled maintenance</span></div>
+    </header>
+
+    <main>
+      <section class="card" aria-labelledby="maintenance-title">
+        <div class="mark" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a4 4 0 0 0-5-5L7.5 3.5l3 3 2.2-2.2a4 4 0 0 0 2 2Z"/><path d="m4 20 7.6-7.6"/><path d="M13 11.5 20.5 19a1.4 1.4 0 0 1-2 2L11 13.5"/></svg>
+        </div>
+        <p class="eyebrow">A quick tune-up</p>
+        <h1 id="maintenance-title">We’ll be back<br><span>shortly.</span></h1>
+        <p class="copy">VoloLeads is temporarily offline while we make a few improvements. Our team is working behind the scenes to get everything running again.</p>
+        <div class="note">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+          Thank you for your patience
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <span>&copy; <span id="year"></span> VoloLeads Agency</span>
+      <span>Questions? <a href="mailto:syed@vololeads.com">syed@vololeads.com</a></span>
+    </footer>
+  </div>
+  <script>document.getElementById('year').textContent = new Date().getFullYear();</script>
+</body>
+</html>
