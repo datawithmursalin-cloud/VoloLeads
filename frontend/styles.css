@@ -3364,3 +3364,315 @@ body.site-loaded #home .delay-300 { animation-delay: 270ms; }
         transform: none !important;
     }
 }
+
+/* Premium interaction layer */
+@keyframes growth-border-arrival {
+    0% { box-shadow: 0 0 0 0 rgba(249, 115, 22, 0); }
+    45% { box-shadow: 0 0 0 5px rgba(249, 115, 22, 0.16), 0 24px 52px -30px rgba(249, 115, 22, 0.72); }
+    100% { box-shadow: 0 18px 42px -34px rgba(249, 115, 22, 0.5); }
+}
+
+@keyframes waveform-pulse {
+    0%, 100% { transform: scaleY(0.42); opacity: 0.48; }
+    50% { transform: scaleY(1); opacity: 1; }
+}
+
+@keyframes table-row-flash {
+    0%, 100% { box-shadow: inset 0 0 0 rgba(249, 115, 22, 0); }
+    45% { box-shadow: inset 4px 0 0 rgba(249, 115, 22, 0.45); }
+}
+
+nav.nav-compressed {
+    top: 0.75rem !important;
+    width: min(94%, 70rem) !important;
+    background-color: rgba(255, 255, 255, 0.97) !important;
+    box-shadow: 0 16px 40px -24px rgba(15, 23, 42, 0.5) !important;
+}
+
+html.dark nav.nav-compressed {
+    background-color: rgba(15, 23, 42, 0.97) !important;
+}
+
+nav.nav-compressed > div:first-child > div {
+    height: 3.5rem !important;
+}
+
+.motion-heading {
+    position: relative;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity 0.46s ease, transform 0.62s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.motion-heading::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: min(5rem, 24%);
+    height: 2px;
+    border-radius: 999px;
+    background: linear-gradient(90deg, #f97316, #dc2626);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.52s cubic-bezier(0.22, 1, 0.36, 1) 160ms;
+}
+
+.text-center .motion-heading::after,
+.motion-heading.text-center::after,
+.section-heading-row.how-heading .motion-heading::after,
+.section-heading-row.plan-comparison-header .motion-heading::after {
+    left: 50%;
+    transform: translateX(-50%) scaleX(0);
+    transform-origin: center;
+}
+
+.motion-heading.is-revealed {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.motion-heading.is-revealed::after {
+    transform: scaleX(1);
+}
+
+.text-center .motion-heading.is-revealed::after,
+.motion-heading.text-center.is-revealed::after,
+.section-heading-row.how-heading .motion-heading.is-revealed::after,
+.section-heading-row.plan-comparison-header .motion-heading.is-revealed::after {
+    transform: translateX(-50%) scaleX(1);
+}
+
+#plans [aria-label="Flip Growth plan card"].growth-entered .backface-hidden:first-child {
+    animation: growth-border-arrival 1.15s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.audio-player-panel > button {
+    grid-column: 1;
+    grid-row: 1;
+}
+
+.audio-waveform {
+    grid-column: 2;
+    grid-row: 1;
+    height: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    min-width: 0;
+}
+
+.audio-waveform span {
+    width: 2px;
+    height: var(--wave-height);
+    flex: 1 1 auto;
+    max-width: 3px;
+    border-radius: 999px;
+    background: linear-gradient(180deg, #fb923c, #ea580c);
+    transform: scaleY(0.42);
+    transform-origin: center;
+    opacity: 0.48;
+}
+
+.audio-player-panel.is-playing .audio-waveform span {
+    animation: waveform-pulse 0.82s ease-in-out infinite;
+    animation-delay: var(--wave-delay);
+}
+
+.audio-player-panel > span[id^="timer-audio-"] {
+    grid-column: 3;
+    grid-row: 1;
+}
+
+.kpi-motion-card {
+    position: relative;
+    overflow: hidden;
+}
+
+.kpi-storyline {
+    position: absolute;
+    left: 1rem;
+    bottom: 0.45rem;
+    width: var(--kpi-width);
+    max-width: calc(100% - 2rem);
+    height: 2px;
+    border-radius: 999px;
+    background: linear-gradient(90deg, #f97316, rgba(249, 115, 22, 0.08));
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 1.05s cubic-bezier(0.22, 1, 0.36, 1) 180ms;
+}
+
+.kpi-motion-card.is-active .kpi-storyline {
+    transform: scaleX(1);
+}
+
+.premium-motion-button {
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+}
+
+.premium-motion-button::before {
+    content: "";
+    position: absolute;
+    inset: -1px;
+    z-index: 0;
+    pointer-events: none;
+    mix-blend-mode: soft-light;
+    background: linear-gradient(105deg, transparent 22%, rgba(255, 255, 255, 0.34) 45%, transparent 66%);
+    transform: translateX(-115%);
+    transition: transform 0.62s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.premium-motion-button:hover::before {
+    transform: translateX(115%);
+}
+
+.premium-motion-button:active {
+    transform: translateY(1px) scale(0.985) !important;
+}
+
+.premium-motion-button .fa-arrow-right,
+.premium-motion-button .site-icon-svg {
+    transition: transform 0.25s ease;
+}
+
+.premium-motion-button:hover .fa-arrow-right,
+.premium-motion-button:hover .site-icon-svg {
+    transform: translateX(3px);
+}
+
+.motion-ready .comparison-table-wrap.is-motion-visible tbody tr > * {
+    animation: table-row-flash 0.9s ease both;
+    animation-delay: calc(var(--motion-order, 0) * 90ms + 140ms);
+}
+
+.animate-scroll {
+    animation-duration: 56s;
+}
+
+.animate-scroll:hover,
+.animate-scroll:focus-within {
+    animation-play-state: paused;
+}
+
+.faq-preview-list details > p {
+    overflow: hidden;
+    transform-origin: top;
+}
+
+.faq-motion-enhanced details[open] > p {
+    animation: none;
+}
+
+body {
+    transition: opacity 0.15s ease, transform 0.15s ease;
+}
+
+body.page-transition-out {
+    opacity: 0;
+    transform: translateY(3px);
+}
+
+.insight-scroll-progress {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 9999;
+    width: 100%;
+    height: 3px;
+    background: linear-gradient(90deg, #f97316, #dc2626);
+    box-shadow: 0 0 12px rgba(249, 115, 22, 0.36);
+    transform: scaleX(0);
+    transform-origin: left;
+    pointer-events: none;
+}
+
+.homepage-scroll-progress {
+    height: 2px;
+    box-shadow: 0 0 9px rgba(249, 115, 22, 0.3);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    nav.nav-compressed > div:first-child > div {
+        height: 3.5rem !important;
+    }
+
+    .motion-heading,
+    .motion-heading.is-revealed {
+        opacity: 1 !important;
+        transform: none !important;
+    }
+
+    .motion-heading::after,
+    .audio-waveform span,
+    .kpi-storyline,
+    .premium-motion-button::before,
+    .motion-ready .comparison-table-wrap.is-motion-visible tbody tr > *,
+    #plans [aria-label="Flip Growth plan card"].growth-entered .backface-hidden:first-child {
+        animation: none !important;
+        transition: none !important;
+    }
+
+    .kpi-storyline {
+        transform: scaleX(1) !important;
+    }
+
+    body.page-transition-out {
+        opacity: 1 !important;
+        transform: none !important;
+    }
+}
+
+/* Header emphasis: underline keywords, never the whole heading block. */
+@keyframes keyword-underline-highlight {
+    0%, 100% {
+        text-decoration-color: #f97316;
+        text-decoration-thickness: 0.065em;
+        filter: drop-shadow(0 0 0 rgba(249, 115, 22, 0));
+    }
+    48% {
+        text-decoration-color: #fed7aa;
+        text-decoration-thickness: 0.105em;
+        filter: drop-shadow(0 3px 7px rgba(249, 115, 22, 0.28));
+    }
+}
+
+.motion-heading::after,
+.motion-heading.is-revealed::after {
+    content: none !important;
+    display: none !important;
+}
+
+:is(h1, h2, h3) span[class*="bg-gradient-to-r"],
+:is(h1, h2, h3)[class*="bg-gradient-to-r"],
+.section-heading-row h2 > span,
+.daily-deliverables-card h2 > span,
+.plans-partnership-heading .plans-partnership-name {
+    text-decoration-line: underline !important;
+    text-decoration-color: #f97316 !important;
+    text-decoration-thickness: max(2px, 0.065em) !important;
+    text-underline-offset: 0.15em !important;
+    text-decoration-skip-ink: auto;
+}
+
+#home h1 > span,
+.plans-partnership-heading .plans-partnership-name--cow {
+    text-decoration: none !important;
+}
+
+.reveal-on-scroll.is-visible .kpi-storyline--static {
+    transform: scaleX(1);
+}
+
+.keyword-highlight-active {
+    animation: keyword-underline-highlight 0.78s ease both;
+    animation-delay: calc(var(--keyword-order, 0) * 130ms);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .keyword-highlight-active {
+        animation: none !important;
+    }
+}

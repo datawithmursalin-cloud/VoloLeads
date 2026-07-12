@@ -14,6 +14,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initRevealOnScroll();
     initMotionSequences();
     initStickyMobileCta();
+    initPremiumMotion();
     initScrollToTop();
     initAccordions();
     initFlipCards();
@@ -244,6 +245,7 @@ window.toggleAudio = function(audioId, btn) {
     if (currentAudio && currentAudio !== audio) {
         currentAudio.pause();
         currentAudio.currentTime = 0;
+        currentButton?.closest('.audio-player-panel')?.classList.remove('is-playing');
         if (currentButton) {
             const oldIcon = currentButton.querySelector('i');
             if (oldIcon) {
@@ -269,6 +271,7 @@ window.toggleAudio = function(audioId, btn) {
 
                 currentAudio = audio;
                 currentButton = btn;
+                btn.closest('.audio-player-panel')?.classList.add('is-playing');
             })
             .catch(error => {
                 console.error("Playback failed. Check if audio file exists.", error);
@@ -282,6 +285,7 @@ window.toggleAudio = function(audioId, btn) {
         icon.classList.add('fa-play', 'ml-0.5');
         setInlineIcon(icon, 'play');
         if (window.renderSiteIcons) window.renderSiteIcons(btn);
+        btn.closest('.audio-player-panel')?.classList.remove('is-playing');
         currentAudio = null;
         currentButton = null;
     }
@@ -314,6 +318,7 @@ window.resetIcon = function(audioElement) {
         icon.classList.add('fa-play', 'ml-0.5');
         setInlineIcon(icon, 'play');
         if (window.renderSiteIcons && currentButton) window.renderSiteIcons(currentButton);
+        currentButton.closest('.audio-player-panel')?.classList.remove('is-playing');
         currentAudio = null;
         currentButton = null;
     }
@@ -605,6 +610,7 @@ function initCounterAnimation() {
 
     const animateCounter = (counter) => {
         const target = Number(counter.getAttribute('data-target')) || 0;
+        counter.closest('.kpi-motion-card')?.classList.add('is-active');
         if (reduceMotion) {
             setCounterValue(counter, target);
             return;
@@ -728,6 +734,261 @@ function initStickyMobileCta() {
     }, { threshold: 0.06 });
 
     observer.observe(hero);
+}
+
+function initPremiumMotion() {
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    initCompressedNavbar();
+    initHeadingReveals(reduceMotion);
+    initKeywordUnderlineHighlights(reduceMotion);
+    initGrowthCardEmphasis(reduceMotion);
+    initAudioWaveforms();
+    initKpiStorytelling();
+    initPremiumButtons();
+    initAnimatedFaqDetails(reduceMotion);
+    initInternalPageTransitions(reduceMotion);
+    initInsightScrollProgress();
+}
+
+function initKeywordUnderlineHighlights(reduceMotion) {
+    if (reduceMotion) return;
+
+    const selector = [
+        ':is(h1, h2, h3) span[class*="bg-gradient-to-r"]',
+        ':is(h1, h2, h3)[class*="bg-gradient-to-r"]',
+        '.section-heading-row h2 > span',
+        '.daily-deliverables-card h2 > span',
+        '.plans-partnership-heading .plans-partnership-name'
+    ].join(',');
+
+    const keywords = [...document.querySelectorAll(selector)].filter(keyword => (
+        !keyword.matches('#home h1 > span, .plans-partnership-name--cow')
+    ));
+    if (!keywords.length) return;
+
+    const headingGroups = new Map();
+    keywords.forEach(keyword => {
+        const heading = keyword.closest('h1, h2, h3');
+        if (!heading) return;
+        if (!headingGroups.has(heading)) headingGroups.set(heading, []);
+        headingGroups.get(heading).push(keyword);
+    });
+
+    if (!('IntersectionObserver' in window)) {
+        headingGroups.forEach(group => group.forEach((keyword, index) => {
+            keyword.style.setProperty('--keyword-order', index);
+            keyword.classList.add('keyword-highlight-active');
+        }));
+        return;
+    }
+
+    const observer = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+            if (!entry.isIntersecting) return;
+            const group = headingGroups.get(entry.target) || [];
+            group.forEach((keyword, index) => {
+                keyword.style.setProperty('--keyword-order', index);
+                keyword.classList.add('keyword-highlight-active');
+            });
+            observer.unobserve(entry.target);
+        });
+    }, { threshold: 0.42, rootMargin: '0px 0px -6% 0px' });
+
+    headingGroups.forEach((_, heading) => observer.observe(heading));
+}
+
+function initCompressedNavbar() {
+    const nav = document.querySelector('nav');
+    if (!nav) return;
+
+    let ticking = false;
+    const update = () => {
+        nav.classList.toggle('nav-compressed', window.scrollY > 72);
+        ticking = false;
+    };
+
+    update();
+    window.addEventListener('scroll', () => {
+        if (ticking) return;
+        ticking = true;
+        requestAnimationFrame(update);
+    }, { passive: true });
+}
+
+function initHeadingReveals(reduceMotion) {
+    const headings = document.querySelectorAll(
+        'main section h2, main section > div > h3, .insight-article h2, .insight-article h3'
+    );
+    if (!headings.length) return;
+
+    headings.forEach(heading => heading.classList.add('motion-heading'));
+
+    if (reduceMotion || !('IntersectionObserver' in window)) {
+        headings.forEach(heading => heading.classList.add('is-revealed'));
+        return;
+    }
+
+    const observer = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+            if (!entry.isIntersecting) return;
+            entry.target.classList.add('is-revealed');
+            observer.unobserve(entry.target);
+        });
+    }, { threshold: 0.35, rootMargin: '0px 0px -8% 0px' });
+
+    headings.forEach(heading => observer.observe(heading));
+}
+
+function initGrowthCardEmphasis(reduceMotion) {
+    const card = document.querySelector('#plans [aria-label="Flip Growth plan card"]');
+    if (!card) return;
+
+    if (reduceMotion || !('IntersectionObserver' in window)) {
+        card.classList.add('growth-entered');
+        return;
+    }
+
+    const observer = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+            if (!entry.isIntersecting) return;
+            entry.target.classList.add('growth-entered');
+            observer.unobserve(entry.target);
+        });
+    }, { threshold: 0.52 });
+
+    observer.observe(card);
+}
+
+function initAudioWaveforms() {
+    document.querySelectorAll('.audio-player-panel').forEach((panel, panelIndex) => {
+        if (panel.querySelector('.audio-waveform')) return;
+
+        const waveform = document.createElement('div');
+        waveform.className = 'audio-waveform';
+        waveform.setAttribute('aria-hidden', 'true');
+
+        for (let index = 0; index < 16; index += 1) {
+            const bar = document.createElement('span');
+            bar.style.setProperty('--wave-height', `${28 + ((index * 19 + panelIndex * 11) % 62)}%`);
+            bar.style.setProperty('--wave-delay', `${index * -55}ms`);
+            waveform.appendChild(bar);
+        }
+
+        const timer = panel.querySelector('[id^="timer-audio-"]');
+        panel.insertBefore(waveform, timer || panel.querySelector('.audio-seek'));
+    });
+}
+
+function initKpiStorytelling() {
+    document.querySelectorAll('.counter-animate').forEach(counter => {
+        const card = counter.closest('.proof-strip-grid > div, #testimonials .grid > div, #about .grid > div')
+            || counter.parentElement?.parentElement;
+        if (!card || card.querySelector('.kpi-storyline')) return;
+
+        card.classList.add('kpi-motion-card');
+        const target = Number(counter.dataset.target) || 0;
+        const width = target >= 1000 ? 94 : target >= 100 ? 100 : 78;
+        const line = document.createElement('span');
+        line.className = 'kpi-storyline';
+        line.setAttribute('aria-hidden', 'true');
+        line.style.setProperty('--kpi-width', `${width}%`);
+        card.appendChild(line);
+    });
+}
+
+function initPremiumButtons() {
+    const selector = [
+        'a[href="#contact"]',
+        '.subscribe-btn',
+        '#submit-btn',
+        '.faq-all-link',
+        '.prefooter-cta a',
+        '.mobile-sticky-cta'
+    ].join(',');
+
+    document.querySelectorAll(selector).forEach(button => button.classList.add('premium-motion-button'));
+}
+
+function initAnimatedFaqDetails(reduceMotion) {
+    if (reduceMotion) return;
+
+    document.querySelectorAll('.faq-preview-list details').forEach(detail => {
+        detail.parentElement?.classList.add('faq-motion-enhanced');
+        const summary = detail.querySelector('summary');
+        const answer = detail.querySelector('p');
+        if (!summary || !answer) return;
+
+        summary.addEventListener('click', event => {
+            if (detail.dataset.animating === 'true') return;
+            event.preventDefault();
+            detail.dataset.animating = 'true';
+
+            if (!detail.open) {
+                detail.open = true;
+                const animation = answer.animate([
+                    { opacity: 0, maxHeight: '0px', transform: 'translateY(-6px)' },
+                    { opacity: 1, maxHeight: `${answer.scrollHeight + 32}px`, transform: 'translateY(0)' }
+                ], { duration: 320, easing: 'cubic-bezier(0.22, 1, 0.36, 1)' });
+                animation.onfinish = () => { delete detail.dataset.animating; };
+            } else {
+                const animation = answer.animate([
+                    { opacity: 1, maxHeight: `${answer.scrollHeight + 32}px`, transform: 'translateY(0)' },
+                    { opacity: 0, maxHeight: '0px', transform: 'translateY(-6px)' }
+                ], { duration: 220, easing: 'ease' });
+                animation.onfinish = () => {
+                    detail.open = false;
+                    delete detail.dataset.animating;
+                };
+            }
+        });
+    });
+}
+
+function initInternalPageTransitions(reduceMotion) {
+    if (reduceMotion) return;
+
+    document.querySelectorAll('a[href]').forEach(link => {
+        link.addEventListener('click', event => {
+            if (event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+            if (link.target === '_blank' || link.hasAttribute('download')) return;
+
+            const destination = new URL(link.href, window.location.href);
+            const current = new URL(window.location.href);
+            const isSameDocumentHash = destination.pathname === current.pathname && destination.search === current.search && destination.hash;
+            if (destination.origin !== current.origin || isSameDocumentHash) return;
+
+            event.preventDefault();
+            document.body.classList.add('page-transition-out');
+            window.setTimeout(() => { window.location.href = destination.href; }, 150);
+        });
+    });
+}
+
+function initInsightScrollProgress() {
+    const isInsightPage = Boolean(document.querySelector('.insight-article'));
+    const isHomepage = Boolean(document.querySelector('#main-content #home'));
+    if (!isInsightPage && !isHomepage) return;
+
+    const progress = document.createElement('div');
+    progress.className = `insight-scroll-progress${isHomepage ? ' homepage-scroll-progress' : ''}`;
+    progress.setAttribute('aria-hidden', 'true');
+    document.body.appendChild(progress);
+
+    let ticking = false;
+    const update = () => {
+        const maxScroll = Math.max(document.documentElement.scrollHeight - window.innerHeight, 1);
+        progress.style.transform = `scaleX(${Math.min(window.scrollY / maxScroll, 1)})`;
+        ticking = false;
+    };
+
+    update();
+    window.addEventListener('scroll', () => {
+        if (ticking) return;
+        ticking = true;
+        requestAnimationFrame(update);
+    }, { passive: true });
+    window.addEventListener('resize', update, { passive: true });
 }
 
 /* ============================================
@@ -920,6 +1181,7 @@ function resetPlayer(audio) {
     // Reset icon to Play (safely)
     const btn = audio.nextElementSibling;
     if (btn) {
+        btn.closest('.audio-player-panel')?.classList.remove('is-playing');
         const icon = btn.querySelector('i');
         if (icon) {
             icon.className = 'fa-solid fa-play ml-0.5';
