@@ -12,9 +12,9 @@ document.addEventListener('DOMContentLoaded', () => {
     initFormSecurity();
     initCounterAnimation();
     initRevealOnScroll();
-    initScrollAnimations();
+    initMotionSequences();
+    initStickyMobileCta();
     initScrollToTop();
-    initCounters();
     initAccordions();
     initFlipCards();
     initMobilePlansCarousel();
@@ -595,25 +595,44 @@ function initContactForm() {
    ============================================ */
 function initCounterAnimation() {
     const counters = document.querySelectorAll('.counter-animate');
+    if (!counters.length) return;
 
-    const animateCounter = (counter) => {
-        const target = parseInt(counter.getAttribute('data-target'));
-        const duration = 2000; // 2 seconds
-        const increment = target / (duration / 50);
-        let current = 0;
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-        const interval = setInterval(() => {
-            current += increment;
-            if (current >= target) {
-                counter.textContent = target.toLocaleString();
-                clearInterval(interval);
-            } else {
-                counter.textContent = Math.floor(current).toLocaleString();
-            }
-        }, 50);
+    const setCounterValue = (counter, value) => {
+        counter.textContent = Math.round(value).toLocaleString();
     };
 
-    // Intersection Observer for triggering animations on scroll
+    const animateCounter = (counter) => {
+        const target = Number(counter.getAttribute('data-target')) || 0;
+        if (reduceMotion) {
+            setCounterValue(counter, target);
+            return;
+        }
+
+        const duration = 1200;
+        const startTime = performance.now();
+
+        const update = (now) => {
+            const progress = Math.min((now - startTime) / duration, 1);
+            const eased = 1 - Math.pow(1 - progress, 3);
+            setCounterValue(counter, target * eased);
+            if (progress < 1) requestAnimationFrame(update);
+        };
+
+        requestAnimationFrame(update);
+    };
+
+    if (reduceMotion) {
+        counters.forEach(animateCounter);
+        return;
+    }
+
+    if (!('IntersectionObserver' in window)) {
+        counters.forEach(animateCounter);
+        return;
+    }
+
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
@@ -632,6 +651,13 @@ function initCounterAnimation() {
    ============================================ */
 function initRevealOnScroll() {
     const revealElements = document.querySelectorAll('.reveal-on-scroll');
+    if (!revealElements.length) return;
+
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches || !('IntersectionObserver' in window)) {
+        revealElements.forEach(element => element.classList.add('is-visible'));
+        return;
+    }
+
     const revealOnScroll = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
@@ -644,6 +670,64 @@ function initRevealOnScroll() {
     revealElements.forEach(element => {
         revealOnScroll.observe(element);
     });
+}
+
+function initMotionSequences() {
+    const groups = [
+        document.querySelector('.proof-strip-grid'),
+        document.querySelector('.how-grid'),
+        ...document.querySelectorAll('.comparison-table-wrap')
+    ].filter(Boolean);
+
+    if (!groups.length) return;
+
+    document.documentElement.classList.add('motion-ready');
+
+    groups.forEach(group => {
+        const items = group.matches('.comparison-table-wrap')
+            ? group.querySelectorAll('tbody tr')
+            : group.children;
+
+        [...items].forEach((item, index) => {
+            item.style.setProperty('--motion-order', index);
+        });
+    });
+
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches || !('IntersectionObserver' in window)) {
+        groups.forEach(group => group.classList.add('is-motion-visible'));
+        return;
+    }
+
+    const observer = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+            if (!entry.isIntersecting) return;
+            entry.target.classList.add('is-motion-visible');
+            observer.unobserve(entry.target);
+        });
+    }, { threshold: 0.16, rootMargin: '0px 0px -8% 0px' });
+
+    groups.forEach(group => observer.observe(group));
+}
+
+function initStickyMobileCta() {
+    const hero = document.getElementById('home');
+    const cta = document.querySelector('.mobile-sticky-cta');
+    if (!hero || !cta) return;
+
+    document.documentElement.classList.add('sticky-cta-ready');
+
+    if (!('IntersectionObserver' in window)) {
+        cta.classList.add('is-visible');
+        return;
+    }
+
+    const observer = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+            cta.classList.toggle('is-visible', !entry.isIntersecting);
+        });
+    }, { threshold: 0.06 });
+
+    observer.observe(hero);
 }
 
 /* ============================================
