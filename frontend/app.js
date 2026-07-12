@@ -610,7 +610,7 @@ function initCounterAnimation() {
             return;
         }
 
-        const duration = 1200;
+        const duration = Number(counter.dataset.duration) || 1200;
         const startTime = performance.now();
 
         const update = (now) => {
