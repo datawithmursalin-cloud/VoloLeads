@@ -18,7 +18,7 @@ const SHEETS = {
     headers: [
       'id', 'name', 'email', 'phone', 'company', 'service', 'quantity',
       'preferredDate', 'preferredTime', 'preferredTimezone', 'referralSource',
-      'referralSourceOther', 'message', 'status', 'source', 'createdAt', 'updatedAt'
+      'referralSourceOther', 'message', 'meetLink', 'status', 'source', 'createdAt', 'updatedAt'
     ]
   },
   subscriptions: {
@@ -36,7 +36,7 @@ const SHEETS = {
 function setupScriptProperties() {
   const props = PropertiesService.getScriptProperties();
   props.setProperties({
-    API_BASE_URL: 'https://your-api-host.example.com',
+    API_BASE_URL: 'https://vololeads.com',
     SYNC_API_KEY: 'paste-the-same-value-as-SHEETS_SYNC_API_KEY'
   });
 }
@@ -87,10 +87,22 @@ function syncDataset_(config) {
     });
 
     const status = response.getResponseCode();
-    const body = JSON.parse(response.getContentText() || '{}');
+    const raw = response.getContentText() || '';
+    let body;
+
+    try {
+      body = JSON.parse(raw || '{}');
+    } catch (parseError) {
+      const preview = raw.replace(/\s+/g, ' ').slice(0, 120);
+      throw new Error(
+        'Export returned HTML instead of JSON (' + status + '). '
+        + 'Check API_BASE_URL (' + baseUrl + ') and that production has SHEETS_SYNC_API_KEY set. '
+        + 'Preview: ' + preview
+      );
+    }
 
     if (status !== 200 || !body.success) {
-      throw new Error('Export failed (' + status + '): ' + (body.message || response.getContentText()));
+      throw new Error('Export failed (' + status + '): ' + (body.message || raw));
     }
 
     const rows = body.data.rows || [];
@@ -107,11 +119,43 @@ function syncDataset_(config) {
       });
     });
 
-    const startRow = sheet.getLastRow() + 1;
-    sheet.getRange(startRow, 1, values.length, config.headers.length).setValues(values);
+    // appendRow avoids getRange row/column count mistakes on incremental sync
+    values.forEach(function (rowValues) {
+      sheet.appendRow(rowValues);
+    });
 
     lastId = body.data.lastId;
     props.setProperty(config.lastIdKey, String(lastId));
     hasMore = body.data.hasMore;
   }
+}
+
+function testApiConnection() {
+  const props = PropertiesService.getScriptProperties();
+  const baseUrl = props.getProperty('API_BASE_URL');
+  const apiKey = props.getProperty('SYNC_API_KEY');
+
+  Logger.log('API_BASE_URL: ' + (baseUrl || 'MISSING'));
+  Logger.log('SYNC_API_KEY: ' + (apiKey ? 'set (' + apiKey.length + ' chars)' : 'MISSING'));
+
+  if (!baseUrl || !apiKey) {
+    throw new Error('Run setupScriptProperties() once, then check Project Settings → Script properties');
+  }
+
+  const healthUrl = baseUrl.replace(/\/$/, '') + '/api/health';
+  const health = UrlFetchApp.fetch(healthUrl, { muteHttpExceptions: true });
+  Logger.log('Health URL: ' + healthUrl);
+  Logger.log('Health status: ' + health.getResponseCode());
+  Logger.log('Health body: ' + health.getContentText().slice(0, 200));
+
+  const exportUrl = baseUrl.replace(/\/$/, '') + '/api/export/contact-forms?after_id=0&limit=1';
+  const response = UrlFetchApp.fetch(exportUrl, {
+    method: 'get',
+    headers: { Authorization: 'Bearer ' + apiKey },
+    muteHttpExceptions: true
+  });
+
+  Logger.log('Export URL: ' + exportUrl);
+  Logger.log('Export status: ' + response.getResponseCode());
+  Logger.log('Export body: ' + response.getContentText().slice(0, 300));
 }

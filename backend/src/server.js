@@ -5,7 +5,10 @@ const helmet = require('helmet');
 const morgan = require('morgan');
 const path = require('path');
 const connectDB = require('./config/db');
+const { validateProductionSecrets } = require('./config/secrets');
 const { handleStripeWebhook } = require('./controllers/billingController');
+
+validateProductionSecrets();
 
 connectDB().catch(error => {
   console.error(`Database startup error: ${error.message}`);
@@ -61,6 +64,7 @@ app.use('/api/health', require('./routes/health'));
 app.use('/api/auth', require('./routes/auth'));
 app.use('/api/users', require('./routes/users'));
 app.use('/api', require('./routes/billing'));
+app.use('/api', require('./routes/subscriberMeeting'));
 app.use('/api', require('./routes/contact'));
 app.use('/api', require('./routes/visitors'));
 app.use('/api', require('./routes/export'));

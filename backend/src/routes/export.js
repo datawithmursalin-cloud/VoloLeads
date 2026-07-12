@@ -6,9 +6,7 @@ const {
   exportSubscriptions
 } = require('../controllers/exportController');
 
-router.use(requireSyncApiKey);
-
-router.get('/export/contact-forms', exportContactForms);
-router.get('/export/subscriptions', exportSubscriptions);
+router.get('/export/contact-forms', requireSyncApiKey, exportContactForms);
+router.get('/export/subscriptions', requireSyncApiKey, exportSubscriptions);
 
 module.exports = router;

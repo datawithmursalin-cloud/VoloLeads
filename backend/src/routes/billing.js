@@ -1,7 +1,7 @@
 const express = require('express');
 const rateLimit = require('express-rate-limit');
 const verifyTurnstile = require('../middleware/turnstile');
-const { createCheckoutSession, requestManageLink } = require('../controllers/billingController');
+const { createCheckoutSession, requestManageLink, redirectCheckoutSuccess } = require('../controllers/billingController');
 
 const router = express.Router();
 
@@ -14,6 +14,7 @@ const billingLimiter = rateLimit({
 });
 
 router.post('/create-checkout-session', billingLimiter, createCheckoutSession);
+router.get('/billing/checkout-success', billingLimiter, redirectCheckoutSuccess);
 router.post('/request-manage-link', billingLimiter, verifyTurnstile, requestManageLink);
 
 module.exports = router;

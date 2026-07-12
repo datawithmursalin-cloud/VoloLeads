@@ -166,6 +166,7 @@ https://vololeads.com/api/stripe/webhook
 
 4. Subscribe at minimum to:
    - `checkout.session.completed`
+   - `customer.subscription.created`
    - `invoice.paid`
    - `invoice.payment_failed`
    - `customer.subscription.updated`

@@ -14,6 +14,9 @@ CREATE TABLE IF NOT EXISTS subscriptions (
   reminder_week3_sent_at TIMESTAMPTZ,
   reminder_day3_sent_at TIMESTAMPTZ,
   reminder_day1_sent_at TIMESTAMPTZ,
+  onboarding_meet_link TEXT,
+  onboarding_calendar_event_id TEXT,
+  onboarding_meeting_scheduled_at TIMESTAMPTZ,
   metadata JSONB NOT NULL DEFAULT '{}'::jsonb,
   created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
@@ -45,6 +48,8 @@ CREATE TABLE IF NOT EXISTS contact_forms (
   referral_source TEXT NOT NULL,
   referral_source_other TEXT,
   message TEXT,
+  meet_link TEXT,
+  calendar_event_id TEXT,
   ip_address TEXT,
   user_agent TEXT,
   source TEXT NOT NULL DEFAULT 'website',

@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Schedule Onboarding Call | VoloLeads</title>
+    <meta name="description" content="Schedule your VoloLeads subscriber onboarding call after checkout.">
+    <link rel="icon" type="image/webp" href="./png/logo.webp" sizes="any">
+    <link rel="apple-touch-icon" href="./png/logo.webp">
+    <meta name="robots" content="noindex, nofollow">
+    <meta name="theme-color" content="#0f172a">
+    <link rel="stylesheet" href="tailwind.css?v=20260610-02">
+    <link rel="stylesheet" href="styles.css?v=20260610-02">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body class="bg-brand-light dark:bg-slate-950 text-brand-navy dark:text-slate-100 font-sans antialiased flex flex-col min-h-screen">
+    <nav class="fixed top-6 left-0 right-0 z-50 w-[92%] max-w-7xl mx-auto bg-white/90 dark:bg-slate-900/90 backdrop-blur-md border border-slate-200 dark:border-slate-700 rounded-full shadow-2xl transition-all duration-300">
+        <div class="px-4 sm:px-6 md:px-8">
+            <div class="flex justify-between items-center h-16">
+                <a href="index.html#home" class="flex items-center gap-2 cursor-pointer group flex-shrink-0 min-w-0">
+                    <img src="./png/logo.webp" alt="" aria-hidden="true" class="site-nav-logo">
+                    <span class="font-bold text-lg sm:text-xl tracking-tight text-brand-navy dark:text-white">VoloLeads</span>
+                </a>
+                <div class="flex items-center gap-2 sm:gap-3 flex-shrink-0">
+                    <button id="dark-mode-toggle" class="text-slate-600 dark:text-slate-300 text-xl cursor-pointer focus:outline-none transition-colors hover:text-brand-orange dark:hover:text-brand-orange" aria-label="Toggle Dark Mode">
+                        <i class="fa-solid fa-moon" id="dark-mode-icon" aria-hidden="true"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="utility-page-main relative flex-grow overflow-hidden pt-36 pb-24 px-4">
+        <section class="utility-shell max-w-4xl mx-auto px-6 md:px-10 py-10 md:py-12">
+            <div id="schedule-access-loading" class="text-center max-w-2xl mx-auto">
+                <div class="w-20 h-20 mx-auto mb-6 rounded-full bg-orange-100 dark:bg-orange-900/30 flex items-center justify-center ring-8 ring-orange-50 dark:ring-orange-950/40">
+                    <i class="fa-solid fa-spinner fa-spin text-brand-orange text-3xl" aria-hidden="true"></i>
+                </div>
+                <h1 class="text-3xl font-extrabold text-brand-navy dark:text-white mb-3">Verifying your subscription</h1>
+                <p class="text-slate-600 dark:text-slate-300">Please wait while we confirm your checkout.</p>
+            </div>
+
+            <div id="schedule-access-denied" class="hidden text-center max-w-2xl mx-auto">
+                <div class="w-20 h-20 mx-auto mb-6 rounded-full bg-red-100 dark:bg-red-900/30 flex items-center justify-center ring-8 ring-red-50 dark:ring-red-950/40">
+                    <i class="fa-solid fa-lock text-red-500 text-3xl" aria-hidden="true"></i>
+                </div>
+                <h1 class="text-3xl font-extrabold text-brand-navy dark:text-white mb-3">Subscription access required</h1>
+                <p id="schedule-access-denied-message" class="text-slate-600 dark:text-slate-300 mb-8">This page is only available after a successful subscription checkout.</p>
+                <a href="index.html#plans" class="inline-flex px-8 py-4 bg-brand-orange hover:bg-orange-600 text-white font-bold rounded-full shadow-xl transition-all">View Plans</a>
+            </div>
+
+            <div id="schedule-access-complete" class="hidden text-center max-w-2xl mx-auto">
+                <div class="w-20 h-20 mx-auto mb-6 rounded-full bg-green-100 dark:bg-green-900/30 flex items-center justify-center ring-8 ring-green-50 dark:ring-green-950/40">
+                    <i class="fa-solid fa-check text-green-600 dark:text-green-400 text-3xl" aria-hidden="true"></i>
+                </div>
+                <h1 class="text-3xl font-extrabold text-brand-navy dark:text-white mb-3">Onboarding call scheduled</h1>
+                <p class="text-slate-600 dark:text-slate-300 mb-8">Check your inbox for the Google Meet link and calendar details.</p>
+                <a href="index.html" class="inline-flex px-8 py-4 bg-brand-orange hover:bg-orange-600 text-white font-bold rounded-full shadow-xl transition-all">Back to Home</a>
+            </div>
+
+            <div id="schedule-onboarding-shell" class="hidden">
+                <div class="text-center max-w-3xl mx-auto mb-8">
+                    <div class="w-20 h-20 mx-auto mb-6 rounded-full bg-orange-100 dark:bg-orange-900/30 flex items-center justify-center ring-8 ring-orange-50 dark:ring-orange-950/40">
+                        <i class="fa-solid fa-calendar-check text-brand-orange text-3xl" aria-hidden="true"></i>
+                    </div>
+                    <p class="inline-flex items-center gap-2 px-4 py-2 rounded-full text-xs font-bold uppercase tracking-[0.24em] bg-orange-50 dark:bg-orange-950/40 text-brand-orange mb-5">Subscriber Onboarding</p>
+                    <h1 class="text-4xl md:text-5xl font-extrabold text-brand-navy dark:text-white mb-4">Schedule Your Onboarding Call</h1>
+                    <p class="text-base md:text-lg text-slate-600 dark:text-slate-300 leading-relaxed">
+                        Welcome aboard. Pick a time for your onboarding call and we will send the Google Meet link to your subscription email.
+                    </p>
+                    <p id="schedule-plan-badge" class="mt-4 inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-bold bg-slate-100 dark:bg-slate-800 text-brand-navy dark:text-white"></p>
+                </div>
+
+                <div class="utility-form-card max-w-3xl mx-auto">
+                    <div class="px-6 md:px-9 pt-8 md:pt-9 pb-10 md:pb-11">
+                        <form id="schedule-onboarding-form" class="space-y-6">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div class="space-y-1">
+                                    <label for="subscriber-name" class="text-xs font-bold text-slate-500 uppercase tracking-wide ml-1">Full Name <span class="text-red-500">*</span></label>
+                                    <input id="subscriber-name" type="text" name="name" autocomplete="name" required minlength="2" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 dark:bg-slate-700 dark:border-slate-600 dark:text-white rounded-lg outline-none focus:border-brand-orange focus:ring-1 focus:ring-brand-orange" placeholder="Jane Smith">
+                                </div>
+                                <div class="space-y-1">
+                                    <label for="subscriber-email" class="text-xs font-bold text-slate-500 uppercase tracking-wide ml-1">Email from checkout</label>
+                                    <input id="subscriber-email" type="email" readonly aria-readonly="true" tabindex="-1" class="w-full px-4 py-3 bg-slate-100 border border-slate-200 dark:bg-slate-800 dark:border-slate-600 dark:text-slate-300 rounded-lg cursor-not-allowed" title="This email comes from your Stripe checkout and cannot be changed here.">
+                                    <p class="text-xs text-slate-500 dark:text-slate-400 ml-1">Filled automatically from your subscription payment. Meet links and confirmations go here.</p>
+                                </div>
+                            </div>
+
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div class="space-y-1">
+                                    <label for="subscriber-phone" class="text-xs font-bold text-slate-500 uppercase tracking-wide ml-1">Phone <span class="text-red-500">*</span></label>
+                                    <input id="subscriber-phone" type="tel" name="phone" autocomplete="tel" required class="w-full px-4 py-3 bg-slate-50 border border-slate-200 dark:bg-slate-700 dark:border-slate-600 dark:text-white rounded-lg outline-none focus:border-brand-orange focus:ring-1 focus:ring-brand-orange" placeholder="(555) 123-4567">
+                                </div>
+                                <div class="space-y-1">
+                                    <label for="subscriber-date" class="text-xs font-bold text-slate-500 uppercase tracking-wide ml-1">Preferred Date <span class="text-red-500">*</span></label>
+                                    <input type="date" id="subscriber-date" name="preferred_date" required class="w-full px-4 py-3 bg-slate-50 border border-slate-200 dark:bg-slate-700 dark:border-slate-600 dark:text-white rounded-lg outline-none focus:border-brand-orange focus:ring-1 focus:ring-brand-orange text-sm">
+                                </div>
+                            </div>
+
+                            <div id="subscriber-time-row" class="hidden space-y-1">
+                                <label for="subscriber-time" class="text-xs font-bold text-slate-500 uppercase tracking-wide ml-1">Preferred Time (EST) <span class="text-red-500">*</span></label>
+                                <select id="subscriber-time" name="preferred_time" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 dark:bg-slate-700 dark:border-slate-600 dark:text-white rounded-lg outline-none focus:border-brand-orange focus:ring-1 focus:ring-brand-orange text-sm appearance-none cursor-pointer">
+                                    <option value="" disabled selected>Select a time...</option>
+                                </select>
+                                <input type="hidden" id="subscriber-timezone" name="preferred_timezone" value="EST">
+                            </div>
+
+                            <div class="space-y-1">
+                                <label for="subscriber-message" class="text-xs font-bold text-slate-500 uppercase tracking-wide ml-1">Onboarding notes</label>
+                                <textarea id="subscriber-message" name="message" rows="4" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 dark:bg-slate-700 dark:border-slate-600 dark:text-white rounded-lg outline-none focus:border-brand-orange focus:ring-1 focus:ring-brand-orange resize-none" placeholder="Share your markets, CRM, team size, or anything we should prepare before the call."></textarea>
+                            </div>
+
+                            <div class="flex justify-center">
+                                <div class="cf-turnstile" data-sitekey="0x4AAAAAADKTLan8Zgz02zqw" data-theme="auto"></div>
+                            </div>
+
+                            <button type="submit" id="schedule-submit-btn" class="w-full py-4 bg-brand-orange hover:bg-orange-600 text-white font-bold text-lg rounded-xl shadow-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed">
+                                <span id="schedule-btn-text">Schedule Onboarding Call</span>
+                                <span id="schedule-btn-loader" class="hidden"><i class="fa-solid fa-spinner fa-spin" aria-hidden="true"></i> Scheduling...</span>
+                            </button>
+
+                            <p id="schedule-onboarding-message" class="text-sm font-semibold min-h-[1.5rem] text-center" aria-live="polite"></p>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script src="icons.js?v=20260610-02"></script>
+    <script src="app.js?v=20260626-01"></script>
+</body>
+</html>

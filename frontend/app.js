@@ -20,6 +20,8 @@ document.addEventListener('DOMContentLoaded', () => {
     initMobilePlansCarousel();
     initSubscriptionCheckout();
     initManageSubscriptionForm();
+    initScheduleOnboardingPage();
+    initSubscriptionSuccessPage();
     initTurnstileLoader();
     initAudioSeekBars();
     initDecorativeIcons();
@@ -350,6 +352,7 @@ function renderUniversalFooter() {
                         <li><a href="privacy-policy.html" class="hover:text-brand-orange transition-colors">Privacy Policy</a></li>
                         <li><a href="terms-condition.html" class="hover:text-brand-orange transition-colors">Terms of Service</a></li>
                         <li><a href="refund-policy.html" class="hover:text-brand-orange transition-colors">Refund Policy</a></li>
+                        <li><a href="disclaimer.html" class="hover:text-brand-orange transition-colors">Disclaimer</a></li>
                         <li><a href="manage-subscription.html" class="hover:text-brand-orange transition-colors">Manage Subscription</a></li>
                         <li><a href="faqs.html" class="hover:text-brand-orange transition-colors">FAQs</a></li>
                     </ul>
@@ -443,6 +446,63 @@ window.scrollPricing = function(direction) {
 };
 
 /* --- Contact Form Logic --- */
+function formatMeetingSlotLabel(value) {
+    const [hourPart, minutePart] = value.split(':');
+    const hour = Number(hourPart);
+    const minute = Number(minutePart);
+    const ampm = hour < 12 ? 'AM' : 'PM';
+    const displayHour = ((hour + 11) % 12) + 1;
+    return `${displayHour}:${String(minute).padStart(2, '0')} EST`;
+}
+
+function resetTimeSelect(timeSelect, placeholder) {
+    if (!timeSelect) return;
+    timeSelect.innerHTML = '';
+    const placeholderOption = document.createElement('option');
+    placeholderOption.value = '';
+    placeholderOption.textContent = placeholder || 'Select a time';
+    timeSelect.appendChild(placeholderOption);
+}
+
+async function loadAvailableMeetingSlots({
+    date,
+    timeSelect,
+    timeRow,
+    timezone = 'EST',
+    timezoneInput
+}) {
+    const preferredTimezone = timezoneInput?.value || timezone;
+
+    resetTimeSelect(timeSelect, 'Loading times...');
+    if (timeRow) timeRow.classList.remove('hidden');
+    if (timeSelect) timeSelect.setAttribute('required', 'true');
+
+    try {
+        const response = await fetch(
+            `/api/meeting-availability?date=${encodeURIComponent(date)}&timezone=${encodeURIComponent(preferredTimezone)}`
+        );
+        const payload = await response.json().catch(() => ({}));
+        const slots = payload.data?.slots || [];
+
+        resetTimeSelect(timeSelect, slots.length ? 'Select a time' : 'No times available');
+
+        slots.forEach((slot) => {
+            const opt = document.createElement('option');
+            opt.value = slot;
+            opt.textContent = formatMeetingSlotLabel(slot);
+            timeSelect.appendChild(opt);
+        });
+
+        if (!slots.length && timeSelect) {
+            timeSelect.removeAttribute('required');
+        }
+    } catch (error) {
+        console.error('Meeting availability error:', error);
+        resetTimeSelect(timeSelect, 'Unable to load times');
+        if (timeSelect) timeSelect.removeAttribute('required');
+    }
+}
+
 function initContactForm() {
     const serviceSelect = document.getElementById('service-select');
     const dateInput = document.getElementById('preferred-date');
@@ -482,10 +542,11 @@ function initContactForm() {
         const dd = String(tomorrow.getDate()).padStart(2, '0');
         dateInput.min = `${yyyy}-${mm}-${dd}`;
 
-        // Handle Date Change -> Show Time Slots
+        // Handle Date Change -> Show available time slots
         dateInput.addEventListener('change', function() {
             const timeRow = document.getElementById('time-row');
             const timeSelect = document.getElementById('preferred-time');
+            const timezoneInput = document.getElementById('preferred-timezone');
             
             if (!this.value) {
                 if (timeRow) timeRow.classList.add('hidden');
@@ -496,35 +557,12 @@ function initContactForm() {
                 return;
             }
 
-            // Populate time slots (9:00 AM - 4:30 PM EST)
-            if (timeSelect && timeSelect.options.length <= 1) {
-                const startHour = 9; 
-                const endHour = 16; 
-                
-                for (let h = startHour; h <= endHour; h++) {
-                    for (let m = 0; m < 60; m += 30) {
-                        // Stop loop after 4:30 PM
-                        if (h === 16 && m > 30) continue;
-
-                        const hour = h;
-                        const minute = m;
-                        // Format Value (24h)
-                        const value = String(hour).padStart(2, '0') + ':' + String(minute).padStart(2, '0');
-                        // Format Display (12h)
-                        const ampm = hour < 12 ? 'AM' : 'PM';
-                        const displayHour = ((hour + 11) % 12) + 1; 
-                        const text = `${displayHour}:${String(minute).padStart(2, '0')} ${ampm} EST`;
-                        
-                        const opt = document.createElement('option');
-                        opt.value = value;
-                        opt.text = text;
-                        timeSelect.appendChild(opt);
-                    }
-                }
-            }
-
-            if (timeRow) timeRow.classList.remove('hidden');
-            if (timeSelect) timeSelect.setAttribute('required', 'true');
+            loadAvailableMeetingSlots({
+                date: this.value,
+                timeSelect,
+                timeRow,
+                timezoneInput
+            });
         });
     }
 
@@ -970,6 +1008,263 @@ function initManageSubscriptionForm() {
     });
 }
 
+function populateSubscriberTimeSlots(timeSelect, date, timeRow, timezoneInput) {
+    if (!date || !timeSelect) return;
+    loadAvailableMeetingSlots({
+        date,
+        timeSelect,
+        timeRow,
+        timezoneInput
+    });
+}
+
+function initScheduleOnboardingPage() {
+    const loading = document.getElementById('schedule-access-loading');
+    const denied = document.getElementById('schedule-access-denied');
+    const deniedMessage = document.getElementById('schedule-access-denied-message');
+    const complete = document.getElementById('schedule-access-complete');
+    const shell = document.getElementById('schedule-onboarding-shell');
+    const form = document.getElementById('schedule-onboarding-form');
+
+    if (!loading || !denied || !shell || !form) return;
+
+    const params = new URLSearchParams(window.location.search);
+    const hashParams = new URLSearchParams(window.location.hash.replace(/^#/, ''));
+    const accessToken = hashParams.get('access_token') || params.get('access_token');
+    const sessionId = params.get('session_id');
+    const legacyEmail = params.get('email');
+    let bookingToken = null;
+
+    const showDenied = (message) => {
+        loading.classList.add('hidden');
+        shell.classList.add('hidden');
+        complete.classList.add('hidden');
+        denied.classList.remove('hidden');
+        if (deniedMessage && message) {
+            deniedMessage.textContent = message;
+        }
+    };
+
+    const verifyWithSessionAndEmail = async (email) => {
+        try {
+            const query = new URLSearchParams({
+                session_id: sessionId,
+                email
+            });
+            const response = await fetch(`/api/verify-subscriber-access?${query.toString()}`);
+            const data = await response.json().catch(() => ({}));
+
+            if (response.status === 409) {
+                showComplete();
+                return;
+            }
+
+            if (!response.ok || !data.data?.bookingToken) {
+                throw new Error(data.message || 'Unable to verify subscription access.');
+            }
+
+            bookingToken = data.data.bookingToken;
+            showForm(data.data);
+        } catch (error) {
+            console.error('Subscriber access verification error:', error);
+            showDenied(error.message || 'Unable to verify subscription access.');
+        }
+    };
+
+    const showLegacyEmailPrompt = () => {
+        loading.innerHTML = `
+            <div class="w-20 h-20 mx-auto mb-6 rounded-full bg-orange-100 dark:bg-orange-900/30 flex items-center justify-center ring-8 ring-orange-50 dark:ring-orange-950/40">
+                <i class="fa-solid fa-envelope text-brand-orange text-3xl" aria-hidden="true"></i>
+            </div>
+            <h1 class="text-3xl font-extrabold text-brand-navy dark:text-white mb-3">Confirm your subscription email</h1>
+            <p class="text-slate-600 dark:text-slate-300 mb-6">Enter the email address you used at checkout to continue scheduling.</p>
+            <form id="legacy-subscriber-email-form" class="max-w-md mx-auto space-y-4 text-left">
+                <div class="space-y-1">
+                    <label for="legacy-subscriber-email" class="text-xs font-bold text-slate-500 uppercase tracking-wide ml-1">Checkout email</label>
+                    <input id="legacy-subscriber-email" type="email" required autocomplete="email" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 dark:bg-slate-700 dark:border-slate-600 dark:text-white rounded-lg outline-none focus:border-brand-orange focus:ring-1 focus:ring-brand-orange" placeholder="you@company.com">
+                </div>
+                <button type="submit" class="w-full py-3 bg-brand-orange hover:bg-orange-600 text-white font-bold rounded-xl shadow-lg transition-all">Continue</button>
+            </form>
+        `;
+
+        const legacyForm = document.getElementById('legacy-subscriber-email-form');
+        legacyForm?.addEventListener('submit', async (event) => {
+            event.preventDefault();
+            const emailInput = document.getElementById('legacy-subscriber-email');
+            const email = emailInput?.value.trim().toLowerCase();
+            if (!email) return;
+
+            loading.querySelector('button[type="submit"]')?.setAttribute('disabled', 'disabled');
+            await verifyWithSessionAndEmail(email);
+        });
+    };
+
+    const showComplete = () => {
+        loading.classList.add('hidden');
+        denied.classList.add('hidden');
+        shell.classList.add('hidden');
+        complete.classList.remove('hidden');
+    };
+
+    const showForm = (data) => {
+        loading.classList.add('hidden');
+        denied.classList.add('hidden');
+        complete.classList.add('hidden');
+        shell.classList.remove('hidden');
+
+        const emailInput = document.getElementById('subscriber-email');
+        const planBadge = document.getElementById('schedule-plan-badge');
+        const dateInput = document.getElementById('subscriber-date');
+        const timeRow = document.getElementById('subscriber-time-row');
+        const timeSelect = document.getElementById('subscriber-time');
+        const timezoneInput = document.getElementById('subscriber-timezone');
+
+        if (emailInput) emailInput.value = data.email || '';
+        if (planBadge) planBadge.textContent = `Plan: ${data.planDisplayName || 'Subscriber'}`;
+
+        if (dateInput) {
+            const tomorrow = new Date();
+            tomorrow.setDate(tomorrow.getDate() + 1);
+            dateInput.min = tomorrow.toISOString().slice(0, 10);
+
+            dateInput.addEventListener('change', function handleDateChange() {
+                if (!this.value) {
+                    if (timeRow) timeRow.classList.add('hidden');
+                    if (timeSelect) {
+                        timeSelect.removeAttribute('required');
+                        timeSelect.value = '';
+                    }
+                    return;
+                }
+
+                populateSubscriberTimeSlots(timeSelect, this.value, timeRow, timezoneInput);
+            });
+        }
+    };
+
+    const verifyAccess = async () => {
+        if (accessToken) {
+            try {
+                const response = await fetch(`/api/verify-subscriber-access?access_token=${encodeURIComponent(accessToken)}`);
+                const data = await response.json().catch(() => ({}));
+
+                if (response.status === 409) {
+                    showComplete();
+                    return;
+                }
+
+                if (!response.ok || !data.data?.bookingToken) {
+                    throw new Error(data.message || 'Unable to verify subscription access.');
+                }
+
+                bookingToken = data.data.bookingToken;
+                showForm(data.data);
+            } catch (error) {
+                console.error('Subscriber access verification error:', error);
+                showDenied(error.message || 'Unable to verify subscription access.');
+            }
+            return;
+        }
+
+        if (!sessionId || !legacyEmail) {
+            if (sessionId && !legacyEmail) {
+                showLegacyEmailPrompt();
+                return;
+            }
+
+            showDenied('This page requires a valid onboarding link. Use the link from your subscription confirmation email.');
+            return;
+        }
+
+        await verifyWithSessionAndEmail(legacyEmail);
+    };
+
+    const submitButton = document.getElementById('schedule-submit-btn');
+    const btnText = document.getElementById('schedule-btn-text');
+    const btnLoader = document.getElementById('schedule-btn-loader');
+    const message = document.getElementById('schedule-onboarding-message');
+
+    form.addEventListener('submit', async (event) => {
+        event.preventDefault();
+
+        if (!bookingToken) {
+            if (message) {
+                message.textContent = 'Subscription access has expired. Please reopen the link from your confirmation email.';
+                message.className = 'text-sm font-semibold text-red-600 dark:text-red-400 text-center';
+            }
+            return;
+        }
+
+        const turnstileToken = getTurnstileToken(form);
+        if (!turnstileToken) {
+            if (message) {
+                message.textContent = 'Please complete the security check before scheduling.';
+                message.className = 'text-sm font-semibold text-red-600 dark:text-red-400 text-center';
+            }
+            return;
+        }
+
+        const formData = new FormData(form);
+        const payload = Object.fromEntries(formData.entries());
+        payload['cf-turnstile-response'] = turnstileToken;
+
+        if (submitButton) submitButton.disabled = true;
+        if (btnText) btnText.classList.add('hidden');
+        if (btnLoader) btnLoader.classList.remove('hidden');
+        if (message) {
+            message.textContent = '';
+            message.className = 'text-sm font-semibold text-center';
+        }
+
+        try {
+            const response = await fetch('/api/subscriber/schedule-meeting', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${bookingToken}`
+                },
+                body: JSON.stringify(payload)
+            });
+
+            const data = await response.json().catch(() => ({}));
+
+            if (!response.ok) {
+                throw new Error(data.message || 'Unable to schedule onboarding call.');
+            }
+
+            showComplete();
+        } catch (error) {
+            console.error('Schedule onboarding error:', error);
+            if (message) {
+                message.textContent = error.message || 'We could not schedule your call right now. Please try again or contact support.';
+                message.className = 'text-sm font-semibold text-red-600 dark:text-red-400 text-center';
+            }
+        } finally {
+            resetTurnstile(form);
+            if (submitButton) submitButton.disabled = false;
+            if (btnText) btnText.classList.remove('hidden');
+            if (btnLoader) btnLoader.classList.add('hidden');
+        }
+    });
+
+    verifyAccess();
+}
+
+function initSubscriptionSuccessPage() {
+    const scheduleLink = document.getElementById('schedule-onboarding-link');
+    if (!scheduleLink) return;
+
+    const hashParams = new URLSearchParams(window.location.hash.replace(/^#/, ''));
+    const accessToken = hashParams.get('access_token');
+
+    if (!accessToken) {
+        scheduleLink.classList.add('hidden');
+        return;
+    }
+
+    scheduleLink.href = `schedule-onboarding.html#access_token=${encodeURIComponent(accessToken)}`;
+}
+
 function getTurnstileToken(scope) {
     const tokenInput = scope ? scope.querySelector('[name="cf-turnstile-response"]') : null;
     return tokenInput ? tokenInput.value : '';
@@ -1142,8 +1437,13 @@ function initFormSecurity() {
                     // Redirect to thank you page
                     window.location.href = '/thank-you.html';
                 } else {
-                    console.error('Form submission failed:', response.status);
-                    alert('Failed to submit form. Please try again.');
+                    const payload = await response.json().catch(() => ({}));
+                    const errorMessage = payload.message
+                        || (response.status === 409
+                            ? 'That meeting time is no longer available. Please choose another time.'
+                            : 'Failed to submit form. Please try again.');
+                    console.error('Form submission failed:', response.status, errorMessage);
+                    alert(errorMessage);
 
                     // Re-enable button
                     if (submitBtn) {
