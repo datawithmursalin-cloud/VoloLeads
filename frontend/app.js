@@ -105,18 +105,18 @@ function initPageLoadAnimation() {
 /* --- Dark Mode Logic --- */
 function initDarkMode() {
     const html = document.documentElement;
+    const darkModeToggle = document.getElementById('dark-mode-toggle');
+    const mobileDarkModeToggle = document.getElementById('mobile-dark-mode-toggle');
 
-    // Check for saved dark mode preference or default to light mode
-    let isDarkMode = false;
+    let savedTheme = null;
     try {
-        isDarkMode = localStorage.getItem('dark-mode') === 'true';
+        savedTheme = localStorage.getItem('dark-mode');
     } catch (error) {
         console.warn('Dark mode preference unavailable', error);
     }
 
-    if (isDarkMode) {
-        html.classList.add('dark');
-    }
+    const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+    const initialDarkMode = savedTheme === null ? prefersDark : savedTheme === 'true';
 
     // Helper function to update icon
     const updateIcon = (icon, isDark) => {
@@ -129,29 +129,35 @@ function initDarkMode() {
         }
     };
 
-    // Helper function to toggle dark mode
-    const toggleDarkMode = () => {
-        html.classList.toggle('dark');
-        const isNowDark = html.classList.contains('dark');
-
-        // Update all toggle button icons
+    const applyTheme = (isDark, persist = false) => {
+        html.classList.toggle('dark', isDark);
         const darkModeIcon = document.getElementById('dark-mode-icon');
         const mobileDarkModeIcon = document.getElementById('mobile-dark-mode-icon');
 
-        if (darkModeIcon) updateIcon(darkModeIcon, isNowDark);
-        if (mobileDarkModeIcon) updateIcon(mobileDarkModeIcon, isNowDark);
+        if (darkModeIcon) updateIcon(darkModeIcon, isDark);
+        if (mobileDarkModeIcon) updateIcon(mobileDarkModeIcon, isDark);
+
+        [darkModeToggle, mobileDarkModeToggle].filter(Boolean).forEach(toggle => {
+            const nextTheme = isDark ? 'light' : 'dark';
+            toggle.setAttribute('aria-checked', String(isDark));
+            toggle.setAttribute('aria-label', `Switch to ${nextTheme} mode`);
+            toggle.setAttribute('title', `Switch to ${nextTheme} mode`);
+        });
+
         if (window.renderSiteIcons) window.renderSiteIcons();
 
-        try {
-            localStorage.setItem('dark-mode', isNowDark);
-        } catch (error) {
-            console.warn('Could not save dark mode preference', error);
+        if (persist) {
+            try {
+                localStorage.setItem('dark-mode', String(isDark));
+            } catch (error) {
+                console.warn('Could not save dark mode preference', error);
+            }
         }
     };
 
-    // Attach click handlers to all dark mode toggle buttons
-    const darkModeToggle = document.getElementById('dark-mode-toggle');
-    const mobileDarkModeToggle = document.getElementById('mobile-dark-mode-toggle');
+    const toggleDarkMode = () => applyTheme(!html.classList.contains('dark'), true);
+
+    applyTheme(initialDarkMode);
 
     if (darkModeToggle) {
         darkModeToggle.addEventListener('click', toggleDarkMode);
@@ -322,16 +328,16 @@ function renderUniversalFooter() {
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8 mb-8">
                 <div class="lg:col-span-2">
                     <a href="index.html#home" class="flex items-center space-x-2 mb-4">
-                        <i class="fa-solid fa-bolt text-brand-orange"></i>
+                        <img src="./png/logo.webp" alt="" aria-hidden="true" class="site-brand-logo site-brand-logo-sm">
                         <span class="text-white text-xl font-bold">VoloLeads</span>
                     </a>
-                    <p class="text-sm max-w-sm">High-velocity virtual assistants for real estate wholesalers. We hunt, you close.</p>
+                    <p class="text-sm max-w-sm">Managed acquisition teams for real estate wholesalers. We run the pipeline; you close.</p>
                 </div>
                 <div>
                     <h4 class="text-white font-bold mb-4">Navigate</h4>
                     <ul class="space-y-2 text-sm">
                         <li><a href="index.html#about" class="hover:text-brand-orange transition-colors">About Us</a></li>
-                        <li><a href="index.html#services" class="hover:text-brand-orange transition-colors">Services</a></li>
+                        <li><a href="index.html#plans" class="hover:text-brand-orange transition-colors">Services</a></li>
                         <li><a href="index.html#plans" class="hover:text-brand-orange transition-colors">Plans</a></li>
                         <li><a href="index.html#insights" class="hover:text-brand-orange transition-colors">Insights</a></li>
                         <li><a href="index.html#testimonials" class="hover:text-brand-orange transition-colors">Testimonials</a></li>
@@ -357,7 +363,7 @@ function renderUniversalFooter() {
                             </a>
                         </li>
                         <li>
-                            <a href="https://wa.me/15551234567" class="hover:text-brand-orange transition-colors">
+                            <a href="https://wa.me/8801793716608" class="hover:text-brand-orange transition-colors">
                                 <i class="fa-brands fa-whatsapp mr-2 text-brand-orange"></i> WhatsApp Support
                             </a>
                         </li>
@@ -1048,7 +1054,7 @@ function equalizePlanCardHeights() {
 
     if (maxContentHeight <= 0) return;
 
-    const cardHeight = Math.ceil(maxContentHeight + 40);
+    const cardHeight = Math.ceil(maxContentHeight + 16);
     plansRoot.style.setProperty('--plan-card-height', `${cardHeight}px`);
 }
 

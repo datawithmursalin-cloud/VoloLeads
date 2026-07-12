@@ -25,7 +25,7 @@
 
     <!-- ========== External Stylesheets ========== -->
     <!-- Custom CSS for animations and grid backgrounds -->
-    <link rel="stylesheet" href="styles.css?v=20260610-02">
+    <link rel="stylesheet" href="styles.css?v=20260713-12">
 
     <!-- ========== Google Fonts ========== -->
     <!-- Inter: Primary font for body text and headings -->
@@ -59,7 +59,7 @@
                     <a href="#contact" class="hidden lg:block px-6 py-2 bg-brand-navy dark:bg-brand-orange hover:bg-slate-800 dark:hover:bg-orange-600 text-white text-sm font-bold rounded-full shadow-lg transition-all transform hover:-translate-y-0.5">
                         Book Now
                     </a>
-                    <button id="dark-mode-toggle" class="text-slate-600 dark:text-slate-300 text-xl cursor-pointer focus:outline-none transition-colors hover:text-brand-orange dark:hover:text-brand-orange" aria-label="Toggle Dark Mode">
+                    <button id="dark-mode-toggle" class="theme-switch text-slate-600 dark:text-slate-300 text-xl cursor-pointer transition-colors hover:text-brand-orange dark:hover:text-brand-orange" type="button" role="switch" aria-checked="false" aria-label="Switch to dark mode" title="Switch to dark mode">
                         <i class="fa-solid fa-moon" id="dark-mode-icon" aria-hidden="true"></i>
                     </button>
                     <button id="mobile-menu-btn" class="lg:hidden text-slate-600 dark:text-slate-300 text-xl cursor-pointer focus:outline-none" aria-label="Toggle Menu">
@@ -89,7 +89,8 @@
         <div class="absolute inset-0 h-full w-full strategic-grid-bg"></div>
 
         <!-- Hero content container -->
-        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 relative text-center z-10">
+        <div class="hero-layout hero-layout--centered max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="hero-copy text-center">
 
             <!-- Badge: Tagline with animated pulse indicator -->
             <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm border border-slate-200 dark:border-slate-700 shadow-sm text-brand-navy dark:text-slate-100 text-[10px] sm:text-xs md:text-sm font-bold uppercase tracking-widest mb-6 hover:shadow-md transition-all cursor-default reveal-on-scroll">
@@ -104,12 +105,12 @@
             </h1>
 
             <!-- Supporting paragraph: Value proposition and key differentiator -->
-                        <p class="text-sm sm:text-base md:text-lg lg:text-xl text-slate-600 dark:text-slate-300 mb-8 max-w-3xl mx-auto leading-relaxed reveal-on-scroll delay-200">
-              Stop babysitting your cold callers. We provide elite, highly-trained Acquisition Specialists backed by daily QA audits, strict KPI tracking, and executive reporting. <span class="font-semibold text-brand-navy dark:text-slate-100">We handle the pipeline so you can focus on closing.</span>
+            <p class="text-sm sm:text-base md:text-lg lg:text-xl text-slate-600 dark:text-slate-300 mb-8 max-w-3xl mx-auto leading-relaxed reveal-on-scroll delay-200">
+              Stop babysitting your cold callers. We provide elite, highly-trained acquisition specialists backed by daily QA audits, strict KPI tracking, and executive reporting. <span class="font-semibold text-brand-navy dark:text-slate-100">We handle the pipeline so you can focus on closing.</span>
             </p>
 
             <!-- CTA Buttons: Primary (Start Scaling) and Secondary (Hear Live Calls) -->
-            <div class="flex flex-col sm:flex-row justify-center gap-4 mb-12 reveal-on-scroll delay-300">
+            <div class="flex flex-col sm:flex-row justify-center gap-4 mb-8 reveal-on-scroll delay-300">
                 <!-- Primary CTA: Scroll to contact form - More specific with urgency -->
                 <a href="#contact" class="px-8 py-4 bg-brand-orange hover:bg-orange-600 text-white font-bold rounded-full shadow-lg shadow-orange-400 dark:shadow-orange-900/50 transition-all transform hover:-translate-y-1 flex items-center justify-center gap-2 group">
                     <span>Schedule Free Strategy Call</span>
@@ -120,6 +121,38 @@
                     <i class="fa-solid fa-headphones" aria-hidden="true"></i>
                     <span>Hear the Quality</span>
                 </a>
+            </div>
+            <div class="hero-assurance reveal-on-scroll delay-300" aria-label="Service assurances">
+                <span><i class="fa-solid fa-shield-halved" aria-hidden="true"></i> No long-term contracts</span>
+                <span><i class="fa-solid fa-calendar-check" aria-hidden="true"></i> Onboarding starts after checkout</span>
+            </div>
+            </div>
+
+        </div>
+    </section>
+
+    <section class="proof-strip" aria-label="VoloLeads operating proof">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="proof-strip-grid">
+                <div><strong>5,000+</strong><span>seller leads generated</span></div>
+                <div><i class="fa-solid fa-wave-square" aria-hidden="true"></i><span>Daily QA audits</span></div>
+                <div><i class="fa-solid fa-graduation-cap" aria-hidden="true"></i><span>Wholesale-trained callers</span></div>
+                <div><i class="fa-solid fa-file-circle-check" aria-hidden="true"></i><span>No long-term contracts</span></div>
+            </div>
+        </div>
+    </section>
+
+    <section id="how-it-works" class="how-it-works-section">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="section-kicker">A SIMPLE OPERATING RHYTHM</div>
+            <div class="section-heading-row how-heading">
+                <h2>From strategy call to <span>daily lead flow.</span></h2>
+                <p>A managed acquisition system with clear ownership, measurable output, and a report in your inbox every day.</p>
+            </div>
+            <div class="how-grid">
+                <article><span class="step-number">01</span><i class="fa-solid fa-comments" aria-hidden="true"></i><h3>Strategy Call</h3><p>We map your market, goals, offer criteria, tech stack, and calling capacity.</p></article>
+                <article><span class="step-number">02</span><i class="fa-solid fa-sliders" aria-hidden="true"></i><h3>Caller + Campaign Setup</h3><p>Your trained caller, scripts, data flow, dialer, CRM, and QA scorecard are prepared.</p></article>
+                <article><span class="step-number">03</span><i class="fa-solid fa-chart-line" aria-hidden="true"></i><h3>Daily Leads + KPI Reports</h3><p>You receive qualified opportunities, lead notes, call feedback, and performance visibility.</p></article>
             </div>
         </div>
     </section>
@@ -132,6 +165,13 @@
             <p class="text-center text-sm font-semibold text-slate-400 uppercase tracking-widest mb-8 reveal-on-scroll">
                 EXPERTS IN INDUSTRY-LEADING SOFTWARE
             </p>
+
+            <div class="integration-categories reveal-on-scroll" aria-label="Integration categories">
+                <div><span>Data</span><p><i class="fa-solid fa-database" aria-hidden="true"></i> PropStream · XLeads · DealMachine</p></div>
+                <div><span>Dialers</span><p><i class="fa-solid fa-phone-volume" aria-hidden="true"></i> ReadyMode · WAVV · Mojo</p></div>
+                <div><span>CRM</span><p><i class="fa-solid fa-diagram-project" aria-hidden="true"></i> Podio · GoHighLevel</p></div>
+                <div><span>Reporting</span><p><i class="fa-solid fa-chart-column" aria-hidden="true"></i> KPI dashboards · Daily briefs</p></div>
+            </div>
 
             <!-- Animated scrolling carousel container -->
             <div class="flex overflow-hidden relative reveal-on-scroll delay-100">
@@ -250,7 +290,7 @@
                             <span class="text-[#8e775d] dark:text-[#cfb078] font-bold">no long-term contracts</span>.
                         </p>
                         <p class="text-xs md:text-sm text-[#8e775d] dark:text-[#cfb078] font-semibold mb-4">
-                            Get discount code by messaging College of Wholesale on TikTok or Instagram
+                            July College of Wholesale Discount — message College of Wholesale on TikTok or Instagram for your promo code.
                         </p>
                         <p class="plans-tip text-xs md:text-sm text-slate-500 dark:text-slate-400 italic inline-flex items-center gap-2 justify-center md:justify-start">
                             <i class="fa-regular fa-lightbulb text-[#8e775d] dark:text-[#cfb078]" aria-hidden="true"></i>
@@ -283,11 +323,11 @@
 
                             <div class="plan-price-block plan-price-block--promo mb-6">
                                 <div class="plan-price-row">
-                                    <span class="plan-price-list">$500</span>
-                                    <span class="plan-price font-extrabold text-brand-navy dark:text-white">$480</span>
+                                    <span class="plan-price-list">$600</span>
+                                    <span class="plan-price font-extrabold text-brand-navy dark:text-white">$560</span>
                                     <span class="plan-price-unit text-slate-500 dark:text-slate-400">/month</span>
                                 </div>
-                                <p class="plan-billing-note text-xs text-[#8e775d] dark:text-[#cfb078]">July 4th promo: get the discount code by messaging College of Wholesale on TikTok or Instagram.</p>
+                                <p class="plan-billing-note text-xs text-[#8e775d] dark:text-[#cfb078]"><strong>July College of Wholesale Discount</strong> — get your code by messaging College of Wholesale on TikTok or Instagram.</p>
                             </div>
 
                             <ul class="plan-feature-list space-y-1.5 mb-5 flex-grow text-xs">
@@ -424,11 +464,11 @@
 
                             <div class="plan-price-block plan-price-block--promo mb-6">
                                 <div class="plan-price-row">
-                                    <span class="plan-price-list">$1,235</span>
-                                    <span class="plan-price font-extrabold text-[#8e775d] dark:text-[#c9a34a]">$1,135</span>
+                                    <span class="plan-price-list">$1,535</span>
+                                    <span class="plan-price font-extrabold text-[#8e775d] dark:text-[#c9a34a]">$1,235</span>
                                     <span class="plan-price-unit text-slate-500 dark:text-slate-400">/month</span>
                                 </div>
-                                <p class="plan-billing-note text-xs text-[#8e775d] dark:text-[#cfb078]">July 4th promo: get the discount code by messaging College of Wholesale on TikTok or Instagram.</p>
+                                <p class="plan-billing-note text-xs text-[#8e775d] dark:text-[#cfb078]"><strong>July College of Wholesale Discount</strong> — enter the discount code to receive $300 off.</p>
                             </div>
 
                             <ul class="plan-feature-list space-y-1.5 mb-5 flex-grow text-xs">
@@ -594,7 +634,7 @@
                                     <span class="plan-price font-extrabold text-brand-orange">$2,599</span>
                                     <span class="plan-price-unit text-slate-500 dark:text-slate-400">/month</span>
                                 </div>
-                                <p class="plan-billing-note text-xs text-[#8e775d] dark:text-[#cfb078]">July 4th promo: get the discount code by messaging College of Wholesale on TikTok or Instagram.</p>
+                                <p class="plan-billing-note text-xs text-[#8e775d] dark:text-[#cfb078]"><strong>July College of Wholesale Discount</strong> — get your code by messaging College of Wholesale on TikTok or Instagram.</p>
                             </div>
 
                             <ul class="plan-feature-list space-y-1.5 mb-5 flex-grow text-[11px]">
@@ -907,66 +947,52 @@
                 </button>
             </div>
 
+            <section class="plan-comparison reveal-on-scroll" aria-labelledby="plan-comparison-title">
+                <div class="section-kicker">COMPARE AT A GLANCE</div>
+                <div class="section-heading-row compact plan-comparison-header">
+                    <h2 id="plan-comparison-title">Choose by <span>operating model.</span></h2>
+                    <p>The cards hold the detail. This table makes the ownership decision simple.</p>
+                </div>
+                <div class="comparison-table-wrap" role="region" aria-label="Plan comparison" tabindex="0">
+                    <table class="comparison-table">
+                        <thead><tr><th>Plan</th><th>Best for</th><th>Included</th><th>You handle</th><th>Monthly</th></tr></thead>
+                        <tbody>
+                            <tr><th>Starter</th><td data-label="Best for">Teams with an existing stack</td><td data-label="Included">1 caller, training, management, KPI reports</td><td data-label="You handle">Data, dialer, CRM costs</td><td data-label="Monthly"><strong>$560</strong><small>July COW price</small></td></tr>
+                            <tr class="is-featured"><th>Growth <span>Most popular</span></th><td data-label="Best for">Operators wanting a turnkey outbound system</td><td data-label="Included">Caller, data, dialer, QA, CRM support</td><td data-label="You handle">Closing qualified opportunities</td><td data-label="Monthly"><strong>$1,235</strong><small>July COW price</small></td></tr>
+                            <tr><th>Scale</th><td data-label="Best for">High-volume, multi-market teams</td><td data-label="Included">More volume, priority data, deeper optimization</td><td data-label="You handle">Acquisitions and dispositions</td><td data-label="Monthly"><strong>$2,599</strong><small>July COW price</small></td></tr>
+                            <tr><th>Custom+</th><td data-label="Best for">Complex or multi-seat operations</td><td data-label="Included">Custom staffing, workflows and automation</td><td data-label="You handle">Defined together</td><td data-label="Monthly"><strong>Custom</strong><small>Scoped to your operation</small></td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
             <!-- DIY BASELINE COMPARISON -->
             <div class="mt-16 border-t border-slate-200 dark:border-slate-700 pt-12 reveal-on-scroll">
-                <div class="bg-slate-50 dark:bg-slate-800 rounded-2xl p-8 border border-slate-200 dark:border-slate-700">
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
-                        <div>
-                            <h3 class="text-2xl font-bold text-brand-navy dark:text-white mb-4">DIY (Do It Yourself)</h3>
-                            <p class="text-slate-600 dark:text-slate-400 mb-4 text-sm leading-relaxed">
-                                Want to build it yourself? You'll need to handle everything:
-                            </p>
-                            <ul class="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-3">
-                                <li class="flex items-start">
-                                    <i class="fa-solid fa-xmark text-red-500 mt-1 mr-3 flex-shrink-0"></i>
-                                    <span class="text-slate-600 dark:text-slate-400 text-sm">Recruit and train callers</span>
-                                </li>
-                                <li class="flex items-start">
-                                    <i class="fa-solid fa-xmark text-red-500 mt-1 mr-3 flex-shrink-0"></i>
-                                    <span class="text-slate-600 dark:text-slate-400 text-sm">Set up dialer software</span>
-                                </li>
-                                <li class="flex items-start">
-                                    <i class="fa-solid fa-xmark text-red-500 mt-1 mr-3 flex-shrink-0"></i>
-                                    <span class="text-slate-600 dark:text-slate-400 text-sm">Source and manage leads</span>
-                                </li>
-                                <li class="flex items-start">
-                                    <i class="fa-solid fa-xmark text-red-500 mt-1 mr-3 flex-shrink-0"></i>
-                                    <span class="text-slate-600 dark:text-slate-400 text-sm">Ensure consistency & quality</span>
-                                </li>
-                                <li class="flex items-start">
-                                    <i class="fa-solid fa-xmark text-red-500 mt-1 mr-3 flex-shrink-0"></i>
-                                    <span class="text-slate-600 dark:text-slate-400 text-sm">Track your own KPIs</span>
-                                </li>
-                                <li class="flex items-start">
-                                    <i class="fa-solid fa-xmark text-red-500 mt-1 mr-3 flex-shrink-0"></i>
-                                    <span class="text-slate-600 dark:text-slate-400 text-sm">Manage pipeline</span>
-                                </li>
-                                <li class="flex items-start">
-                                    <i class="fa-solid fa-xmark text-red-500 mt-1 mr-3 flex-shrink-0"></i>
-                                    <span class="text-slate-600 dark:text-slate-400 text-sm">Babysit your VA</span>
-                                </li>
-                                <li class="flex items-start">
-                                    <i class="fa-solid fa-xmark text-red-500 mt-1 mr-3 flex-shrink-0"></i>
-                                    <span class="text-slate-600 dark:text-slate-400 text-sm">Build everything from scratch</span>
-                                </li>
-                            </ul>
-                        </div>
-                        <div class="bg-white dark:bg-slate-900 rounded-xl p-6 border border-slate-300 dark:border-slate-700">
-                            <div class="flex items-baseline mb-2">
-                                <span class="text-4xl font-extrabold text-brand-navy dark:text-white">$670+</span>
-                                <span class="text-slate-500 dark:text-slate-400 ml-1">/month</span>
-                            </div>
-                            <p class="text-xs text-slate-500 dark:text-slate-400 mb-6">Base cost (no guarantee on quality)</p>
-                            <div class="space-y-2 text-xs text-slate-600 dark:text-slate-400">
-                                <p><strong>Reality:</strong> Most DIY setups require</p>
-                                <p>5-10x more time investment and 3-6 months to get leads flowing consistently.</p>
-                            </div>
-                        </div>
-                    </div>
+                <div class="section-heading-row compact diy-comparison-header">
+                    <h2>DIY vs <span>VoloLeads</span></h2>
+                    <p>Compare the real operating burden, not only the caller’s hourly rate.</p>
+                </div>
+                <div class="comparison-table-wrap" role="region" aria-label="DIY versus VoloLeads comparison" tabindex="0">
+                    <table class="comparison-table diy-table">
+                        <thead><tr><th>Operating category</th><th>DIY</th><th>VoloLeads</th></tr></thead>
+                        <tbody>
+                            <tr class="diy-cost-row"><th>Base monthly cost</th><td data-label="DIY"><strong>$800+</strong><small>No guarantee on quality</small></td><td data-label="VoloLeads"><strong>From $560</strong><small>Managed support</small></td></tr>
+                            <tr><th>Data + dialer</th><td data-label="DIY">Source, fund and configure vendors</td><td data-label="VoloLeads">Included on managed plans</td></tr>
+                            <tr><th>Recruiting + training</th><td data-label="DIY">Hire, replace and coach callers</td><td data-label="VoloLeads">Wholesale-trained talent</td></tr>
+                            <tr><th>Quality assurance</th><td data-label="DIY">Review recordings yourself</td><td data-label="VoloLeads">Daily audits and coaching</td></tr>
+                            <tr><th>CRM setup</th><td data-label="DIY">Build stages, fields and routing</td><td data-label="VoloLeads">Setup and ongoing support</td></tr>
+                            <tr><th>KPI reporting</th><td data-label="DIY">Compile and interpret manually</td><td data-label="VoloLeads">Executive report every day</td></tr>
+                            <tr><th>Management time</th><td data-label="DIY"><strong>5–10× more owner time</strong></td><td data-label="VoloLeads"><strong>You focus on closing</strong></td></tr>
+                            <tr><th>Typical ramp</th><td data-label="DIY">3–6 months to stabilize</td><td data-label="VoloLeads">Structured onboarding and launch</td></tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
 
             <div class="mt-12 text-center border-t border-slate-200 dark:border-slate-700 pt-8 reveal-on-scroll">
+                <p class="text-sm text-[#8e775d] dark:text-[#cfb078] font-semibold mb-4">
+                    July College of Wholesale Discount — limited-time savings on Starter, Growth, and Scale. Message College of Wholesale on TikTok or Instagram for your promo code.
+                </p>
                 <p class="text-xs text-slate-400 dark:text-slate-500 max-w-4xl mx-auto leading-relaxed">
                     * All plans include dedicated talent and management. <strong>Dialer software and lead data costs may apply separately based on volume.</strong> No long-term contracts—cancel anytime. Ready to scale? Book a consultation to customize your plan.
                 </p>
@@ -1000,9 +1026,9 @@
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 mb-24 items-start lg:items-stretch">
             <div class="lg:col-span-4 reveal-on-scroll lg:h-full">
                 <div class="h-full rounded-3xl p-8 bg-white/80 dark:bg-slate-900/70 backdrop-blur-sm border border-slate-200/80 dark:border-slate-700 shadow-xl flex flex-col">
-                    <p class="text-xs font-bold uppercase tracking-[0.25em] text-brand-orange mb-4">Live Call Library</p>
+                    <p class="text-xs font-bold uppercase tracking-[0.25em] text-brand-orange mb-4">Call Quality Library</p>
                     <p class="text-slate-600 dark:text-slate-400 mb-6 text-lg leading-relaxed">
-                        AI outbound gets hung up on. Only humans can build the rapport required to acquire seller leads. Hear how our agents pivot off-script to have genuine, problem-solving conversations with homeowners.
+                        Hear the moments our QA team looks for: natural rapport, calm objection handling, precise qualification, and useful notes for acquisitions.
                     </p>
                     <a href="#plans" class="text-brand-orange font-bold hover:text-orange-700 transition-colors inline-flex items-center gap-2 text-lg group">
                         Hire this talent <i class="fa-solid fa-arrow-right group-hover:translate-x-1 transition-transform"></i>
@@ -1309,7 +1335,7 @@
             </div>
 
             <!-- Testimonials Grid: 3 columns on desktop -->
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div class="testimonials-grid grid grid-cols-1 md:grid-cols-3 gap-8 items-start">
 
                 <!-- Testimonial 1 -->
                 <div class="testimonial-card bg-slate-50 dark:bg-slate-700 rounded-xl p-8 border border-slate-200 dark:border-slate-600 hover:border-brand-orange/50 transition-all duration-300 shadow-sm hover:shadow-lg reveal-on-scroll delay-100">
@@ -1483,6 +1509,40 @@
         </div>
     </section>
 
+    <section class="daily-deliverables-section" aria-labelledby="daily-deliverables-title">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="daily-deliverables-card">
+                <div>
+                    <div class="section-kicker">DELIVERED EVERY DAY</div>
+                    <h2 id="daily-deliverables-title">Know what happened.<br><span>Know what to do next.</span></h2>
+                    <p>Your operation stays visible without another dashboard to babysit.</p>
+                </div>
+                <div class="daily-items">
+                    <div><i class="fa-solid fa-file-lines" aria-hidden="true"></i><span><strong>Daily call report</strong><small>Activity and outcomes</small></span></div>
+                    <div><i class="fa-solid fa-note-sticky" aria-hidden="true"></i><span><strong>Lead notes</strong><small>Seller context and next steps</small></span></div>
+                    <div><i class="fa-solid fa-headphones" aria-hidden="true"></i><span><strong>QA feedback</strong><small>Audits and coaching actions</small></span></div>
+                    <div><i class="fa-solid fa-chart-simple" aria-hidden="true"></i><span><strong>KPI tracking</strong><small>Dials through conversions</small></span></div>
+                    <div><i class="fa-solid fa-arrow-right-arrow-left" aria-hidden="true"></i><span><strong>Pipeline updates</strong><small>Clean stages and ownership</small></span></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="faq-preview-section" aria-labelledby="faq-preview-title">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="section-kicker text-center">QUICK ANSWERS</div>
+            <h2 id="faq-preview-title">Before we build your campaign.</h2>
+            <div class="faq-preview-list">
+                <details><summary>Do you provide the dialer?<i class="fa-solid fa-plus" aria-hidden="true"></i></summary><p>Growth and Scale include managed dialer infrastructure. Starter is designed for teams that already have their own stack.</p></details>
+                <details><summary>Do you provide leads?<i class="fa-solid fa-plus" aria-hidden="true"></i></summary><p>Managed plans include lead data and targeted public-record lists. We confirm volume and market fit during onboarding.</p></details>
+                <details><summary>Can I cancel anytime?<i class="fa-solid fa-plus" aria-hidden="true"></i></summary><p>Yes. There are no long-term contracts; subscription terms and any setup fee are shown clearly at checkout.</p></details>
+                <details><summary>When does onboarding start?<i class="fa-solid fa-plus" aria-hidden="true"></i></summary><p>Onboarding begins after checkout, starting with campaign intake, access collection, and success criteria.</p></details>
+                <details><summary>What happens after checkout?<i class="fa-solid fa-plus" aria-hidden="true"></i></summary><p>You receive the onboarding steps, schedule the kickoff, and begin campaign setup with your assigned team.</p></details>
+            </div>
+            <a href="faqs.html" class="faq-all-link">See all frequently asked questions <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
+        </div>
+    </section>
+
     <!-- ========== CONTACT / QUOTE SECTION ========== -->
     <!-- Contact form for lead generation and quote requests -->
     <section id="contact" class="py-24 bg-slate-50 dark:bg-slate-900 relative overflow-hidden scroll-mt-32">
@@ -1501,7 +1561,7 @@
             </div>
 
             <!-- Contact Form Container -->
-            <div class="max-w-3xl mx-auto bg-white dark:bg-slate-800 p-8 md:p-12 rounded-3xl border border-slate-200 dark:border-slate-700 shadow-2xl relative z-10 reveal-on-scroll delay-200">
+            <div class="max-w-6xl mx-auto bg-white dark:bg-slate-800 p-8 md:p-12 rounded-3xl border border-slate-200 dark:border-slate-700 shadow-2xl relative z-10 reveal-on-scroll delay-200">
 
                 <!-- Form Header with icon -->
                 <div class="flex items-center justify-center gap-3 mb-10">
@@ -1514,8 +1574,21 @@
                     </div>
                 </div>
 
+                <div class="contact-executive-grid">
+                    <aside class="contact-next-steps">
+                        <span class="section-kicker">WHAT HAPPENS NEXT</span>
+                        <h4>A useful conversation, not a sales ambush.</h4>
+                        <ol>
+                            <li><span>1</span><p><strong>We review your campaign</strong><small>Market, goals and current setup</small></p></li>
+                            <li><span>2</span><p><strong>We map the right plan</strong><small>Clear ownership and realistic volume</small></p></li>
+                            <li><span>3</span><p><strong>You get next steps</strong><small>Scope, onboarding and launch path</small></p></li>
+                        </ol>
+                        <p class="response-note"><i class="fa-solid fa-clock" aria-hidden="true"></i> Expect a response within 24 hours.</p>
+                    </aside>
+
                 <!-- Contact Form: submitted to backend API (SMTP notification via cPanel) -->
                 <form id="contact-form" class="space-y-6">
+                <div class="form-section-label"><span>01</span><div><strong>Contact Info</strong><small>Where we can reach you</small></div></div>
                 <!-- Redirect URL after successful form submission -->
                 <input type="hidden" name="redirect" value="thank-you.html">
 
@@ -1565,6 +1638,8 @@
                                placeholder="+1 (555) 000-0000">
                     </div>
                 </div>
+
+                <div class="form-section-label form-section-label--campaign"><span>02</span><div><strong>Campaign Details</strong><small>Help us prepare a useful strategy call</small></div></div>
 
                 <!-- Service Type Dropdown: Required field with conditional quantity field -->
                 <div class="space-y-1">
@@ -1673,13 +1748,22 @@
                         No Contracts
                     </div>
                 </div>
-            </form>
+                </form>
+                </div>
         </div>
     </div>
 </section>
 
     </main>
 
+    <section class="prefooter-cta" aria-label="Book a strategy call">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div><span>READY WHEN YOU ARE</span><h2>Build an acquisition system you don’t have to babysit.</h2></div>
+            <a href="#contact">Book a Strategy Call <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
+        </div>
+    </section>
+
+    <a href="#contact" class="mobile-sticky-cta"><i class="fa-solid fa-calendar-check" aria-hidden="true"></i><span>Book Strategy Call</span></a>
 
     <!-- ========== FOOTER ========== -->
     <!-- Site footer with navigation, contact info, and social links -->
@@ -1691,9 +1775,7 @@
                         <img src="./png/logo.webp" alt="" aria-hidden="true" class="site-brand-logo site-brand-logo-sm">
                         <span class="font-bold text-xl text-white">VoloLeads</span>
                     </div>
-                    <p class="text-xs text-slate-500">
-                        High-velocity virtual assistants for real estate wholesalers. We hunt, you close.
-                    </p>
+                    <p class="text-xs text-slate-500">Managed acquisition teams for real estate wholesalers. We run the pipeline; you close.</p>
                 </div>
 
                 <div>
@@ -1752,7 +1834,7 @@
 
     <!-- JavaScript Application File: Handles interactivity, animations, and visitor tracking -->
     <script src="icons.js?v=20260610-02"></script>
-    <script src="app.js?v=20260610-02"></script>
+    <script src="app.js?v=20260713-04"></script>
 
     <!-- Third-party widgets (e.g. Crisp) are loaded only after cookie consent. -->
 
