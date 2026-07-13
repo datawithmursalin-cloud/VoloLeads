@@ -3676,3 +3676,13 @@ body.page-transition-out {
         animation: none !important;
     }
 }
+
+/* Keep comparison titles at the same mobile display scale as the call-library heading. */
+@media (max-width: 768px) {
+    #plans .section-heading-row.plan-comparison-header h2,
+    #plans .section-heading-row.diy-comparison-header h2 {
+        font-size: 1.875rem !important;
+        line-height: 1.25 !important;
+        letter-spacing: -0.025em !important;
+    }
+}
