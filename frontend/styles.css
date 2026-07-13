@@ -353,11 +353,12 @@ section {
 .dark .strategic-grid-bg {
     background-color: #0f172a;
     background-image:
-        linear-gradient(to right, rgba(148, 163, 184, 0.14) 1px, transparent 1px),
-        linear-gradient(to bottom, rgba(148, 163, 184, 0.1) 1px, transparent 1px);
-    background-size: 14px 24px;
-    mask-image: linear-gradient(to bottom, #000 0%, rgba(0, 0, 0, 0.42) 28%, transparent 62%);
-    -webkit-mask-image: linear-gradient(to bottom, #000 0%, rgba(0, 0, 0, 0.42) 28%, transparent 62%);
+        radial-gradient(ellipse 68% 62% at 50% 8%, rgba(249, 115, 22, 0.09), transparent 72%),
+        linear-gradient(to right, rgba(148, 163, 184, 0.23) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(148, 163, 184, 0.17) 1px, transparent 1px);
+    background-size: auto, 14px 24px, 14px 24px;
+    mask-image: radial-gradient(ellipse 78% 68% at 50% 0%, #000 62%, rgba(0, 0, 0, 0.72) 82%, transparent 100%);
+    -webkit-mask-image: radial-gradient(ellipse 78% 68% at 50% 0%, #000 62%, rgba(0, 0, 0, 0.72) 82%, transparent 100%);
 }
 
 /* ============================================
@@ -2174,11 +2175,12 @@ html.dark .contact-strategic-grid-bg {
 html.dark .strategic-grid-bg {
     background-color: #0f172a !important;
     background-image:
-        linear-gradient(to right, rgba(148, 163, 184, 0.08) 1px, transparent 1px),
-        linear-gradient(to bottom, rgba(148, 163, 184, 0.06) 1px, transparent 1px) !important;
-    background-size: 14px 24px !important;
-    mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.72) 0%, rgba(0, 0, 0, 0.34) 28%, transparent 58%) !important;
-    -webkit-mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.72) 0%, rgba(0, 0, 0, 0.34) 28%, transparent 58%) !important;
+        radial-gradient(ellipse 68% 62% at 50% 8%, rgba(249, 115, 22, 0.09), transparent 72%),
+        linear-gradient(to right, rgba(148, 163, 184, 0.23) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(148, 163, 184, 0.17) 1px, transparent 1px) !important;
+    background-size: auto, 14px 24px, 14px 24px !important;
+    mask-image: radial-gradient(ellipse 78% 68% at 50% 0%, #000 62%, rgba(0, 0, 0, 0.72) 82%, transparent 100%) !important;
+    -webkit-mask-image: radial-gradient(ellipse 78% 68% at 50% 0%, #000 62%, rgba(0, 0, 0, 0.72) 82%, transparent 100%) !important;
 }
 
 nav.fixed.top-6 {
