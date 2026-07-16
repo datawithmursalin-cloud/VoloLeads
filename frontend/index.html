@@ -25,7 +25,7 @@
 
     <!-- ========== External Stylesheets ========== -->
     <!-- Custom CSS for animations and grid backgrounds -->
-    <link rel="stylesheet" href="styles.css?v=20260713-23">
+    <link rel="stylesheet" href="styles.css?v=20260717-01">
 
     <!-- ========== Google Fonts ========== -->
     <!-- Inter: Primary font for body text and headings -->
@@ -302,6 +302,55 @@
                 </div>
             </div>
 
+            <section class="plan-advisor reveal-on-scroll" aria-labelledby="plan-advisor-title">
+                <div class="plan-advisor-intro">
+                    <span class="section-kicker">PLAN RECOMMENDER</span>
+                    <h3 id="plan-advisor-title">Find your best-fit operating model.</h3>
+                    <p>Answer three quick questions. We’ll point you to the plan that matches your stack, caller count, and campaign pace.</p>
+                </div>
+
+                <form id="plan-advisor-form" class="plan-advisor-form">
+                    <fieldset>
+                        <legend>What does your setup look like?</legend>
+                        <div class="advisor-options">
+                            <label><input type="radio" name="advisor-stack" value="owned" checked><span>I have a dialer + data</span></label>
+                            <label><input type="radio" name="advisor-stack" value="managed"><span>I want it managed</span></label>
+                        </div>
+                    </fieldset>
+                    <fieldset>
+                        <legend>How many callers do you need?</legend>
+                        <div class="advisor-options advisor-options--three">
+                            <label><input type="radio" name="advisor-callers" value="one" checked><span>1 caller</span></label>
+                            <label><input type="radio" name="advisor-callers" value="two"><span>2 callers</span></label>
+                            <label><input type="radio" name="advisor-callers" value="three-plus"><span>3+ callers</span></label>
+                        </div>
+                    </fieldset>
+                    <fieldset>
+                        <legend>What campaign pace fits you?</legend>
+                        <div class="advisor-options advisor-options--three">
+                            <label><input type="radio" name="advisor-volume" value="focused" checked><span>Focused</span></label>
+                            <label><input type="radio" name="advisor-volume" value="consistent"><span>Consistent</span></label>
+                            <label><input type="radio" name="advisor-volume" value="multi"><span>Multi-market</span></label>
+                        </div>
+                    </fieldset>
+                </form>
+
+                <aside class="plan-advisor-result" aria-live="polite" aria-atomic="true">
+                    <span class="plan-advisor-result-label">YOUR BEST FIT</span>
+                    <h3 id="advisor-plan-name">Starter</h3>
+                    <p id="advisor-plan-reason">You already have the stack and want one focused caller.</p>
+                    <ul id="advisor-plan-highlights">
+                        <li>1 dedicated caller</li>
+                        <li>Works in your existing stack</li>
+                        <li>Daily reporting and QA</li>
+                    </ul>
+                    <div class="plan-advisor-actions">
+                        <button type="button" id="advisor-apply-plan">Use this plan</button>
+                        <a href="#pricing-slider" id="advisor-see-plan">See plan details <i class="fa-solid fa-arrow-down" aria-hidden="true"></i></a>
+                    </div>
+                </aside>
+            </section>
+
             <!-- Pricing carousel with flip cards -->
             <div class="plans-carousel-shell relative">
                 <button type="button" class="pricing-nav-btn pricing-nav-prev" aria-label="Previous pricing plan" onclick="event.stopPropagation(); scrollPricing('left')">
@@ -311,7 +360,7 @@
                 <div id="pricing-slider" class="plans-pricing-grid scrollbar-hide pb-12 pt-6">
 
                 <!-- ESSENTIAL TIER - FLIP CARD -->
-                <div class="perspective-1000 group reveal-on-scroll relative cursor-pointer" role="button" tabindex="0" aria-label="Flip Starter plan card" aria-pressed="false" onclick="flipCard(this)">
+                <div class="perspective-1000 group reveal-on-scroll relative cursor-pointer" data-plan-card="Starter" role="button" tabindex="0" aria-label="Flip Starter plan card" aria-pressed="false" onclick="flipCard(this)">
                     <div class="transform-style-3d relative w-full h-full transition-transform duration-500 ease-in-out" style="transform-style: preserve-3d;">
 
                         <!-- FRONT: Plan Details -->
@@ -461,7 +510,7 @@
                 </div>
 
                 <!-- PREMIUM TIER - FLIP CARD (MOST POPULAR) -->
-                <div class="perspective-1000 group reveal-on-scroll delay-100 relative cursor-pointer" role="button" tabindex="0" aria-label="Flip Growth plan card" aria-pressed="false" onclick="flipCard(this)">
+                <div class="perspective-1000 group reveal-on-scroll delay-100 relative cursor-pointer" data-plan-card="Growth" role="button" tabindex="0" aria-label="Flip Growth plan card" aria-pressed="false" onclick="flipCard(this)">
                     <!-- MOST POPULAR BADGE -->
                     <div class="plan-popular-badge absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-20">
                         <span class="bg-brand-orange text-white text-sm font-bold px-4 py-1.5 rounded-full shadow-md uppercase tracking-wide">MOST POPULAR</span>
@@ -646,7 +695,7 @@
                 </div>
 
                 <!-- CUSTOM+ TIER - FLIP CARD -->
-                <div class="perspective-1000 group reveal-on-scroll delay-200 relative cursor-pointer" role="button" tabindex="0" aria-label="Flip Custom Plus plan card" aria-pressed="false" onclick="flipCard(this)">
+                <div class="perspective-1000 group reveal-on-scroll delay-200 relative cursor-pointer" data-plan-card="Scale" role="button" tabindex="0" aria-label="Flip Scale plan card" aria-pressed="false" onclick="flipCard(this)">
                     <div class="transform-style-3d relative w-full h-full transition-transform duration-500 ease-in-out" style="transform-style: preserve-3d;">
 
                         <!-- FRONT: Plan Details -->
@@ -859,7 +908,7 @@
                 </div>
 
                 <!-- CUSTOM TIER - CONTACT CTA -->
-                <div class="perspective-1000 group reveal-on-scroll delay-300 relative cursor-pointer" role="button" tabindex="0" aria-label="Flip Custom plan card" aria-pressed="false" onclick="flipCard(this)">
+                <div class="perspective-1000 group reveal-on-scroll delay-300 relative cursor-pointer" data-plan-card="Custom+" role="button" tabindex="0" aria-label="Flip Custom Plus plan card" aria-pressed="false" onclick="flipCard(this)">
                     <div class="transform-style-3d relative w-full h-full transition-transform duration-500 ease-in-out" style="transform-style: preserve-3d;">
                         <div class="backface-hidden absolute w-full h-full bg-white dark:bg-slate-800 rounded-2xl shadow-lg p-8 border border-slate-200 dark:border-slate-700 flex flex-col" style="backface-visibility: hidden; overflow: visible;">
                             <div class="mb-4">
@@ -1142,6 +1191,7 @@
                         <span id="timer-audio-richard" class="text-xs font-mono text-slate-500 w-14 text-right">6:29</span>
                         <input id="seek-audio-richard" class="audio-seek" type="range" min="0" max="100" value="0" step="0.1" aria-label="Seek Richard H. call sample" data-audio-id="audio-richard">
                     </div>
+                    <button type="button" class="audio-breakdown-trigger" data-audio-breakdown="audio-richard" aria-haspopup="dialog"><span><i class="fa-solid fa-wave-square" aria-hidden="true"></i> View QA breakdown</span><i class="fa-solid fa-arrow-right" aria-hidden="true"></i></button>
                 </div>
 
                 <!-- CARD 2 — Joe (Nowshad) -->
@@ -1168,6 +1218,7 @@
                         <span id="timer-audio-joe" class="text-xs font-mono text-slate-500 w-14 text-right">5:46</span>
                         <input id="seek-audio-joe" class="audio-seek" type="range" min="0" max="100" value="0" step="0.1" aria-label="Seek Joe N. call sample" data-audio-id="audio-joe">
                     </div>
+                    <button type="button" class="audio-breakdown-trigger" data-audio-breakdown="audio-joe" aria-haspopup="dialog"><span><i class="fa-solid fa-wave-square" aria-hidden="true"></i> View QA breakdown</span><i class="fa-solid fa-arrow-right" aria-hidden="true"></i></button>
                 </div>
 
                 <!-- CARD 3 — Ben (Sakeef): update name, subtitle, src, and duration -->
@@ -1194,6 +1245,7 @@
                         <span id="timer-audio-3" class="text-xs font-mono text-slate-500 w-14 text-right">4:04</span>
                         <input id="seek-audio-3" class="audio-seek" type="range" min="0" max="100" value="0" step="0.1" aria-label="Seek Ben S. call sample" data-audio-id="audio-3">
                     </div>
+                    <button type="button" class="audio-breakdown-trigger" data-audio-breakdown="audio-3" aria-haspopup="dialog"><span><i class="fa-solid fa-wave-square" aria-hidden="true"></i> View QA breakdown</span><i class="fa-solid fa-arrow-right" aria-hidden="true"></i></button>
                 </div>
 
                 <!-- CARD 4 — Anna (Nusrat): -->
@@ -1220,6 +1272,7 @@
                         <span id="timer-audio-4" class="text-xs font-mono text-slate-500 w-14 text-right">4:35</span>
                         <input id="seek-audio-4" class="audio-seek" type="range" min="0" max="100" value="0" step="0.1" aria-label="Seek Anna N. call sample" data-audio-id="audio-4">
                     </div>
+                    <button type="button" class="audio-breakdown-trigger" data-audio-breakdown="audio-4" aria-haspopup="dialog"><span><i class="fa-solid fa-wave-square" aria-hidden="true"></i> View QA breakdown</span><i class="fa-solid fa-arrow-right" aria-hidden="true"></i></button>
                 </div>
 
                 <!-- CARD 5 — Dave (Faizan): -->
@@ -1246,6 +1299,7 @@
                         <span id="timer-audio-5" class="text-xs font-mono text-slate-500 w-14 text-right">6:23</span>
                         <input id="seek-audio-5" class="audio-seek" type="range" min="0" max="100" value="0" step="0.1" aria-label="Seek Dave F. call sample" data-audio-id="audio-5">
                     </div>
+                    <button type="button" class="audio-breakdown-trigger" data-audio-breakdown="audio-5" aria-haspopup="dialog"><span><i class="fa-solid fa-wave-square" aria-hidden="true"></i> View QA breakdown</span><i class="fa-solid fa-arrow-right" aria-hidden="true"></i></button>
                 </div>
 
                 <!-- CARD 6 — Anna (Heba): -->
@@ -1272,10 +1326,23 @@
                         <span id="timer-audio-6" class="text-xs font-mono text-slate-500 w-14 text-right">3:42</span>
                         <input id="seek-audio-6" class="audio-seek" type="range" min="0" max="100" value="0" step="0.1" aria-label="Seek Anna H. call sample" data-audio-id="audio-6">
                     </div>
+                    <button type="button" class="audio-breakdown-trigger" data-audio-breakdown="audio-6" aria-haspopup="dialog"><span><i class="fa-solid fa-wave-square" aria-hidden="true"></i> View QA breakdown</span><i class="fa-solid fa-arrow-right" aria-hidden="true"></i></button>
                 </div>
 
             </div>
             <!-- END AUDIO CARDS GRID -->
+
+            <dialog id="audio-breakdown-dialog" class="interaction-dialog audio-breakdown-dialog" aria-labelledby="audio-breakdown-title">
+                <div class="interaction-dialog-shell">
+                    <button type="button" class="interaction-dialog-close" data-dialog-close aria-label="Close audio breakdown"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>
+                    <span class="dialog-kicker">CALL COACHING BREAKDOWN</span>
+                    <h3 id="audio-breakdown-title">What to listen for</h3>
+                    <p id="audio-breakdown-summary"></p>
+                    <div id="audio-breakdown-tags" class="audio-breakdown-tags" aria-label="Coaching focus areas"></div>
+                    <div id="audio-breakdown-grid" class="audio-breakdown-grid"></div>
+                    <button type="button" id="audio-breakdown-play" class="dialog-primary-action"><i class="fa-solid fa-play" aria-hidden="true"></i> Play this call</button>
+                </div>
+            </dialog>
 
         </div>
         
@@ -1577,14 +1644,24 @@
                     <p>Your operation stays visible without another dashboard to babysit.</p>
                 </div>
                 <div class="daily-items">
-                    <div><i class="fa-solid fa-file-lines" aria-hidden="true"></i><span><strong>Daily call report</strong><small>Activity and outcomes</small></span></div>
-                    <div><i class="fa-solid fa-note-sticky" aria-hidden="true"></i><span><strong>Lead notes</strong><small>Seller context and next steps</small></span></div>
-                    <div><i class="fa-solid fa-headphones" aria-hidden="true"></i><span><strong>QA feedback</strong><small>Audits and coaching actions</small></span></div>
-                    <div><i class="fa-solid fa-chart-simple" aria-hidden="true"></i><span><strong>KPI tracking</strong><small>Dials through conversions</small></span></div>
-                    <div><i class="fa-solid fa-arrow-right-arrow-left" aria-hidden="true"></i><span><strong>Pipeline updates</strong><small>Clean stages and ownership</small></span></div>
+                    <button type="button" data-deliverable="report" aria-haspopup="dialog"><i class="fa-solid fa-file-lines" aria-hidden="true"></i><span><strong>Daily call report</strong><small>Activity and outcomes</small></span><i class="fa-solid fa-arrow-up-right-from-square daily-item-arrow" aria-hidden="true"></i></button>
+                    <button type="button" data-deliverable="notes" aria-haspopup="dialog"><i class="fa-solid fa-note-sticky" aria-hidden="true"></i><span><strong>Lead notes</strong><small>Seller context and next steps</small></span><i class="fa-solid fa-arrow-up-right-from-square daily-item-arrow" aria-hidden="true"></i></button>
+                    <button type="button" data-deliverable="qa" aria-haspopup="dialog"><i class="fa-solid fa-headphones" aria-hidden="true"></i><span><strong>QA feedback</strong><small>Audits and coaching actions</small></span><i class="fa-solid fa-arrow-up-right-from-square daily-item-arrow" aria-hidden="true"></i></button>
+                    <button type="button" data-deliverable="kpi" aria-haspopup="dialog"><i class="fa-solid fa-chart-simple" aria-hidden="true"></i><span><strong>KPI tracking</strong><small>Dials through conversions</small></span><i class="fa-solid fa-arrow-up-right-from-square daily-item-arrow" aria-hidden="true"></i></button>
+                    <button type="button" data-deliverable="pipeline" aria-haspopup="dialog"><i class="fa-solid fa-arrow-right-arrow-left" aria-hidden="true"></i><span><strong>Pipeline updates</strong><small>Clean stages and ownership</small></span><i class="fa-solid fa-arrow-up-right-from-square daily-item-arrow" aria-hidden="true"></i></button>
                 </div>
             </div>
         </div>
+        <dialog id="deliverable-dialog" class="interaction-dialog deliverable-dialog" aria-labelledby="deliverable-dialog-title">
+            <div class="interaction-dialog-shell">
+                <button type="button" class="interaction-dialog-close" data-dialog-close aria-label="Close deliverable preview"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>
+                <span class="dialog-kicker">ILLUSTRATIVE SAMPLE</span>
+                <h3 id="deliverable-dialog-title">Daily call report</h3>
+                <p id="deliverable-dialog-intro"></p>
+                <div id="deliverable-dialog-preview" class="deliverable-dialog-preview"></div>
+                <p class="dialog-disclaimer"><i class="fa-solid fa-circle-info" aria-hidden="true"></i> Sample data shown for layout illustration; your reporting reflects your live campaign.</p>
+            </div>
+        </dialog>
     </section>
 
     <section id="faq-preview" class="faq-preview-section scroll-mt-28" aria-labelledby="faq-preview-title">
@@ -1643,6 +1720,15 @@
                             <li><span>3</span><p><strong>You get next steps</strong><small>Scope, onboarding and launch path</small></p></li>
                         </ol>
                         <p class="response-note"><i class="fa-solid fa-clock" aria-hidden="true"></i> Expect a response within 24 hours.</p>
+                        <div class="booking-summary-card" aria-live="polite" aria-atomic="true">
+                            <div class="booking-summary-head"><span>LIVE CALL SUMMARY</span><strong id="booking-summary-progress">0/3 ready</strong></div>
+                            <dl>
+                                <div><dt><i class="fa-solid fa-layer-group" aria-hidden="true"></i> Plan</dt><dd id="booking-summary-plan">Choose a service</dd></div>
+                                <div><dt><i class="fa-solid fa-users" aria-hidden="true"></i> Team</dt><dd id="booking-summary-team">Select caller count</dd></div>
+                                <div><dt><i class="fa-regular fa-calendar" aria-hidden="true"></i> Schedule</dt><dd id="booking-summary-schedule">Choose a date</dd></div>
+                            </dl>
+                            <p>This summary updates as you build your request.</p>
+                        </div>
                     </aside>
 
                 <!-- Contact Form: submitted to backend API (SMTP notification via cPanel) -->
@@ -1893,7 +1979,7 @@
 
     <!-- JavaScript Application File: Handles interactivity, animations, and visitor tracking -->
     <script src="icons.js?v=20260610-02"></script>
-    <script src="app.js?v=20260713-09"></script>
+    <script src="app.js?v=20260717-01"></script>
 
     <!-- Third-party widgets (e.g. Crisp) are loaded only after cookie consent. -->
 

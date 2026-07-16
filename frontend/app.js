@@ -26,6 +26,10 @@ document.addEventListener('DOMContentLoaded', () => {
     initTurnstileLoader();
     initAudioSeekBars();
     initDecorativeIcons();
+    initPlanRecommender();
+    initDeliverablePreviews();
+    initAudioBreakdowns();
+    initBookingSummary();
 
     // Cookie consent banner initialization
     initCookieConsentBanner();
@@ -2065,6 +2069,250 @@ function loadThirdPartyScriptsOnConsent() {
     }
 
     // Potentially enable analytics or other widgets here when consented
+}
+
+/* ============================================
+   CONVERSION INTERACTION SUITE
+   ============================================ */
+function openInteractionDialog(dialog, trigger) {
+    if (!dialog) return;
+    dialog._lastTrigger = trigger || document.activeElement;
+    if (typeof dialog.showModal === 'function') {
+        dialog.showModal();
+    } else {
+        dialog.setAttribute('open', '');
+    }
+}
+
+function initInteractionDialog(dialog) {
+    if (!dialog) return;
+
+    dialog.querySelectorAll('[data-dialog-close]').forEach(button => {
+        button.addEventListener('click', () => dialog.close());
+    });
+
+    dialog.addEventListener('click', event => {
+        if (event.target === dialog) dialog.close();
+    });
+
+    dialog.addEventListener('close', () => {
+        if (dialog._lastTrigger && typeof dialog._lastTrigger.focus === 'function') {
+            dialog._lastTrigger.focus();
+        }
+    });
+}
+
+function initPlanRecommender() {
+    const form = document.getElementById('plan-advisor-form');
+    const planName = document.getElementById('advisor-plan-name');
+    const reason = document.getElementById('advisor-plan-reason');
+    const highlights = document.getElementById('advisor-plan-highlights');
+    const applyButton = document.getElementById('advisor-apply-plan');
+    const seePlan = document.getElementById('advisor-see-plan');
+    if (!form || !planName || !reason || !highlights) return;
+
+    const plans = {
+        'Starter': {
+            reason: 'You already have the stack and want one focused caller.',
+            highlights: ['1 dedicated caller', 'Works in your existing stack', 'Daily reporting and QA']
+        },
+        'Growth': {
+            reason: 'You want a consistent campaign with the operating stack managed for you.',
+            highlights: ['Managed campaign infrastructure', 'Dedicated caller support', 'Reporting, QA, and optimization']
+        },
+        'Scale': {
+            reason: 'Your caller count or market pace needs more capacity and advanced optimization.',
+            highlights: ['Higher calling capacity', 'Advanced targeting and analytics', 'Priority campaign optimization']
+        },
+        'Custom+': {
+            reason: 'Three or more callers call for a tailored operating plan and capacity review.',
+            highlights: ['Custom caller count', 'Flexible markets and workflows', 'Tailored reporting and fulfillment']
+        }
+    };
+
+    let recommendation = 'Starter';
+
+    const getValue = name => form.querySelector(`input[name="${name}"]:checked`)?.value;
+    const choosePlan = () => {
+        const stack = getValue('advisor-stack');
+        const callers = getValue('advisor-callers');
+        const volume = getValue('advisor-volume');
+
+        if (callers === 'three-plus') recommendation = 'Custom+';
+        else if (callers === 'two' || volume === 'multi') recommendation = 'Scale';
+        else if (stack === 'owned' && volume === 'focused') recommendation = 'Starter';
+        else recommendation = 'Growth';
+
+        const result = plans[recommendation];
+        planName.textContent = recommendation;
+        reason.textContent = result.reason;
+        highlights.innerHTML = result.highlights.map(item => `<li>${item}</li>`).join('');
+        seePlan?.setAttribute('aria-label', `See ${recommendation} plan details`);
+
+        document.querySelectorAll('[data-plan-card]').forEach(card => {
+            const isMatch = card.dataset.planCard === recommendation;
+            card.classList.toggle('is-recommended-plan', isMatch);
+            if (isMatch) card.setAttribute('data-recommendation-label', 'Recommended for you');
+            else card.removeAttribute('data-recommendation-label');
+        });
+    };
+
+    form.addEventListener('change', choosePlan);
+    choosePlan();
+
+    seePlan?.addEventListener('click', () => {
+        window.setTimeout(() => {
+            const card = document.querySelector(`[data-plan-card="${recommendation}"]`);
+            card?.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+            card?.focus({ preventScroll: true });
+        }, 450);
+    });
+
+    applyButton?.addEventListener('click', () => {
+        const serviceSelect = document.getElementById('service-select');
+        const quantitySelect = document.getElementById('quantity-select');
+        if (!serviceSelect) return;
+
+        serviceSelect.value = recommendation === 'Custom+' ? 'Custom Quote' : recommendation;
+        serviceSelect.dispatchEvent(new Event('change', { bubbles: true }));
+
+        if (quantitySelect && recommendation !== 'Custom+') {
+            const callers = getValue('advisor-callers');
+            quantitySelect.value = callers === 'two' ? '2-3 Seats' : '1 Seat';
+            quantitySelect.dispatchEvent(new Event('change', { bubbles: true }));
+        }
+
+        document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        window.setTimeout(() => serviceSelect.focus(), 500);
+    });
+}
+
+function initDeliverablePreviews() {
+    const dialog = document.getElementById('deliverable-dialog');
+    const title = document.getElementById('deliverable-dialog-title');
+    const intro = document.getElementById('deliverable-dialog-intro');
+    const preview = document.getElementById('deliverable-dialog-preview');
+    if (!dialog || !title || !intro || !preview) return;
+
+    const deliverables = {
+        report: {
+            title: 'Daily call report',
+            intro: 'A concise end-of-day view of activity, outcomes, and the next follow-up priorities.',
+            preview: '<div class="sample-metrics"><div><span>Dials</span><strong>402</strong></div><div><span>Conversations</span><strong>57</strong></div><div><span>Qualified</span><strong>4</strong></div><div><span>Callbacks</span><strong>9</strong></div></div><div class="sample-callout"><span>DAY AT A GLANCE</span><p>Conversation quality held steady. Review the four qualified leads first, then work the callback queue.</p></div>'
+        },
+        notes: {
+            title: 'Lead notes',
+            intro: 'Seller context is organized so the next person can continue the conversation without starting over.',
+            preview: '<div class="sample-note"><div><span>SELLER CONTEXT</span><strong>Inherited property · vacant</strong></div><p>Owner is comparing options and requested a follow-up after speaking with a family member.</p><dl><div><dt>Motivation</dt><dd>Reduce carrying costs</dd></div><div><dt>Next step</dt><dd>Call back Thursday</dd></div></dl></div>'
+        },
+        qa: {
+            title: 'QA feedback',
+            intro: 'Coaching turns call reviews into a small set of specific actions for the next dialing block.',
+            preview: '<div class="sample-qa"><div><span>Rapport</span><i><b style="width:88%"></b></i><strong>Strong</strong></div><div><span>Discovery</span><i><b style="width:72%"></b></i><strong>Refine</strong></div><div><span>Next step</span><i><b style="width:80%"></b></i><strong>Clear</strong></div></div><div class="sample-callout"><span>COACHING ACTION</span><p>Ask one more timeline question before moving to the close.</p></div>'
+        },
+        kpi: {
+            title: 'KPI tracking',
+            intro: 'The funnel stays visible from first dial through qualified opportunity.',
+            preview: '<div class="sample-funnel"><div><strong>402</strong><span>Dials</span></div><i class="fa-solid fa-arrow-right"></i><div><strong>57</strong><span>Conversations</span></div><i class="fa-solid fa-arrow-right"></i><div><strong>13</strong><span>Interested</span></div><i class="fa-solid fa-arrow-right"></i><div><strong>4</strong><span>Qualified</span></div></div>'
+        },
+        pipeline: {
+            title: 'Pipeline updates',
+            intro: 'Ownership and next actions stay clear as leads move from contact to follow-up.',
+            preview: '<div class="sample-pipeline"><div><span class="pipeline-dot pipeline-dot--new"></span><p><strong>New lead</strong><small>Review seller context</small></p><b>Owner: Acquisitions</b></div><div><span class="pipeline-dot pipeline-dot--warm"></span><p><strong>Warm follow-up</strong><small>Callback scheduled</small></p><b>Due: Thursday</b></div><div><span class="pipeline-dot pipeline-dot--ready"></span><p><strong>Qualified</strong><small>Ready for offer review</small></p><b>Priority</b></div></div>'
+        }
+    };
+
+    initInteractionDialog(dialog);
+    document.querySelectorAll('[data-deliverable]').forEach(button => {
+        button.addEventListener('click', () => {
+            const item = deliverables[button.dataset.deliverable];
+            if (!item) return;
+            title.textContent = item.title;
+            intro.textContent = item.intro;
+            preview.innerHTML = item.preview;
+            openInteractionDialog(dialog, button);
+        });
+    });
+}
+
+function initAudioBreakdowns() {
+    const dialog = document.getElementById('audio-breakdown-dialog');
+    const title = document.getElementById('audio-breakdown-title');
+    const summary = document.getElementById('audio-breakdown-summary');
+    const tags = document.getElementById('audio-breakdown-tags');
+    const grid = document.getElementById('audio-breakdown-grid');
+    const playButton = document.getElementById('audio-breakdown-play');
+    if (!dialog || !title || !summary || !tags || !grid) return;
+
+    const breakdowns = {
+        'audio-richard': { title: 'Handling seller objections', summary: 'Listen for a calm response that acknowledges the concern before guiding the seller toward a useful next step.', tags: ['Acknowledgment', 'Pacing', 'Next step'], focus: ['Make the seller feel heard', 'Avoid arguing with the objection', 'Keep the close specific'] },
+        'audio-joe': { title: 'Building rapport', summary: 'Listen for curiosity, permission, and a natural tone that keeps the conversation open.', tags: ['Curiosity', 'Permission', 'Tone'], focus: ['Open without pressure', 'Use context to build trust', 'Transition naturally'] },
+        'audio-3': { title: 'Nurturing a lead', summary: 'Listen for patience and continuity in a conversation that is not ready to convert today.', tags: ['Patience', 'Recall', 'Follow-up'], focus: ['Preserve relationship context', 'Confirm what changed', 'Set a useful follow-up'] },
+        'audio-4': { title: 'Collecting MTCP', summary: 'Listen for complete discovery across motivation, timeline, condition, and price without making the call feel like an interrogation.', tags: ['Motivation', 'Timeline', 'Condition + price'], focus: ['Ask one question at a time', 'Probe incomplete answers', 'Capture usable notes'] },
+        'audio-5': { title: 'Lead qualification', summary: 'Listen for clear fit checks, constraints, and a handoff that gives acquisitions enough context to act.', tags: ['Fit', 'Constraints', 'Handoff'], focus: ['Confirm seller intent', 'Surface decision factors', 'State the next owner'] },
+        'audio-6': { title: 'Finding the right prospects', summary: 'Listen for respectful verification and clean routing when identifying whether the contact matches the campaign.', tags: ['Verification', 'Respect', 'Data hygiene'], focus: ['Verify without friction', 'Protect the brand experience', 'Route or disposition clearly'] }
+    };
+
+    let activeAudioId = '';
+    initInteractionDialog(dialog);
+
+    document.querySelectorAll('[data-audio-breakdown]').forEach(button => {
+        button.addEventListener('click', () => {
+            activeAudioId = button.dataset.audioBreakdown;
+            const item = breakdowns[activeAudioId];
+            if (!item) return;
+            title.textContent = item.title;
+            summary.textContent = item.summary;
+            tags.innerHTML = item.tags.map(tag => `<span>${tag}</span>`).join('');
+            grid.innerHTML = item.focus.map((focus, index) => `<div><span>0${index + 1}</span><p>${focus}</p></div>`).join('');
+            openInteractionDialog(dialog, button);
+        });
+    });
+
+    playButton?.addEventListener('click', () => {
+        const audio = document.getElementById(activeAudioId);
+        const playerButton = audio?.closest('.audio-player-panel')?.querySelector('button');
+        dialog.close();
+        if (audio && playerButton && audio.paused) toggleAudio(activeAudioId, playerButton);
+    });
+}
+
+function initBookingSummary() {
+    const service = document.getElementById('service-select');
+    const quantity = document.getElementById('quantity-select');
+    const date = document.getElementById('preferred-date');
+    const time = document.getElementById('preferred-time');
+    const timezone = document.getElementById('preferred-timezone');
+    const planOutput = document.getElementById('booking-summary-plan');
+    const teamOutput = document.getElementById('booking-summary-team');
+    const scheduleOutput = document.getElementById('booking-summary-schedule');
+    const progressOutput = document.getElementById('booking-summary-progress');
+    if (!service || !planOutput || !teamOutput || !scheduleOutput || !progressOutput) return;
+
+    const selectedText = select => select?.value ? select.options[select.selectedIndex]?.textContent.trim() : '';
+    const update = () => {
+        const isCustom = service.value === 'Custom Quote';
+        const hasTeam = isCustom || Boolean(quantity?.value);
+        const hasDate = Boolean(date?.value);
+        const ready = Number(Boolean(service.value)) + Number(hasTeam) + Number(hasDate);
+
+        planOutput.textContent = selectedText(service) || 'Choose a service';
+        teamOutput.textContent = isCustom ? 'Scoped during strategy call' : (selectedText(quantity) || 'Select caller count');
+
+        if (hasDate) {
+            const parsedDate = new Date(`${date.value}T12:00:00`);
+            const dateLabel = new Intl.DateTimeFormat('en-US', { weekday: 'short', month: 'short', day: 'numeric' }).format(parsedDate);
+            const timeLabel = selectedText(time);
+            scheduleOutput.textContent = timeLabel ? `${dateLabel} · ${timeLabel} ${timezone?.value || 'EST'}` : `${dateLabel} · choose a time`;
+        } else {
+            scheduleOutput.textContent = 'Choose a date';
+        }
+
+        progressOutput.textContent = `${ready}/3 ready`;
+    };
+
+    [service, quantity, date, time].forEach(control => control?.addEventListener('change', update));
+    update();
 }
 
 // ========== EXIT DETECTION ==========
