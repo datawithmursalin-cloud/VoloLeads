@@ -25,7 +25,7 @@
 
     <!-- ========== External Stylesheets ========== -->
     <!-- Custom CSS for animations and grid backgrounds -->
-    <link rel="stylesheet" href="styles.css?v=20260717-01">
+    <link rel="stylesheet" href="styles.css?v=20260717-07">
 
     <!-- ========== Google Fonts ========== -->
     <!-- Inter: Primary font for body text and headings -->
@@ -151,10 +151,93 @@
                 <h2>From strategy call to <span>daily lead flow.</span></h2>
                 <p>A managed acquisition system with clear ownership, measurable output, and a report in your inbox every day.</p>
             </div>
-            <div class="how-grid">
-                <article><span class="step-number">01</span><i class="fa-solid fa-comments" aria-hidden="true"></i><h3>Strategy Call</h3><p>We map your market, goals, offer criteria, tech stack, and calling capacity.</p></article>
-                <article><span class="step-number">02</span><i class="fa-solid fa-sliders" aria-hidden="true"></i><h3>Caller + Campaign Setup</h3><p>Your trained caller, scripts, data flow, dialer, CRM, and QA scorecard are prepared.</p></article>
-                <article><span class="step-number">03</span><i class="fa-solid fa-chart-line" aria-hidden="true"></i><h3>Daily Leads + KPI Reports</h3><p>You receive qualified opportunities, lead notes, call feedback, and performance visibility.</p></article>
+            <div class="guided-stepper reveal-on-scroll delay-200" data-active-step="0">
+                <div class="guided-step-tabs" role="tablist" aria-label="How VoloLeads works" aria-orientation="vertical">
+                    <button type="button" id="how-step-tab-1" class="guided-step-tab is-active" role="tab" aria-selected="true" aria-controls="how-step-panel-1" tabindex="0" data-how-step="0">
+                        <span class="guided-step-index">01</span><span class="guided-step-tab-icon"><i class="fa-solid fa-comments" aria-hidden="true"></i></span>
+                        <span><strong>Strategy call</strong><small>Align goals, fit, and priorities</small></span><i class="fa-solid fa-arrow-right guided-step-arrow" aria-hidden="true"></i>
+                    </button>
+                    <button type="button" id="how-step-tab-2" class="guided-step-tab" role="tab" aria-selected="false" aria-controls="how-step-panel-2" tabindex="-1" data-how-step="1">
+                        <span class="guided-step-index">02</span><span class="guided-step-tab-icon"><i class="fa-solid fa-user-check" aria-hidden="true"></i></span>
+                        <span><strong>Onboarding</strong><small>Collect access and assign the team</small></span><i class="fa-solid fa-arrow-right guided-step-arrow" aria-hidden="true"></i>
+                    </button>
+                    <button type="button" id="how-step-tab-3" class="guided-step-tab" role="tab" aria-selected="false" aria-controls="how-step-panel-3" tabindex="-1" data-how-step="2">
+                        <span class="guided-step-index">03</span><span class="guided-step-tab-icon"><i class="fa-solid fa-sliders" aria-hidden="true"></i></span>
+                        <span><strong>Campaign setup</strong><small>Build the operating system</small></span><i class="fa-solid fa-arrow-right guided-step-arrow" aria-hidden="true"></i>
+                    </button>
+                    <button type="button" id="how-step-tab-4" class="guided-step-tab" role="tab" aria-selected="false" aria-controls="how-step-panel-4" tabindex="-1" data-how-step="3">
+                        <span class="guided-step-index">04</span><span class="guided-step-tab-icon"><i class="fa-solid fa-headset" aria-hidden="true"></i></span>
+                        <span><strong>Calling &amp; QA</strong><small>Run, review, and improve</small></span><i class="fa-solid fa-arrow-right guided-step-arrow" aria-hidden="true"></i>
+                    </button>
+                    <button type="button" id="how-step-tab-5" class="guided-step-tab" role="tab" aria-selected="false" aria-controls="how-step-panel-5" tabindex="-1" data-how-step="4">
+                        <span class="guided-step-index">05</span><span class="guided-step-tab-icon"><i class="fa-solid fa-paper-plane" aria-hidden="true"></i></span>
+                        <span><strong>Qualified lead delivery</strong><small>Route context, not just a name</small></span><i class="fa-solid fa-arrow-right guided-step-arrow" aria-hidden="true"></i>
+                    </button>
+                </div>
+
+                <div class="guided-step-stage">
+                    <div class="guided-pipeline" role="img" aria-label="Strategy call is the active stage">
+                        <div class="guided-pipeline-header">
+                            <span><i class="fa-solid fa-diagram-project" aria-hidden="true"></i> LIVE OPERATING FLOW</span>
+                            <strong id="guided-pipeline-status" aria-live="polite">Strategy being mapped</strong>
+                        </div>
+                        <div class="guided-pipeline-track" aria-hidden="true">
+                            <div class="guided-pipeline-progress"></div>
+                            <div class="guided-pipeline-node is-active"><span><i class="fa-solid fa-comments"></i></span><small>Strategy</small></div>
+                            <div class="guided-pipeline-node"><span><i class="fa-solid fa-user-check"></i></span><small>Onboard</small></div>
+                            <div class="guided-pipeline-node"><span><i class="fa-solid fa-sliders"></i></span><small>Setup</small></div>
+                            <div class="guided-pipeline-node"><span><i class="fa-solid fa-headset"></i></span><small>Call + QA</small></div>
+                            <div class="guided-pipeline-node"><span><i class="fa-solid fa-house-circle-check"></i></span><small>Qualified</small></div>
+                        </div>
+                    </div>
+
+                    <div class="guided-step-panels">
+                        <section id="how-step-panel-1" class="guided-step-panel" role="tabpanel" aria-labelledby="how-step-tab-1" tabindex="0">
+                            <div class="guided-panel-heading"><span>STAGE 01 · DISCOVERY</span><h3>Start with your acquisition model, not a generic script.</h3><p>We review your market, goals, current setup, and lead criteria so the recommendation fits the way you actually buy.</p></div>
+                            <div class="guided-detail-grid">
+                                <article><span><i class="fa-solid fa-people-arrows" aria-hidden="true"></i> Responsibilities</span><dl><div><dt>VoloLeads</dt><dd>Review fit, identify priorities, and recommend the right plan</dd></div><div><dt>You</dt><dd>Share goals, constraints, market, and qualification criteria</dd></div></dl></article>
+                                <article><span><i class="fa-regular fa-clock" aria-hidden="true"></i> Expected timing</span><strong>15 minutes</strong><p>A focused strategy conversation with clear next steps.</p></article>
+                                <article><span><i class="fa-solid fa-box-open" aria-hidden="true"></i> You receive</span><ul><li>Plan recommendation</li><li>Campaign priorities</li><li>Clear next steps</li></ul></article>
+                            </div>
+                        </section>
+
+                        <section id="how-step-panel-2" class="guided-step-panel" role="tabpanel" aria-labelledby="how-step-tab-2" tabindex="0" hidden>
+                            <div class="guided-panel-heading"><span>STAGE 02 · ONBOARDING</span><h3>Give the assigned team the context and access to launch cleanly.</h3><p>After checkout, intake, kickoff, access collection, and success criteria are organized around your chosen operating model.</p></div>
+                            <div class="guided-detail-grid">
+                                <article><span><i class="fa-solid fa-people-arrows" aria-hidden="true"></i> Responsibilities</span><dl><div><dt>VoloLeads</dt><dd>Send intake, collect access, and assign your caller and manager</dd></div><div><dt>You</dt><dd>Complete intake, provide access, and schedule the kickoff</dd></div></dl></article>
+                                <article><span><i class="fa-regular fa-clock" aria-hidden="true"></i> Expected timing</span><strong>After checkout</strong><p>Onboarding begins as soon as your subscription is confirmed.</p></article>
+                                <article><span><i class="fa-solid fa-box-open" aria-hidden="true"></i> You receive</span><ul><li>Onboarding checklist</li><li>Assigned operating team</li><li>Confirmed launch path</li></ul></article>
+                            </div>
+                        </section>
+
+                        <section id="how-step-panel-3" class="guided-step-panel" role="tabpanel" aria-labelledby="how-step-tab-3" tabindex="0" hidden>
+                            <div class="guided-panel-heading"><span>STAGE 03 · FOUNDATION</span><h3>Turn your criteria into a campaign callers can execute.</h3><p>Before the first dialing block, the market, message, routing, and definition of a qualified lead are made clear.</p></div>
+                            <div class="guided-detail-grid">
+                                <article><span><i class="fa-solid fa-people-arrows" aria-hidden="true"></i> Responsibilities</span><dl><div><dt>VoloLeads</dt><dd>Caller, script, workflow, routing, and QA setup</dd></div><div><dt>You</dt><dd>Confirm market, offer criteria, access, and success targets</dd></div></dl></article>
+                                <article><span><i class="fa-regular fa-clock" aria-hidden="true"></i> Expected timing</span><strong>48–72 hours</strong><p>Calling begins after completed onboarding and required access.</p></article>
+                                <article><span><i class="fa-solid fa-box-open" aria-hidden="true"></i> You receive</span><ul><li>Launch checklist</li><li>Configured campaign workflow</li><li>Clear qualification rules</li></ul></article>
+                            </div>
+                        </section>
+
+                        <section id="how-step-panel-4" class="guided-step-panel" role="tabpanel" aria-labelledby="how-step-tab-4" tabindex="0" hidden>
+                            <div class="guided-panel-heading"><span>STAGE 04 · EXECUTION</span><h3>Every calling block feeds the next coaching decision.</h3><p>Your caller works the campaign while management reviews quality, reinforces the script, and keeps disposition data clean.</p></div>
+                            <div class="guided-detail-grid">
+                                <article><span><i class="fa-solid fa-people-arrows" aria-hidden="true"></i> Responsibilities</span><dl><div><dt>VoloLeads</dt><dd>Calling, dispositions, call audits, and coaching actions</dd></div><div><dt>You</dt><dd>Share market feedback and stay ready for lead follow-up</dd></div></dl></article>
+                                <article><span><i class="fa-regular fa-clock" aria-hidden="true"></i> Expected timing</span><strong>Daily rhythm</strong><p>Calling blocks and QA review continue throughout the campaign.</p></article>
+                                <article><span><i class="fa-solid fa-box-open" aria-hidden="true"></i> You receive</span><ul><li>Activity visibility</li><li>Reviewed call quality</li><li>Specific coaching actions</li></ul></article>
+                            </div>
+                        </section>
+
+                        <section id="how-step-panel-5" class="guided-step-panel" role="tabpanel" aria-labelledby="how-step-tab-5" tabindex="0" hidden>
+                            <div class="guided-panel-heading"><span>STAGE 05 · HANDOFF</span><h3>Qualified opportunities arrive with enough context to act.</h3><p>Leads are checked against your criteria, documented, and routed with seller context and a defined next action.</p></div>
+                            <div class="guided-detail-grid">
+                                <article><span><i class="fa-solid fa-people-arrows" aria-hidden="true"></i> Responsibilities</span><dl><div><dt>VoloLeads</dt><dd>Verify criteria, capture notes, and update ownership</dd></div><div><dt>You</dt><dd>Lead the offer conversation and complete follow-up</dd></div></dl></article>
+                                <article><span><i class="fa-regular fa-clock" aria-hidden="true"></i> Expected timing</span><strong>As verified</strong><p>Qualified leads are routed during the campaign with a daily reporting wrap-up.</p></article>
+                                <article><span><i class="fa-solid fa-box-open" aria-hidden="true"></i> You receive</span><ul><li>Qualified lead details</li><li>Seller context and notes</li><li>Next step and ownership</li></ul></article>
+                            </div>
+                        </section>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
@@ -338,10 +421,10 @@
                 <aside class="plan-advisor-result" aria-live="polite" aria-atomic="true">
                     <span class="plan-advisor-result-label">YOUR BEST FIT</span>
                     <h3 id="advisor-plan-name">Starter</h3>
-                    <p id="advisor-plan-reason">You already have the stack and want one focused caller.</p>
+                    <p id="advisor-plan-reason">Your dialer and data are already in place, so the essential one-caller setup fits at any campaign pace.</p>
                     <ul id="advisor-plan-highlights">
                         <li>1 dedicated caller</li>
-                        <li>Works in your existing stack</li>
+                        <li>Uses your dialer and data</li>
                         <li>Daily reporting and QA</li>
                     </ul>
                     <div class="plan-advisor-actions">
@@ -1176,7 +1259,7 @@
                             </div>
                             <div class="min-w-0">
                                 <h4 class="font-bold text-slate-900 dark:text-slate-100 text-sm">Agent: Richard H.</h4>
-                                <p class="text-xs text-slate-500">Handling Seller Objections</p>
+                                <p class="audio-coaching-title text-xs text-slate-500">Qualifying a Hot, Motivated Seller</p>
                             </div>
                         </div>
                         <div class="w-10 h-10 rounded-full bg-brand-orange/10 flex items-center justify-center">
@@ -1203,7 +1286,7 @@
                             </div>
                             <div class="min-w-0">
                                 <h4 class="font-bold text-slate-900 dark:text-slate-100 text-sm">Agent: Joe N.</h4>
-                                <p class="text-xs text-slate-500">Building Rapport</p>
+                                <p class="audio-coaching-title text-xs text-slate-500">Building Rapport From a Wrong-Contact Opener</p>
                             </div>
                         </div>
                         <div class="w-10 h-10 rounded-full bg-brand-orange/10 flex items-center justify-center">
@@ -1230,7 +1313,7 @@
                             </div>
                             <div class="min-w-0">
                                 <h4 class="font-bold text-slate-900 dark:text-slate-100 text-sm">Agent: Ben S.</h4>
-                                <p class="text-xs text-slate-500">Nurturing Lead</p>
+                                <p class="audio-coaching-title text-xs text-slate-500">Nurturing a Seller Who Isn’t Ready Yet</p>
                             </div>
                         </div>
                         <div class="w-10 h-10 rounded-full bg-brand-orange/10 flex items-center justify-center">
@@ -1257,7 +1340,7 @@
                             </div>
                             <div class="min-w-0">
                                 <h4 class="font-bold text-slate-900 dark:text-slate-100 text-sm">Agent: Anna N.</h4>
-                                <p class="text-xs text-slate-500">Collecting MTCP</p>
+                                <p class="audio-coaching-title text-xs text-slate-500">Capturing Complete MTCP From a Warm Lead</p>
                             </div>
                         </div>
                         <div class="w-10 h-10 rounded-full bg-brand-orange/10 flex items-center justify-center">
@@ -1284,7 +1367,7 @@
                             </div>
                             <div class="min-w-0">
                                 <h4 class="font-bold text-slate-900 dark:text-slate-100 text-sm">Agent: Dave F.</h4>
-                                <p class="text-xs text-slate-500">Lead Qualification</p>
+                                <p class="audio-coaching-title text-xs text-slate-500">Qualifying a Warm Lead for Acquisitions</p>
                             </div>
                         </div>
                         <div class="w-10 h-10 rounded-full bg-brand-orange/10 flex items-center justify-center">
@@ -1311,7 +1394,7 @@
                             </div>
                             <div class="min-w-0">
                                 <h4 class="font-bold text-slate-900 dark:text-slate-100 text-sm">Agent: Anna H.</h4>
-                                <p class="text-xs text-slate-500">Finding Right Prospects</p>
+                                <p class="audio-coaching-title text-xs text-slate-500">Turning a Warm Conversation Into a Qualified Opportunity</p>
                             </div>
                         </div>
                         <div class="w-10 h-10 rounded-full bg-brand-orange/10 flex items-center justify-center">
@@ -1377,7 +1460,7 @@
 
                 <a href="insights-deal.html" class="group cursor-pointer block h-full reveal-on-scroll delay-200">
                     <div class="relative overflow-hidden rounded-2xl mb-6 h-72 shadow-lg border border-slate-100 dark:border-slate-700 hover:shadow-2xl transition-all duration-500">
-                        <img src="png/insights-deal.webp" alt="Targeting" width="800" height="500" loading="lazy" decoding="async" class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500">
+                        <img src="png/insights-deal-navy-branded.webp" alt="Deal structure options for choosing the right seller offer" width="1200" height="675" loading="lazy" decoding="async" class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500">
                         <div class="absolute inset-0 bg-gradient-to-t from-brand-navy/80 via-brand-navy/40 to-transparent group-hover:from-brand-navy/60 group-hover:via-brand-navy/20 transition-all duration-500"></div>
                         <div class="absolute top-4 right-4 w-12 h-12 bg-brand-orange/90 rounded-xl flex items-center justify-center text-white shadow-lg group-hover:scale-110 transition-transform duration-300">
                             <i class="fa-solid fa-handshake text-lg"></i>
@@ -1394,7 +1477,7 @@
 
                 <a href="insights-kpi.html" class="group cursor-pointer block h-full reveal-on-scroll delay-300">
                     <div class="relative overflow-hidden rounded-2xl mb-6 h-72 shadow-lg border border-slate-100 dark:border-slate-700 hover:shadow-2xl transition-all duration-500">
-                        <img src="png/insights-kpi.webp" alt="Industry Analysis" width="800" height="500" loading="lazy" decoding="async" class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500">
+                        <img src="png/insights-kpi-branded.webp" alt="Real-time cold calling performance analytics dashboard" width="1200" height="675" loading="lazy" decoding="async" class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500">
                         <div class="absolute inset-0 bg-gradient-to-t from-brand-navy/80 via-brand-navy/40 to-transparent group-hover:from-brand-navy/60 group-hover:via-brand-navy/20 transition-all duration-500"></div>
                         <div class="absolute top-4 right-4 w-12 h-12 bg-brand-orange/90 rounded-xl flex items-center justify-center text-white shadow-lg group-hover:scale-110 transition-transform duration-300">
                             <i class="fa-solid fa-chart-line text-lg"></i>
@@ -1465,7 +1548,7 @@
                 <!-- Testimonial 1 -->
                 <div class="testimonial-card bg-slate-50 dark:bg-slate-700 rounded-xl p-8 border border-slate-200 dark:border-slate-600 hover:border-brand-orange/50 transition-all duration-300 shadow-sm hover:shadow-lg reveal-on-scroll delay-100">
                     <!-- Star Rating -->
-                    <div class="flex gap-1 mb-4">
+                    <div class="testimonial-rating flex gap-1 mb-4" role="img" aria-label="5 out of 5 stars">
                         <i class="fa-solid fa-star text-brand-orange text-sm"></i>
                         <i class="fa-solid fa-star text-brand-orange text-sm"></i>
                         <i class="fa-solid fa-star text-brand-orange text-sm"></i>
@@ -1493,7 +1576,7 @@
                 <!-- Testimonial 2 -->
                 <div class="testimonial-card bg-slate-50 dark:bg-slate-700 rounded-xl p-8 border border-slate-200 dark:border-slate-600 hover:border-brand-orange/50 transition-all duration-300 shadow-sm hover:shadow-lg reveal-on-scroll delay-200">
                     <!-- Star Rating -->
-                    <div class="flex gap-1 mb-4">
+                    <div class="testimonial-rating flex gap-1 mb-4" role="img" aria-label="5 out of 5 stars">
                         <i class="fa-solid fa-star text-brand-orange text-sm"></i>
                         <i class="fa-solid fa-star text-brand-orange text-sm"></i>
                         <i class="fa-solid fa-star text-brand-orange text-sm"></i>
@@ -1521,7 +1604,7 @@
                 <!-- Testimonial 3 -->
                 <div class="testimonial-card bg-slate-50 dark:bg-slate-700 rounded-xl p-8 border border-slate-200 dark:border-slate-600 hover:border-brand-orange/50 transition-all duration-300 shadow-sm hover:shadow-lg reveal-on-scroll delay-300">
                     <!-- Star Rating -->
-                    <div class="flex gap-1 mb-4">
+                    <div class="testimonial-rating flex gap-1 mb-4" role="img" aria-label="5 out of 5 stars">
                         <i class="fa-solid fa-star text-brand-orange text-sm"></i>
                         <i class="fa-solid fa-star text-brand-orange text-sm"></i>
                         <i class="fa-solid fa-star text-brand-orange text-sm"></i>
@@ -1908,7 +1991,11 @@
         </div>
     </section>
 
-    <a href="#contact" class="mobile-sticky-cta"><i class="fa-solid fa-calendar-check" aria-hidden="true"></i><span>Book Strategy Call</span></a>
+    <a href="#contact" class="mobile-sticky-cta" aria-label="Book a Strategy Call — opens the strategy call form">
+        <span class="sticky-cta-context" aria-hidden="true">LET'S TALK</span>
+        <span class="sticky-cta-copy"><i class="fa-solid fa-comments" aria-hidden="true"></i><span data-sticky-cta-label>Book a Strategy Call</span></span>
+        <i class="fa-solid fa-arrow-right sticky-cta-arrow" aria-hidden="true"></i>
+    </a>
 
     <!-- ========== FOOTER ========== -->
     <!-- Site footer with navigation, contact info, and social links -->
@@ -1979,7 +2066,7 @@
 
     <!-- JavaScript Application File: Handles interactivity, animations, and visitor tracking -->
     <script src="icons.js?v=20260610-02"></script>
-    <script src="app.js?v=20260717-01"></script>
+    <script src="app.js?v=20260717-06"></script>
 
     <!-- Third-party widgets (e.g. Crisp) are loaded only after cookie consent. -->
 

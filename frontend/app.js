@@ -26,6 +26,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initTurnstileLoader();
     initAudioSeekBars();
     initDecorativeIcons();
+    initGuidedHowItWorks();
     initPlanRecommender();
     initDeliverablePreviews();
     initAudioBreakdowns();
@@ -722,22 +723,74 @@ function initMotionSequences() {
 function initStickyMobileCta() {
     const hero = document.getElementById('home');
     const cta = document.querySelector('.mobile-sticky-cta');
+    const contact = document.getElementById('contact');
     if (!hero || !cta) return;
 
+    const label = cta.querySelector('[data-sticky-cta-label]');
+    const contextLabel = cta.querySelector('.sticky-cta-context');
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const defaultContext = {
+        label: 'Book a Strategy Call',
+        context: "LET'S TALK"
+    };
+    const sectionContexts = [
+        { section: document.getElementById('plans'), label: 'Help Me Choose a Plan', context: 'PRICING' },
+        { section: document.getElementById('insights'), label: 'Discuss Your Campaign', context: 'CALLS' },
+        { section: document.getElementById('testimonials'), label: 'Get Similar Results', context: 'RESULTS' },
+        { section: document.getElementById('faq-preview'), label: 'Ask a Question', context: 'FAQ' }
+    ].filter(item => item.section);
+
     document.documentElement.classList.add('sticky-cta-ready');
+    let pendingLabel = defaultContext.label;
+    let frameRequested = false;
 
-    if (!('IntersectionObserver' in window)) {
-        cta.classList.add('is-visible');
-        return;
-    }
+    const commitContext = context => {
+        pendingLabel = context.label;
+        if (label) label.textContent = context.label;
+        if (contextLabel) contextLabel.textContent = context.context;
+        cta.setAttribute('aria-label', `${context.label} — opens the strategy call form`);
+        cta.dataset.ctaContext = context.context.toLowerCase();
+    };
 
-    const observer = new IntersectionObserver(entries => {
-        entries.forEach(entry => {
-            cta.classList.toggle('is-visible', !entry.isIntersecting);
+    const changeContext = context => {
+        if (context.label === pendingLabel) return;
+        commitContext(context);
+        if (reduceMotion) return;
+
+        cta.classList.add('is-context-changing');
+        window.requestAnimationFrame(() => {
+            window.requestAnimationFrame(() => cta.classList.remove('is-context-changing'));
         });
-    }, { threshold: 0.06 });
+    };
 
-    observer.observe(hero);
+    const update = () => {
+        frameRequested = false;
+        const viewportHeight = window.innerHeight || document.documentElement.clientHeight;
+        const scrollTop = window.scrollY || document.documentElement.scrollTop || 0;
+        const readingPosition = scrollTop + (viewportHeight * 0.44);
+        const heroBottom = hero.getBoundingClientRect().top + scrollTop + hero.offsetHeight;
+        const contactTop = contact ? contact.getBoundingClientRect().top + scrollTop : Number.POSITIVE_INFINITY;
+        const heroHasPassed = readingPosition > heroBottom;
+        const contactAhead = readingPosition < contactTop;
+        cta.classList.toggle('is-visible', heroHasPassed && contactAhead);
+
+        const activeContext = sectionContexts.find(item => {
+            const sectionTop = item.section.getBoundingClientRect().top + scrollTop;
+            const sectionBottom = sectionTop + item.section.offsetHeight;
+            return readingPosition >= sectionTop && readingPosition < sectionBottom;
+        });
+        changeContext(activeContext || defaultContext);
+    };
+
+    const requestUpdate = () => {
+        if (frameRequested) return;
+        frameRequested = true;
+        window.requestAnimationFrame(update);
+    };
+
+    window.addEventListener('scroll', requestUpdate, { passive: true });
+    window.addEventListener('resize', requestUpdate);
+    update();
 }
 
 function initPremiumMotion() {
@@ -2102,6 +2155,71 @@ function initInteractionDialog(dialog) {
     });
 }
 
+function initGuidedHowItWorks() {
+    const stepper = document.querySelector('.guided-stepper');
+    if (!stepper) return;
+
+    const tabs = Array.from(stepper.querySelectorAll('[data-how-step]'));
+    const panels = tabs.map(tab => document.getElementById(tab.getAttribute('aria-controls')));
+    const nodes = Array.from(stepper.querySelectorAll('.guided-pipeline-node'));
+    const tabList = stepper.querySelector('[role="tablist"]');
+    const pipeline = stepper.querySelector('.guided-pipeline');
+    const status = document.getElementById('guided-pipeline-status');
+    const states = [
+        { status: 'Strategy being mapped', label: 'Strategy call is the active stage' },
+        { status: 'Onboarding in progress', label: 'Onboarding is the active stage' },
+        { status: 'Campaign being prepared', label: 'Campaign setup is the active stage' },
+        { status: 'Calls active · QA reviewing', label: 'Calling and QA is the active stage' },
+        { status: 'Qualified lead ready', label: 'Qualified lead delivery is the active stage' }
+    ];
+    const compactLayout = window.matchMedia('(max-width: 980px)');
+    const syncOrientation = () => tabList?.setAttribute('aria-orientation', compactLayout.matches ? 'horizontal' : 'vertical');
+
+    syncOrientation();
+    if (typeof compactLayout.addEventListener === 'function') {
+        compactLayout.addEventListener('change', syncOrientation);
+    }
+
+    const activateStep = (index, moveFocus = false) => {
+        if (index < 0 || index >= tabs.length) return;
+
+        stepper.dataset.activeStep = String(index);
+        tabs.forEach((tab, tabIndex) => {
+            const isActive = tabIndex === index;
+            tab.classList.toggle('is-active', isActive);
+            tab.setAttribute('aria-selected', String(isActive));
+            tab.tabIndex = isActive ? 0 : -1;
+            if (panels[tabIndex]) panels[tabIndex].hidden = !isActive;
+        });
+
+        nodes.forEach((node, nodeIndex) => {
+            node.classList.toggle('is-active', nodeIndex === index);
+            node.classList.toggle('is-complete', nodeIndex < index);
+        });
+
+        if (status) status.textContent = states[index].status;
+        pipeline?.setAttribute('aria-label', states[index].label);
+        if (moveFocus) tabs[index].focus();
+    };
+
+    tabs.forEach((tab, index) => {
+        tab.addEventListener('click', () => activateStep(index));
+        tab.addEventListener('keydown', event => {
+            let nextIndex = index;
+            if (event.key === 'ArrowRight' || event.key === 'ArrowDown') nextIndex = (index + 1) % tabs.length;
+            else if (event.key === 'ArrowLeft' || event.key === 'ArrowUp') nextIndex = (index - 1 + tabs.length) % tabs.length;
+            else if (event.key === 'Home') nextIndex = 0;
+            else if (event.key === 'End') nextIndex = tabs.length - 1;
+            else return;
+
+            event.preventDefault();
+            activateStep(nextIndex, true);
+        });
+    });
+
+    activateStep(0);
+}
+
 function initPlanRecommender() {
     const form = document.getElementById('plan-advisor-form');
     const planName = document.getElementById('advisor-plan-name');
@@ -2113,20 +2231,20 @@ function initPlanRecommender() {
 
     const plans = {
         'Starter': {
-            reason: 'You already have the stack and want one focused caller.',
-            highlights: ['1 dedicated caller', 'Works in your existing stack', 'Daily reporting and QA']
+            reason: 'Your dialer and data are already in place, so the essential one-caller setup fits at any campaign pace.',
+            highlights: ['1 dedicated caller', 'Uses your dialer and data', 'Daily reporting and QA']
         },
         'Growth': {
             reason: 'You want a consistent campaign with the operating stack managed for you.',
             highlights: ['Managed campaign infrastructure', 'Dedicated caller support', 'Reporting, QA, and optimization']
         },
         'Scale': {
-            reason: 'Your caller count or market pace needs more capacity and advanced optimization.',
-            highlights: ['Higher calling capacity', 'Advanced targeting and analytics', 'Priority campaign optimization']
+            reason: 'A managed two-caller campaign at a focused or consistent pace fits the Scale plan.',
+            highlights: ['2 managed callers', 'Focused or consistent campaign', 'Advanced reporting and optimization']
         },
         'Custom+': {
-            reason: 'Three or more callers call for a tailored operating plan and capacity review.',
-            highlights: ['Custom caller count', 'Flexible markets and workflows', 'Tailored reporting and fulfillment']
+            reason: 'Three or more callers or a multi-market campaign requires a custom capacity plan.',
+            highlights: ['3+ callers or multi-market scope', 'Flexible markets and workflows', 'Tailored reporting and fulfillment']
         }
     };
 
@@ -2138,9 +2256,10 @@ function initPlanRecommender() {
         const callers = getValue('advisor-callers');
         const volume = getValue('advisor-volume');
 
-        if (callers === 'three-plus') recommendation = 'Custom+';
-        else if (callers === 'two' || volume === 'multi') recommendation = 'Scale';
-        else if (stack === 'owned' && volume === 'focused') recommendation = 'Starter';
+        if (callers === 'three-plus' || volume === 'multi') recommendation = 'Custom+';
+        else if (stack === 'managed' && callers === 'two') recommendation = 'Scale';
+        else if (callers === 'two') recommendation = 'Custom+';
+        else if (stack === 'owned') recommendation = 'Starter';
         else recommendation = 'Growth';
 
         const result = plans[recommendation];
@@ -2197,13 +2316,13 @@ function initDeliverablePreviews() {
     const deliverables = {
         report: {
             title: 'Daily call report',
-            intro: 'A concise end-of-day view of activity, outcomes, and the next follow-up priorities.',
-            preview: '<div class="sample-metrics"><div><span>Dials</span><strong>402</strong></div><div><span>Conversations</span><strong>57</strong></div><div><span>Qualified</span><strong>4</strong></div><div><span>Callbacks</span><strong>9</strong></div></div><div class="sample-callout"><span>DAY AT A GLANCE</span><p>Conversation quality held steady. Review the four qualified leads first, then work the callback queue.</p></div>'
+            intro: 'Each VA’s end-of-shift report shows dial capacity, call outcomes, and immediate follow-up priorities.',
+            preview: '<div class="sample-metrics"><div><span>Dials / hour</span><strong>Up to 300</strong></div><div><span>Shift length</span><strong>4 hours</strong></div><div><span>Daily dials</span><strong>Up to 1,200</strong></div><div><span>Dialer</span><strong>Triple line</strong></div></div><div class="sample-callout"><span>POWER DIALING CAPACITY</span><p>Using a triple-line power dialer, a VA can place up to 1,200 dials across a four-hour shift. Actual totals vary by list quality, pickup rate, and campaign conditions.</p></div>'
         },
         notes: {
             title: 'Lead notes',
-            intro: 'Seller context is organized so the next person can continue the conversation without starting over.',
-            preview: '<div class="sample-note"><div><span>SELLER CONTEXT</span><strong>Inherited property · vacant</strong></div><p>Owner is comparing options and requested a follow-up after speaking with a family member.</p><dl><div><dt>Motivation</dt><dd>Reduce carrying costs</dd></div><div><dt>Next step</dt><dd>Call back Thursday</dd></div></dl></div>'
+            intro: 'Every submitted lead follows an MTCP format so acquisitions receives complete seller and property context.',
+            preview: '<div class="sample-note"><div><span>BASIC INFORMATION</span><strong>Name · phone · address · occupancy · lead status</strong></div><div class="sample-mtcp-grid"><div><b>M</b><p><strong>Motivation</strong><small>Why the seller is considering a sale</small></p></div><div><b>T</b><p><strong>Timeline</strong><small>When they want or need to sell</small></p></div><div><b>C</b><p><strong>Condition</strong><small>Specific property-condition details</small></p></div><div><b>P</b><p><strong>Property</strong><small>Specifications and relevant facts</small></p></div></div><div class="sample-condition-checklist"><span>PROPERTY CONDITION CHECKLIST</span><ul><li>Roof age</li><li>HVAC age</li><li>Plumbing issues</li><li>Electrical issues</li><li>Foundation issues</li><li>Last kitchen and bathroom upgrades</li></ul></div></div>'
         },
         qa: {
             title: 'QA feedback',
@@ -2212,13 +2331,13 @@ function initDeliverablePreviews() {
         },
         kpi: {
             title: 'KPI tracking',
-            intro: 'The funnel stays visible from first dial through qualified opportunity.',
-            preview: '<div class="sample-funnel"><div><strong>402</strong><span>Dials</span></div><i class="fa-solid fa-arrow-right"></i><div><strong>57</strong><span>Conversations</span></div><i class="fa-solid fa-arrow-right"></i><div><strong>13</strong><span>Interested</span></div><i class="fa-solid fa-arrow-right"></i><div><strong>4</strong><span>Qualified</span></div></div>'
+            intro: 'At the end of every VA shift, call dispositions are submitted to a shared Google spreadsheet for daily visibility.',
+            preview: '<div class="sample-kpi-sheet"><div class="sample-sheet-head"><span>DAILY GOOGLE SHEET SUBMISSION</span><b>End of shift</b></div><div class="sample-sheet-grid"><div><span>Total dials</span><strong>1,182</strong></div><div><span>No answers</span><strong>624</strong></div><div><span>Answering machines</span><strong>371</strong></div><div><span>Wrong numbers</span><strong>42</strong></div><div><span>Interested</span><strong>6</strong></div><div><span>Callbacks</span><strong>14</strong></div></div></div>'
         },
         pipeline: {
             title: 'Pipeline updates',
-            intro: 'Ownership and next actions stay clear as leads move from contact to follow-up.',
-            preview: '<div class="sample-pipeline"><div><span class="pipeline-dot pipeline-dot--new"></span><p><strong>New lead</strong><small>Review seller context</small></p><b>Owner: Acquisitions</b></div><div><span class="pipeline-dot pipeline-dot--warm"></span><p><strong>Warm follow-up</strong><small>Callback scheduled</small></p><b>Due: Thursday</b></div><div><span class="pipeline-dot pipeline-dot--ready"></span><p><strong>Qualified</strong><small>Ready for offer review</small></p><b>Priority</b></div></div>'
+            intro: 'Lead temperature combines asking price against Zillow’s estimate with motivation and expected selling timeline.',
+            preview: '<div class="sample-pipeline"><div><span class="pipeline-dot pipeline-dot--ready"></span><p><strong>Hot lead</strong><small>Asking below 80% of Zillow’s estimate with strong motivation to sell</small></p><b>&lt; 80%</b></div><div><span class="pipeline-dot pipeline-dot--warm"></span><p><strong>Warm lead</strong><small>Asking within 90%–99% of Zillow’s estimate and somewhat motivated</small></p><b>90%–99%</b></div><div><span class="pipeline-dot pipeline-dot--new"></span><p><strong>Cold lead</strong><small>3–6 month timeline · retail-or-higher asking price · no urgent motivation</small></p><b>Retail+</b></div></div>'
         }
     };
 
@@ -2245,12 +2364,12 @@ function initAudioBreakdowns() {
     if (!dialog || !title || !summary || !tags || !grid) return;
 
     const breakdowns = {
-        'audio-richard': { title: 'Handling seller objections', summary: 'Listen for a calm response that acknowledges the concern before guiding the seller toward a useful next step.', tags: ['Acknowledgment', 'Pacing', 'Next step'], focus: ['Make the seller feel heard', 'Avoid arguing with the objection', 'Keep the close specific'] },
-        'audio-joe': { title: 'Building rapport', summary: 'Listen for curiosity, permission, and a natural tone that keeps the conversation open.', tags: ['Curiosity', 'Permission', 'Tone'], focus: ['Open without pressure', 'Use context to build trust', 'Transition naturally'] },
-        'audio-3': { title: 'Nurturing a lead', summary: 'Listen for patience and continuity in a conversation that is not ready to convert today.', tags: ['Patience', 'Recall', 'Follow-up'], focus: ['Preserve relationship context', 'Confirm what changed', 'Set a useful follow-up'] },
-        'audio-4': { title: 'Collecting MTCP', summary: 'Listen for complete discovery across motivation, timeline, condition, and price without making the call feel like an interrogation.', tags: ['Motivation', 'Timeline', 'Condition + price'], focus: ['Ask one question at a time', 'Probe incomplete answers', 'Capture usable notes'] },
-        'audio-5': { title: 'Lead qualification', summary: 'Listen for clear fit checks, constraints, and a handoff that gives acquisitions enough context to act.', tags: ['Fit', 'Constraints', 'Handoff'], focus: ['Confirm seller intent', 'Surface decision factors', 'State the next owner'] },
-        'audio-6': { title: 'Finding the right prospects', summary: 'Listen for respectful verification and clean routing when identifying whether the contact matches the campaign.', tags: ['Verification', 'Respect', 'Data hygiene'], focus: ['Verify without friction', 'Protect the brand experience', 'Route or disposition clearly'] }
+        'audio-richard': { title: 'Qualifying a Hot, Motivated Seller', summary: 'Listen for a calm response that acknowledges the concern before guiding the seller toward a useful next step.', tags: ['Acknowledgment', 'Pacing', 'Next step'], focus: ['Make the seller feel heard', 'Avoid arguing with the objection', 'Keep the close specific'] },
+        'audio-joe': { title: 'Building Rapport From a Wrong-Contact Opener', summary: 'Listen for curiosity, permission, and a natural tone that keeps the conversation open.', tags: ['Curiosity', 'Permission', 'Tone'], focus: ['Open without pressure', 'Use context to build trust', 'Transition naturally'] },
+        'audio-3': { title: 'Nurturing a Seller Who Isn’t Ready Yet', summary: 'Listen for patience and continuity in a conversation that is not ready to convert today.', tags: ['Patience', 'Recall', 'Follow-up'], focus: ['Preserve relationship context', 'Confirm what changed', 'Set a useful follow-up'] },
+        'audio-4': { title: 'Capturing Complete MTCP From a Warm Lead', summary: 'Listen for complete discovery across motivation, timeline, condition, and price without making the call feel like an interrogation.', tags: ['Motivation', 'Timeline', 'Condition + price'], focus: ['Ask one question at a time', 'Probe incomplete answers', 'Capture usable notes'] },
+        'audio-5': { title: 'Qualifying a Warm Lead for Acquisitions', summary: 'Listen for clear fit checks, constraints, and a handoff that gives acquisitions enough context to act.', tags: ['Fit', 'Constraints', 'Handoff'], focus: ['Confirm seller intent', 'Surface decision factors', 'State the next owner'] },
+        'audio-6': { title: 'Turning a Warm Conversation Into a Qualified Opportunity', summary: 'Listen for respectful verification and clean routing when identifying whether the contact matches the campaign.', tags: ['Verification', 'Respect', 'Data hygiene'], focus: ['Verify without friction', 'Protect the brand experience', 'Route or disposition clearly'] }
     };
 
     let activeAudioId = '';
