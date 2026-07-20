@@ -25,9 +25,16 @@ async function getMeetingAvailability(req, res) {
     });
   } catch (error) {
     logger.error(`Get meeting availability error: ${error.message}`);
-    return res.status(500).json({
+    return res.status(503).json({
       success: false,
-      message: 'Unable to load meeting availability right now.'
+      code: 'SCHEDULING_UNAVAILABLE',
+      message: 'Online scheduling is temporarily unavailable. Submit the form and we’ll contact you to schedule.',
+      data: {
+        date: req.query.date || req.query.preferred_date,
+        timezone: req.query.timezone || req.query.preferred_timezone || 'EST',
+        schedulingAvailable: false,
+        slots: []
+      }
     });
   }
 }

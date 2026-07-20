@@ -24,7 +24,15 @@ const defaultCorsOrigins = [
   'https://www.vololeads.com'
 ];
 
-app.use(helmet());
+app.use(helmet({
+  contentSecurityPolicy: {
+    directives: {
+      scriptSrc: ['\'self\'', 'https://challenges.cloudflare.com'],
+      frameSrc: ['\'self\'', 'https://challenges.cloudflare.com'],
+      connectSrc: ['\'self\'', 'https://challenges.cloudflare.com']
+    }
+  }
+}));
 
 // Configure CORS for multiple origins
 const corsOrigins = process.env.CORS_ORIGIN

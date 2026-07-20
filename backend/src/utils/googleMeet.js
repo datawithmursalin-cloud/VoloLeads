@@ -11,6 +11,7 @@ const {
   getCalendarClient
 } = require('./googleCalendarClient');
 const { isMeetingSlotAvailable } = require('./meetingAvailability');
+const { alertCalendarAuthFailure } = require('./calendarAuthAlert');
 
 function extractMeetLink(event) {
   if (event.hangoutLink) {
@@ -92,12 +93,18 @@ async function createMeetEvent({
     }
   };
 
-  const response = await calendar.events.insert({
-    calendarId: getCalendarId(),
-    conferenceDataVersion: 1,
-    sendUpdates: 'all',
-    resource: event
-  });
+  let response;
+  try {
+    response = await calendar.events.insert({
+      calendarId: getCalendarId(),
+      conferenceDataVersion: 1,
+      sendUpdates: 'all',
+      resource: event
+    });
+  } catch (error) {
+    await alertCalendarAuthFailure(error);
+    throw error;
+  }
 
   const meetLink = extractMeetLink(response.data);
 

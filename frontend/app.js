@@ -474,6 +474,40 @@ function resetTimeSelect(timeSelect, placeholder) {
     timeSelect.appendChild(placeholderOption);
 }
 
+const MEETING_AVAILABILITY_ERROR_MESSAGE =
+    'Online scheduling is temporarily unavailable. Submit the form and we’ll contact you to schedule.';
+
+function setMeetingAvailabilityState(timeSelect, timeRow, state) {
+    if (timeSelect) {
+        timeSelect.dataset.availabilityState = state;
+        timeSelect.disabled = state !== 'available';
+        timeSelect.dispatchEvent(new CustomEvent('meetingavailabilitychange', {
+            bubbles: true,
+            detail: { state }
+        }));
+    }
+    let status = timeRow?.querySelector('[data-meeting-availability-status]');
+    if (!status && timeRow) {
+        status = document.createElement('p');
+        status.dataset.meetingAvailabilityStatus = '';
+        status.setAttribute('role', 'status');
+        status.setAttribute('aria-live', 'polite');
+        status.className = 'text-xs text-slate-500 mt-1';
+        timeRow.appendChild(status);
+    }
+    if (!status) return;
+    const messages = {
+        loading: 'Checking available times…',
+        available: 'Available slots: 9:00 AM — 4:30 PM EST.',
+        empty: 'No appointment times are available for this date. Please choose another date.',
+        error: MEETING_AVAILABILITY_ERROR_MESSAGE
+    };
+    status.textContent = messages[state] || '';
+    status.classList.toggle('text-red-600', state === 'error');
+    status.classList.toggle('dark:text-red-400', state === 'error');
+    status.classList.toggle('text-slate-500', state !== 'error');
+}
+
 async function loadAvailableMeetingSlots({
     date,
     timeSelect,
@@ -482,34 +516,42 @@ async function loadAvailableMeetingSlots({
     timezoneInput
 }) {
     const preferredTimezone = timezoneInput?.value || timezone;
-
     resetTimeSelect(timeSelect, 'Loading times...');
     if (timeRow) timeRow.classList.remove('hidden');
     if (timeSelect) timeSelect.setAttribute('required', 'true');
+    setMeetingAvailabilityState(timeSelect, timeRow, 'loading');
 
     try {
         const response = await fetch(
             `/api/meeting-availability?date=${encodeURIComponent(date)}&timezone=${encodeURIComponent(preferredTimezone)}`
         );
         const payload = await response.json().catch(() => ({}));
-        const slots = payload.data?.slots || [];
+        if (!response.ok || payload.success === false || payload.code === 'SCHEDULING_UNAVAILABLE') {
+            throw new Error(payload.message || `Meeting availability returned HTTP ${response.status}`);
+        }
+        const slots = payload.data?.slots;
+        if (!Array.isArray(slots)) {
+            throw new Error('Meeting availability returned an invalid response');
+        }
 
         resetTimeSelect(timeSelect, slots.length ? 'Select a time' : 'No times available');
-
         slots.forEach((slot) => {
             const opt = document.createElement('option');
             opt.value = slot;
             opt.textContent = formatMeetingSlotLabel(slot);
             timeSelect.appendChild(opt);
         });
-
         if (!slots.length && timeSelect) {
             timeSelect.removeAttribute('required');
+            setMeetingAvailabilityState(timeSelect, timeRow, 'empty');
+        } else {
+            setMeetingAvailabilityState(timeSelect, timeRow, 'available');
         }
     } catch (error) {
         console.error('Meeting availability error:', error);
-        resetTimeSelect(timeSelect, 'Unable to load times');
+        resetTimeSelect(timeSelect, 'Scheduling temporarily unavailable');
         if (timeSelect) timeSelect.removeAttribute('required');
+        setMeetingAvailabilityState(timeSelect, timeRow, 'error');
     }
 }
 
@@ -560,9 +602,12 @@ function initContactForm() {
             
             if (!this.value) {
                 if (timeRow) timeRow.classList.add('hidden');
-                if (timeSelect) { 
-                    timeSelect.removeAttribute('required'); 
-                    timeSelect.value = ''; 
+                if (timeSelect) {
+                    timeSelect.removeAttribute('required');
+                    timeSelect.value = '';
+                    timeSelect.disabled = false;
+                    delete timeSelect.dataset.availabilityState;
+                    timeSelect.dispatchEvent(new CustomEvent('meetingavailabilitychange', { bubbles: true }));
                 }
                 return;
             }
@@ -2422,7 +2467,11 @@ function initBookingSummary() {
             const parsedDate = new Date(`${date.value}T12:00:00`);
             const dateLabel = new Intl.DateTimeFormat('en-US', { weekday: 'short', month: 'short', day: 'numeric' }).format(parsedDate);
             const timeLabel = selectedText(time);
-            scheduleOutput.textContent = timeLabel ? `${dateLabel} · ${timeLabel} ${timezone?.value || 'EST'}` : `${dateLabel} · choose a time`;
+            scheduleOutput.textContent = time?.dataset.availabilityState === 'error'
+                ? MEETING_AVAILABILITY_ERROR_MESSAGE
+                : timeLabel
+                    ? `${dateLabel} · ${timeLabel} ${timezone?.value || 'EST'}`
+                    : `${dateLabel} · choose a time`;
         } else {
             scheduleOutput.textContent = 'Choose a date';
         }
@@ -2431,6 +2480,7 @@ function initBookingSummary() {
     };
 
     [service, quantity, date, time].forEach(control => control?.addEventListener('change', update));
+    time?.addEventListener('meetingavailabilitychange', update);
     update();
 }
 

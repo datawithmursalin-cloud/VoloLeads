@@ -200,13 +200,6 @@ exports.submitContactForm = async (req, res) => {
     // Sanitize input data
     const sanitized = sanitizeContactForm(req.body);
 
-    if (sanitized.preferredDate && !sanitized.preferredTime) {
-      return res.status(400).json({
-        success: false,
-        message: 'Preferred time is required when a meeting date is selected'
-      });
-    }
-
     if (sanitized.preferredTime && !sanitized.preferredDate) {
       return res.status(400).json({
         success: false,
@@ -229,19 +222,11 @@ exports.submitContactForm = async (req, res) => {
 
     const meeting = await scheduleMeetingIfRequested(sanitized);
 
-    if (
-      hasScheduledMeeting(sanitized)
-      && meeting
-      && !meeting.created
-      && (meeting.reason === 'slot_unavailable' || meeting.reason === 'availability_check_failed')
-    ) {
-      return res.status(409).json({
-        success: false,
-        message: 'That meeting time is no longer available. Please choose another time.'
-      });
-    }
-
     const scheduledMeeting = meeting && meeting.created ? meeting : null;
+    const schedulingFallback = Boolean(
+      (sanitized.preferredDate && !sanitized.preferredTime)
+      || (meeting && !meeting.created)
+    );
 
     // Prepare contact form record
     const contactFormData = {
@@ -264,11 +249,14 @@ exports.submitContactForm = async (req, res) => {
       success: true,
       message: scheduledMeeting && scheduledMeeting.meetLink
         ? 'Form submitted successfully. Check your email for the Google Meet link.'
-        : 'Form submitted successfully',
+        : schedulingFallback
+          ? 'Form submitted successfully. We’ll contact you to schedule.'
+          : 'Form submitted successfully',
       data: {
         id: savedForm.id,
         email: sanitized.email,
-        meetScheduled: Boolean(scheduledMeeting && scheduledMeeting.meetLink)
+        meetScheduled: Boolean(scheduledMeeting && scheduledMeeting.meetLink),
+        schedulingFallback
       }
     });
   } catch (error) {

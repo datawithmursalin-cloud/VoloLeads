@@ -10,6 +10,7 @@ const {
   DEFAULT_MEETING_DURATION_MINUTES
 } = require('./meetingSchedule');
 const { getCalendarClient, isGoogleMeetConfigured, getMeetingDurationMinutes, getCalendarId } = require('./googleCalendarClient');
+const { alertCalendarAuthFailure } = require('./calendarAuthAlert');
 
 function parseEventRange(event) {
   if (event.start?.dateTime && event.end?.dateTime) {
@@ -120,6 +121,7 @@ async function isMeetingSlotAvailable({
     }
   } catch (error) {
     logger.error(`Meeting availability check failed: ${error.message}`);
+    await alertCalendarAuthFailure(error);
     return { available: false, reason: 'availability_check_failed', meetingWindow };
   }
 
@@ -136,6 +138,10 @@ async function getAvailableMeetingSlots({
     return { date: null, slots: [], timezone: resolveTimezone(preferredTimezone) };
   }
 
+  if (!isGoogleMeetConfigured()) {
+    throw new Error('Google Calendar is not configured');
+  }
+
   const timeZone = resolveTimezone(preferredTimezone);
   const standardSlots = getStandardMeetingSlotTimes();
   let eventRanges = [];
@@ -145,6 +151,7 @@ async function getAvailableMeetingSlots({
       eventRanges = await listCalendarEventRangesForDay({ preferredDate: date, preferredTimezone });
     } catch (error) {
       logger.error(`Failed to load calendar availability for ${date}: ${error.message}`);
+      await alertCalendarAuthFailure(error);
       throw error;
     }
   }

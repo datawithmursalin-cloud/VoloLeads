@@ -41,6 +41,14 @@ async function sendEmail({ to, subject, text, html }) {
   return { sent: true };
 }
 
+async function verifyEmailTransport() {
+  const transporter = getTransport();
+  if (!transporter) return false;
+  await transporter.verify();
+  return true;
+}
+
 module.exports = {
-  sendEmail
+  sendEmail,
+  verifyEmailTransport
 };
