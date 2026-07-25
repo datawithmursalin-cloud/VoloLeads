@@ -31,6 +31,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initDeliverablePreviews();
     initAudioBreakdowns();
     initBookingSummary();
+    initWhatsAppWidget();
 
     // Cookie consent banner initialization
     initCookieConsentBanner();
@@ -408,6 +409,101 @@ function updateCopyrightYear() {
     if (yearSpan) {
         yearSpan.textContent = new Date().getFullYear();
     }
+}
+
+/* --- WhatsApp Support Widget --- */
+function initWhatsAppWidget() {
+    if (document.querySelector('[data-whatsapp-widget]')) return;
+
+    const phoneNumber = '8801793716608';
+    const salesMessage = encodeURIComponent("Hi VoloLeads, I'd like to discuss a lead generation plan.");
+    const supportMessage = encodeURIComponent('Hi VoloLeads, I need help with my account or active campaign.');
+    const widget = document.createElement('div');
+    widget.className = 'whatsapp-widget';
+    widget.classList.toggle('whatsapp-widget--with-sticky-cta', Boolean(document.querySelector('.mobile-sticky-cta')));
+    widget.dataset.whatsappWidget = '';
+    widget.innerHTML = `
+        <aside id="whatsapp-support-panel" class="whatsapp-support-panel" role="dialog" aria-modal="false" aria-labelledby="whatsapp-support-title" aria-hidden="true" inert>
+            <header class="whatsapp-support-header">
+                <span class="whatsapp-support-mark" aria-hidden="true"><i class="fa-brands fa-whatsapp"></i></span>
+                <div>
+                    <p>DIRECT SUPPORT</p>
+                    <h2 id="whatsapp-support-title">Start a conversation</h2>
+                    <span>Choose the right team and message us on WhatsApp.</span>
+                </div>
+                <button type="button" class="whatsapp-panel-close" aria-label="Close WhatsApp support">
+                    <i class="fa-solid fa-xmark" aria-hidden="true"></i>
+                </button>
+            </header>
+            <div class="whatsapp-support-body">
+                <p class="whatsapp-response-note"><span aria-hidden="true"></span> We typically reply within a few minutes.</p>
+                <div class="whatsapp-support-routes">
+                    <a class="whatsapp-support-route" href="https://wa.me/${phoneNumber}?text=${salesMessage}" target="_blank" rel="noopener noreferrer">
+                        <span class="whatsapp-route-avatar whatsapp-route-avatar--brand"><img src="./png/logo.webp" alt=""></span>
+                        <span class="whatsapp-route-copy">
+                            <strong>Sales &amp; Strategy</strong>
+                            <small><span aria-hidden="true"></span> Online now</small>
+                            <em>Plans, pricing, and campaign fit</em>
+                        </span>
+                        <span class="whatsapp-route-action" aria-hidden="true"><i class="fa-brands fa-whatsapp"></i></span>
+                    </a>
+                    <a class="whatsapp-support-route" href="https://wa.me/${phoneNumber}?text=${supportMessage}" target="_blank" rel="noopener noreferrer">
+                        <span class="whatsapp-route-avatar whatsapp-route-avatar--support" aria-hidden="true"><i class="fa-solid fa-headset"></i></span>
+                        <span class="whatsapp-route-copy">
+                            <strong>Client Support</strong>
+                            <small><span aria-hidden="true"></span> Online now</small>
+                            <em>Accounts and active campaigns</em>
+                        </span>
+                        <span class="whatsapp-route-action" aria-hidden="true"><i class="fa-brands fa-whatsapp"></i></span>
+                    </a>
+                </div>
+                <p class="whatsapp-privacy-note"><i class="fa-solid fa-lock" aria-hidden="true"></i> Opens a private chat with VoloLeads</p>
+            </div>
+        </aside>
+        <button type="button" class="whatsapp-launcher" aria-controls="whatsapp-support-panel" aria-expanded="false">
+            <span class="whatsapp-launcher-icon" aria-hidden="true"><i class="fa-brands fa-whatsapp"></i></span>
+            <span class="whatsapp-launcher-label"><small>Questions?</small><strong>Chat with us</strong></span>
+            <span class="whatsapp-launcher-status" aria-hidden="true"></span>
+        </button>
+    `;
+
+    document.body.appendChild(widget);
+    if (window.renderSiteIcons) window.renderSiteIcons(widget);
+
+    const panel = widget.querySelector('.whatsapp-support-panel');
+    const launcher = widget.querySelector('.whatsapp-launcher');
+    const closeButton = widget.querySelector('.whatsapp-panel-close');
+    let isOpen = false;
+
+    const setOpen = (open, restoreFocus = true) => {
+        isOpen = open;
+        widget.classList.toggle('is-open', open);
+        launcher.setAttribute('aria-expanded', String(open));
+        panel.setAttribute('aria-hidden', String(!open));
+
+        if (open) {
+            panel.removeAttribute('inert');
+            window.requestAnimationFrame(() => closeButton.focus({ preventScroll: true }));
+        } else {
+            panel.setAttribute('inert', '');
+            if (restoreFocus) launcher.focus({ preventScroll: true });
+        }
+    };
+
+    launcher.addEventListener('click', () => setOpen(!isOpen));
+    closeButton.addEventListener('click', () => setOpen(false));
+
+    widget.querySelectorAll('.whatsapp-support-route').forEach(route => {
+        route.addEventListener('click', () => setOpen(false, false));
+    });
+
+    document.addEventListener('pointerdown', event => {
+        if (isOpen && !widget.contains(event.target)) setOpen(false, false);
+    });
+
+    document.addEventListener('keydown', event => {
+        if (event.key === 'Escape' && isOpen) setOpen(false);
+    });
 }
 
 /* --- Services Slider Logic --- */
