@@ -2,8 +2,6 @@
    VoloLeads Application Logic
    ============================================ */
 
-const CRISP_WEBSITE_ID = 'c38c8838-581c-410e-8809-c6f3f0d3391c';
-
 document.addEventListener('DOMContentLoaded', () => {
     initPageLoadAnimation();
     initMobileMenu();
@@ -33,7 +31,6 @@ document.addEventListener('DOMContentLoaded', () => {
     initDeliverablePreviews();
     initAudioBreakdowns();
     initBookingSummary();
-    initTrustpilotReviews();
 
     // Cookie consent banner initialization
     initCookieConsentBanner();
@@ -2160,122 +2157,16 @@ function initCookieConsentBanner() {
 
 // Lazy-load third-party scripts only after consent
 function loadThirdPartyScriptsOnConsent() {
-    // Crisp configuration comes from the page; load once and only after optional-cookie consent.
-    if (CRISP_WEBSITE_ID && !document.querySelector('script[data-crisp-chat]')) {
+    // Example: Crisp chat loader ONLY if window.CRISP_WEBSITE_ID is provided by server-side template or env
+    if (window.CRISP_WEBSITE_ID) {
         (function() {
-            window.$crisp = window.$crisp || [];
-            window.CRISP_WEBSITE_ID = CRISP_WEBSITE_ID;
+            window.$crisp = []; window.CRISP_WEBSITE_ID = window.CRISP_WEBSITE_ID;
             var d = document; var s = d.createElement("script"); s.src = "https://client.crisp.chat/l.js"; s.async = 1;
-            s.dataset.crispChat = 'true';
             d.getElementsByTagName("head")[0].appendChild(s);
         })();
     }
 
     // Potentially enable analytics or other widgets here when consented
-}
-
-/* ============================================
-   LIVE TRUSTPILOT REVIEWS
-   ============================================ */
-function createTrustpilotReviewCard(review, index) {
-    const card = document.createElement('article');
-    card.className = `testimonial-card bg-slate-50 dark:bg-slate-700 rounded-xl p-8 border border-slate-200 dark:border-slate-600 hover:border-brand-orange/50 transition-all duration-300 shadow-sm hover:shadow-lg is-visible delay-${Math.min(index + 1, 3)}00`;
-
-    const rating = document.createElement('div');
-    rating.className = 'testimonial-rating flex gap-1 mb-4';
-    rating.setAttribute('role', 'img');
-    rating.setAttribute('aria-label', `${review.stars} out of 5 stars`);
-    for (let star = 1; star <= 5; star += 1) {
-        const icon = document.createElement('i');
-        icon.className = `fa-solid fa-star text-sm ${star <= review.stars ? 'text-brand-orange' : 'text-slate-300 dark:text-slate-500'}`;
-        icon.setAttribute('aria-hidden', 'true');
-        rating.appendChild(icon);
-    }
-
-    if (review.title) {
-        const title = document.createElement('h4');
-        title.className = 'font-extrabold text-slate-900 dark:text-white mb-2';
-        title.textContent = review.title;
-        card.appendChild(title);
-    }
-
-    const quote = document.createElement('p');
-    quote.className = 'testimonial-quote text-slate-700 dark:text-slate-300 mb-6 leading-relaxed font-medium';
-    quote.textContent = `“${review.text}”`;
-
-    const author = document.createElement('div');
-    author.className = 'testimonial-author flex items-center gap-3 pt-4 border-t border-slate-200 dark:border-slate-600';
-    const initials = (review.consumer?.displayName || 'Trustpilot reviewer')
-        .split(/\s+/).slice(0, 2).map(part => part.charAt(0)).join('').toUpperCase();
-    const avatar = document.createElement('div');
-    avatar.className = 'w-12 h-12 rounded-full bg-brand-orange/10 flex items-center justify-center shrink-0';
-    const avatarText = document.createElement('span');
-    avatarText.className = 'text-brand-orange font-bold';
-    avatarText.textContent = initials || 'TP';
-    avatar.appendChild(avatarText);
-
-    const details = document.createElement('div');
-    const name = document.createElement('p');
-    name.className = 'font-bold text-slate-900 dark:text-slate-100 text-sm';
-    name.textContent = review.consumer?.displayName || 'Trustpilot reviewer';
-    const meta = document.createElement('p');
-    meta.className = 'text-xs text-slate-500 dark:text-slate-400';
-    const date = review.createdAt
-        ? new Intl.DateTimeFormat('en-US', { month: 'short', day: 'numeric', year: 'numeric' }).format(new Date(review.createdAt))
-        : '';
-    meta.textContent = [review.consumer?.displayLocation, date].filter(Boolean).join(' · ');
-    details.append(name, meta);
-    author.append(avatar, details);
-    card.prepend(rating);
-    card.append(quote, author);
-    return card;
-}
-
-async function initTrustpilotReviews() {
-    const grid = document.getElementById('trustpilot-reviews');
-    const summary = document.getElementById('trustpilot-summary');
-    if (!grid) return;
-
-    const controller = new AbortController();
-    const timeout = window.setTimeout(() => controller.abort(), 7000);
-
-    try {
-        const response = await fetch('/api/trustpilot-reviews', {
-            headers: { Accept: 'application/json' },
-            signal: controller.signal
-        });
-        if (!response.ok) throw new Error(`Trustpilot request failed (${response.status})`);
-
-        const data = await response.json();
-        if (!Array.isArray(data.reviews) || data.reviews.length === 0) {
-            throw new Error('Trustpilot returned no reviews');
-        }
-
-        grid.replaceChildren(...data.reviews.map(createTrustpilotReviewCard));
-        grid.dataset.reviewCount = String(data.reviews.length);
-        if (summary && data.businessUnit) {
-            const score = data.businessUnit.trustScore;
-            const count = data.businessUnit.numberOfReviews;
-            const ratingText = score != null && count != null ? `${score}/5 from ${count} review${count === 1 ? '' : 's'} on ` : 'Reviews on ';
-            summary.replaceChildren(document.createTextNode(ratingText));
-            const link = document.createElement('a');
-            link.href = data.businessUnit.profileUrl || 'https://www.trustpilot.com/review/vololeads.com';
-            link.target = '_blank';
-            link.rel = 'noopener noreferrer';
-            link.className = 'font-extrabold text-emerald-700 dark:text-emerald-400 hover:underline';
-            link.textContent = 'Trustpilot';
-            summary.appendChild(link);
-        }
-    } catch (error) {
-        // The server or Trustpilot may be unavailable; keep the existing curated cards as fallback.
-        console.warn('Using fallback testimonials:', error.message);
-        if (summary) {
-            summary.textContent = 'Client testimonials';
-        }
-    } finally {
-        window.clearTimeout(timeout);
-        grid.setAttribute('aria-busy', 'false');
-    }
 }
 
 /* ============================================

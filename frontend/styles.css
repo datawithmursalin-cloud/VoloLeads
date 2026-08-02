@@ -3892,19 +3892,6 @@ html.dark .theme-switch:hover { background: rgba(124, 45, 18, .32); }
     align-items: stretch;
 }
 
-@media (min-width: 768px) {
-    #testimonials .testimonials-grid[data-review-count="1"] {
-        grid-template-columns: minmax(0, 42rem);
-        justify-content: center;
-    }
-
-    #testimonials .testimonials-grid[data-review-count="2"] {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        max-width: 56rem;
-        margin-inline: auto;
-    }
-}
-
 #testimonials .testimonial-card {
     height: 100%;
     min-height: 0;
