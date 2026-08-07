@@ -626,7 +626,7 @@ function initContactForm() {
             if (!quantityRow || !quantitySelect) return;
 
             // Logic: If they pick a service that needs agents...
-            if (service === "Starter" || service === "Growth" || service === "Scale") {
+            if (service === "Essential" || service === "Growth" || service === "Scale") {
                 quantityRow.classList.remove("hidden");
                 quantitySelect.setAttribute("required", "true");
             } else {
@@ -2326,7 +2326,7 @@ function initPlanRecommender() {
     if (!form || !planName || !reason || !highlights) return;
 
     const plans = {
-        'Starter': {
+        'Essential': {
             reason: 'Your dialer and data are already in place, so the essential one-caller setup fits at any campaign pace.',
             highlights: ['1 dedicated caller', 'Uses your dialer and data', 'Daily reporting and QA']
         },
@@ -2344,7 +2344,7 @@ function initPlanRecommender() {
         }
     };
 
-    let recommendation = 'Starter';
+    let recommendation = 'Essential';
 
     const getValue = name => form.querySelector(`input[name="${name}"]:checked`)?.value;
     const choosePlan = () => {
@@ -2355,7 +2355,7 @@ function initPlanRecommender() {
         if (callers === 'three-plus' || volume === 'multi') recommendation = 'Custom+';
         else if (stack === 'managed' && callers === 'two') recommendation = 'Scale';
         else if (callers === 'two') recommendation = 'Custom+';
-        else if (stack === 'owned') recommendation = 'Starter';
+        else if (stack === 'owned') recommendation = 'Essential';
         else recommendation = 'Growth';
 
         const result = plans[recommendation];

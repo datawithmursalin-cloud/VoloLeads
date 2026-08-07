@@ -81,7 +81,7 @@ function getPlanEmailDetails(planCode, discountInfo = null) {
     case PLAN_CODES.ESSENTIAL_WEEKLY:
       return {
         eyebrow: 'Staffing & Training',
-        headline: 'Starter is active',
+        headline: 'Essential is active',
         summary: hasDiscount
           ? 'Your dedicated cold calling support plan is now live with your College of Wholesale partner rate.'
           : 'Your dedicated cold calling support plan is now live.',

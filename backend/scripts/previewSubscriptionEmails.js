@@ -15,13 +15,13 @@ const PREVIEWS = [
   {
     filename: 'success-essential.html',
     planCode: PLAN_CODES.ESSENTIAL_WEEKLY,
-    title: 'VoloLeads Starter Email Preview',
+    title: 'VoloLeads Essential Email Preview',
     discountInfo: null
   },
   {
     filename: 'success-essential-discounted.html',
     planCode: PLAN_CODES.ESSENTIAL_WEEKLY,
-    title: 'VoloLeads Starter Email Preview (COW Discount)',
+    title: 'VoloLeads Essential Email Preview (COW Discount)',
     discountInfo: { hasDiscount: true, promoCode: 'COW2026E', discountCents: 1000 }
   },
   {

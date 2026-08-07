@@ -43,7 +43,7 @@ function buildCheckoutLineItems(planCode) {
 
   if (planCode === PLAN_CODES.ESSENTIAL_WEEKLY) {
     if (!priceIds.setup) {
-      throw new Error('Missing setup Stripe price for starter plan');
+      throw new Error('Missing setup Stripe price for essential plan');
     }
 
     items.unshift({

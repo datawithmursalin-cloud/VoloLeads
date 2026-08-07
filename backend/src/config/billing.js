@@ -15,7 +15,7 @@ const COW_PROMO_EXPIRES_LABEL = 'Jan 1, 2027';
 const PLAN_CONFIG = {
   [PLAN_CODES.ESSENTIAL_WEEKLY]: {
     requestPlan: 'essential',
-    displayName: 'Starter Monthly',
+    displayName: 'Essential Monthly',
     recurringPriceEnv: 'STRIPE_PRICE_ESSENTIAL_WEEKLY_RECURRING',
     setupPriceEnv: 'STRIPE_PRICE_ESSENTIAL_WEEKLY_SETUP',
     graceDaysAfterCancel: 7,
