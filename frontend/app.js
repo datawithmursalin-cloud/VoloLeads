@@ -570,6 +570,53 @@ function resetTimeSelect(timeSelect, placeholder) {
     timeSelect.appendChild(placeholderOption);
 }
 
+function addMeetingCalendarDays(dateValue, days) {
+    const [year, month, day] = dateValue.split('-').map(Number);
+    const date = new Date(Date.UTC(year, month - 1, day + days));
+    return date.toISOString().slice(0, 10);
+}
+
+function isSundayMeetingDate(dateValue) {
+    const [year, month, day] = dateValue.split('-').map(Number);
+    return new Date(Date.UTC(year, month - 1, day)).getUTCDay() === 0;
+}
+
+function getMinimumMeetingDate() {
+    const cutoff = new Date(Date.now() + (24 * 60 * 60 * 1000));
+    const parts = Object.fromEntries(
+        new Intl.DateTimeFormat('en-US', {
+            timeZone: 'America/New_York',
+            year: 'numeric',
+            month: '2-digit',
+            day: '2-digit',
+            hour: '2-digit',
+            minute: '2-digit',
+            second: '2-digit',
+            hourCycle: 'h23'
+        })
+            .formatToParts(cutoff)
+            .filter((part) => part.type !== 'literal')
+            .map((part) => [part.type, part.value])
+    );
+    let minimumDate = `${parts.year}-${parts.month}-${parts.day}`;
+    const cutoffMinutes = (Number(parts.hour || 0) * 60) + Number(parts.minute || 0);
+    if (cutoffMinutes > (9 * 60) || (cutoffMinutes === (9 * 60) && Number(parts.second || 0) > 0)) {
+        minimumDate = addMeetingCalendarDays(minimumDate, 1);
+    }
+    while (isSundayMeetingDate(minimumDate)) {
+        minimumDate = addMeetingCalendarDays(minimumDate, 1);
+    }
+    return minimumDate;
+}
+
+function validateMeetingDateInput(dateInput) {
+    if (!dateInput?.value) return true;
+    const isSunday = isSundayMeetingDate(dateInput.value);
+    dateInput.setCustomValidity(isSunday ? 'Meetings are not available on Sundays.' : '');
+    if (isSunday) dateInput.reportValidity();
+    return !isSunday;
+}
+
 async function loadAvailableMeetingSlots({
     date,
     timeSelect,
@@ -639,14 +686,7 @@ function initContactForm() {
 
     // 2. Date Picker Logic
     if (dateInput) {
-        // Set min date to tomorrow (not today)
-        const today = new Date();
-        const tomorrow = new Date(today);
-        tomorrow.setDate(tomorrow.getDate() + 1);
-        const yyyy = tomorrow.getFullYear();
-        const mm = String(tomorrow.getMonth() + 1).padStart(2, '0');
-        const dd = String(tomorrow.getDate()).padStart(2, '0');
-        dateInput.min = `${yyyy}-${mm}-${dd}`;
+        dateInput.min = getMinimumMeetingDate();
 
         // Handle Date Change -> Show available time slots
         dateInput.addEventListener('change', function() {
@@ -660,6 +700,12 @@ function initContactForm() {
                     timeSelect.removeAttribute('required'); 
                     timeSelect.value = ''; 
                 }
+                return;
+            }
+
+            if (!validateMeetingDateInput(this)) {
+                if (timeRow) timeRow.classList.add('hidden');
+                if (timeSelect) timeSelect.removeAttribute('required');
                 return;
             }
 
@@ -1622,9 +1668,7 @@ function initScheduleOnboardingPage() {
         if (planBadge) planBadge.textContent = `Plan: ${data.planDisplayName || 'Subscriber'}`;
 
         if (dateInput) {
-            const tomorrow = new Date();
-            tomorrow.setDate(tomorrow.getDate() + 1);
-            dateInput.min = tomorrow.toISOString().slice(0, 10);
+            dateInput.min = getMinimumMeetingDate();
 
             dateInput.addEventListener('change', function handleDateChange() {
                 if (!this.value) {
@@ -1633,6 +1677,12 @@ function initScheduleOnboardingPage() {
                         timeSelect.removeAttribute('required');
                         timeSelect.value = '';
                     }
+                    return;
+                }
+
+                if (!validateMeetingDateInput(this)) {
+                    if (timeRow) timeRow.classList.add('hidden');
+                    if (timeSelect) timeSelect.removeAttribute('required');
                     return;
                 }
 
