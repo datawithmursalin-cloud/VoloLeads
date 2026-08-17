@@ -2397,7 +2397,26 @@ function initPlanRecommender() {
     let recommendation = 'Essential';
 
     const getValue = name => form.querySelector(`input[name="${name}"]:checked`)?.value;
-    const choosePlan = () => {
+    const centerPlanCard = card => {
+        const slider = document.getElementById('pricing-slider');
+        if (!slider || !card || slider.scrollWidth <= slider.clientWidth) return;
+
+        const sliderRect = slider.getBoundingClientRect();
+        const cardRect = card.getBoundingClientRect();
+        const centeredLeft = slider.scrollLeft
+            + (cardRect.left - sliderRect.left)
+            - ((slider.clientWidth - cardRect.width) / 2);
+        const maxScroll = Math.max(0, slider.scrollWidth - slider.clientWidth);
+        const targetLeft = Math.min(maxScroll, Math.max(0, centeredLeft));
+        const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+        slider.scrollTo({
+            left: targetLeft,
+            behavior: reduceMotion ? 'auto' : 'smooth'
+        });
+    };
+
+    const choosePlan = (shouldCenterCard = false) => {
         const stack = getValue('advisor-stack');
         const callers = getValue('advisor-callers');
         const volume = getValue('advisor-volume');
@@ -2414,21 +2433,27 @@ function initPlanRecommender() {
         highlights.innerHTML = result.highlights.map(item => `<li>${item}</li>`).join('');
         seePlan?.setAttribute('aria-label', `See ${recommendation} plan details`);
 
+        let recommendedCard = null;
         document.querySelectorAll('[data-plan-card]').forEach(card => {
             const isMatch = card.dataset.planCard === recommendation;
             card.classList.toggle('is-recommended-plan', isMatch);
-            if (isMatch) card.setAttribute('data-recommendation-label', 'Recommended for you');
+            if (isMatch) {
+                card.setAttribute('data-recommendation-label', 'Recommended for you');
+                recommendedCard = card;
+            }
             else card.removeAttribute('data-recommendation-label');
         });
+
+        if (shouldCenterCard) centerPlanCard(recommendedCard);
     };
 
-    form.addEventListener('change', choosePlan);
+    form.addEventListener('change', () => choosePlan(true));
     choosePlan();
 
     seePlan?.addEventListener('click', () => {
         window.setTimeout(() => {
             const card = document.querySelector(`[data-plan-card="${recommendation}"]`);
-            card?.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+            centerPlanCard(card);
             card?.focus({ preventScroll: true });
         }, 450);
     });
