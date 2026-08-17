@@ -4811,8 +4811,9 @@ html.dark .daily-items > button > i:first-child {
     content: attr(data-recommendation-label);
     position: absolute;
     z-index: 8;
-    top: .55rem;
-    right: .55rem;
+    top: -2.15rem;
+    left: 50%;
+    transform: translate(-50%, -50%);
     padding: .35rem .55rem;
     border-radius: 999px;
     color: #fff;
@@ -4828,6 +4829,26 @@ html.dark .daily-items > button > i:first-child {
 [data-plan-card].is-recommended-plan > div > .backface-hidden:first-child {
     border-color: #f97316 !important;
     box-shadow: 0 22px 48px rgba(249, 115, 22, .16);
+}
+
+/* Keep pricing cards stationary on pointer hover. */
+#plans .plans-pricing-grid > .perspective-1000:hover {
+    transform: none !important;
+    filter: drop-shadow(0 0 1rem rgba(249, 115, 22, .42)) !important;
+}
+
+#plans .plans-pricing-grid > .perspective-1000:hover .backface-hidden {
+    border-color: rgba(249, 115, 22, .9) !important;
+    box-shadow: 0 0 0 1px rgba(249, 115, 22, .22),
+                0 0 2rem rgba(249, 115, 22, .24) !important;
+}
+
+#plans .plans-pricing-grid .backface-hidden:first-child:hover {
+    transform: none !important;
+}
+
+#plans .plans-pricing-grid .backface-hidden:nth-child(2):hover {
+    transform: rotateY(180deg) !important;
 }
 
 html.dark .plan-advisor {
@@ -5441,10 +5462,6 @@ html.dark .booking-summary-card > p {
         min-height: 3rem;
         padding: .5rem .35rem;
         font-size: .65rem;
-    }
-
-    [data-plan-card].is-recommended-plan::after {
-        right: 2.9rem;
     }
 
     .interaction-dialog {
