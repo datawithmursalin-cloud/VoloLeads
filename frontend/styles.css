@@ -3365,6 +3365,108 @@ html.dark body > main.utility-page-main {
 }
 
 /* Pricing carousel */
+#plans .plan-availability {
+    width: min(100% - 2rem, 72rem);
+    margin: clamp(2.75rem, 6vw, 5.25rem) auto clamp(1.75rem, 4vw, 3rem);
+    text-align: center;
+    animation: plan-availability-pulse 2.4s ease-in-out infinite;
+}
+
+#plans .plan-availability-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.42rem 0.9rem;
+    border-radius: 999px;
+    background: #e7e1e5;
+    color: #9f3841;
+    font-size: 0.75rem;
+    font-weight: 800;
+    line-height: 1;
+    letter-spacing: 0.035em;
+    text-transform: uppercase;
+}
+
+#plans .plan-availability-badge > span {
+    width: 0.48rem;
+    height: 0.48rem;
+    border-radius: 50%;
+    background: #bc6570;
+    box-shadow: 0 0 0 0.22rem rgba(188, 101, 112, 0.12);
+    animation: plan-availability-dot-pulse 1.6s ease-in-out infinite;
+}
+
+#plans .plan-availability h3 {
+    margin: 1rem 0 0.75rem;
+    font-size: clamp(1.75rem, 4vw, 2.5rem);
+    font-weight: 900;
+    line-height: 1.08;
+}
+
+#plans .plan-availability h3 span {
+    color: #ffffff;
+}
+
+#plans .plan-availability p {
+    margin: 0;
+    color: #64748b;
+    font-size: clamp(1rem, 2vw, 1.18rem);
+    line-height: 1.6;
+}
+
+#plans .plan-availability p strong {
+    color: #f97316;
+    font-weight: 800;
+}
+
+html.dark #plans .plan-availability-badge {
+    background: #aaa0aa;
+    color: #8b3038;
+}
+
+html.dark #plans .plan-availability p {
+    color: #94a3b8 !important;
+}
+
+@keyframes plan-availability-pulse {
+    0%, 100% {
+        opacity: 0.76;
+        filter: drop-shadow(0 0 0 rgba(249, 115, 22, 0));
+    }
+    50% {
+        opacity: 1;
+        filter: drop-shadow(0 0 0.75rem rgba(249, 115, 22, 0.24));
+    }
+}
+
+@keyframes plan-availability-dot-pulse {
+    0%, 100% {
+        box-shadow: 0 0 0 0.18rem rgba(188, 101, 112, 0.12);
+    }
+    50% {
+        box-shadow: 0 0 0 0.34rem rgba(188, 101, 112, 0.26);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    #plans .plan-availability,
+    #plans .plan-availability-badge > span {
+        animation: none;
+    }
+}
+
+@media (max-width: 640px) {
+    #plans .plan-availability {
+        width: min(100% - 1rem, 32rem);
+        margin-top: 2.5rem;
+        margin-bottom: 1.25rem;
+    }
+
+    #plans .plan-availability h3 {
+        font-size: clamp(1.65rem, 8vw, 2rem);
+    }
+}
+
 #plans .plans-carousel-shell {
     max-width: min(100%, 88rem);
     margin-left: auto;
