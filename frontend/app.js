@@ -28,6 +28,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initDecorativeIcons();
     initGuidedHowItWorks();
     initPlanRecommender();
+    initTrustpilotCarousel();
     initDeliverablePreviews();
     initAudioBreakdowns();
     initBookingSummary();
@@ -332,7 +333,7 @@ window.resetIcon = function(audioElement) {
 
 /* --- Utilities --- */
 function renderUniversalFooter() {
-    const footer = document.querySelector('footer');
+    const footer = document.querySelector('body > footer');
     if (!footer) return;
 
     footer.className = 'bg-brand-navy text-slate-400 py-12 border-t border-slate-800 scroll-mt-32';
@@ -2475,6 +2476,84 @@ function initPlanRecommender() {
         document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
         window.setTimeout(() => serviceSelect.focus(), 500);
     });
+}
+
+function initTrustpilotCarousel() {
+    const carousel = document.querySelector('[data-trustpilot-carousel]');
+    if (!carousel) return;
+
+    const viewport = carousel.querySelector('.trustpilot-carousel-viewport');
+    const track = carousel.querySelector('.trustpilot-carousel-track');
+    const slides = [...track.querySelectorAll('[data-review-slide]')];
+    if (!viewport || !track || slides.length < 2) return;
+
+    // Keep the requested loop order: Rodrigo → Kristian → Keenan → Arya.
+    const orderedSlides = [slides[3], slides[0], slides[1], slides[2]].filter(Boolean);
+    track.replaceChildren(...orderedSlides);
+    orderedSlides.forEach(slide => slide.setAttribute('aria-hidden', 'false'));
+    // Three copies keep a full copy available on either side while dragging,
+    // matching the seamless marquee pattern used by the portfolio site.
+    [1, 2].forEach(() => orderedSlides.forEach(slide => {
+        const clone = slide.cloneNode(true);
+        clone.setAttribute('aria-hidden', 'true');
+        clone.removeAttribute('data-review-slide');
+        track.appendChild(clone);
+    }));
+
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+    let segmentWidth = 0;
+    let paused = reducedMotion.matches;
+    let dragging = false;
+    let dragStartX = 0;
+    let dragStartScroll = 0;
+
+    const measureSegment = () => {
+        segmentWidth = track.scrollWidth / 3;
+        if (segmentWidth > 0 && viewport.scrollLeft < segmentWidth * 0.5) {
+            viewport.scrollLeft = segmentWidth;
+        }
+    };
+    const wrapScroll = () => {
+        if (!segmentWidth) return;
+        if (viewport.scrollLeft >= segmentWidth * 2) viewport.scrollLeft -= segmentWidth;
+        if (viewport.scrollLeft <= 0) viewport.scrollLeft += segmentWidth;
+    };
+
+    viewport.addEventListener('pointerdown', event => {
+        dragging = true;
+        paused = true;
+        dragStartX = event.clientX;
+        dragStartScroll = viewport.scrollLeft;
+        viewport.setPointerCapture?.(event.pointerId);
+        viewport.classList.add('is-dragging');
+    });
+    viewport.addEventListener('pointermove', event => {
+        if (!dragging) return;
+        viewport.scrollLeft = dragStartScroll - (event.clientX - dragStartX);
+        wrapScroll();
+    });
+    const stopDragging = event => {
+        if (!dragging) return;
+        dragging = false;
+        viewport.releasePointerCapture?.(event.pointerId);
+        viewport.classList.remove('is-dragging');
+        paused = reducedMotion.matches;
+    };
+    viewport.addEventListener('pointerup', stopDragging);
+    viewport.addEventListener('pointercancel', stopDragging);
+    reducedMotion.addEventListener?.('change', event => { paused = event.matches; });
+    viewport.addEventListener('keydown', event => {
+        if (event.key !== 'ArrowLeft' && event.key !== 'ArrowRight') return;
+        event.preventDefault();
+        viewport.scrollBy({ left: event.key === 'ArrowRight' ? 184 : -184, behavior: 'smooth' });
+    });
+    window.addEventListener('resize', measureSegment);
+    measureSegment();
+    window.setInterval(() => {
+        if (paused || dragging || !segmentWidth) return;
+        wrapScroll();
+        viewport.scrollLeft += 1;
+    }, 24);
 }
 
 function initDeliverablePreviews() {
