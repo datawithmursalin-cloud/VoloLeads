@@ -2518,14 +2518,17 @@ function initTrustpilotCarousel() {
         const middleCopy = track.children[orderedSlides.length];
         segmentWidth = middleCopy?.offsetLeft || (track.scrollWidth / 3);
         if (segmentWidth > 0 && !positioned) {
-            viewport.scrollLeft = segmentWidth;
+            // Show real content immediately on narrow screens. Desktop starts
+            // in the middle copy; mobile begins at the first card so Safari
+            // never paints an apparently empty rail during initial layout.
+            viewport.scrollLeft = window.matchMedia('(max-width: 640px)').matches ? 0 : segmentWidth;
             positioned = true;
         }
     };
-    const wrapScroll = () => {
+    const wrapScroll = (includeLeftEdge = true) => {
         if (!segmentWidth) return;
         if (viewport.scrollLeft >= segmentWidth * 2) viewport.scrollLeft -= segmentWidth;
-        if (viewport.scrollLeft <= 0) viewport.scrollLeft += segmentWidth;
+        if (includeLeftEdge && viewport.scrollLeft <= 0) viewport.scrollLeft += segmentWidth;
     };
 
     viewport.addEventListener('pointerdown', event => {
@@ -2539,7 +2542,7 @@ function initTrustpilotCarousel() {
     viewport.addEventListener('pointermove', event => {
         if (!dragging) return;
         viewport.scrollLeft = dragStartScroll - (event.clientX - dragStartX);
-        wrapScroll();
+        wrapScroll(true);
     });
     const stopDragging = event => {
         if (!dragging) return;
@@ -2564,7 +2567,7 @@ function initTrustpilotCarousel() {
     window.setTimeout(measureSegment, 120);
     window.setInterval(() => {
         if (paused || dragging || !segmentWidth) return;
-        wrapScroll();
+        wrapScroll(false);
         viewport.scrollLeft += 1;
     }, 24);
 }
