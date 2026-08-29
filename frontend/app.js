@@ -2512,11 +2512,14 @@ function initTrustpilotCarousel() {
     let dragging = false;
     let dragStartX = 0;
     let dragStartScroll = 0;
+    let positioned = false;
 
     const measureSegment = () => {
-        segmentWidth = track.scrollWidth / 3;
-        if (segmentWidth > 0 && viewport.scrollLeft < segmentWidth * 0.5) {
+        const middleCopy = track.children[orderedSlides.length];
+        segmentWidth = middleCopy?.offsetLeft || (track.scrollWidth / 3);
+        if (segmentWidth > 0 && !positioned) {
             viewport.scrollLeft = segmentWidth;
+            positioned = true;
         }
     };
     const wrapScroll = () => {
