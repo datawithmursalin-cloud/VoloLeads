@@ -125,8 +125,9 @@ function initDarkMode() {
         console.warn('Dark mode preference unavailable', error);
     }
 
-    const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-    const initialDarkMode = savedTheme === null ? prefersDark : savedTheme === 'true';
+    // Keep first visits in the readable day theme; a user's explicit choice
+    // still wins on every subsequent visit.
+    const initialDarkMode = savedTheme === 'true';
 
     // Helper function to update icon
     const updateIcon = (icon, isDark) => {
@@ -2489,7 +2490,12 @@ function initTrustpilotCarousel() {
 
     // Keep the requested loop order: Rodrigo → Kristian → Keenan → Arya.
     const orderedSlides = [slides[3], slides[0], slides[1], slides[2]].filter(Boolean);
-    track.replaceChildren(...orderedSlides);
+    if (typeof track.replaceChildren === 'function') {
+        track.replaceChildren(...orderedSlides);
+    } else {
+        while (track.firstChild) track.removeChild(track.firstChild);
+        orderedSlides.forEach(slide => track.appendChild(slide));
+    }
     orderedSlides.forEach(slide => slide.setAttribute('aria-hidden', 'false'));
     // Three copies keep a full copy available on either side while dragging,
     // matching the seamless marquee pattern used by the portfolio site.
@@ -2549,6 +2555,10 @@ function initTrustpilotCarousel() {
     });
     window.addEventListener('resize', measureSegment);
     measureSegment();
+    // Safari can report zero track width during the first DOMContentLoaded
+    // frame; measure again after layout so the middle copy is always visible.
+    window.requestAnimationFrame(measureSegment);
+    window.setTimeout(measureSegment, 120);
     window.setInterval(() => {
         if (paused || dragging || !segmentWidth) return;
         wrapScroll();
