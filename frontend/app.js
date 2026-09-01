@@ -2557,12 +2557,22 @@ function initTrustpilotCarousel() {
 
     const wrapScroll = (includeLeftEdge = true) => {
         if (!segmentWidth) return;
-        const position = viewport.scrollLeft;
-        const shouldWrap = position >= segmentWidth * 2 || (includeLeftEdge && position <= 0);
-        if (!shouldWrap) return;
 
-        const offset = ((position % segmentWidth) + segmentWidth) % segmentWidth;
-        viewport.scrollLeft = segmentWidth + offset;
+        // Keep the viewport inside the middle copy. Moving exactly one copy
+        // preserves the current fractional position and avoids the occasional
+        // modulo/clamping stall at either edge of the scroll container.
+        let position = viewport.scrollLeft;
+        const rightEdge = segmentWidth * 2;
+
+        if (position >= rightEdge) {
+            position -= segmentWidth;
+        } else if (includeLeftEdge && position <= 0) {
+            position += segmentWidth;
+        } else {
+            return;
+        }
+
+        viewport.scrollLeft = position;
     };
 
     const measureSegment = () => {

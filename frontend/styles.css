@@ -5573,6 +5573,23 @@ html.dark .booking-summary-card > p {
     display: none !important;
 }
 
+#testimonials .testimonials-kicker {
+    border: 1px solid #bfdbfe;
+    background: #dbeafe;
+    color: #1e3a8a;
+}
+
+html.dark #testimonials .testimonials-kicker {
+    border-color: rgba(96, 165, 250, .55);
+    background: rgba(30, 64, 175, .3);
+    color: #dbeafe;
+    box-shadow: 0 0 0 1px rgba(30, 64, 175, .12), 0 8px 22px rgba(2, 6, 23, .18);
+}
+
+html.dark #testimonials .testimonials-kicker .w-2 {
+    background: #fb923c;
+}
+
 #testimonials .trustpilot-carousel {
     width: min(100%, 62rem);
     margin: 0 auto;
@@ -5629,7 +5646,7 @@ html.dark .booking-summary-card > p {
 
 #testimonials .trustpilot-carousel-header a:hover { color: #00a878; }
 
-#testimonials .trustpilot-carousel-viewport { overflow-x: auto; overflow-y: hidden; margin-top: 1.5rem; scrollbar-width: none; cursor: grab; touch-action: pan-y; }
+#testimonials .trustpilot-carousel-viewport { overflow-x: auto; overflow-y: hidden; margin-top: 1.5rem; scrollbar-width: none; cursor: grab; touch-action: pan-y; overscroll-behavior-x: contain; }
 #testimonials .trustpilot-carousel-viewport::-webkit-scrollbar { display: none; }
 #testimonials .trustpilot-carousel-viewport.is-dragging { cursor: grabbing; user-select: none; }
 #testimonials .trustpilot-carousel-track { display: flex; width: max-content; gap: .8rem; align-items: stretch; }
@@ -5644,6 +5661,9 @@ html.dark .booking-summary-card > p {
 #testimonials .trustpilot-review footer { border-top-color: #334155; }
 #testimonials .trustpilot-review footer strong { color: #f8fafc; font-size: .78rem; }
 #testimonials .trustpilot-review footer span { color: #94a3b8; font-size: .68rem; }
+
+html.dark #testimonials .trustpilot-review time,
+html.dark #testimonials .trustpilot-review footer span { color: #cbd5e1; }
 
 html:not(.dark) #testimonials .trustpilot-carousel {
     border-color: #d7dee8;
