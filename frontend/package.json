@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
+    "postinstall": "next build",
     "start": "next start",
     "start:legacy": "node server.js"
   },
