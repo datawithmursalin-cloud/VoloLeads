@@ -2576,8 +2576,13 @@ function initTrustpilotCarousel() {
     };
 
     const measureSegment = () => {
+        const firstCopy = track.children[0];
         const middleCopy = track.children[orderedSlides.length];
-        const measuredWidth = middleCopy?.offsetLeft || (track.scrollWidth / 3);
+        const firstRect = firstCopy?.getBoundingClientRect();
+        const middleRect = middleCopy?.getBoundingClientRect();
+        const measuredWidth = firstRect && middleRect
+            ? middleRect.left - firstRect.left
+            : (track.scrollWidth / 3);
         if (!Number.isFinite(measuredWidth) || measuredWidth <= 0) {
             segmentWidth = 0;
             return false;
