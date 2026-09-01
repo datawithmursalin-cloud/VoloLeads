@@ -2513,8 +2513,8 @@ function initTrustpilotCarousel() {
 
     initializedTrustpilotCarousels.add(carousel);
 
-    // Keep the requested loop order: Rodrigo → Kristian → Keenan → Arya.
-    const orderedSlides = [slides[3], slides[0], slides[1], slides[2]].filter(Boolean);
+    // Keep the newest review first, followed by the existing review order.
+    const orderedSlides = [slides[4], slides[3], slides[0], slides[1], slides[2]].filter(Boolean);
     if (typeof track.replaceChildren === 'function') {
         track.replaceChildren(...orderedSlides);
     } else {
