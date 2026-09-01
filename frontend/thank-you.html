@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#f8fafc">
     <title>Thank You | VoloLeads</title>
     <link rel="icon" type="image/webp" href="./png/logo.webp" sizes="any">
     <link rel="apple-touch-icon" href="./png/logo.webp">
@@ -241,39 +242,5 @@
     <script src="icons.js?v=20260610-02"></script>
     <script src="app.js?v=20260724-01"></script>
 
-    <!-- Dark Mode Toggle Script -->
-    <script>
-        // Dark Mode Toggle Functionality
-        const darkModeToggle = document.getElementById('dark-mode-toggle');
-        const darkModeIcon = document.getElementById('dark-mode-icon');
-        const htmlElement = document.documentElement;
-
-        // Initialize dark mode from localStorage
-        function initDarkMode() {
-            const isDarkMode = localStorage.getItem('darkMode') === 'true';
-            if (isDarkMode) {
-                htmlElement.classList.add('dark');
-                darkModeIcon.classList.remove('fa-moon');
-                darkModeIcon.classList.add('fa-sun');
-            }
-        }
-
-        // Toggle dark mode
-        darkModeToggle.addEventListener('click', () => {
-            const isDarkMode = htmlElement.classList.toggle('dark');
-            localStorage.setItem('darkMode', isDarkMode);
-
-            if (isDarkMode) {
-                darkModeIcon.classList.remove('fa-moon');
-                darkModeIcon.classList.add('fa-sun');
-            } else {
-                darkModeIcon.classList.remove('fa-sun');
-                darkModeIcon.classList.add('fa-moon');
-            }
-        });
-
-        // Initialize on page load
-        initDarkMode();
-    </script>
 </body>
 </html>

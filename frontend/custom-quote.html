@@ -7,7 +7,7 @@
     <meta name="description" content="Request a custom VoloLeads strategy meeting for a tailored lead generation and cold calling setup.">
     <link rel="icon" type="image/webp" href="./png/logo.webp" sizes="any">
     <link rel="apple-touch-icon" href="./png/logo.webp">
-    <meta name="theme-color" content="#0f172a">
+    <meta name="theme-color" content="#f8fafc">
     <link rel="stylesheet" href="tailwind.css?v=20260610-02">
     <link rel="stylesheet" href="styles.css?v=20260724-01">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
@@ -76,31 +76,31 @@
 
                         <div class="custom-quote-field-grid grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div class="space-y-1">
-                                <label for="contact-name" class="text-xs font-bold text-slate-500 uppercase tracking-wide ml-1">Full Name <span class="text-red-500">*</span></label>
+                                <label for="contact-name" class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wide ml-1">Full Name <span class="text-red-500">*</span></label>
                                 <input id="contact-name" type="text" name="name" autocomplete="name" required minlength="2" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 dark:bg-slate-700 dark:border-slate-600 dark:text-white dark:placeholder-slate-400 rounded-lg text-slate-800 outline-none focus:border-brand-orange focus:ring-1 focus:ring-brand-orange focus:bg-white transition-all placeholder-slate-400" placeholder="Jane Smith">
                             </div>
 
                             <div class="space-y-1">
-                                <label for="contact-company" class="text-xs font-bold text-slate-500 uppercase tracking-wide ml-1">Company Name</label>
+                                <label for="contact-company" class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wide ml-1">Company Name</label>
                                 <input id="contact-company" type="text" name="company" autocomplete="organization" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 dark:bg-slate-700 dark:border-slate-600 dark:text-white dark:placeholder-slate-400 rounded-lg text-slate-800 outline-none focus:border-brand-orange focus:ring-1 focus:ring-brand-orange focus:bg-white transition-all placeholder-slate-400" placeholder="XYZ Home Buyers LLC">
                             </div>
                         </div>
 
                         <div class="custom-quote-field-grid grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div class="space-y-1">
-                                <label for="contact-email" class="text-xs font-bold text-slate-500 uppercase tracking-wide ml-1">Work Email <span class="text-red-500">*</span></label>
+                                <label for="contact-email" class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wide ml-1">Work Email <span class="text-red-500">*</span></label>
                                 <input id="contact-email" type="email" name="email" autocomplete="email" spellcheck="false" required class="w-full px-4 py-3 bg-slate-50 border border-slate-200 dark:bg-slate-700 dark:border-slate-600 dark:text-white dark:placeholder-slate-400 rounded-lg text-slate-800 outline-none focus:border-brand-orange focus:ring-1 focus:ring-brand-orange focus:bg-white transition-all placeholder-slate-400" placeholder="jane@company.com">
                             </div>
 
                             <div class="space-y-1">
-                                <label for="contact-phone" class="text-xs font-bold text-slate-500 uppercase tracking-wide ml-1">Phone Number <span class="text-red-500">*</span></label>
+                                <label for="contact-phone" class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wide ml-1">Phone Number <span class="text-red-500">*</span></label>
                                 <input id="contact-phone" type="tel" name="phone" autocomplete="tel" inputmode="tel" required minlength="10" pattern="[0-9+\-\.() ]{10,}" title="Please enter a valid phone number (at least 10 digits)" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 dark:bg-slate-700 dark:border-slate-600 dark:text-white dark:placeholder-slate-400 rounded-lg text-slate-800 outline-none focus:border-brand-orange focus:ring-1 focus:ring-brand-orange focus:bg-white transition-all placeholder-slate-400" placeholder="+1 (555) 000-0000">
                             </div>
                         </div>
 
                         <div class="custom-quote-field-grid grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div class="space-y-1">
-                                <label for="service-select" class="text-xs font-bold text-slate-500 uppercase tracking-wide ml-1">Type of Service <span class="text-red-500">*</span></label>
+                                <label for="service-select" class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wide ml-1">Type of Service <span class="text-red-500">*</span></label>
                                 <select id="service-select" name="service" required class="w-full px-4 py-3 bg-slate-50 border border-slate-200 dark:bg-slate-700 dark:border-slate-600 dark:text-white rounded-lg text-slate-800 outline-none focus:border-brand-orange focus:bg-white appearance-none cursor-pointer font-medium">
                                     <option value="Custom Quote" selected>Custom Quote</option>
                                     <option value="Essential">Essential</option>
@@ -110,14 +110,14 @@
                             </div>
 
                             <div class="space-y-1">
-                                <label for="preferred-date" class="text-xs font-bold text-slate-500 uppercase tracking-wide ml-1">Preferred Meeting Date</label>
+                                <label for="preferred-date" class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wide ml-1">Preferred Meeting Date</label>
                                 <input type="date" id="preferred-date" name="preferred_date" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 dark:bg-slate-700 dark:border-slate-600 dark:text-white dark:placeholder-slate-400 rounded-lg text-slate-800 outline-none focus:border-brand-orange focus:ring-1 focus:ring-brand-orange focus:bg-white transition-all placeholder-slate-400 text-sm">
                             </div>
                         </div>
 
                         <div id="quantity-row" class="hidden space-y-1 animate-fade-in-down">
                             <label for="quantity-select" class="text-xs font-bold text-brand-orange uppercase tracking-wide ml-1">Number of Cold Callers <span class="text-red-500">*</span></label>
-                            <select id="quantity-select" name="quantity" class="w-full px-4 py-3 bg-white-50 border border-white-200 rounded-lg text-brand-navy dark:text-white dark:bg-slate-700 dark:border-slate-600 outline-none focus:border-brand-orange focus:bg-white dark:focus:bg-slate-700 appearance-none cursor-pointer font-bold">
+                            <select id="quantity-select" name="quantity" class="w-full px-4 py-3 bg-white border border-slate-200 rounded-lg text-brand-navy dark:text-white dark:bg-slate-700 dark:border-slate-600 outline-none focus:border-brand-orange focus:bg-white dark:focus:bg-slate-700 appearance-none cursor-pointer font-bold">
                                 <option value="" disabled selected>Select Quantity...</option>
                                 <option value="1 Seat">Just One</option>
                                 <option value="2-3 Seats">Two - Three</option>
@@ -127,7 +127,7 @@
                         </div>
 
                         <div id="time-row" class="hidden space-y-1">
-                            <label for="preferred-time" class="text-xs font-bold text-slate-500 uppercase tracking-wide ml-1">Preferred Time (EST)</label>
+                            <label for="preferred-time" class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wide ml-1">Preferred Time (EST)</label>
                             <select id="preferred-time" name="preferred_time" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 dark:bg-slate-700 dark:border-slate-600 dark:text-white rounded-lg text-slate-800 outline-none focus:border-brand-orange focus:ring-1 focus:ring-brand-orange focus:bg-white transition-all text-sm appearance-none cursor-pointer">
                                 <option value="" disabled selected>Select a time...</option>
                             </select>
@@ -135,7 +135,7 @@
                         </div>
 
                         <div class="space-y-1">
-                            <label for="contact-message" class="text-xs font-bold text-slate-500 uppercase tracking-wide ml-1">What should we build?</label>
+                            <label for="contact-message" class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wide ml-1">What should we build?</label>
                             <textarea id="contact-message" name="message" rows="5" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 dark:bg-slate-700 dark:border-slate-600 dark:text-white dark:placeholder-slate-400 rounded-lg text-slate-800 outline-none focus:border-brand-orange focus:ring-1 focus:ring-brand-orange focus:bg-white transition-all placeholder-slate-400 resize-none" placeholder="Tell us about your markets, caller volume, CRM, reporting needs, or anything custom you want included."></textarea>
                         </div>
 
@@ -164,7 +164,7 @@
                         <img src="./png/logo.webp" alt="" aria-hidden="true" class="site-brand-logo site-brand-logo-sm">
                         <span class="font-bold text-xl text-white">VoloLeads</span>
                     </div>
-                    <p class="text-xs text-slate-500">High-velocity virtual assistants for real estate wholesalers. We hunt, you close.</p>
+                    <p class="text-xs text-slate-500 dark:text-slate-400">High-velocity virtual assistants for real estate wholesalers. We hunt, you close.</p>
                 </div>
 
                 <div>

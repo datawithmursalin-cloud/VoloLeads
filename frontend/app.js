@@ -2,7 +2,7 @@
    VoloLeads Application Logic
    ============================================ */
 
-document.addEventListener('DOMContentLoaded', () => {
+function initializeVoloLeadsPage() {
     initPageLoadAnimation();
     initMobileMenu();
     renderUniversalFooter();
@@ -82,7 +82,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
         a.addEventListener('error', () => handleAudioError(a));
     });
-});
+}
+
+window.initializeVoloLeadsPage = initializeVoloLeadsPage;
+
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initializeVoloLeadsPage, { once: true });
+} else if (!window.__VOLOLEADS_MANAGED_BY_NEXT__) {
+    initializeVoloLeadsPage();
+}
 
 function ensureAudioSource(audio) {
     if (!audio || audio.src) return;
@@ -121,6 +129,10 @@ function initDarkMode() {
     let savedTheme = null;
     try {
         savedTheme = localStorage.getItem('dark-mode');
+        if (savedTheme === null && localStorage.getItem('darkMode') === 'true') {
+            savedTheme = 'true';
+            localStorage.setItem('dark-mode', 'true');
+        }
     } catch (error) {
         console.warn('Dark mode preference unavailable', error);
     }
@@ -142,6 +154,13 @@ function initDarkMode() {
 
     const applyTheme = (isDark, persist = false) => {
         html.classList.toggle('dark', isDark);
+        html.style.colorScheme = isDark ? 'dark' : 'light';
+
+        const themeColorMeta = document.querySelector('meta[name="theme-color"]');
+        if (themeColorMeta) {
+            themeColorMeta.setAttribute('content', isDark ? '#020617' : '#f8fafc');
+        }
+
         const darkModeIcon = document.getElementById('dark-mode-icon');
         const mobileDarkModeIcon = document.getElementById('mobile-dark-mode-icon');
 
