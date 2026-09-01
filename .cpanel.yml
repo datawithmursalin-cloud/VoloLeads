@@ -4,5 +4,3 @@ deployment:
     - export FRONTEND_APP_PATH=/home/vololead/vololeads/frontend/
     - /bin/mkdir -p $FRONTEND_APP_PATH
     - /bin/cp -R frontend/. $FRONTEND_APP_PATH
-    - export DEPLOYPATH=/home/vololead/public_html/
-    - /bin/cp -R frontend/. $DEPLOYPATH
