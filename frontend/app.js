@@ -2479,14 +2479,20 @@ function initPlanRecommender() {
     });
 }
 
+const initializedTrustpilotCarousels = new WeakSet();
+
 function initTrustpilotCarousel() {
     const carousel = document.querySelector('[data-trustpilot-carousel]');
-    if (!carousel) return;
+    if (!carousel || initializedTrustpilotCarousels.has(carousel)) return;
 
     const viewport = carousel.querySelector('.trustpilot-carousel-viewport');
     const track = carousel.querySelector('.trustpilot-carousel-track');
+    if (!viewport || !track) return;
+
     const slides = [...track.querySelectorAll('[data-review-slide]')];
-    if (!viewport || !track || slides.length < 2) return;
+    if (slides.length < 2) return;
+
+    initializedTrustpilotCarousels.add(carousel);
 
     // Keep the requested loop order: Rodrigo → Kristian → Keenan → Arya.
     const orderedSlides = [slides[3], slides[0], slides[1], slides[2]].filter(Boolean);
@@ -2507,33 +2513,124 @@ function initTrustpilotCarousel() {
     }));
 
     const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const frameDelay = 24;
+    const clock = () => (
+        typeof performance !== 'undefined' && typeof performance.now === 'function'
+            ? performance.now()
+            : Date.now()
+    );
     let segmentWidth = 0;
-    let paused = reducedMotion.matches;
     let dragging = false;
     let dragStartX = 0;
     let dragStartScroll = 0;
     let positioned = false;
+    let autoplayTimer = null;
+    let lastAutoplayAt = 0;
+    let manualPauseUntil = 0;
+    let autoplayWriteUntil = 0;
+    let resizeFrame = null;
+
+    const clearAutoplayTimer = () => {
+        if (autoplayTimer === null) return;
+        window.clearTimeout(autoplayTimer);
+        autoplayTimer = null;
+    };
+
+    const wrapScroll = (includeLeftEdge = true) => {
+        if (!segmentWidth) return;
+        const position = viewport.scrollLeft;
+        const shouldWrap = position >= segmentWidth * 2 || (includeLeftEdge && position <= 0);
+        if (!shouldWrap) return;
+
+        const offset = ((position % segmentWidth) + segmentWidth) % segmentWidth;
+        viewport.scrollLeft = segmentWidth + offset;
+    };
 
     const measureSegment = () => {
         const middleCopy = track.children[orderedSlides.length];
-        segmentWidth = middleCopy?.offsetLeft || (track.scrollWidth / 3);
-        if (segmentWidth > 0 && !positioned) {
+        const measuredWidth = middleCopy?.offsetLeft || (track.scrollWidth / 3);
+        if (!Number.isFinite(measuredWidth) || measuredWidth <= 0) {
+            segmentWidth = 0;
+            return false;
+        }
+
+        const previousWidth = segmentWidth;
+        segmentWidth = measuredWidth;
+
+        if (!positioned || !previousWidth) {
             // Show real content immediately on narrow screens. Desktop starts
             // in the middle copy; mobile begins at the first card so Safari
             // never paints an apparently empty rail during initial layout.
             viewport.scrollLeft = window.matchMedia('(max-width: 640px)').matches ? 0 : segmentWidth;
             positioned = true;
+        } else if (Math.abs(previousWidth - measuredWidth) > 0.5) {
+            const copyIndex = Math.max(0, Math.min(1, Math.floor(viewport.scrollLeft / previousWidth)));
+            const relativePosition = Math.min(1, Math.max(0, (viewport.scrollLeft - (copyIndex * previousWidth)) / previousWidth));
+            viewport.scrollLeft = (copyIndex + relativePosition) * measuredWidth;
+            wrapScroll(false);
         }
+
+        return true;
     };
-    const wrapScroll = (includeLeftEdge = true) => {
-        if (!segmentWidth) return;
-        if (viewport.scrollLeft >= segmentWidth * 2) viewport.scrollLeft -= segmentWidth;
-        if (includeLeftEdge && viewport.scrollLeft <= 0) viewport.scrollLeft += segmentWidth;
+
+    const canAutoplay = () => (
+        !document.hidden && !dragging && !reducedMotion.matches && clock() >= manualPauseUntil
+    );
+
+    const runAutoplay = () => {
+        autoplayTimer = null;
+        if (!canAutoplay()) {
+            if (!document.hidden && !dragging && !reducedMotion.matches) scheduleAutoplay();
+            return;
+        }
+
+        const now = clock();
+        const elapsed = lastAutoplayAt ? Math.max(frameDelay, now - lastAutoplayAt) : frameDelay;
+        lastAutoplayAt = now;
+        let nextDelay = frameDelay;
+
+        try {
+            if (!measureSegment()) {
+                nextDelay = 120;
+            } else {
+                autoplayWriteUntil = now + 100;
+                wrapScroll(false);
+                viewport.scrollLeft += elapsed / frameDelay;
+            }
+        } catch (error) {
+            nextDelay = 120;
+            console.warn('Trustpilot carousel recovered from an autoplay error', error);
+        }
+
+        if (canAutoplay()) scheduleAutoplay(nextDelay);
+    };
+
+    function scheduleAutoplay(delay = frameDelay) {
+        clearAutoplayTimer();
+        if (document.hidden || dragging || reducedMotion.matches) return;
+
+        const wait = Math.max(delay, manualPauseUntil - clock());
+        autoplayTimer = window.setTimeout(runAutoplay, wait);
+    }
+
+    const pauseForInteraction = (duration = 220) => {
+        const now = clock();
+        manualPauseUntil = Math.max(manualPauseUntil, now + duration);
+        lastAutoplayAt = now;
+        scheduleAutoplay();
+    };
+
+    const scheduleMeasure = () => {
+        if (resizeFrame !== null) window.cancelAnimationFrame(resizeFrame);
+        resizeFrame = window.requestAnimationFrame(() => {
+            resizeFrame = null;
+            measureSegment();
+        });
     };
 
     viewport.addEventListener('pointerdown', event => {
         dragging = true;
-        paused = true;
+        clearAutoplayTimer();
         dragStartX = event.clientX;
         dragStartScroll = viewport.scrollLeft;
         viewport.setPointerCapture?.(event.pointerId);
@@ -2547,29 +2644,97 @@ function initTrustpilotCarousel() {
     const stopDragging = event => {
         if (!dragging) return;
         dragging = false;
-        viewport.releasePointerCapture?.(event.pointerId);
+        try {
+            viewport.releasePointerCapture?.(event.pointerId);
+        } catch (error) {
+            // The browser may release the pointer before this event arrives.
+        }
         viewport.classList.remove('is-dragging');
-        paused = reducedMotion.matches;
+        lastAutoplayAt = clock();
+        pauseForInteraction();
     };
     viewport.addEventListener('pointerup', stopDragging);
     viewport.addEventListener('pointercancel', stopDragging);
-    reducedMotion.addEventListener?.('change', event => { paused = event.matches; });
+    viewport.addEventListener('lostpointercapture', stopDragging);
+    window.addEventListener('pointerup', stopDragging, { passive: true });
+    window.addEventListener('pointercancel', stopDragging, { passive: true });
+    window.addEventListener('blur', stopDragging);
+    viewport.addEventListener('scroll', () => {
+        wrapScroll(true);
+        if (!dragging && clock() > autoplayWriteUntil) pauseForInteraction();
+    }, { passive: true });
+    viewport.addEventListener('scrollend', () => {
+        const now = clock();
+        if (now <= autoplayWriteUntil) return;
+        if (now < manualPauseUntil) {
+            scheduleAutoplay();
+            return;
+        }
+        manualPauseUntil = 0;
+        lastAutoplayAt = now;
+        scheduleAutoplay();
+    });
     viewport.addEventListener('keydown', event => {
         if (event.key !== 'ArrowLeft' && event.key !== 'ArrowRight') return;
         event.preventDefault();
-        viewport.scrollBy({ left: event.key === 'ArrowRight' ? 184 : -184, behavior: 'smooth' });
+        pauseForInteraction(700);
+        const scrollAmount = event.key === 'ArrowRight' ? 184 : -184;
+        if (typeof viewport.scrollBy === 'function') {
+            viewport.scrollBy({
+                left: scrollAmount,
+                behavior: reducedMotion.matches ? 'auto' : 'smooth'
+            });
+        } else {
+            viewport.scrollLeft += scrollAmount;
+        }
     });
-    window.addEventListener('resize', measureSegment);
+
+    const handleVisibilityChange = () => {
+        if (document.hidden) {
+            clearAutoplayTimer();
+            dragging = false;
+            viewport.classList.remove('is-dragging');
+            if (resizeFrame !== null) window.cancelAnimationFrame(resizeFrame);
+            resizeFrame = null;
+            return;
+        }
+
+        if (resizeFrame !== null) window.cancelAnimationFrame(resizeFrame);
+        resizeFrame = window.requestAnimationFrame(() => {
+            resizeFrame = null;
+            measureSegment();
+            wrapScroll(false);
+            manualPauseUntil = 0;
+            lastAutoplayAt = clock();
+            scheduleAutoplay();
+        });
+    };
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+
+    const handleReducedMotionChange = event => {
+        if (event.matches) {
+            clearAutoplayTimer();
+            return;
+        }
+        lastAutoplayAt = clock();
+        scheduleAutoplay();
+    };
+    if (typeof reducedMotion.addEventListener === 'function') {
+        reducedMotion.addEventListener('change', handleReducedMotionChange);
+    } else {
+        reducedMotion.addListener?.(handleReducedMotionChange);
+    }
+
+    window.addEventListener('resize', scheduleMeasure, { passive: true });
+    if (typeof ResizeObserver === 'function') {
+        const resizeObserver = new ResizeObserver(scheduleMeasure);
+        resizeObserver.observe(viewport);
+        resizeObserver.observe(track);
+    }
+
     measureSegment();
-    // Safari can report zero track width during the first DOMContentLoaded
-    // frame; measure again after layout so the middle copy is always visible.
     window.requestAnimationFrame(measureSegment);
-    window.setTimeout(measureSegment, 120);
-    window.setInterval(() => {
-        if (paused || dragging || !segmentWidth) return;
-        wrapScroll(false);
-        viewport.scrollLeft += 1;
-    }, 24);
+    scheduleAutoplay();
 }
 
 function initDeliverablePreviews() {
