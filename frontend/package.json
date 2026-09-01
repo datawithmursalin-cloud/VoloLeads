@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build --webpack",
-    "postinstall": "node scripts/build-next.js",
+    "postinstall": "node -e \"require(require('path').join(process.env.INIT_CWD, 'scripts', 'build-next.js'))\"",
     "start": "next start",
     "start:legacy": "node server.js"
   },

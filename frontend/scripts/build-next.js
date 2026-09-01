@@ -1,7 +1,7 @@
 const { spawnSync } = require('node:child_process');
 const path = require('node:path');
 
-const projectRoot = path.resolve(__dirname, '..');
+const projectRoot = process.env.INIT_CWD || path.resolve(__dirname, '..');
 process.chdir(projectRoot);
 
 const nextExecutable = process.platform === 'win32' ? 'next.cmd' : 'next';
