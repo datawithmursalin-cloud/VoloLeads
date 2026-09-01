@@ -459,7 +459,7 @@ function initWhatsAppWidget() {
             <div class="whatsapp-support-body">
                 <p class="whatsapp-response-note"><span aria-hidden="true"></span> We typically reply within a few minutes.</p>
                 <div class="whatsapp-support-routes">
-                    <a class="whatsapp-support-route" href="https://wa.me/${phoneNumber}?text=${salesMessage}" target="_blank" rel="noopener noreferrer">
+                    <a class="whatsapp-support-route" href="https://wa.me/${phoneNumber}?text=${salesMessage}">
                         <span class="whatsapp-route-avatar whatsapp-route-avatar--brand"><img src="./png/logo.webp" alt=""></span>
                         <span class="whatsapp-route-copy">
                             <strong>Sales &amp; Strategy</strong>
@@ -468,7 +468,7 @@ function initWhatsAppWidget() {
                         </span>
                         <span class="whatsapp-route-action" aria-hidden="true"><i class="fa-brands fa-whatsapp"></i></span>
                     </a>
-                    <a class="whatsapp-support-route" href="https://wa.me/${phoneNumber}?text=${supportMessage}" target="_blank" rel="noopener noreferrer">
+                    <a class="whatsapp-support-route" href="https://wa.me/${phoneNumber}?text=${supportMessage}">
                         <span class="whatsapp-route-avatar whatsapp-route-avatar--support" aria-hidden="true"><i class="fa-solid fa-headset"></i></span>
                         <span class="whatsapp-route-copy">
                             <strong>Client Support</strong>

@@ -6066,6 +6066,7 @@ html:not(.dark) #advisor-see-plan:hover {
     cursor: pointer;
     font: inherit;
     isolation: isolate;
+    overflow: hidden;
     transition: transform .28s cubic-bezier(.22, 1, .36, 1), box-shadow .28s ease, background-color .28s ease;
 }
 
@@ -6076,6 +6077,7 @@ html:not(.dark) #advisor-see-plan:hover {
     z-index: -1;
     border-radius: inherit;
     background: linear-gradient(110deg, transparent 18%, rgba(255, 255, 255, .1), transparent 72%);
+    pointer-events: none;
     transform: translateX(-100%);
     transition: transform .55s ease;
 }
