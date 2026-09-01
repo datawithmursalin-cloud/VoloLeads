@@ -3938,8 +3938,8 @@ html.dark .theme-switch:hover { background: rgba(124, 45, 18, .32); }
 /* Wider, shorter, equal-height plan and testimonial cards */
 @media (min-width: 769px) {
     #plans .plans-carousel-shell {
-        padding-left: 2rem;
-        padding-right: 2rem;
+        padding-left: clamp(4.75rem, 7vw, 5.75rem);
+        padding-right: clamp(4.75rem, 7vw, 5.75rem);
     }
 
     #plans .plans-pricing-grid {
@@ -3972,6 +3972,14 @@ html.dark .theme-switch:hover { background: rgba(124, 45, 18, .32); }
     #plans .plan-feature-list {
         gap: .35rem !important;
         margin-bottom: 1rem !important;
+    }
+
+    #plans .pricing-nav-prev {
+        left: clamp(0rem, 1.25vw, 1.25rem);
+    }
+
+    #plans .pricing-nav-next {
+        right: clamp(0rem, 1.25vw, 1.25rem);
     }
 }
 
