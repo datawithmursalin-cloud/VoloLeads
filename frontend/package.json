@@ -4,8 +4,8 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
-    "postinstall": "next build",
+    "build": "next build --webpack",
+    "postinstall": "next build --webpack",
     "start": "next start",
     "start:legacy": "node server.js"
   },
