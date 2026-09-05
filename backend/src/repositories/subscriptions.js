@@ -1,4 +1,16 @@
 const { query } = require('../config/db');
+const { normalizePlanCode } = require('../config/billing');
+
+function canonicalizePlanCode(planCode) {
+  if (planCode === 'unknown_plan') return planCode;
+
+  const normalized = normalizePlanCode(planCode);
+  if (!normalized) {
+    throw new Error(`Invalid subscription plan code: ${planCode}`);
+  }
+
+  return normalized;
+}
 
 function mapSubscription(row) {
   if (!row) return null;
@@ -9,7 +21,7 @@ function mapSubscription(row) {
     stripeCustomerId: row.stripe_customer_id,
     stripeSubscriptionId: row.stripe_subscription_id,
     stripeCheckoutSessionId: row.stripe_checkout_session_id,
-    planCode: row.plan_code,
+    planCode: normalizePlanCode(row.plan_code) || row.plan_code,
     status: row.status,
     cancelAtPeriodEnd: row.cancel_at_period_end,
     currentPeriodStart: row.current_period_start,
@@ -119,8 +131,9 @@ async function upsertByCheckoutSessionId(data) {
        current_period_end,
        service_access_ends_at,
        canceled_at,
+       metadata,
        updated_at
-     ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, NOW())
+     ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12::jsonb, NOW())
      ON CONFLICT (stripe_checkout_session_id)
      DO UPDATE SET
        email = EXCLUDED.email,
@@ -133,6 +146,7 @@ async function upsertByCheckoutSessionId(data) {
        current_period_end = EXCLUDED.current_period_end,
        service_access_ends_at = EXCLUDED.service_access_ends_at,
        canceled_at = EXCLUDED.canceled_at,
+       metadata = COALESCE(subscriptions.metadata, '{}'::jsonb) || EXCLUDED.metadata,
        updated_at = NOW()
      RETURNING *`,
     [
@@ -140,13 +154,14 @@ async function upsertByCheckoutSessionId(data) {
       data.stripeCustomerId,
       data.stripeSubscriptionId,
       data.stripeCheckoutSessionId,
-      data.planCode,
+      canonicalizePlanCode(data.planCode),
       data.status,
       data.cancelAtPeriodEnd || false,
       data.currentPeriodStart || null,
       data.currentPeriodEnd || null,
       data.serviceAccessEndsAt || null,
-      data.canceledAt || null
+      data.canceledAt || null,
+      JSON.stringify(data.metadata || {})
     ]
   );
 
@@ -167,12 +182,16 @@ async function upsertBySubscriptionId(data) {
        current_period_end,
        service_access_ends_at,
        canceled_at,
+       metadata,
        updated_at
-     ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, NOW())
+     ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12::jsonb, NOW())
      ON CONFLICT (stripe_subscription_id)
      DO UPDATE SET
-       email = COALESCE(EXCLUDED.email, subscriptions.email),
-       stripe_customer_id = EXCLUDED.stripe_customer_id,
+       email = CASE
+         WHEN EXCLUDED.email = 'unknown-subscription-email@local.invalid' THEN subscriptions.email
+         ELSE EXCLUDED.email
+       END,
+       stripe_customer_id = COALESCE(EXCLUDED.stripe_customer_id, subscriptions.stripe_customer_id),
        stripe_checkout_session_id = COALESCE(EXCLUDED.stripe_checkout_session_id, subscriptions.stripe_checkout_session_id),
        plan_code = COALESCE(EXCLUDED.plan_code, subscriptions.plan_code),
        status = EXCLUDED.status,
@@ -181,6 +200,7 @@ async function upsertBySubscriptionId(data) {
        current_period_end = EXCLUDED.current_period_end,
        service_access_ends_at = EXCLUDED.service_access_ends_at,
        canceled_at = EXCLUDED.canceled_at,
+       metadata = COALESCE(subscriptions.metadata, '{}'::jsonb) || EXCLUDED.metadata,
        updated_at = NOW()
      RETURNING *`,
     [
@@ -188,13 +208,14 @@ async function upsertBySubscriptionId(data) {
       data.stripeCustomerId,
       data.stripeSubscriptionId,
       data.stripeCheckoutSessionId || null,
-      data.planCode,
+      canonicalizePlanCode(data.planCode),
       data.status,
       data.cancelAtPeriodEnd || false,
       data.currentPeriodStart || null,
       data.currentPeriodEnd || null,
       data.serviceAccessEndsAt || null,
-      data.canceledAt || null
+      data.canceledAt || null,
+      JSON.stringify(data.metadata || {})
     ]
   );
 
@@ -216,13 +237,21 @@ async function updateBySubscriptionId(stripeSubscriptionId, updates) {
     planCode: 'plan_code',
     reminderWeek3SentAt: 'reminder_week3_sent_at',
     reminderDay3SentAt: 'reminder_day3_sent_at',
-    reminderDay1SentAt: 'reminder_day1_sent_at'
+    reminderDay1SentAt: 'reminder_day1_sent_at',
+    metadata: 'metadata'
   };
 
   Object.entries(mapping).forEach(([key, column]) => {
     if (Object.prototype.hasOwnProperty.call(updates, key)) {
-      values.push(updates[key]);
-      fields.push(`${column} = $${values.length}`);
+      const value = key === 'planCode'
+        ? canonicalizePlanCode(updates[key])
+        : key === 'metadata'
+          ? JSON.stringify(updates[key] || {})
+          : updates[key];
+      values.push(value);
+      fields.push(key === 'metadata'
+        ? `${column} = COALESCE(${column}, '{}'::jsonb) || $${values.length}::jsonb`
+        : `${column} = $${values.length}`);
     }
   });
 

@@ -50,6 +50,11 @@ function subscriptionRowForSheet(row) {
     currentPeriodEnd: row.currentPeriodEnd || '',
     serviceAccessEndsAt: row.serviceAccessEndsAt || '',
     canceledAt: row.canceledAt || '',
+    checkoutAmountTotalCents: row.metadata.checkoutAmountTotalCents ?? '',
+    currency: row.metadata.currency || '',
+    discountAmountCents: row.metadata.discountAmountCents ?? '',
+    promoCode: row.metadata.promoCode || '',
+    setupFeeIncluded: row.metadata.setupFeeIncluded ?? '',
     createdAt: row.createdAt,
     updatedAt: row.updatedAt
   };

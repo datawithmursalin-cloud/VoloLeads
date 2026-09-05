@@ -839,7 +839,11 @@ textarea:focus {
    ============================================ */
 html {
     scroll-behavior: smooth;
-    color-scheme: light dark;
+    color-scheme: light;
+}
+
+html.dark {
+    color-scheme: dark;
 }
 
 a:focus-visible,
@@ -3421,8 +3425,8 @@ html.dark body > main.utility-page-main {
 }
 
 html.dark #plans .plan-availability-badge {
-    background: #aaa0aa;
-    color: #8b3038;
+    background: #431407;
+    color: #fdba74;
 }
 
 html.dark #plans .plan-availability p {
@@ -3629,6 +3633,7 @@ html.dark #plans .pricing-nav-btn {
 .response-note i { color:#f97316; }
 html.dark .integration-categories > div,html.dark .contact-next-steps { border-color:#334155; background:#111c2e; }
 html.dark .integration-categories p,html.dark .contact-next-steps h4,html.dark .contact-next-steps strong { color:#f8fafc; }
+html.dark .contact-next-steps small,html.dark .response-note { color:#94a3b8; }
 
 #plans .cow-logo-link { padding:0 !important; }
 #plans .cow-logo-frame { border:0 !important; }
@@ -3862,7 +3867,8 @@ html.dark .diy-cost-row td strong { color: #f8fafc; }
 }
 
 /* Theme switch, centered DIY heading, and compact testimonials */
-.theme-switch {
+.theme-switch,
+#dark-mode-toggle {
     width: 2.5rem;
     height: 2.5rem;
     display: inline-grid;
@@ -3873,22 +3879,26 @@ html.dark .diy-cost-row td strong { color: #f8fafc; }
     background: rgba(241, 245, 249, .82);
 }
 
-.theme-switch:hover {
+.theme-switch:hover,
+#dark-mode-toggle:hover {
     border-color: rgba(249, 115, 22, .32);
     background: #fff7ed;
 }
 
-.theme-switch:focus-visible {
+.theme-switch:focus-visible,
+#dark-mode-toggle:focus-visible {
     outline: 3px solid rgba(249, 115, 22, .28);
     outline-offset: 2px;
 }
 
-html.dark .theme-switch {
+html.dark .theme-switch,
+html.dark #dark-mode-toggle {
     border-color: rgba(71, 85, 105, .75);
     background: rgba(30, 41, 59, .9);
 }
 
-html.dark .theme-switch:hover { background: rgba(124, 45, 18, .32); }
+html.dark .theme-switch:hover,
+html.dark #dark-mode-toggle:hover { background: rgba(124, 45, 18, .32); }
 
 .section-heading-row.diy-comparison-header,
 .section-heading-row.diy-comparison-header p {
@@ -5563,6 +5573,23 @@ html.dark .booking-summary-card > p {
     display: none !important;
 }
 
+#testimonials .testimonials-kicker {
+    border: 1px solid #bfdbfe;
+    background: #dbeafe;
+    color: #1e3a8a;
+}
+
+html.dark #testimonials .testimonials-kicker {
+    border-color: rgba(96, 165, 250, .55);
+    background: rgba(30, 64, 175, .3);
+    color: #dbeafe;
+    box-shadow: 0 0 0 1px rgba(30, 64, 175, .12), 0 8px 22px rgba(2, 6, 23, .18);
+}
+
+html.dark #testimonials .testimonials-kicker .w-2 {
+    background: #fb923c;
+}
+
 #testimonials .trustpilot-carousel {
     width: min(100%, 62rem);
     margin: 0 auto;
@@ -5619,7 +5646,7 @@ html.dark .booking-summary-card > p {
 
 #testimonials .trustpilot-carousel-header a:hover { color: #00a878; }
 
-#testimonials .trustpilot-carousel-viewport { overflow-x: auto; overflow-y: hidden; margin-top: 1.5rem; scrollbar-width: none; cursor: grab; touch-action: pan-y; }
+#testimonials .trustpilot-carousel-viewport { overflow-x: auto; overflow-y: hidden; margin-top: 1.5rem; scrollbar-width: none; cursor: grab; touch-action: pan-y; overscroll-behavior-x: contain; }
 #testimonials .trustpilot-carousel-viewport::-webkit-scrollbar { display: none; }
 #testimonials .trustpilot-carousel-viewport.is-dragging { cursor: grabbing; user-select: none; }
 #testimonials .trustpilot-carousel-track { display: flex; width: max-content; gap: .8rem; align-items: stretch; }
@@ -5634,6 +5661,9 @@ html.dark .booking-summary-card > p {
 #testimonials .trustpilot-review footer { border-top-color: #334155; }
 #testimonials .trustpilot-review footer strong { color: #f8fafc; font-size: .78rem; }
 #testimonials .trustpilot-review footer span { color: #94a3b8; font-size: .68rem; }
+
+html.dark #testimonials .trustpilot-review time,
+html.dark #testimonials .trustpilot-review footer span { color: #cbd5e1; }
 
 html:not(.dark) #testimonials .trustpilot-carousel {
     border-color: #d7dee8;
@@ -5656,6 +5686,8 @@ html:not(.dark) #testimonials .trustpilot-carousel-header a { color: #475569; }
 #testimonials .trustpilot-carousel-dots { display: flex; align-items: center; gap: .45rem; }
 #testimonials .trustpilot-carousel-dots button { width: .48rem; height: .48rem; padding: 0; border: 0; border-radius: 50%; background: #c9c9c9; cursor: pointer; }
 #testimonials .trustpilot-carousel-dots button.is-active { background: #00b67a; transform: scale(1.2); }
+html.dark #testimonials .trustpilot-carousel-arrow { border-color: #40506a; background: #172238; color: #f8fafc; }
+html.dark #testimonials .trustpilot-carousel-dots button { background: #475569; }
 
 @media (min-width: 641px) {
     #testimonials .trustpilot-carousel-dots button:nth-child(n+3) { display: none; }
@@ -6054,6 +6086,7 @@ html:not(.dark) #advisor-see-plan:hover {
     cursor: pointer;
     font: inherit;
     isolation: isolate;
+    overflow: hidden;
     transition: transform .28s cubic-bezier(.22, 1, .36, 1), box-shadow .28s ease, background-color .28s ease;
 }
 
@@ -6064,6 +6097,7 @@ html:not(.dark) #advisor-see-plan:hover {
     z-index: -1;
     border-radius: inherit;
     background: linear-gradient(110deg, transparent 18%, rgba(255, 255, 255, .1), transparent 72%);
+    pointer-events: none;
     transform: translateX(-100%);
     transition: transform .55s ease;
 }

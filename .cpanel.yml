@@ -1,6 +1,7 @@
 ---
 deployment:
   tasks:
-    - export DEPLOYPATH=/home/vololead/public_html/
-    - /bin/cp -R frontend/* $DEPLOYPATH
-    - /bin/cp frontend/.htaccess $DEPLOYPATH
+    - export FRONTEND_APP_PATH=/home/vololead/vololeads/frontend/
+    - /bin/mkdir -p $FRONTEND_APP_PATH
+    - /bin/cp -R frontend/. $FRONTEND_APP_PATH
+    - /bin/cp -f frontend/styles.css /home/vololead/public_html/styles.css

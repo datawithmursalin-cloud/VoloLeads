@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const rateLimit = require('express-rate-limit');
 const { trackVisitorEvent, getVisitorEvents, getVisitorAnalytics, deleteVisitorData } = require('../controllers/visitorController');
-const { authenticate } = require('../middleware/authenticate');
+const requireAdminApiKey = require('../middleware/requireAdminApiKey');
 
 // Rate limiter: 100 events per IP per hour
 const visitorLimiter = rateLimit({
@@ -15,10 +15,10 @@ const visitorLimiter = rateLimit({
 
 router.post('/visitors', visitorLimiter, trackVisitorEvent);
 
-router.get('/visitors', authenticate, getVisitorEvents);
+router.get('/visitors', requireAdminApiKey, getVisitorEvents);
 
-router.get('/analytics', authenticate, getVisitorAnalytics);
+router.get('/analytics', requireAdminApiKey, getVisitorAnalytics);
 
-router.delete('/visitors/:visitorHash', authenticate, deleteVisitorData);
+router.delete('/visitors/:visitorHash', requireAdminApiKey, deleteVisitorData);
 
 module.exports = router;

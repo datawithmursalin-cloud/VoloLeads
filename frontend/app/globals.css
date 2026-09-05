@@ -1,0 +1,14 @@
+@import '../tailwind.css';
+@import '../styles.css';
+
+html {
+  color-scheme: light;
+}
+
+html.dark {
+  color-scheme: dark;
+}
+
+body {
+  margin: 0;
+}

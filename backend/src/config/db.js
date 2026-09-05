@@ -42,6 +42,22 @@ async function initSchema() {
     ALTER TABLE subscriptions ADD COLUMN IF NOT EXISTS onboarding_calendar_event_id TEXT;
     ALTER TABLE subscriptions ADD COLUMN IF NOT EXISTS onboarding_meeting_scheduled_at TIMESTAMPTZ;
 
+    UPDATE subscriptions
+    SET plan_code = 'essential_monthly', updated_at = NOW()
+    WHERE plan_code = 'essential_weekly';
+
+    DO $$
+    BEGIN
+      IF NOT EXISTS (
+        SELECT 1 FROM pg_constraint WHERE conname = 'subscriptions_plan_code_check'
+      ) THEN
+        ALTER TABLE subscriptions
+          ADD CONSTRAINT subscriptions_plan_code_check
+          CHECK (plan_code IN ('essential_monthly', 'premium_monthly', 'custom_plus_monthly', 'unknown_plan'))
+          NOT VALID;
+      END IF;
+    END $$;
+
     CREATE INDEX IF NOT EXISTS subscriptions_email_idx ON subscriptions (email);
     CREATE INDEX IF NOT EXISTS subscriptions_updated_at_idx ON subscriptions (updated_at DESC);
     CREATE INDEX IF NOT EXISTS subscriptions_stripe_customer_id_idx ON subscriptions (stripe_customer_id);

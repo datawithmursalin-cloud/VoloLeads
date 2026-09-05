@@ -11,6 +11,7 @@
     "send:renewal-reminders:test-clock": "node scripts/sendRenewalReminders.js --dry-run --at",
     "backfill:stripe-subscriptions": "node scripts/backfillStripeSubscriptions.js",
     "import:stripe-subscriptions": "node scripts/importStripeSubscriptions.js",
+    "reconcile:stripe-subscriptions": "node scripts/importStripeSubscriptions.js",
     "preview:subscription-emails": "node scripts/previewSubscriptionEmails.js",
     "setup:google-calendar": "node scripts/setupGoogleCalendarAuth.js",
     "test": "jest --detectOpenHandles",

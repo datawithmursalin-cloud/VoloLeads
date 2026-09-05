@@ -1,11 +1,15 @@
 const PLAN_CODES = {
-  ESSENTIAL_WEEKLY: 'essential_weekly',
+  ESSENTIAL_MONTHLY: 'essential_monthly',
   PREMIUM_MONTHLY: 'premium_monthly',
   CUSTOM_PLUS_MONTHLY: 'custom_plus_monthly'
 };
 
+const LEGACY_PLAN_CODES = {
+  ESSENTIAL_WEEKLY: 'essential_weekly'
+};
+
 const PLAN_REQUEST_MAP = {
-  essential: PLAN_CODES.ESSENTIAL_WEEKLY,
+  essential: PLAN_CODES.ESSENTIAL_MONTHLY,
   premium: PLAN_CODES.PREMIUM_MONTHLY,
   custom_plus: PLAN_CODES.CUSTOM_PLUS_MONTHLY
 };
@@ -13,20 +17,22 @@ const PLAN_REQUEST_MAP = {
 const COW_PROMO_EXPIRES_LABEL = 'Jan 1, 2027';
 
 const PLAN_CONFIG = {
-  [PLAN_CODES.ESSENTIAL_WEEKLY]: {
+  [PLAN_CODES.ESSENTIAL_MONTHLY]: {
     requestPlan: 'essential',
     displayName: 'Essential Monthly',
-    recurringPriceEnv: 'STRIPE_PRICE_ESSENTIAL_WEEKLY_RECURRING',
-    setupPriceEnv: 'STRIPE_PRICE_ESSENTIAL_WEEKLY_SETUP',
+    recurringPriceEnv: 'STRIPE_PRICE_ESSENTIAL_MONTHLY_RECURRING',
+    recurringPriceEnvFallback: 'STRIPE_PRICE_ESSENTIAL_WEEKLY_RECURRING',
+    setupPriceEnv: 'STRIPE_PRICE_ESSENTIAL_MONTHLY_SETUP',
+    setupPriceEnvFallback: 'STRIPE_PRICE_ESSENTIAL_WEEKLY_SETUP',
     graceDaysAfterCancel: 7,
     billingInterval: 'month',
     pricing: {
-      listDisplay: '$500/month',
-      listDisplayAlt: '$6.25/hour, billed monthly',
+      listDisplay: '$680/month',
+      listDisplayAlt: '$8.50/hour, billed monthly',
       setupDisplay: '1 week of cost is used as a one-time setup fee at checkout',
       promoCode: 'COW2026E',
-      promoDiscountCents: 2000,
-      promoDisplay: '$480/month',
+      promoDiscountCents: 5000,
+      promoDisplay: '$630/month',
       promoExpiresLabel: COW_PROMO_EXPIRES_LABEL
     }
   },
@@ -64,8 +70,16 @@ function getPlanCode(requestPlan) {
   return PLAN_REQUEST_MAP[requestPlan] || null;
 }
 
+function normalizePlanCode(planCode) {
+  if (planCode === LEGACY_PLAN_CODES.ESSENTIAL_WEEKLY) {
+    return PLAN_CODES.ESSENTIAL_MONTHLY;
+  }
+
+  return Object.values(PLAN_CODES).includes(planCode) ? planCode : null;
+}
+
 function getPlanConfig(planCode) {
-  return PLAN_CONFIG[planCode] || null;
+  return PLAN_CONFIG[normalizePlanCode(planCode)] || null;
 }
 
 function getPlanPriceIds(planCode) {
@@ -73,8 +87,14 @@ function getPlanPriceIds(planCode) {
   if (!plan) return null;
 
   return {
-    recurring: process.env[plan.recurringPriceEnv] || '',
-    setup: plan.setupPriceEnv ? (process.env[plan.setupPriceEnv] || '') : ''
+    recurring: process.env[plan.recurringPriceEnv]
+      || (plan.recurringPriceEnvFallback ? process.env[plan.recurringPriceEnvFallback] : '')
+      || '',
+    setup: plan.setupPriceEnv
+      ? (process.env[plan.setupPriceEnv]
+        || (plan.setupPriceEnvFallback ? process.env[plan.setupPriceEnvFallback] : '')
+        || '')
+      : ''
   };
 }
 
@@ -99,8 +119,10 @@ function getPromoPricingByCode(promoCode) {
 
 module.exports = {
   PLAN_CODES,
+  LEGACY_PLAN_CODES,
   COW_PROMO_EXPIRES_LABEL,
   getPlanCode,
+  normalizePlanCode,
   getPlanConfig,
   getPlanPriceIds,
   getPlanPricing,

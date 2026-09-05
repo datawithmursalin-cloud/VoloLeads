@@ -2,7 +2,7 @@
    VoloLeads Application Logic
    ============================================ */
 
-document.addEventListener('DOMContentLoaded', () => {
+function initializeVoloLeadsPage() {
     initPageLoadAnimation();
     initMobileMenu();
     renderUniversalFooter();
@@ -82,7 +82,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
         a.addEventListener('error', () => handleAudioError(a));
     });
-});
+}
+
+window.initializeVoloLeadsPage = initializeVoloLeadsPage;
+
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initializeVoloLeadsPage, { once: true });
+} else if (!window.__VOLOLEADS_MANAGED_BY_NEXT__) {
+    initializeVoloLeadsPage();
+}
 
 function ensureAudioSource(audio) {
     if (!audio || audio.src) return;
@@ -121,6 +129,10 @@ function initDarkMode() {
     let savedTheme = null;
     try {
         savedTheme = localStorage.getItem('dark-mode');
+        if (savedTheme === null && localStorage.getItem('darkMode') === 'true') {
+            savedTheme = 'true';
+            localStorage.setItem('dark-mode', 'true');
+        }
     } catch (error) {
         console.warn('Dark mode preference unavailable', error);
     }
@@ -142,6 +154,13 @@ function initDarkMode() {
 
     const applyTheme = (isDark, persist = false) => {
         html.classList.toggle('dark', isDark);
+        html.style.colorScheme = isDark ? 'dark' : 'light';
+
+        const themeColorMeta = document.querySelector('meta[name="theme-color"]');
+        if (themeColorMeta) {
+            themeColorMeta.setAttribute('content', isDark ? '#020617' : '#f8fafc');
+        }
+
         const darkModeIcon = document.getElementById('dark-mode-icon');
         const mobileDarkModeIcon = document.getElementById('mobile-dark-mode-icon');
 
@@ -440,7 +459,7 @@ function initWhatsAppWidget() {
             <div class="whatsapp-support-body">
                 <p class="whatsapp-response-note"><span aria-hidden="true"></span> We typically reply within a few minutes.</p>
                 <div class="whatsapp-support-routes">
-                    <a class="whatsapp-support-route" href="https://wa.me/${phoneNumber}?text=${salesMessage}" target="_blank" rel="noopener noreferrer">
+                    <a class="whatsapp-support-route" href="https://wa.me/${phoneNumber}?text=${salesMessage}">
                         <span class="whatsapp-route-avatar whatsapp-route-avatar--brand"><img src="./png/logo.webp" alt=""></span>
                         <span class="whatsapp-route-copy">
                             <strong>Sales &amp; Strategy</strong>
@@ -449,7 +468,7 @@ function initWhatsAppWidget() {
                         </span>
                         <span class="whatsapp-route-action" aria-hidden="true"><i class="fa-brands fa-whatsapp"></i></span>
                     </a>
-                    <a class="whatsapp-support-route" href="https://wa.me/${phoneNumber}?text=${supportMessage}" target="_blank" rel="noopener noreferrer">
+                    <a class="whatsapp-support-route" href="https://wa.me/${phoneNumber}?text=${supportMessage}">
                         <span class="whatsapp-route-avatar whatsapp-route-avatar--support" aria-hidden="true"><i class="fa-solid fa-headset"></i></span>
                         <span class="whatsapp-route-copy">
                             <strong>Client Support</strong>
@@ -2494,8 +2513,8 @@ function initTrustpilotCarousel() {
 
     initializedTrustpilotCarousels.add(carousel);
 
-    // Keep the requested loop order: Rodrigo → Kristian → Keenan → Arya.
-    const orderedSlides = [slides[3], slides[0], slides[1], slides[2]].filter(Boolean);
+    // Keep the newest review first, followed by the existing review order.
+    const orderedSlides = [slides[4], slides[3], slides[0], slides[1], slides[2]].filter(Boolean);
     if (typeof track.replaceChildren === 'function') {
         track.replaceChildren(...orderedSlides);
     } else {
@@ -2538,17 +2557,32 @@ function initTrustpilotCarousel() {
 
     const wrapScroll = (includeLeftEdge = true) => {
         if (!segmentWidth) return;
-        const position = viewport.scrollLeft;
-        const shouldWrap = position >= segmentWidth * 2 || (includeLeftEdge && position <= 0);
-        if (!shouldWrap) return;
 
-        const offset = ((position % segmentWidth) + segmentWidth) % segmentWidth;
-        viewport.scrollLeft = segmentWidth + offset;
+        // Keep the viewport inside the middle copy. Moving exactly one copy
+        // preserves the current fractional position and avoids the occasional
+        // modulo/clamping stall at either edge of the scroll container.
+        let position = viewport.scrollLeft;
+        const rightEdge = segmentWidth * 2;
+
+        if (position >= rightEdge) {
+            position -= segmentWidth;
+        } else if (includeLeftEdge && position <= 0) {
+            position += segmentWidth;
+        } else {
+            return;
+        }
+
+        viewport.scrollLeft = position;
     };
 
     const measureSegment = () => {
+        const firstCopy = track.children[0];
         const middleCopy = track.children[orderedSlides.length];
-        const measuredWidth = middleCopy?.offsetLeft || (track.scrollWidth / 3);
+        const firstRect = firstCopy?.getBoundingClientRect();
+        const middleRect = middleCopy?.getBoundingClientRect();
+        const measuredWidth = firstRect && middleRect
+            ? middleRect.left - firstRect.left
+            : (track.scrollWidth / 3);
         if (!Number.isFinite(measuredWidth) || measuredWidth <= 0) {
             segmentWidth = 0;
             return false;

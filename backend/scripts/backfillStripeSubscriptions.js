@@ -3,6 +3,10 @@ require('dotenv').config();
 const connectDB = require('../src/config/db');
 const db = require('../src/config/db');
 const getStripeClient = require('../src/config/stripe');
+const {
+  resolveStripePlanCode,
+  computeServiceAccessEnd
+} = require('../src/controllers/billingController');
 const SubscriptionStore = require('../src/repositories/subscriptions');
 
 async function getSubscriptionsNeedingBackfill() {
@@ -34,18 +38,31 @@ async function getSubscriptionsNeedingBackfill() {
       }
     }
 
+    const planCode = resolveStripePlanCode(subscription) || 'unknown_plan';
+    const currentPeriodEnd = subscription.current_period_end
+      ? new Date(subscription.current_period_end * 1000)
+      : null;
+
     await SubscriptionStore.upsertBySubscriptionId({
       email: email || 'unknown-subscription-email@local.invalid',
       stripeCustomerId: subscription.customer,
       stripeSubscriptionId: subscription.id,
       stripeCheckoutSessionId: null,
-      planCode: (subscription.metadata && subscription.metadata.planCode) || 'unknown_plan',
+      planCode,
       status: subscription.status,
       cancelAtPeriodEnd: Boolean(subscription.cancel_at_period_end),
       currentPeriodStart: subscription.current_period_start ? new Date(subscription.current_period_start * 1000) : null,
-      currentPeriodEnd: subscription.current_period_end ? new Date(subscription.current_period_end * 1000) : null,
-      serviceAccessEndsAt: subscription.current_period_end ? new Date(subscription.current_period_end * 1000) : null,
-      canceledAt: subscription.canceled_at ? new Date(subscription.canceled_at * 1000) : null
+      currentPeriodEnd,
+      serviceAccessEndsAt: currentPeriodEnd && (subscription.cancel_at_period_end || subscription.status === 'canceled')
+        ? computeServiceAccessEnd(currentPeriodEnd, planCode)
+        : currentPeriodEnd,
+      canceledAt: subscription.canceled_at ? new Date(subscription.canceled_at * 1000) : null,
+      metadata: {
+        stripePriceIds: subscription.items && Array.isArray(subscription.items.data)
+          ? subscription.items.data.map(item => item.price && item.price.id).filter(Boolean)
+          : [],
+        stripePlanCode: subscription.metadata && subscription.metadata.planCode || null
+      }
     });
 
     summary.push({
