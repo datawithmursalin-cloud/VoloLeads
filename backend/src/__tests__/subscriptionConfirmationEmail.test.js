@@ -9,6 +9,23 @@ const {
 
 describe('subscriptionConfirmationEmail', () => {
   describe('standard checkout email', () => {
+    it('shows the current Essential monthly price', () => {
+      const details = getPlanEmailDetails(PLAN_CODES.ESSENTIAL_MONTHLY);
+
+      expect(details.price).toBe('$8.50/hour, billed monthly');
+    });
+
+    it('shows the current Essential promotional price', () => {
+      const details = getPlanEmailDetails(PLAN_CODES.ESSENTIAL_MONTHLY, {
+        hasDiscount: true,
+        promoCode: 'COW2026E',
+        discountCents: 5000
+      });
+
+      expect(details.price).toBe('$630/month');
+      expect(details.listPrice).toBe('$680/month');
+    });
+
     it('shows full Growth price without discount markup', () => {
       const html = buildSubscriptionEmailHtml({
         email: 'test@example.com',

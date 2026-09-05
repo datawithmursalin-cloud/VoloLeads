@@ -8,12 +8,12 @@ const email = 'benaaf2000@gmail.com';
 
 const plans = [
   {
-    code: 'essential_weekly',
+    code: 'essential_monthly',
     subject: 'VoloLeads Essential email preview',
     eyebrow: 'Staffing & Training',
     headline: 'Essential is active',
     summary: 'Your dedicated cold calling support plan is now live.',
-    price: '$6/hour, billed monthly',
+    price: '$8.50/hour, billed monthly',
     note: 'Your first checkout also includes the one-week setup fee deposit.',
     bullets: [
       '1 dedicated cold caller focused on your campaign',

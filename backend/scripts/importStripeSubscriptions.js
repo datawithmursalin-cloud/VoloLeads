@@ -3,7 +3,10 @@ require('dotenv').config();
 const connectDB = require('../src/config/db');
 const db = require('../src/config/db');
 const getStripeClient = require('../src/config/stripe');
-const { inferPlanCodeFromStripeSubscription } = require('../src/controllers/billingController');
+const {
+  resolveStripePlanCode,
+  computeServiceAccessEnd
+} = require('../src/controllers/billingController');
 const SubscriptionStore = require('../src/repositories/subscriptions');
 
 async function getKnownSubscriptionIds() {
@@ -17,9 +20,7 @@ async function getKnownSubscriptionIds() {
 }
 
 async function importSubscription(stripe, subscription, knownIds) {
-  if (knownIds.has(subscription.id)) {
-    return { imported: false, reason: 'already_exists', stripeSubscriptionId: subscription.id };
-  }
+  const existed = knownIds.has(subscription.id);
 
   let email = null;
   if (subscription.customer) {
@@ -29,9 +30,7 @@ async function importSubscription(stripe, subscription, knownIds) {
     }
   }
 
-  const planCode = (subscription.metadata && subscription.metadata.planCode)
-    || inferPlanCodeFromStripeSubscription(subscription)
-    || 'unknown_plan';
+  const planCode = resolveStripePlanCode(subscription) || 'unknown_plan';
 
   await SubscriptionStore.upsertBySubscriptionId({
     email: email || 'unknown-subscription-email@local.invalid',
@@ -48,15 +47,24 @@ async function importSubscription(stripe, subscription, knownIds) {
       ? new Date(subscription.current_period_end * 1000)
       : null,
     serviceAccessEndsAt: subscription.current_period_end
-      ? new Date(subscription.current_period_end * 1000)
+      ? (subscription.cancel_at_period_end || subscription.status === 'canceled'
+        ? computeServiceAccessEnd(new Date(subscription.current_period_end * 1000), planCode)
+        : new Date(subscription.current_period_end * 1000))
       : null,
     canceledAt: subscription.canceled_at
       ? new Date(subscription.canceled_at * 1000)
-      : null
+      : null,
+    metadata: {
+      stripePriceIds: subscription.items && Array.isArray(subscription.items.data)
+        ? subscription.items.data.map(item => item.price && item.price.id).filter(Boolean)
+        : [],
+      stripePlanCode: subscription.metadata && subscription.metadata.planCode || null
+    }
   });
 
   return {
-    imported: true,
+    imported: !existed,
+    updated: existed,
     stripeSubscriptionId: subscription.id,
     email,
     planCode,
@@ -68,36 +76,32 @@ async function importSubscription(stripe, subscription, knownIds) {
   await connectDB();
   const stripe = getStripeClient();
   const knownIds = await getKnownSubscriptionIds();
-  const statuses = ['active', 'trialing', 'past_due', 'unpaid'];
   const summary = [];
+  let startingAfter = null;
 
-  for (const status of statuses) {
-    let startingAfter = null;
+  do {
+    const page = await stripe.subscriptions.list({
+      status: 'all',
+      limit: 100,
+      ...(startingAfter ? { starting_after: startingAfter } : {})
+    });
 
-    do {
-      const page = await stripe.subscriptions.list({
-        status,
-        limit: 100,
-        ...(startingAfter ? { starting_after: startingAfter } : {})
-      });
+    for (const subscription of page.data) {
+      summary.push(await importSubscription(stripe, subscription, knownIds));
+      knownIds.add(subscription.id);
+    }
 
-      for (const subscription of page.data) {
-        summary.push(await importSubscription(stripe, subscription, knownIds));
-        knownIds.add(subscription.id);
-      }
-
-      startingAfter = page.has_more ? page.data[page.data.length - 1].id : null;
-    } while (startingAfter);
-  }
+    startingAfter = page.has_more ? page.data[page.data.length - 1].id : null;
+  } while (startingAfter);
 
   const imported = summary.filter(item => item.imported);
-  const skipped = summary.filter(item => !item.imported);
+  const updated = summary.filter(item => item.updated);
 
   console.log(JSON.stringify({
     inspected: summary.length,
     imported: imported.length,
-    skipped: skipped.length,
-    rows: imported
+    updated: updated.length,
+    rows: summary
   }, null, 2));
 
   process.exit(0);

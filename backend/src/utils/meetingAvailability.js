@@ -7,6 +7,7 @@ const {
   rangesOverlap,
   resolveTimezone,
   normalizePreferredDate,
+  validateBookingDate,
   DEFAULT_MEETING_DURATION_MINUTES
 } = require('./meetingSchedule');
 const { getCalendarClient, isGoogleMeetConfigured, getMeetingDurationMinutes, getCalendarId } = require('./googleCalendarClient');
@@ -85,6 +86,11 @@ async function isMeetingSlotAvailable({
   preferredTimezone,
   durationMinutes = getMeetingDurationMinutes()
 }) {
+  const bookingDatePolicy = validateBookingDate({ preferredDate, preferredTimezone });
+  if (!bookingDatePolicy.allowed) {
+    return bookingDatePolicy;
+  }
+
   const meetingWindow = buildMeetingWindow({
     preferredDate,
     preferredTime,
@@ -134,6 +140,17 @@ async function getAvailableMeetingSlots({
   const date = normalizePreferredDate(preferredDate);
   if (!date) {
     return { date: null, slots: [], timezone: resolveTimezone(preferredTimezone) };
+  }
+
+  const bookingDatePolicy = validateBookingDate({ preferredDate: date, preferredTimezone });
+  if (!bookingDatePolicy.allowed) {
+    return {
+      date,
+      slots: [],
+      timezone: resolveTimezone(preferredTimezone),
+      reason: bookingDatePolicy.reason,
+      minimumDate: bookingDatePolicy.minimumDate || null
+    };
   }
 
   const timeZone = resolveTimezone(preferredTimezone);

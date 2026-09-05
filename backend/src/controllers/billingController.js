@@ -1,5 +1,11 @@
 const getStripeClient = require('../config/stripe');
-const { getPlanCode, getPlanConfig, getPlanPriceIds, PLAN_CODES } = require('../config/billing');
+const {
+  getPlanCode,
+  getPlanConfig,
+  getPlanPriceIds,
+  normalizePlanCode,
+  PLAN_CODES
+} = require('../config/billing');
 const {
   getSubscriptionEmailSubject,
   getSubscriptionEmailText,
@@ -41,7 +47,7 @@ function buildCheckoutLineItems(planCode) {
     }
   ];
 
-  if (planCode === PLAN_CODES.ESSENTIAL_WEEKLY) {
+  if (normalizePlanCode(planCode) === PLAN_CODES.ESSENTIAL_MONTHLY) {
     if (!priceIds.setup) {
       throw new Error('Missing setup Stripe price for essential plan');
     }
@@ -154,6 +160,25 @@ function inferPlanCodeFromStripeSubscription(subscription) {
   }
 
   return null;
+}
+
+function resolveStripePlanCode(subscription) {
+  if (!subscription) return null;
+
+  const metadataPlanCode = subscription.metadata && subscription.metadata.planCode;
+  return normalizePlanCode(metadataPlanCode)
+    || inferPlanCodeFromStripeSubscription(subscription)
+    || null;
+}
+
+function getStripePriceIds(subscription) {
+  if (!subscription || !subscription.items || !Array.isArray(subscription.items.data)) {
+    return [];
+  }
+
+  return subscription.items.data
+    .map(item => item && item.price && item.price.id)
+    .filter(Boolean);
 }
 
 function formatDate(dateValue) {
@@ -280,22 +305,23 @@ async function resolveCheckoutSessionEmail(stripe, session) {
 
 function resolveCheckoutSessionPlanCode(session, stripeSubscription) {
   const sessionPlanCode = session.metadata && session.metadata.planCode;
-  if (sessionPlanCode) return sessionPlanCode;
+  const normalizedSessionPlanCode = normalizePlanCode(sessionPlanCode);
+  if (normalizedSessionPlanCode) return normalizedSessionPlanCode;
 
   if (!stripeSubscription) return null;
 
-  return (stripeSubscription.metadata && stripeSubscription.metadata.planCode)
-    || inferPlanCodeFromStripeSubscription(stripeSubscription)
-    || null;
+  return resolveStripePlanCode(stripeSubscription);
 }
 
 async function upsertSubscriptionFromStripe(stripeSubscriptionId, fallbackEmail = null) {
   const stripe = getStripeClient();
   const subscription = await stripe.subscriptions.retrieve(stripeSubscriptionId);
-  const metadata = subscription.metadata || {};
-  const planCode = metadata.planCode || inferPlanCodeFromStripeSubscription(subscription) || null;
+  const planCode = resolveStripePlanCode(subscription);
   const currentPeriodStart = subscription.current_period_start ? new Date(subscription.current_period_start * 1000) : null;
   const currentPeriodEnd = subscription.current_period_end ? new Date(subscription.current_period_end * 1000) : null;
+  const serviceAccessEndsAt = subscription.cancel_at_period_end || subscription.status === 'canceled'
+    ? computeServiceAccessEnd(currentPeriodEnd, planCode)
+    : currentPeriodEnd;
 
   let customerEmail = fallbackEmail || null;
   if (!customerEmail && subscription.customer) {
@@ -315,8 +341,12 @@ async function upsertSubscriptionFromStripe(stripeSubscriptionId, fallbackEmail 
     cancelAtPeriodEnd: Boolean(subscription.cancel_at_period_end),
     currentPeriodStart,
     currentPeriodEnd,
-    serviceAccessEndsAt: currentPeriodEnd,
-    canceledAt: subscription.canceled_at ? new Date(subscription.canceled_at * 1000) : null
+    serviceAccessEndsAt,
+    canceledAt: subscription.canceled_at ? new Date(subscription.canceled_at * 1000) : null,
+    metadata: {
+      stripePriceIds: getStripePriceIds(subscription),
+      stripePlanCode: subscription.metadata && subscription.metadata.planCode || null
+    }
   });
 
   return subscription;
@@ -564,6 +594,13 @@ async function handleStripeWebhook(req, res) {
           ? new Date(stripeSubscription.current_period_end * 1000)
           : null;
 
+        let discountInfo = { hasDiscount: false, promoCode: null, discountCents: 0 };
+        try {
+          discountInfo = await resolveCheckoutDiscount(stripe, session, stripeSubscription);
+        } catch (error) {
+          logger.warn(`Could not resolve checkout discount for ${session.id}: ${error.message}`);
+        }
+
         const record = await SubscriptionStore.upsertBySubscriptionId({
           email,
           stripeCustomerId: session.customer,
@@ -577,15 +614,19 @@ async function handleStripeWebhook(req, res) {
           serviceAccessEndsAt: currentPeriodEnd,
           canceledAt: stripeSubscription && stripeSubscription.canceled_at
             ? new Date(stripeSubscription.canceled_at * 1000)
-            : null
+            : null,
+          metadata: {
+            checkoutAmountTotalCents: Number.isInteger(session.amount_total) ? session.amount_total : null,
+            currency: session.currency || null,
+            discountAmountCents: discountInfo.discountCents || 0,
+            promoCode: discountInfo.promoCode || null,
+            setupFeeIncluded: planCode === PLAN_CODES.ESSENTIAL_MONTHLY,
+            stripePriceIds: getStripePriceIds(stripeSubscription),
+            stripePlanCode: stripeSubscription && stripeSubscription.metadata
+              ? stripeSubscription.metadata.planCode || null
+              : null
+          }
         });
-
-        let discountInfo = { hasDiscount: false, promoCode: null, discountCents: 0 };
-        try {
-          discountInfo = await resolveCheckoutDiscount(stripe, session, stripeSubscription);
-        } catch (error) {
-          logger.warn(`Could not resolve checkout discount for ${session.id}: ${error.message}`);
-        }
 
         const plan = getPlanConfig(planCode);
         const appBaseUrl = getEmailBaseUrl();
@@ -657,12 +698,13 @@ async function handleStripeWebhook(req, res) {
         const invoice = event.data.object;
         const stripeSubscriptionId = getInvoiceSubscriptionId(invoice);
         if (stripeSubscriptionId) {
-          await SubscriptionStore.updateBySubscriptionId(stripeSubscriptionId, { status: 'past_due' });
-
-          const subscription = await getStripeClient().subscriptions.retrieve(stripeSubscriptionId);
+          const customerEmail = invoice.customer_email
+            || (invoice.customer_details && invoice.customer_details.email)
+            || null;
+          const subscription = await upsertSubscriptionFromStripe(stripeSubscriptionId, customerEmail);
           const appBaseUrl = getEmailBaseUrl();
-          const planCode = subscription.metadata && subscription.metadata.planCode;
-          const recipient = invoice.customer_email || null;
+          const planCode = resolveStripePlanCode(subscription);
+          const recipient = customerEmail;
 
           if (recipient) {
             await sendEmail({
@@ -687,7 +729,7 @@ async function handleStripeWebhook(req, res) {
         const customerEmail = eventSubscription.customer_email || null;
         const subscription = await upsertSubscriptionFromStripe(eventSubscription.id, customerEmail);
         const currentPeriodEnd = subscription.current_period_end ? new Date(subscription.current_period_end * 1000) : null;
-        const planCode = subscription.metadata && subscription.metadata.planCode;
+        const planCode = resolveStripePlanCode(subscription);
         const serviceAccessEndsAt = subscription.cancel_at_period_end || event.type === 'customer.subscription.deleted'
           ? computeServiceAccessEnd(currentPeriodEnd, planCode)
           : currentPeriodEnd;
@@ -722,5 +764,7 @@ module.exports = {
   requestManageLink,
   redirectCheckoutSuccess,
   handleStripeWebhook,
-  inferPlanCodeFromStripeSubscription
+  inferPlanCodeFromStripeSubscription,
+  resolveStripePlanCode,
+  computeServiceAccessEnd
 };

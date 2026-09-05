@@ -435,10 +435,14 @@ async function scheduleSubscriberMeeting(req, res) {
     if (!meeting.created) {
       logger.warn(`Subscriber meeting was not created for ${subscription.email}: ${meeting.reason}`);
 
-      if (meeting.reason === 'slot_unavailable' || meeting.reason === 'availability_check_failed') {
+      if (['slot_unavailable', 'availability_check_failed', 'insufficient_notice', 'sunday_unavailable'].includes(meeting.reason)) {
         return res.status(409).json({
           success: false,
-          message: 'That meeting time is no longer available. Please choose another time.'
+          message: meeting.reason === 'insufficient_notice'
+            ? 'Meetings require at least 24 hours notice. Please choose the next available day.'
+            : meeting.reason === 'sunday_unavailable'
+              ? 'Meetings are not available on Sundays.'
+              : 'That meeting time is no longer available. Please choose another time.'
         });
       }
 

@@ -25,10 +25,12 @@ const SHEETS = {
     sheetName: 'Subscriptions',
     endpoint: '/api/export/subscriptions',
     lastIdKey: 'subscriptions_last_id',
+    upsertById: true,
     headers: [
       'id', 'email', 'planCode', 'status', 'stripeCustomerId', 'stripeSubscriptionId',
       'cancelAtPeriodEnd', 'currentPeriodStart', 'currentPeriodEnd',
-      'serviceAccessEndsAt', 'canceledAt', 'createdAt', 'updatedAt'
+      'serviceAccessEndsAt', 'canceledAt', 'checkoutAmountTotalCents', 'currency',
+      'discountAmountCents', 'promoCode', 'setupFeeIncluded', 'createdAt', 'updatedAt'
     ]
   }
 };
@@ -68,13 +70,24 @@ function syncDataset_(config) {
 
   if (!sheet) {
     sheet = spreadsheet.insertSheet(config.sheetName);
-    sheet.appendRow(config.headers);
-  } else if (sheet.getLastRow() === 0) {
-    sheet.appendRow(config.headers);
   }
 
-  let lastId = parseInt(props.getProperty(config.lastIdKey) || '0', 10);
+  sheet.getRange(1, 1, 1, config.headers.length).setValues([config.headers]);
+
+  let lastId = config.upsertById
+    ? 0
+    : parseInt(props.getProperty(config.lastIdKey) || '0', 10);
   let hasMore = true;
+  const rowById = {};
+
+  if (config.upsertById && sheet.getLastRow() > 1) {
+    const existingIds = sheet.getRange(2, 1, sheet.getLastRow() - 1, 1).getValues();
+    existingIds.forEach(function (row, index) {
+      if (row[0] !== '' && row[0] !== null) {
+        rowById[String(row[0])] = index + 2;
+      }
+    });
+  }
 
   while (hasMore) {
     const url = baseUrl.replace(/\/$/, '') + config.endpoint
@@ -119,13 +132,22 @@ function syncDataset_(config) {
       });
     });
 
-    // appendRow avoids getRange row/column count mistakes on incremental sync
     values.forEach(function (rowValues) {
-      sheet.appendRow(rowValues);
+      const idKey = String(rowValues[0]);
+      const existingRow = config.upsertById ? rowById[idKey] : null;
+
+      if (existingRow) {
+        sheet.getRange(existingRow, 1, 1, config.headers.length).setValues([rowValues]);
+      } else {
+        sheet.appendRow(rowValues);
+        if (config.upsertById) rowById[idKey] = sheet.getLastRow();
+      }
     });
 
     lastId = body.data.lastId;
-    props.setProperty(config.lastIdKey, String(lastId));
+    if (!config.upsertById) {
+      props.setProperty(config.lastIdKey, String(lastId));
+    }
     hasMore = body.data.hasMore;
   }
 }

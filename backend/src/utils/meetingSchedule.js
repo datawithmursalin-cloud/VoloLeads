@@ -19,6 +19,7 @@ const MEETING_SLOT_START_HOUR = 9;
 const MEETING_SLOT_END_HOUR = 16;
 const MEETING_SLOT_END_MINUTE = 30;
 const MEETING_SLOT_INTERVAL_MINUTES = 30;
+const MINIMUM_BOOKING_NOTICE_HOURS = 24;
 
 function getZonedParts(utcMs, timeZone) {
   const parts = Object.fromEntries(
@@ -101,6 +102,80 @@ function resolveTimezone(timezone) {
   if (!timezone) return 'America/New_York';
   const normalized = String(timezone).trim().toUpperCase();
   return TIMEZONE_MAP[normalized] || timezone;
+}
+
+function formatDateInTimezone(date, timeZone) {
+  const parts = Object.fromEntries(
+    new Intl.DateTimeFormat('en-US', {
+      timeZone,
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit'
+    })
+      .formatToParts(date)
+      .filter((part) => part.type !== 'literal')
+      .map((part) => [part.type, part.value])
+  );
+
+  return `${parts.year}-${parts.month}-${parts.day}`;
+}
+
+function addCalendarDays(date, days) {
+  const [year, month, day] = date.split('-').map(Number);
+  const result = new Date(Date.UTC(year, month - 1, day + days));
+  return result.toISOString().slice(0, 10);
+}
+
+function isSunday(date) {
+  const normalized = normalizePreferredDate(date);
+  if (!normalized) return false;
+  const [year, month, day] = normalized.split('-').map(Number);
+  return new Date(Date.UTC(year, month - 1, day)).getUTCDay() === 0;
+}
+
+function getMinimumBookingDate({
+  preferredTimezone = 'EST',
+  now = new Date()
+} = {}) {
+  const noticeCutoff = new Date(now.getTime() + (MINIMUM_BOOKING_NOTICE_HOURS * 60 * 60 * 1000));
+  let candidateDate = formatDateInTimezone(noticeCutoff, resolveTimezone(preferredTimezone));
+
+  for (let attempt = 0; attempt < 8; attempt += 1) {
+    if (!isSunday(candidateDate)) {
+      const firstSlot = buildMeetingWindow({
+        preferredDate: candidateDate,
+        preferredTime: `${String(MEETING_SLOT_START_HOUR).padStart(2, '0')}:00`,
+        preferredTimezone
+      });
+      const { start } = meetingWindowToUtcRange(firstSlot);
+
+      if (start >= noticeCutoff) {
+        return candidateDate;
+      }
+    }
+
+    candidateDate = addCalendarDays(candidateDate, 1);
+  }
+
+  return candidateDate;
+}
+
+function validateBookingDate({ preferredDate, preferredTimezone = 'EST', now = new Date() }) {
+  const date = normalizePreferredDate(preferredDate);
+  if (!date) {
+    return { allowed: false, reason: 'invalid_schedule' };
+  }
+
+  if (isSunday(date)) {
+    return { allowed: false, reason: 'sunday_unavailable' };
+  }
+
+  const minimumDate = getMinimumBookingDate({ preferredTimezone, now });
+  if (date < minimumDate) {
+    return { allowed: false, reason: 'insufficient_notice', minimumDate };
+  }
+
+  return { allowed: true, minimumDate };
 }
 
 function normalizePreferredDate(preferredDate) {
@@ -200,6 +275,7 @@ module.exports = {
   MEETING_SLOT_END_HOUR,
   MEETING_SLOT_END_MINUTE,
   MEETING_SLOT_INTERVAL_MINUTES,
+  MINIMUM_BOOKING_NOTICE_HOURS,
   resolveTimezone,
   normalizePreferredDate,
   normalizePreferredTime,
@@ -209,5 +285,8 @@ module.exports = {
   getStandardMeetingSlotTimes,
   meetingWindowToUtcRange,
   rangesOverlap,
-  zonedDateTimeToUtcDate
+  zonedDateTimeToUtcDate,
+  getMinimumBookingDate,
+  isSunday,
+  validateBookingDate
 };

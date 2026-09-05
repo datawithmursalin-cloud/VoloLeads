@@ -1,5 +1,6 @@
 const {
   PLAN_CODES,
+  normalizePlanCode,
   getPlanPricing,
   getPromoPricingByCode
 } = require('../config/billing');
@@ -74,18 +75,19 @@ async function resolveCheckoutDiscount(stripe, session, stripeSubscription) {
 }
 
 function getPlanEmailDetails(planCode, discountInfo = null) {
+  const normalizedPlanCode = normalizePlanCode(planCode);
   const pricing = getPlanPricing(planCode);
   const hasDiscount = Boolean(discountInfo && discountInfo.hasDiscount);
 
-  switch (planCode) {
-    case PLAN_CODES.ESSENTIAL_WEEKLY:
+  switch (normalizedPlanCode) {
+    case PLAN_CODES.ESSENTIAL_MONTHLY:
       return {
         eyebrow: 'Staffing & Training',
         headline: 'Essential is active',
         summary: hasDiscount
           ? 'Your dedicated cold calling support plan is now live with your College of Wholesale partner rate.'
           : 'Your dedicated cold calling support plan is now live.',
-        price: hasDiscount && pricing ? pricing.promoDisplay : '$6/hour, billed monthly',
+        price: hasDiscount && pricing ? pricing.promoDisplay : (pricing && pricing.listDisplayAlt) || '$680/month',
         listPrice: hasDiscount && pricing ? pricing.listDisplay : null,
         promoCode: hasDiscount ? (discountInfo.promoCode || (pricing && pricing.promoCode)) : null,
         note: hasDiscount && pricing
