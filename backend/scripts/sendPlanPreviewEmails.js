@@ -41,7 +41,7 @@ const plans = [
     eyebrow: 'Advanced Scaling',
     headline: 'Scale is active',
     summary: 'Your advanced scaling plan is now in motion.',
-    price: '$2,799/month',
+    price: '$2,999/month',
     note: 'This plan is built for higher-volume operators and includes enterprise-level support.',
     bullets: [
       'Higher calling volume with advanced KPI optimization',

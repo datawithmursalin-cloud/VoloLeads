@@ -125,7 +125,7 @@ function getPlanEmailDetails(planCode, discountInfo = null) {
         summary: hasDiscount
           ? 'Your advanced scaling plan is now in motion with your College of Wholesale partner rate.'
           : 'Your advanced scaling plan is now in motion.',
-        price: hasDiscount && pricing ? pricing.promoDisplay : '$2,799/month',
+        price: hasDiscount && pricing ? pricing.promoDisplay : '$2,999/month',
         listPrice: hasDiscount && pricing ? pricing.listDisplay : null,
         promoCode: hasDiscount ? (discountInfo.promoCode || (pricing && pricing.promoCode)) : null,
         note: hasDiscount && pricing

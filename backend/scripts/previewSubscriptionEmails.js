@@ -46,7 +46,7 @@ const PREVIEWS = [
     filename: 'success-scale-discounted.html',
     planCode: PLAN_CODES.CUSTOM_PLUS_MONTHLY,
     title: 'VoloLeads Scale Email Preview (COW Discount)',
-    discountInfo: { hasDiscount: true, promoCode: 'COW2026S', discountCents: 20000 }
+    discountInfo: { hasDiscount: true, promoCode: 'COW2026S', discountCents: 30000 }
   }
 ];
 
