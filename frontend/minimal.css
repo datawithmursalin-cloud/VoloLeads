@@ -1,0 +1,170 @@
+/* VoloTech-inspired type, adapted to VoloLeads' existing sales pages.
+   Backgrounds, plan contents, and the buying flow remain owned by styles.css. */
+@font-face {
+    font-family: 'Satoshi';
+    src: url('./fonts/satoshi-400.woff2') format('woff2');
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+}
+@font-face {
+    font-family: 'Satoshi';
+    src: url('./fonts/satoshi-500.woff2') format('woff2');
+    font-style: normal;
+    font-weight: 500 600;
+    font-display: swap;
+}
+@font-face {
+    font-family: 'Satoshi';
+    src: url('./fonts/satoshi-700.woff2') format('woff2');
+    font-style: normal;
+    font-weight: 700 900;
+    font-display: swap;
+}
+
+.minimal-type,
+.minimal-type .font-sans {
+    font-family: 'Satoshi', ui-sans-serif, system-ui, sans-serif !important;
+    -webkit-font-smoothing: antialiased;
+}
+.minimal-type :is(button, input, select, textarea) { font-family: inherit; }
+
+/* Scoped overrides deliberately outrank the legacy type effects. */
+.minimal-type :is(h1, h2, h3, h4),
+.minimal-type :is(h1, h2, h3, h4) span {
+    font-weight: 500 !important;
+    letter-spacing: -0.04em;
+    text-shadow: none !important;
+    filter: none !important;
+    text-wrap: balance;
+}
+.minimal-type h1 { line-height: 1.08 !important; }
+.minimal-type :is(h2, h3, h4) { line-height: 1.16; }
+.minimal-type :is(h1, h2, h3) span[class*="bg-gradient"],
+.minimal-type :is(h1, h2, h3)[class*="bg-gradient"],
+.minimal-type .section-heading-row h2 > span,
+.minimal-type .daily-deliverables-card h2 > span,
+.minimal-type .plans-partnership-heading .plans-partnership-name {
+    text-decoration: none !important;
+    animation: none !important;
+}
+.minimal-type p { text-wrap: pretty; }
+.minimal-type nav a { font-weight: 500; }
+.minimal-type :is(.section-kicker, .eyebrow, .stack-eyebrow, .hero-eyebrow) {
+    font-family: ui-monospace, 'Cascadia Code', Consolas, monospace;
+    font-size: 0.7rem;
+    font-weight: 400;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+}
+.minimal-type #home h1 {
+    max-width: 25ch;
+    margin-inline: auto;
+    font-size: clamp(2.2rem, 5.2vw, 4.6rem) !important;
+    line-height: 1.02 !important;
+    letter-spacing: -0.055em;
+}
+.minimal-type #home h1 > span { display: block !important; }
+.minimal-type #home p {
+    max-width: 64ch;
+    font-size: clamp(1rem, 1.6vw, 1.25rem) !important;
+    line-height: 1.6 !important;
+    letter-spacing: 0;
+    text-shadow: none !important;
+}
+.minimal-type .hero-eyebrow { margin-bottom: 1.5rem; }
+.minimal-type .hero-assurance { font-weight: 400; }
+.minimal-type :is(#how-it-works, #insights, #testimonials, #about, #faq-preview, #contact) h2,
+.minimal-type .prefooter-cta h2,
+.minimal-type .daily-deliverables-card h2,
+.minimal-type #plans .section-heading-row h2 {
+    font-size: clamp(1.9rem, 3.7vw, 3rem) !important;
+    line-height: 1.12 !important;
+}
+.minimal-type #plans .plan-title { font-size: 2rem !important; }
+.minimal-type #plans .plans-partnership-heading {
+    font-size: clamp(1.6rem, 3vw, 2.6rem) !important;
+}
+.minimal-type .insight-article { line-height: 1.75; }
+.minimal-type .insight-article .lead { font-weight: 400; }
+.minimal-type .insight-article h3 { margin-top: 2.5rem; }
+.minimal-type .insight-article p { max-width: 65ch; }
+
+/* Picture-led insight cards; preserve the original two-column grid. */
+#insight-guides { scroll-margin-top: 6.5rem; }
+.insight-media {
+    aspect-ratio: 3 / 2;
+    margin-bottom: 1.5rem;
+    overflow: hidden;
+    border: 1px solid #334155;
+    border-radius: 1rem;
+    background: #0f172a;
+}
+.insight-media img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 220ms ease;
+}
+a:hover > .insight-media img,
+a:focus-visible > .insight-media img { transform: scale(1.015); }
+.minimal-type a:focus-visible:has(> .insight-media) {
+    outline: 2px solid #f97316;
+    outline-offset: 6px;
+    border-radius: 1rem;
+}
+
+/* Keep feedback subtle and make content available without entrance effects. */
+.minimal-type .reveal-on-scroll { transition-duration: 400ms; }
+.minimal-type .motion-heading { transition-duration: 400ms; }
+.minimal-type .animate-pulse { animation: none; }
+@media (max-width: 640px) {
+    .minimal-type #home h1 { max-width: 25ch; }
+    .minimal-type #home p { max-width: 33ch; }
+    .minimal-type .hero-assurance { font-size: .72rem; }
+}
+@media (prefers-reduced-motion: reduce) {
+    .minimal-type *, .minimal-type *::before, .minimal-type *::after {
+        animation-duration: .01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: .01ms !important;
+        scroll-behavior: auto !important;
+    }
+    .minimal-type .reveal-on-scroll,
+    .minimal-type .motion-heading { opacity: 1 !important; transform: none !important; }
+}
+
+/* Minimal ambient motion; retain interactive state changes and audio feedback. */
+.minimal-type #home .strategic-grid-bg,
+.minimal-type #plans .plan-availability,
+.minimal-type #plans .plan-availability-badge > span,
+.minimal-type .animate-bounce,
+.minimal-type .animate-pulse-custom,
+.minimal-type .animate-spin-slow { animation: none !important; }
+@media (prefers-reduced-motion: reduce) {
+    .minimal-type .insight-media img { transform: none !important; }
+}
+
+/* Keep the original partner list available without continuous motion. */
+.minimal-type .animate-scroll { animation: none; }
+.minimal-type div:has(> .animate-scroll) { overflow-x: auto; scrollbar-width: thin; }
+
+/* Complete theme pairs for the insight badge, diagrams, and callouts. */
+:root { --insight-surface: #ffffff; --insight-inset: #f1f5f9; --insight-badge: #dbeafe; --insight-badge-text: #1e40af; }
+html.dark { --insight-surface: #1e293b; --insight-inset: #334155; --insight-badge: #172554; --insight-badge-text: #bfdbfe; }
+.minimal-type .insight-topic-badge { background: var(--insight-badge); color: var(--insight-badge-text); }
+.insight-themed-panel { background: var(--insight-surface); color: var(--theme-text); border: 1px solid var(--theme-border); }
+.insight-themed-panel :is(h3, h4) { color: var(--theme-text); }
+.insight-themed-panel > p { color: var(--theme-muted); }
+.insight-flow .grid > div { background: var(--insight-inset); border-color: var(--theme-border); }
+.insight-flow .grid p { color: var(--theme-text); }
+.insight-flow .grid > div > div:first-child { color: var(--theme-accent); }
+.insight-flow .grid > div > div:last-child { background: var(--insight-surface); color: var(--theme-text); }
+.insight-media { background: var(--insight-surface); border-color: var(--theme-border); }
+.insight-media .insight-art-dark { display: none; }
+.dark .insight-media .insight-art-dark { display: block; }
+.dark .insight-media .insight-art-light { display: none; }
+
+/* Icon tiles also need complete dark backgrounds, not pastel fills with pale text. */
+.dark .insight-article :is(.w-10.h-10, .w-12.h-12) { background: var(--insight-inset); color: var(--theme-accent); }

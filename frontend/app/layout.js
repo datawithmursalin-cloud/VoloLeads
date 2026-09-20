@@ -16,10 +16,9 @@ const themeBootstrap = `
       localStorage.setItem('dark-mode', 'true');
       savedTheme = 'true';
     }
-    if (savedTheme === 'true') {
-      document.documentElement.classList.add('dark');
-      document.documentElement.style.colorScheme = 'dark';
-    }
+    var isDark = savedTheme === 'true';
+    document.documentElement.classList.toggle('dark', isDark);
+    document.documentElement.style.colorScheme = isDark ? 'dark' : 'light';
   } catch (error) {}
 `;
 

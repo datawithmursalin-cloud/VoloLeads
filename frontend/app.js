@@ -139,7 +139,9 @@ function initDarkMode() {
 
     // Keep first visits in the readable day theme; a user's explicit choice
     // still wins on every subsequent visit.
-    const initialDarkMode = savedTheme === 'true';
+    const initialDarkMode = savedTheme === null
+        ? html.classList.contains('dark')
+        : savedTheme === 'true';
 
     // Helper function to update icon
     const updateIcon = (icon, isDark) => {
@@ -190,11 +192,11 @@ function initDarkMode() {
     applyTheme(initialDarkMode);
 
     if (darkModeToggle) {
-        darkModeToggle.addEventListener('click', toggleDarkMode);
+        darkModeToggle.onclick = toggleDarkMode;
     }
 
     if (mobileDarkModeToggle) {
-        mobileDarkModeToggle.addEventListener('click', toggleDarkMode);
+        mobileDarkModeToggle.onclick = toggleDarkMode;
     }
 }
 
@@ -362,7 +364,7 @@ function renderUniversalFooter() {
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8 mb-8">
                 <div class="lg:col-span-2">
                     <a href="index.html#home" class="flex items-center space-x-2 mb-4">
-                        <img src="./png/logo.webp" alt="" aria-hidden="true" class="site-brand-logo site-brand-logo-sm">
+                        <img src="${window.__VOLOLEADS_MANAGED_BY_NEXT__ ? '/legacy-assets' : '.'}/png/logo.webp" alt="" aria-hidden="true" class="site-brand-logo site-brand-logo-sm">
                         <span class="text-white text-xl font-bold">VoloLeads</span>
                     </a>
                     <p class="text-sm max-w-sm">Managed acquisition teams for real estate wholesalers. We run the pipeline; you close.</p>
@@ -460,7 +462,7 @@ function initWhatsAppWidget() {
                 <p class="whatsapp-response-note"><span aria-hidden="true"></span> We typically reply within a few minutes.</p>
                 <div class="whatsapp-support-routes">
                     <a class="whatsapp-support-route" href="https://wa.me/${phoneNumber}?text=${salesMessage}">
-                        <span class="whatsapp-route-avatar whatsapp-route-avatar--brand"><img src="./png/logo.webp" alt=""></span>
+                        <span class="whatsapp-route-avatar whatsapp-route-avatar--brand"><img src="${window.__VOLOLEADS_MANAGED_BY_NEXT__ ? '/legacy-assets' : '.'}/png/logo.webp" alt=""></span>
                         <span class="whatsapp-route-copy">
                             <strong>Sales &amp; Strategy</strong>
                             <small><span aria-hidden="true"></span> Online now</small>
@@ -2607,8 +2609,9 @@ function initTrustpilotCarousel() {
         return true;
     };
 
+    const minimalMotion = document.body.classList.contains('minimal-type');
     const canAutoplay = () => (
-        !document.hidden && !dragging && !reducedMotion.matches && clock() >= manualPauseUntil
+        !minimalMotion && !document.hidden && !dragging && !reducedMotion.matches && clock() >= manualPauseUntil
     );
 
     const runAutoplay = () => {
@@ -2641,7 +2644,7 @@ function initTrustpilotCarousel() {
 
     function scheduleAutoplay(delay = frameDelay) {
         clearAutoplayTimer();
-        if (document.hidden || dragging || reducedMotion.matches) return;
+        if (minimalMotion || document.hidden || dragging || reducedMotion.matches) return;
 
         const wait = Math.max(delay, manualPauseUntil - clock());
         autoplayTimer = window.setTimeout(runAutoplay, wait);

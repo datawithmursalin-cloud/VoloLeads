@@ -2758,6 +2758,11 @@ html.dark .text-transparent.bg-clip-text {
    Site-Wide Responsive Spacing System
    ============================================ */
 :root {
+    --theme-text: #0f172a;
+    --theme-muted: #475569;
+    --theme-control: #f1f5f9;
+    --theme-border: #cbd5e1;
+    --theme-accent: #c2410c;
     --site-edge: clamp(1rem, 4vw, 2rem);
     --nav-clearance: clamp(7rem, 11vw, 9.5rem);
     --page-bottom-space: clamp(3.5rem, 8vw, 6rem);
@@ -2799,11 +2804,11 @@ html.dark body::before {
         linear-gradient(to bottom, rgba(148, 163, 184, 0.1) 1px, transparent 1px);
 }
 
-body > nav,
-body > main,
-body > footer,
-body > header,
-body > article {
+:is(body, :where(#legacy-root)) > nav,
+:is(body, :where(#legacy-root)) > main,
+:is(body, :where(#legacy-root)) > footer,
+:is(body, :where(#legacy-root)) > header,
+:is(body, :where(#legacy-root)) > article {
     position: relative;
     z-index: 1;
 }
@@ -2813,22 +2818,22 @@ html.dark body {
     background: #020617 !important;
 }
 
-body > main:not(#main-content),
-body > section {
+:is(body, :where(#legacy-root)) > main:not(#main-content),
+:is(body, :where(#legacy-root)) > section {
     isolation: isolate;
     background:
         radial-gradient(circle at 50% 0%, rgba(249, 115, 22, 0.09), transparent 32rem),
         linear-gradient(135deg, #fff7ed 0%, #ffffff 52%, #f8fafc 100%);
 }
 
-html.dark body > main:not(#main-content),
-html.dark body > section {
+html.dark :is(body, :where(#legacy-root)) > main:not(#main-content),
+html.dark :is(body, :where(#legacy-root)) > section {
     background: #020617 !important;
 }
 
-body:not(.site-preload) > main:not(#main-content),
-body:not(.site-preload) > header,
-body:not(.site-preload) > article {
+:is(body:not(.site-preload), body:not(.site-preload) > :where(#legacy-root)) > main:not(#main-content),
+:is(body:not(.site-preload), body:not(.site-preload) > :where(#legacy-root)) > header,
+:is(body:not(.site-preload), body:not(.site-preload) > :where(#legacy-root)) > article {
     background:
         linear-gradient(to bottom, rgba(248, 250, 252, 0.18) 0%, rgba(248, 250, 252, 0.76) 21rem, #f8fafc 32rem),
         linear-gradient(to right, rgba(148, 163, 184, 0.22) 1px, transparent 1px),
@@ -2838,9 +2843,9 @@ body:not(.site-preload) > article {
     background-position: center top !important;
 }
 
-html.dark body:not(.site-preload) > main:not(#main-content),
-html.dark body:not(.site-preload) > header,
-html.dark body:not(.site-preload) > article {
+html.dark :is(body:not(.site-preload), body:not(.site-preload) > :where(#legacy-root)) > main:not(#main-content),
+html.dark :is(body:not(.site-preload), body:not(.site-preload) > :where(#legacy-root)) > header,
+html.dark :is(body:not(.site-preload), body:not(.site-preload) > :where(#legacy-root)) > article {
     background:
         linear-gradient(to bottom, rgba(2, 6, 23, 0.18) 0%, rgba(2, 6, 23, 0.78) 13rem, #020617 22rem),
         linear-gradient(to right, rgba(148, 163, 184, 0.08) 1px, transparent 1px),
@@ -2850,16 +2855,16 @@ html.dark body:not(.site-preload) > article {
     background-position: center top !important;
 }
 
-body:not(.site-preload) > main:not(#main-content),
-body:not(.site-preload) > header,
-body:not(.site-preload) > article {
+:is(body:not(.site-preload), body:not(.site-preload) > :where(#legacy-root)) > main:not(#main-content),
+:is(body:not(.site-preload), body:not(.site-preload) > :where(#legacy-root)) > header,
+:is(body:not(.site-preload), body:not(.site-preload) > :where(#legacy-root)) > article {
     position: relative;
     isolation: isolate;
 }
 
-body:not(.site-preload) > main:not(#main-content)::before,
-body:not(.site-preload) > header::before,
-body:not(.site-preload) > article::before {
+:is(body:not(.site-preload), body:not(.site-preload) > :where(#legacy-root)) > main:not(#main-content)::before,
+:is(body:not(.site-preload), body:not(.site-preload) > :where(#legacy-root)) > header::before,
+:is(body:not(.site-preload), body:not(.site-preload) > :where(#legacy-root)) > article::before {
     content: none;
     position: absolute;
     inset: 0 0 auto;
@@ -2876,24 +2881,24 @@ body:not(.site-preload) > article::before {
     -webkit-mask-image: linear-gradient(to bottom, #000 0%, rgba(0, 0, 0, 0.82) 42%, transparent 100%);
 }
 
-body:not(.site-preload) > main:not(#main-content) > *,
-body:not(.site-preload) > header > *,
-body:not(.site-preload) > article > * {
+:is(body:not(.site-preload), body:not(.site-preload) > :where(#legacy-root)) > main:not(#main-content) > *,
+:is(body:not(.site-preload), body:not(.site-preload) > :where(#legacy-root)) > header > *,
+:is(body:not(.site-preload), body:not(.site-preload) > :where(#legacy-root)) > article > * {
     position: relative;
     z-index: 1;
 }
 
-html.dark body:not(.site-preload) > main:not(#main-content)::before,
-html.dark body:not(.site-preload) > header::before,
-html.dark body:not(.site-preload) > article::before {
+html.dark :is(body:not(.site-preload), body:not(.site-preload) > :where(#legacy-root)) > main:not(#main-content)::before,
+html.dark :is(body:not(.site-preload), body:not(.site-preload) > :where(#legacy-root)) > header::before,
+html.dark :is(body:not(.site-preload), body:not(.site-preload) > :where(#legacy-root)) > article::before {
     opacity: 0.65;
     background-image:
         linear-gradient(to right, rgba(148, 163, 184, 0.12) 1px, transparent 1px),
         linear-gradient(to bottom, rgba(148, 163, 184, 0.08) 1px, transparent 1px);
 }
 
-html.dark body > main:not(#main-content) > .absolute[class*="blur-"],
-html.dark body > section > .absolute[class*="blur-"],
+html.dark :is(body, :where(#legacy-root)) > main:not(#main-content) > .absolute[class*="blur-"],
+html.dark :is(body, :where(#legacy-root)) > section > .absolute[class*="blur-"],
 html.dark .animate-blob,
 html.dark .mix-blend-screen,
 html.dark .mix-blend-multiply {
@@ -2928,8 +2933,8 @@ nav.fixed.top-6 {
     overscroll-behavior: contain;
 }
 
-body > main:not(#main-content),
-body > section {
+:is(body, :where(#legacy-root)) > main:not(#main-content),
+:is(body, :where(#legacy-root)) > section {
     padding-top: var(--nav-clearance) !important;
     padding-bottom: var(--page-bottom-space) !important;
     padding-left: var(--site-edge) !important;
@@ -3024,7 +3029,7 @@ body > section {
 .utility-shell h1,
 .utility-success-shell h1,
 .utility-status-card h1,
-body > section h1 {
+:is(body, :where(#legacy-root)) > section h1 {
     font-size: clamp(2.3rem, 7vw, 4rem) !important;
     line-height: 1.06 !important;
     text-wrap: balance;
@@ -3103,7 +3108,7 @@ footer .grid {
     .utility-shell h1,
     .utility-success-shell h1,
     .utility-status-card h1,
-    body > section h1 {
+    :is(body, :where(#legacy-root)) > section h1 {
         font-size: clamp(2.15rem, 10vw, 3rem) !important;
     }
 
@@ -3154,7 +3159,7 @@ footer .grid {
         padding: 1.1rem !important;
     }
 
-    body > main:not(#main-content) .utility-status-card {
+    :is(body, :where(#legacy-root)) > main:not(#main-content) .utility-status-card {
         margin-top: 1rem !important;
     }
 
@@ -3296,8 +3301,8 @@ footer .grid {
 }
 
 /* Keep insight articles as one continuous editorial surface. */
-body:not(.site-preload) > header.insight-hero-bg,
-body:not(.site-preload) > article.insight-article {
+:is(body:not(.site-preload), body:not(.site-preload) > :where(#legacy-root)) > header.insight-hero-bg,
+:is(body:not(.site-preload), body:not(.site-preload) > :where(#legacy-root)) > article.insight-article {
     background:
         linear-gradient(to bottom, rgba(248, 250, 252, 0.08) 0%, rgba(248, 250, 252, 0.9) 10rem, #f8fafc 100%),
         linear-gradient(to right, rgba(148, 163, 184, 0.2) 1px, transparent 1px),
@@ -3308,8 +3313,8 @@ body:not(.site-preload) > article.insight-article {
     border-bottom: 0 !important;
 }
 
-html.dark body:not(.site-preload) > header.insight-hero-bg,
-html.dark body:not(.site-preload) > article.insight-article {
+html.dark :is(body:not(.site-preload), body:not(.site-preload) > :where(#legacy-root)) > header.insight-hero-bg,
+html.dark :is(body:not(.site-preload), body:not(.site-preload) > :where(#legacy-root)) > article.insight-article {
     background:
         linear-gradient(to bottom, rgba(2, 6, 23, 0.08) 0%, rgba(2, 6, 23, 0.82) 9rem, #020617 100%),
         linear-gradient(to right, rgba(148, 163, 184, 0.075) 1px, transparent 1px),
@@ -3319,12 +3324,12 @@ html.dark body:not(.site-preload) > article.insight-article {
     background-position: center top !important;
 }
 
-body:not(.site-preload) > article.insight-article {
+:is(body:not(.site-preload), body:not(.site-preload) > :where(#legacy-root)) > article.insight-article {
     padding-top: clamp(1.75rem, 4vw, 2.75rem) !important;
 }
 
 /* Final utility page spacing override: keep checkout/status cards directly under nav. */
-body > main.utility-page-main {
+:is(body, :where(#legacy-root)) > main.utility-page-main {
     display: grid !important;
     justify-items: center !important;
     align-items: start !important;
@@ -3346,20 +3351,20 @@ body > main.utility-page-main {
     background-position: center top !important;
 }
 
-body > main.utility-page-main > section {
+:is(body, :where(#legacy-root)) > main.utility-page-main > section {
     width: min(100%, 64rem) !important;
     margin-left: auto !important;
     margin-right: auto !important;
 }
 
 @media (max-width: 640px) {
-    body > main.utility-page-main {
+    :is(body, :where(#legacy-root)) > main.utility-page-main {
         padding-top: calc(var(--nav-clearance) + 0.75rem) !important;
         padding-bottom: 2.5rem !important;
     }
 }
 
-html.dark body > main.utility-page-main {
+html.dark :is(body, :where(#legacy-root)) > main.utility-page-main {
     background:
         linear-gradient(to bottom, rgba(2, 6, 23, 0.12) 0%, rgba(2, 6, 23, 0.82) 8rem, #020617 14rem),
         linear-gradient(to right, rgba(148, 163, 184, 0.075) 1px, transparent 1px),
@@ -3866,17 +3871,26 @@ html.dark .diy-cost-row td strong { color: #f8fafc; }
     }
 }
 
+html.dark {
+    --theme-text: #f8fafc;
+    --theme-muted: #cbd5e1;
+    --theme-control: #1e293b;
+    --theme-border: #475569;
+    --theme-accent: #fb923c;
+}
+
 /* Theme switch, centered DIY heading, and compact testimonials */
 .theme-switch,
 #dark-mode-toggle {
-    width: 2.5rem;
-    height: 2.5rem;
+    width: 2.75rem;
+    height: 2.75rem;
+    color: var(--theme-text);
     display: inline-grid;
     place-items: center;
     flex: 0 0 auto;
     border: 1px solid transparent;
     border-radius: 999px;
-    background: rgba(241, 245, 249, .82);
+    background: var(--theme-control);
 }
 
 .theme-switch:hover,

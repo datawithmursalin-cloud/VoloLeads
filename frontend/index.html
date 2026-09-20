@@ -29,12 +29,10 @@
 
     <!-- ========== Google Fonts ========== -->
     <!-- Inter: Primary font for body text and headings -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
 
+    <link rel="stylesheet" href="minimal.css?v=20260920-02">
 </head>
-<body class="site-preload bg-brand-light dark:bg-slate-950 text-brand-navy dark:text-slate-100 font-sans antialiased flex flex-col min-h-screen relative">
+<body class="minimal-type site-preload bg-brand-light dark:bg-slate-950 text-brand-navy dark:text-slate-100 font-sans antialiased flex flex-col min-h-screen relative">
     <a href="#main-content" class="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[9999] focus:px-4 focus:py-3 focus:rounded-lg focus:bg-brand-orange focus:text-white focus:font-bold focus:shadow-xl">Skip to main content</a>
 
     <!-- ========== MAIN NAVIGATION ========== -->
@@ -1388,16 +1386,10 @@
                 </p>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-6xl mx-auto">
+            <div id="insight-guides" class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-6xl mx-auto">
                 
                 <a href="insights-intelligence.html" class="group cursor-pointer block h-full reveal-on-scroll delay-100">
-                    <div class="relative overflow-hidden rounded-2xl mb-6 h-72 shadow-lg border border-slate-100 dark:border-slate-700 hover:shadow-2xl transition-all duration-500">
-                        <img src="png/insights-intelligence.webp" alt="Team meeting" width="800" height="500" loading="lazy" decoding="async" class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500">
-                        <div class="absolute inset-0 bg-gradient-to-t from-brand-navy/80 via-brand-navy/40 to-transparent group-hover:from-brand-navy/60 group-hover:via-brand-navy/20 transition-all duration-500"></div>
-                        <div class="absolute top-4 right-4 w-12 h-12 bg-brand-orange/90 rounded-xl flex items-center justify-center text-white shadow-lg group-hover:scale-110 transition-transform duration-300">
-                            <i class="fa-solid fa-lightbulb text-lg"></i>
-                        </div>
-                    </div>
+                    <div class="insight-media"><img src="png/insights-intelligence-minimal.webp" alt="Property research using a neighborhood map and a house-condition photo" width="1536" height="1024" loading="lazy" decoding="async"></div>
                     <div class="flex-grow">
                         <h4 class="font-bold text-slate-900 dark:text-slate-100 text-2xl mb-3 group-hover:text-brand-orange transition-colors duration-300">Target Motivation based on Intelligence</h4>
                         <p class="text-slate-600 dark:text-slate-400 text-base leading-relaxed mb-4">Most agencies sell you dials. We sell you Intelligence. Learn how we categorize leads by asset condition, not just phone numbers.</p>
@@ -1408,13 +1400,7 @@
                 </a>
 
                 <a href="insights-deal.html" class="group cursor-pointer block h-full reveal-on-scroll delay-200">
-                    <div class="relative overflow-hidden rounded-2xl mb-6 h-72 shadow-lg border border-slate-100 dark:border-slate-700 hover:shadow-2xl transition-all duration-500">
-                        <img src="png/insights-deal-navy-branded.webp" alt="Deal structure options for choosing the right seller offer" width="1200" height="675" loading="lazy" decoding="async" class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500">
-                        <div class="absolute inset-0 bg-gradient-to-t from-brand-navy/80 via-brand-navy/40 to-transparent group-hover:from-brand-navy/60 group-hover:via-brand-navy/20 transition-all duration-500"></div>
-                        <div class="absolute top-4 right-4 w-12 h-12 bg-brand-orange/90 rounded-xl flex items-center justify-center text-white shadow-lg group-hover:scale-110 transition-transform duration-300">
-                            <i class="fa-solid fa-handshake text-lg"></i>
-                        </div>
-                    </div>
+                    <div class="insight-media"><img class="insight-art-dark" src="png/insights-deal-minimal.webp" alt="Deal diagram connecting seller condition, timeline, and equity to cash, retail, or creative terms" width="1200" height="800" loading="eager" decoding="async"><img class="insight-art-light" src="png/insights-deal-minimal-light.webp" alt="Deal diagram connecting seller condition, timeline, and equity to cash, retail, or creative terms" width="1200" height="800" loading="eager" decoding="async"></div>
                     <div class="flex-grow">
                         <h4 class="font-bold text-slate-900 dark:text-slate-100 text-2xl mb-3 group-hover:text-brand-orange transition-colors duration-300">The Right Offer at the Right Moment</h4>
                         <p class="text-slate-600 dark:text-slate-400 text-base leading-relaxed mb-4">Understand different deal structures and pivot based on the seller's timeline and equity.</p>
@@ -1425,13 +1411,7 @@
                 </a>
 
                 <a href="insights-kpi.html" class="group cursor-pointer block h-full reveal-on-scroll delay-300">
-                    <div class="relative overflow-hidden rounded-2xl mb-6 h-72 shadow-lg border border-slate-100 dark:border-slate-700 hover:shadow-2xl transition-all duration-500">
-                        <img src="png/insights-kpi-branded.webp" alt="Real-time cold calling performance analytics dashboard" width="1200" height="675" loading="lazy" decoding="async" class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500">
-                        <div class="absolute inset-0 bg-gradient-to-t from-brand-navy/80 via-brand-navy/40 to-transparent group-hover:from-brand-navy/60 group-hover:via-brand-navy/20 transition-all duration-500"></div>
-                        <div class="absolute top-4 right-4 w-12 h-12 bg-brand-orange/90 rounded-xl flex items-center justify-center text-white shadow-lg group-hover:scale-110 transition-transform duration-300">
-                            <i class="fa-solid fa-chart-line text-lg"></i>
-                        </div>
-                    </div>
+                    <div class="insight-media"><img class="insight-art-dark" src="png/insights-kpi-minimal.webp" alt="Illustrative campaign dashboard showing sample calling activity, callbacks, and interested sellers; not actual results" width="1200" height="800" loading="eager" decoding="async"><img class="insight-art-light" src="png/insights-kpi-minimal-light.webp" alt="Illustrative campaign dashboard showing sample calling activity, callbacks, and interested sellers; not actual results" width="1200" height="800" loading="eager" decoding="async"></div>
                     <div class="flex-grow">
                         <h4 class="font-bold text-slate-900 dark:text-slate-100 text-2xl mb-3 group-hover:text-brand-orange transition-colors duration-300">Real-Time Performance Analytics</h4>
                         <p class="text-slate-600 dark:text-slate-400 text-base leading-relaxed mb-4">Data-driven insights at your fingertips. Visualize your call volume, conversion rates, and lead quality instantly to make faster decisions.</p>
@@ -1442,13 +1422,7 @@
                 </a>
 
                 <a href="insights-market.html" class="group cursor-pointer block h-full reveal-on-scroll delay-400">
-                    <div class="relative overflow-hidden rounded-2xl mb-6 h-72 shadow-lg border border-slate-100 dark:border-slate-700 hover:shadow-2xl transition-all duration-500">
-                        <img src="png/insights-market.webp" alt="Social Media vs Calling" width="800" height="500" loading="lazy" decoding="async" class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500">
-                        <div class="absolute inset-0 bg-gradient-to-t from-brand-navy/80 via-brand-navy/40 to-transparent group-hover:from-brand-navy/60 group-hover:via-brand-navy/20 transition-all duration-500"></div>
-                        <div class="absolute top-4 right-4 w-12 h-12 bg-brand-orange/90 rounded-xl flex items-center justify-center text-white shadow-lg group-hover:scale-110 transition-transform duration-300">
-                            <i class="fa-solid fa-calendar-days text-lg"></i>
-                        </div>
-                    </div>
+                    <div class="insight-media"><img src="png/insights-market-minimal.webp" alt="Planning a target market with a printed neighborhood map and local property photos" width="1536" height="1024" loading="lazy" decoding="async"></div>
                     <div class="flex-grow">
                         <h4 class="font-bold text-slate-900 dark:text-slate-100 text-2xl mb-3 group-hover:text-brand-orange transition-colors duration-300">Mastering Market Seasonality</h4>
                         <p class="text-slate-600 dark:text-slate-400 text-base leading-relaxed mb-4">Like every other business Real Estate market is also cyclical. We have monitored inventory volume and days-on-market trends to deploy your budget exactly when seller motivation is peaking.</p>

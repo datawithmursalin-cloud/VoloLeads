@@ -1,5 +1,6 @@
 @import '../tailwind.css';
 @import '../styles.css';
+@import '../minimal.css';
 
 html {
   color-scheme: light;

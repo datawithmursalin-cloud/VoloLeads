@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>VoloLeads insight artwork sources</title>
+<style>
+@font-face{font-family:Satoshi;src:url('../fonts/satoshi-400.woff2')}@font-face{font-family:Satoshi;src:url('../fonts/satoshi-500.woff2');font-weight:500}@font-face{font-family:Satoshi;src:url('../fonts/satoshi-700.woff2');font-weight:700}
+*{box-sizing:border-box}body{margin:0;background:#091221;font-family:Satoshi,sans-serif;color:#edf2f8}.artwork{width:1200px;height:800px;position:relative;overflow:hidden;margin-bottom:40px;background:#0c1729}.brand{display:flex;align-items:center;gap:10px;font-size:24px;font-weight:700}.brand img{width:29px;height:29px}.eyebrow{font-size:19px;letter-spacing:2px;text-transform:uppercase;color:#96a9c2}.topline{display:flex;justify-content:space-between;align-items:center}.title{font-size:56px;line-height:1.08;letter-spacing:-2px;font-weight:500;margin:22px 0}.muted{color:#a4b5ca}.orange{color:#fb923c}
+/* A flat branching diagram, built entirely in HTML/CSS. */
+#deal{padding:48px 56px;background-image:linear-gradient(#1c2c402e 1px,transparent 1px),linear-gradient(90deg,#1c2c402e 1px,transparent 1px);background-size:40px 40px}
+.deal-stage{position:relative;height:555px}.seller{width:300px;position:absolute;top:2px;left:394px;text-align:center}.house{width:100px;height:104px;position:relative;margin:0 auto 13px}.roof{width:100px;height:48px;background:#fb923c;clip-path:polygon(50% 0,100% 90%,88% 100%,50% 28%,12% 100%,0 90%)}.walls{position:absolute;top:44px;left:15px;width:70px;height:59px;border:4px solid #fb923c;border-top:0}.door{position:absolute;bottom:0;left:25px;width:20px;height:34px;border:3px solid #fb923c;border-bottom:0}.seller-label{font-size:24px;color:#cbd5e1}.trunk{position:absolute;left:543px;top:151px;width:2px;height:42px;background:#e9883f}.branch{position:absolute;top:192px;left:167px;width:754px;height:36px;border:2px solid #e9883f;border-bottom:0;border-radius:14px 14px 0 0}.middle-line{position:absolute;left:543px;top:192px;width:2px;height:36px;background:#e9883f}.routes{display:grid;grid-template-columns:repeat(3,1fr);gap:26px;position:absolute;left:0;right:0;top:228px}.route{height:240px;border:1px solid #38516c;border-radius:16px;background:#132238;padding:26px 25px}.route-name{display:flex;align-items:center;gap:12px;font-size:30px;font-weight:500;margin-bottom:22px}.route-symbol{color:#fb923c;font-size:29px}.route p{font-size:23px;line-height:1.4;color:#b8c6d9;margin:0}.route-footer{position:absolute;bottom:32px;font-size:21px;color:#fb923c}.deal-caption{position:absolute;bottom:0;left:0;right:0;text-align:center;font-size:21px;color:#a4b5ca}
+/* Illustrative values mirror the existing site's sample daily report. */
+#report{padding:43px 48px;background:linear-gradient(135deg,#172c43,#0b1526 65%)}.report-window{height:714px;background:#0e1c30;border:1px solid #47607a;border-radius:22px;overflow:hidden;box-shadow:0 25px 60px #03071266}.report-top{display:flex;align-items:center;justify-content:space-between;height:84px;padding:0 35px;border-bottom:1px solid #293e57}.sample{font-size:18px;letter-spacing:1.5px;text-transform:uppercase;color:#b8c8dc}.report-body{padding:28px 34px}.report-heading{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px}.report-heading h1{margin:0;font-size:38px;letter-spacing:-1px;font-weight:500}.report-heading span{font-size:20px;color:#9fb2c9}.stats{display:grid;grid-template-columns:1.25fr 1fr 1fr;gap:20px}.stat{padding:18px 22px;background:#172940;border-radius:12px;border:1px solid #30445d}.stat span{font-size:21px;color:#aabdd3}.stat b{display:block;font-size:44px;line-height:1.2;font-weight:500;margin-top:6px}.report-chart{display:grid;grid-template-columns:1.6fr 1fr;gap:26px;margin-top:25px}.chart{position:relative;height:282px;border:1px solid #30445d;border-radius:12px;padding:22px}.chart-title{font-size:23px;font-weight:500}.bars{height:166px;display:flex;gap:33px;align-items:end;justify-content:center;margin-top:19px;background:repeating-linear-gradient(to top,#33496166 0 1px,transparent 1px 49px);padding-bottom:25px}.bar{height:var(--height);width:56px;background:#d97736;border-radius:6px 6px 0 0;position:relative}.bar:last-child{background:#fb923c}.bar span{position:absolute;bottom:-31px;left:50%;transform:translateX(-50%);white-space:nowrap;font-size:17px;color:#9db1c9}.outcomes{padding:22px 20px;border:1px solid #30445d;border-radius:12px}.outcome{display:flex;justify-content:space-between;align-items:center;margin-top:24px;font-size:21px;color:#b6c6d8}.outcome b{font-size:26px;color:#edf2f8;font-weight:500}.quality{display:flex;gap:10px;align-items:center;border-top:1px solid #30445d;margin-top:25px;padding-top:21px;color:#fb923c;font-size:19px}.report-foot{display:flex;justify-content:space-between;margin-top:21px;font-size:18px;color:#9db1c9}
+
+/* Day-mode exports preserve the same diagram geometry and labels. */
+html.light body{background:#f8fafc;color:#0f172a}
+.light .artwork{background-color:#f8fafc}
+.light #report{background:linear-gradient(135deg,#e2e8f0,#f8fafc 65%)}
+.light .report-window,.light .route{background:#fff;border-color:#cbd5e1;box-shadow:none}
+.light .stat{background:#f1f5f9;border-color:#cbd5e1}
+.light :is(.eyebrow,.muted,.seller-label,.route p,.deal-caption,.sample,.report-heading span,.stat span,.bar span,.outcome,.report-foot){color:#475569}
+.light .outcome b{color:#0f172a}
+.light :is(.orange,.route-symbol,.route-footer,.quality){color:#c2410c}
+.light :is(.chart,.outcomes,.report-top,.quality){border-color:#cbd5e1}
+.light .bars{background:repeating-linear-gradient(to top,#cbd5e1 0 1px,transparent 1px 49px)}
+</style>
+</head>
+<body>
+<section id="deal" class="artwork" aria-label="Deal options diagram">
+ <div class="topline"><div class="brand"><img src="../png/logo.webp" alt="">VoloLeads</div><span class="eyebrow">Deal structure</span></div>
+ <h1 class="title">One seller. <span class="orange">Different options.</span></h1>
+ <div class="deal-stage">
+  <div class="seller"><div class="house"><div class="roof"></div><div class="walls"><div class="door"></div></div></div><div class="seller-label">Condition · Timeline · Equity</div></div>
+  <div class="trunk"></div><div class="branch"></div><div class="middle-line"></div>
+  <div class="routes">
+   <div class="route"><div class="route-name"><span class="route-symbol">$</span>Cash offer</div><p>Speed and an<br>as-is sale.</p><div class="route-footer">Prioritize certainty →</div></div>
+   <div class="route"><div class="route-name"><span class="route-symbol">↗</span>Retail</div><p>Time to prepare<br>for the market.</p><div class="route-footer">Explore the fit →</div></div>
+   <div class="route"><div class="route-name"><span class="route-symbol">⇄</span>Creative terms</div><p>A conversation<br>about payment terms.</p><div class="route-footer">Review the structure →</div></div>
+  </div>
+  <div class="deal-caption">Qualify the seller. Give acquisitions the full picture.</div>
+ </div>
+</section>
+<section id="report" class="artwork" aria-label="Illustrative campaign reporting dashboard">
+ <div class="report-window">
+  <div class="report-top"><div class="brand"><img src="../png/logo.webp" alt="">VoloLeads</div><span class="sample">Illustrative report</span></div>
+  <div class="report-body">
+   <div class="report-heading"><h1>Campaign overview</h1><span>Daily activity</span></div>
+   <div class="stats"><div class="stat"><span>Total dials</span><b>1,182</b></div><div class="stat"><span>Callbacks</span><b>14</b></div><div class="stat"><span>Interested</span><b class="orange">6</b></div></div>
+   <div class="report-chart">
+    <div class="chart"><div class="chart-title">Calling activity</div><div class="bars"><div class="bar" style="--height:84px"><span>9 AM</span></div><div class="bar" style="--height:125px"><span>10 AM</span></div><div class="bar" style="--height:108px"><span>11 AM</span></div><div class="bar" style="--height:138px"><span>12 PM</span></div></div></div>
+    <div class="outcomes"><div class="chart-title">Keep leads moving</div><div class="outcome"><span>Interested</span><b>6</b></div><div class="outcome"><span>Callback requested</span><b>14</b></div><div class="quality"><span>✓</span>Call review &amp; coaching</div></div>
+   </div>
+   <div class="report-foot"><span>Activity. Quality. Next steps.</span><span>Sample data, not actual results.</span></div>
+  </div>
+ </div>
+</section>
+</body>
+</html>
