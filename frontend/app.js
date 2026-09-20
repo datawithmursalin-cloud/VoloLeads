@@ -2609,9 +2609,8 @@ function initTrustpilotCarousel() {
         return true;
     };
 
-    const minimalMotion = document.body.classList.contains('minimal-type');
     const canAutoplay = () => (
-        !minimalMotion && !document.hidden && !dragging && !reducedMotion.matches && clock() >= manualPauseUntil
+        !document.hidden && !dragging && !reducedMotion.matches && clock() >= manualPauseUntil
     );
 
     const runAutoplay = () => {
@@ -2644,7 +2643,7 @@ function initTrustpilotCarousel() {
 
     function scheduleAutoplay(delay = frameDelay) {
         clearAutoplayTimer();
-        if (minimalMotion || document.hidden || dragging || reducedMotion.matches) return;
+        if (document.hidden || dragging || reducedMotion.matches) return;
 
         const wait = Math.max(delay, manualPauseUntil - clock());
         autoplayTimer = window.setTimeout(runAutoplay, wait);
@@ -2677,6 +2676,10 @@ function initTrustpilotCarousel() {
         if (!dragging) return;
         viewport.scrollLeft = dragStartScroll - (event.clientX - dragStartX);
         wrapScroll(true);
+        // Continue from the wrapped position so crossing a copy boundary
+        // does not snap back on the next pointer movement.
+        dragStartX = event.clientX;
+        dragStartScroll = viewport.scrollLeft;
     });
     const stopDragging = event => {
         if (!dragging) return;
