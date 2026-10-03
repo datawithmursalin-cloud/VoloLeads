@@ -4060,6 +4060,19 @@ html.dark .comparison-table tbody td small {
     color: #fb923c !important;
 }
 
+/* Keep every plan price neutral and consistent across themes. */
+#plans .plan-price,
+#plans td[data-label="Monthly"] strong,
+#plans .diy-cost-row td strong {
+    color: #000 !important;
+}
+
+html.dark #plans .plan-price,
+html.dark #plans td[data-label="Monthly"] strong,
+html.dark #plans .diy-cost-row td strong {
+    color: #fff !important;
+}
+
 /* Homepage motion system: deliberate, brief, and reduced-motion safe. */
 @keyframes hero-content-enter {
     from {
