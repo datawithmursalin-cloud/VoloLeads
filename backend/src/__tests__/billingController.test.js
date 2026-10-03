@@ -15,6 +15,7 @@ const SubscriptionStore = require('../repositories/subscriptions');
 const getStripeClient = require('../config/stripe');
 const { sendEmail } = require('../utils/mailer');
 const {
+  createCheckoutSession,
   processRenewalReminders,
   resolveStripePlanCode,
   computeServiceAccessEnd,
@@ -155,5 +156,35 @@ describe('Stripe status synchronization', () => {
       { status: 'past_due' }
     );
     expect(res.json).toHaveBeenCalledWith({ received: true });
+  });
+});
+
+
+describe('checkout without promotions', () => {
+  const priceEnv = 'STRIPE_PRICE_PREMIUM_MONTHLY';
+  const originalPrice = process.env[priceEnv];
+
+  afterEach(() => {
+    if (originalPrice === undefined) delete process.env[priceEnv];
+    else process.env[priceEnv] = originalPrice;
+    jest.clearAllMocks();
+  });
+
+  it('creates a full-price subscription without a promo-code field', async () => {
+    process.env[priceEnv] = 'price_growth_regular';
+    const create = jest.fn().mockResolvedValue({ url: 'https://checkout.stripe.com/test' });
+    getStripeClient.mockReturnValue({ checkout: { sessions: { create } } });
+    const res = { status: jest.fn().mockReturnThis(), json: jest.fn().mockReturnThis() };
+
+    await createCheckoutSession({ body: { plan: 'premium', promoCode: 'COW2026G' } }, res);
+
+    expect(create).toHaveBeenCalledWith(expect.objectContaining({
+      mode: 'subscription',
+      line_items: [{ price: 'price_growth_regular', quantity: 1 }],
+      allow_promotion_codes: false
+    }));
+    expect(create.mock.calls[0][0]).not.toHaveProperty('discounts');
+    expect(res.status).toHaveBeenCalledWith(200);
+    expect(res.json).toHaveBeenCalledWith({ success: true, url: 'https://checkout.stripe.com/test' });
   });
 });

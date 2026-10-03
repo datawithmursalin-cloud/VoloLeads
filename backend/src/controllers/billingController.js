@@ -426,7 +426,7 @@ async function createCheckoutSession(req, res) {
       success_url: `${getApiBaseUrl()}/api/billing/checkout-success?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${appBaseUrl}/cancel.html`,
       billing_address_collection: 'auto',
-      allow_promotion_codes: true,
+      allow_promotion_codes: false,
       metadata: {
         planCode
       },

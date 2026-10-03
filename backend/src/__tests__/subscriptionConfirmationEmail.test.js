@@ -33,10 +33,16 @@ describe('subscriptionConfirmationEmail', () => {
         appBaseUrl: 'https://vololeads.com'
       });
 
-      expect(html).toContain('$1,235/month');
+      expect(html).toContain('$1,535/month');
       expect(html).toContain('Payment successful');
       expect(html).not.toContain('Partner discount');
       expect(html).not.toContain('line-through');
+    });
+
+    it('shows the original Scale monthly price', () => {
+      const details = getPlanEmailDetails(PLAN_CODES.CUSTOM_PLUS_MONTHLY);
+
+      expect(details.price).toBe('$2,999/month');
     });
 
     it('uses the standard subject line', () => {
@@ -55,7 +61,7 @@ describe('subscriptionConfirmationEmail', () => {
       const details = getPlanEmailDetails(PLAN_CODES.PREMIUM_MONTHLY, discountInfo);
 
       expect(details.price).toBe('$1,135/month');
-      expect(details.listPrice).toBe('$1,235/month');
+      expect(details.listPrice).toBe('$1,535/month');
       expect(details.promoCode).toBe('COW2026G');
     });
 
@@ -68,7 +74,7 @@ describe('subscriptionConfirmationEmail', () => {
       });
 
       expect(html).toContain('text-decoration:line-through');
-      expect(html).toContain('$1,235/month');
+      expect(html).toContain('$1,535/month');
       expect(html).toContain('$1,135/month');
       expect(html).toContain('Partner discount · COW2026G');
       expect(html).toContain('Partner discount applied');
@@ -88,7 +94,7 @@ describe('subscriptionConfirmationEmail', () => {
 
       expect(text).toContain('$1,135/month');
       expect(text).toContain('COW2026G');
-      expect(text).toContain('$1,235/month');
+      expect(text).toContain('$1,535/month');
     });
   });
 

@@ -43,7 +43,7 @@ const PLAN_CONFIG = {
     graceDaysAfterCancel: 7,
     billingInterval: 'month',
     pricing: {
-      listDisplay: '$1,235/month',
+      listDisplay: '$1,535/month',
       promoCode: 'COW2026G',
       promoDiscountCents: 10000,
       promoDisplay: '$1,135/month',

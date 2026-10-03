@@ -2229,37 +2229,11 @@ html.dark #plans .plans-partnership-system {
     margin-bottom: 0.35rem;
 }
 
-#plans .plan-price-list {
-    display: inline-flex;
-    align-items: baseline;
-    gap: 0.1rem;
-    font-size: clamp(1.05rem, 1.8vw, 1.25rem) !important;
-    font-weight: 600;
-    line-height: 1.2;
-    color: #64748b;
-    text-decoration: line-through;
-    text-decoration-thickness: 2px;
-    text-decoration-color: #94a3b8;
-    opacity: 0.9;
-}
-
-.dark #plans .plan-price-list {
-    color: #94a3b8;
-    text-decoration-color: #64748b;
-}
-
-#plans .plan-price-list .plan-price-unit {
-    font-size: 0.82em !important;
-    margin-left: 0.05rem !important;
-    font-weight: 600;
-    color: inherit;
-}
-
-#plans .plan-price-block--promo .plan-price {
+#plans .plan-price-row .plan-price {
     font-size: clamp(2.15rem, 3.4vw, 2.75rem) !important;
 }
 
-#plans .plan-price-block--promo .plan-price-unit {
+#plans .plan-price-row .plan-price-unit {
     font-size: clamp(0.95rem, 1.2vw, 1.05rem) !important;
 }
 
@@ -3734,11 +3708,11 @@ html.dark .contact-next-steps small,html.dark .response-note { color:#94a3b8; }
         flex-wrap: nowrap;
     }
 
-    #plans .plan-price-block--promo .plan-price {
+    #plans .plan-price-row .plan-price {
         font-size: clamp(2.2rem, 2.7vw, 2.55rem) !important;
     }
 
-    #plans .plan-price-block--promo .plan-price-unit {
+    #plans .plan-price-row .plan-price-unit {
         font-size: .9rem !important;
     }
 }
