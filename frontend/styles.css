@@ -2172,6 +2172,22 @@ html.dark #plans .plans-partnership-system {
     letter-spacing: 0 !important;
 }
 
+#plans .plan-price,
+#plans .plan-price-unit,
+#plans .comparison-table td[data-label="Monthly"],
+#plans .comparison-table td[data-label="Monthly"] strong,
+#plans .comparison-table td[data-label="Monthly"] small {
+    color: #000 !important;
+}
+
+html.dark #plans .plan-price,
+html.dark #plans .plan-price-unit,
+html.dark #plans .comparison-table td[data-label="Monthly"],
+html.dark #plans .comparison-table td[data-label="Monthly"] strong,
+html.dark #plans .comparison-table td[data-label="Monthly"] small {
+    color: #fff !important;
+}
+
 #plans .plan-price-unit {
     font-size: clamp(1rem, 1.4vw, 1.15rem) !important;
     line-height: 1.2 !important;
