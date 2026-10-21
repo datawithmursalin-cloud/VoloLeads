@@ -19,7 +19,7 @@ const { sendEmail } = require('../utils/mailer');
 const { escapeHtml } = require('../utils/helpers');
 const { issueOnboardingAccessToken, isSubscriptionActive, delay } = require('../utils/subscriptionAccess');
 const logger = require('../utils/logger');
-const { getVerifiedCheckoutLineItems } = require('../utils/checkoutPricing');
+const { getVerifiedCheckoutLineItems, getCheckoutBillingCycle } = require('../utils/checkoutPricing');
 
 function getAppBaseUrl() {
   return (process.env.APP_BASE_URL || 'http://localhost:3000').replace(/\/$/, '');
@@ -562,7 +562,7 @@ async function handleStripeWebhook(req, res) {
           : null;
 
         const planCode = resolveCheckoutSessionPlanCode(session, stripeSubscription);
-        const billingCycle = getSubscriptionBillingCycle(stripeSubscription || session);
+        const billingCycle = await getCheckoutBillingCycle(stripe, session, stripeSubscription);
         const email = await resolveCheckoutSessionEmail(stripe, session);
 
         if (!planCode || !email) {

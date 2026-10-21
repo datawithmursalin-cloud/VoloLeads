@@ -1,4 +1,4 @@
-const { getPlanConfig, getPlanPriceIds } = require('../config/billing');
+const { getPlanConfig, getPlanPriceIds, getSubscriptionBillingCycle } = require('../config/billing');
 
 // Validate resolved IDs, including legacy fallbacks, before accepting a new checkout.
 async function getVerifiedCheckoutLineItems(stripe, planCode, billingCycle = 'monthly') {
@@ -20,4 +20,13 @@ async function getVerifiedCheckoutLineItems(stripe, planCode, billingCycle = 'mo
   return [{ price: ids.recurring, quantity: 1 }];
 }
 
-module.exports = { getVerifiedCheckoutLineItems };
+async function getCheckoutBillingCycle(stripe, session, subscription) {
+  // Stripe upsells replace the line item; the original session metadata stays unchanged.
+  const lineItems = await stripe.checkout.sessions.listLineItems(session.id, { limit: 10 });
+  const recurringItems = lineItems.data.filter(item => item.price?.recurring);
+  return recurringItems.length
+    ? getSubscriptionBillingCycle({ items: { data: recurringItems } })
+    : getSubscriptionBillingCycle(subscription || session);
+}
+
+module.exports = { getVerifiedCheckoutLineItems, getCheckoutBillingCycle };

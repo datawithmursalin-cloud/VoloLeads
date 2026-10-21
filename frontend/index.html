@@ -445,15 +445,6 @@
                 <p>We have <strong>limited seats available</strong> this month. Reserve your spot before they’re filled.</p>
             </aside>
 
-            <fieldset class="plan-billing-selector" id="plan-billing-selector">
-                <legend>Choose Growth &amp; Scale billing</legend>
-                <div class="plan-billing-options">
-                    <label><input type="radio" name="plan-billing" value="monthly"><span>Pay monthly</span></label>
-                    <label><input type="radio" name="plan-billing" value="annual" checked><span>Pay annually &amp; save</span></label>
-                </div>
-                <p>Annual plans are paid upfront for the year. The lower monthly equivalent applies only to annual billing. Essential is billed monthly.</p>
-            </fieldset>
-
             <!-- Pricing carousel with flip cards -->
             <div class="plans-carousel-shell relative">
                 <button type="button" class="pricing-nav-btn pricing-nav-prev" aria-label="Previous pricing plan" onclick="event.stopPropagation(); scrollPricing('left')">
@@ -633,12 +624,12 @@
                             <p class="text-slate-600 dark:text-slate-400 text-xs mb-6">Complete plug-and-play system that removes technical burden.</p>
 
                             <div class="plan-price-block mb-6">
-                                <div class="plan-monthly-price">Monthly billing: $1,699/month</div>
-                                <div class="plan-price-row" data-billing-price-row="premium" aria-label="Annual billing: $1,535 per month equivalent, $18,420 billed yearly">
-                                    <span class="plan-price font-extrabold text-brand-navy dark:text-white" data-billing-amount="premium">$1,535</span>
-                                    <span class="plan-price-unit text-slate-500 dark:text-slate-400" data-billing-unit="premium">/month equivalent</span>
+                                <div class="plan-monthly-price">Monthly billing</div>
+                                <div class="plan-price-row" data-billing-price-row="premium" aria-label="$1,699 billed monthly, annual billing available in Stripe checkout">
+                                    <span class="plan-price font-extrabold text-brand-navy dark:text-white" data-billing-amount="premium">$1,699</span>
+                                    <span class="plan-price-unit text-slate-500 dark:text-slate-400" data-billing-unit="premium">/month</span>
                                 </div>
-                                <p data-billing-note="premium" class="plan-billing-note text-xs text-[#8e775d] dark:text-[#cfb078]">$18,420 billed annually. Save $164/month, $1,968/year, compared with monthly billing.</p>
+                                <p data-billing-note="premium" class="plan-billing-note text-xs text-[#8e775d] dark:text-[#cfb078]">Or $1,535/month equivalent, $18,420 billed annually. Save $1,968/year. Choose billing in Stripe checkout.</p>
                             </div>
 
                             <ul class="plan-feature-list space-y-1.5 mb-5 flex-grow text-xs">
@@ -672,10 +663,10 @@
                                 </li>
                             </ul>
 
-                            <button type="button" class="subscribe-btn w-full py-4 px-6 bg-brand-orange hover:bg-orange-600 text-white font-bold text-center rounded-lg shadow-lg hover:shadow-xl transition-all" data-plan="premium" data-billing-cycle="annual">
-                                Subscribe annually
+                            <button type="button" class="subscribe-btn w-full py-4 px-6 bg-brand-orange hover:bg-orange-600 text-white font-bold text-center rounded-lg shadow-lg hover:shadow-xl transition-all" data-plan="premium" data-billing-cycle="monthly">
+                                Continue to checkout
                             </button>
-                            <p class="text-[11px] text-slate-500 dark:text-slate-400 text-center mt-2">Secure checkout powered by Stripe</p>
+                            <p class="text-[11px] text-slate-500 dark:text-slate-400 text-center mt-2">Choose monthly or annual billing in Stripe.</p>
                             <p class="text-[11px] text-slate-400 dark:text-slate-500 text-center mt-2 group-hover:text-brand-orange transition-colors">
                                 Tap card to see services
                             </p>
@@ -684,7 +675,7 @@
                         <!-- BACK: Services -->
                         <div class="backface-hidden absolute inset-0 w-full h-full overflow-hidden bg-gradient-to-br from-orange-50 to-orange-100 dark:from-orange-900/20 dark:to-orange-800/20 rounded-2xl shadow-2xl p-8 border-2 border-brand-orange dark:border-orange-600 flex flex-col" style="backface-visibility: hidden; transform: rotateY(180deg);">
                             <h3 class="text-xl font-bold text-brand-navy dark:text-white mb-3">Managed sourcing + Growth services</h3>
-                            <p class="plan-back-price" data-billing-back="premium"><span>Monthly billing: $1,699/month</span><strong>$1,535/month equivalent, billed annually</strong><span>$18,420/year. Save $1,968/year.</span></p>
+                            <p class="plan-back-price" data-billing-back="premium"><strong>$1,699/month, billed monthly</strong><span>Annual option: $1,535/month equivalent, $18,420 billed yearly. Save $1,968/year.</span></p>
 
                             <ul class="space-y-2 flex-grow text-xs">
                                 <li class="flex items-start gap-2">
@@ -768,10 +759,10 @@
                                 </li>
                             </ul>
 
-                            <button type="button" class="subscribe-btn w-full py-3 px-4 bg-brand-orange hover:bg-orange-600 text-white font-bold text-center rounded-lg shadow-lg transition-all mt-4" data-plan="premium" data-billing-cycle="annual">
-                                Subscribe annually
+                            <button type="button" class="subscribe-btn w-full py-3 px-4 bg-brand-orange hover:bg-orange-600 text-white font-bold text-center rounded-lg shadow-lg transition-all mt-4" data-plan="premium" data-billing-cycle="monthly">
+                                Continue to checkout
                             </button>
-                            <p class="text-[11px] text-slate-600 dark:text-slate-400 text-center mt-2">Secure checkout powered by Stripe</p>
+                            <p class="text-[11px] text-slate-600 dark:text-slate-400 text-center mt-2">Choose monthly or annual billing in Stripe.</p>
                         </div>
                     </div>
                 </div>
@@ -790,12 +781,12 @@
                             <p class="text-slate-600 dark:text-slate-400 text-xs mb-6">For high-volume operators with data-driven execution.</p>
 
                             <div class="plan-price-block mb-6">
-                                <div class="plan-monthly-price">Monthly billing: $2,999/month</div>
-                                <div class="plan-price-row" data-billing-price-row="custom_plus" aria-label="Annual billing: $2,685 per month equivalent, $32,220 billed yearly">
-                                    <span class="plan-price font-extrabold text-brand-navy dark:text-white" data-billing-amount="custom_plus">$2,685</span>
-                                    <span class="plan-price-unit text-slate-500 dark:text-slate-400" data-billing-unit="custom_plus">/month equivalent</span>
+                                <div class="plan-monthly-price">Monthly billing</div>
+                                <div class="plan-price-row" data-billing-price-row="custom_plus" aria-label="$2,999 billed monthly, annual billing available in Stripe checkout">
+                                    <span class="plan-price font-extrabold text-brand-navy dark:text-white" data-billing-amount="custom_plus">$2,999</span>
+                                    <span class="plan-price-unit text-slate-500 dark:text-slate-400" data-billing-unit="custom_plus">/month</span>
                                 </div>
-                                <p data-billing-note="custom_plus" class="plan-billing-note text-xs text-[#8e775d] dark:text-[#cfb078]">$32,220 billed annually. Save $314/month, $3,768/year, compared with monthly billing.</p>
+                                <p data-billing-note="custom_plus" class="plan-billing-note text-xs text-[#8e775d] dark:text-[#cfb078]">Or $2,685/month equivalent, $32,220 billed annually. Save $3,768/year. Choose billing in Stripe checkout.</p>
                             </div>
 
                             <ul class="plan-feature-list space-y-1.5 mb-5 flex-grow text-[11px]">
@@ -837,10 +828,10 @@
                                 </li>
                             </ul>
 
-                            <button type="button" class="subscribe-btn w-full py-3 px-6 bg-slate-900 dark:bg-slate-700 hover:bg-slate-800 dark:hover:bg-slate-600 text-white font-bold text-center rounded-lg transition-colors" data-plan="custom_plus" data-billing-cycle="annual">
-                                Subscribe annually
+                            <button type="button" class="subscribe-btn w-full py-3 px-6 bg-slate-900 dark:bg-slate-700 hover:bg-slate-800 dark:hover:bg-slate-600 text-white font-bold text-center rounded-lg transition-colors" data-plan="custom_plus" data-billing-cycle="monthly">
+                                Continue to checkout
                             </button>
-                            <p class="text-[11px] text-slate-500 dark:text-slate-400 text-center mt-2">Secure checkout powered by Stripe</p>
+                            <p class="text-[11px] text-slate-500 dark:text-slate-400 text-center mt-2">Choose monthly or annual billing in Stripe.</p>
                             <p class="text-[11px] text-slate-400 dark:text-slate-500 text-center mt-2 group-hover:text-brand-orange transition-colors">
                                 Tap card to see services
                             </p>
@@ -849,7 +840,7 @@
                         <!-- BACK: Services -->
                         <div class="backface-hidden absolute w-full h-full overflow-hidden bg-gradient-to-br from-orange-50 to-orange-100 dark:from-orange-900/20 dark:to-orange-800/20 rounded-2xl shadow-lg p-8 border-2 border-brand-orange dark:border-orange-600 flex flex-col" style="backface-visibility: hidden; transform: rotateY(180deg);">
                             <h3 class="text-xl font-bold text-brand-navy dark:text-white mb-3">Growth services + Scale support</h3>
-                            <p class="plan-back-price" data-billing-back="custom_plus"><span>Monthly billing: $2,999/month</span><strong>$2,685/month equivalent, billed annually</strong><span>$32,220/year. Save $3,768/year.</span></p>
+                            <p class="plan-back-price" data-billing-back="custom_plus"><strong>$2,999/month, billed monthly</strong><span>Annual option: $2,685/month equivalent, $32,220 billed yearly. Save $3,768/year.</span></p>
 
                             <ul class="space-y-1.5 flex-grow text-[11px]">
 
@@ -944,10 +935,10 @@
                                 </li>
                             </ul>
 
-                            <button type="button" class="subscribe-btn w-full py-3 px-4 bg-brand-orange hover:bg-orange-600 text-white font-bold text-center rounded-lg shadow-lg transition-all mt-4" data-plan="custom_plus" data-billing-cycle="annual">
-                                Subscribe annually
+                            <button type="button" class="subscribe-btn w-full py-3 px-4 bg-brand-orange hover:bg-orange-600 text-white font-bold text-center rounded-lg shadow-lg transition-all mt-4" data-plan="custom_plus" data-billing-cycle="monthly">
+                                Continue to checkout
                             </button>
-                            <p class="text-[11px] text-slate-600 dark:text-slate-400 text-center mt-2">Secure checkout powered by Stripe</p>
+                            <p class="text-[11px] text-slate-600 dark:text-slate-400 text-center mt-2">Choose monthly or annual billing in Stripe.</p>
                         </div>
                     </div>
                 </div>

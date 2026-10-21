@@ -6509,29 +6509,6 @@ html:not(.dark) .whatsapp-launcher-status { border-color: #fff; }
 #plans .plan-essential-bonus strong { font-weight: 800; }
 .dark #plans .plan-essential-bonus { color: #f8fafc; }
 
-.plan-billing-selector {
-    margin: 1.5rem auto;
-    max-width: 42rem;
-    padding: 1rem;
-    text-align: center;
-    border: 0;
-}
-.plan-billing-selector legend { font-weight: 800; padding: 0 .5rem; }
-.plan-billing-selector p { margin-top: .75rem; font-size: .875rem; line-height: 1.5; }
-.plan-billing-options { display: flex; justify-content: center; gap: .5rem; flex-wrap: wrap; }
-.plan-billing-options label { cursor: pointer; position: relative; }
-.plan-billing-options input { position: absolute; opacity: 0; width: 1px; height: 1px; }
-.plan-billing-options span {
-    display: block;
-    padding: .8rem 1.2rem;
-    border: 1px solid #94a3b8;
-    border-radius: .75rem;
-    font-weight: 700;
-}
-.plan-billing-options input:checked + span { color: #fff; background: #0f1b2d; border-color: #0f1b2d; }
-.dark .plan-billing-options input:checked + span { background: #f97316; border-color: #f97316; }
-.plan-billing-options input:focus-visible + span { outline: 3px solid #f97316; outline-offset: 3px; }
-
 .essential-offer-dialog {
     color-scheme: light;
     margin: auto;

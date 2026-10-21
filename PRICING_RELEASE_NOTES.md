@@ -30,6 +30,21 @@ The checkout endpoint verifies the selected amount, currency, and interval befor
 
 The historical database plan-code names are retained for compatibility. The separate `billingCycle` field is recorded in Stripe metadata and existing subscription metadata. Confirmation and onboarding emails use the actual Stripe interval when available.
 
+## Billing selection inside Stripe Checkout
+
+The website has no billing selector. Growth and Scale buttons start with their monthly prices and tell customers to choose monthly or annual billing in Stripe. The cards continue to explain both rates and the annual upfront totals.
+
+Configure these Dashboard-only subscription upsells before deploying this version:
+
+- Growth: open the $1,699/month Price details page. Under Upsells, select the $18,420/year price.
+- Scale: open the $2,999/month Price details page. Under Upsells, select the $32,220/year price.
+
+Each pair must belong to the same product and use the same currency and tax behavior. Stripe then presents both options in eligible hosted subscription checkouts. Creating two prices alone does not enable the chooser. Essential remains monthly only, without an upsell or setup fee.
+
+The completion webhook retrieves the actual Checkout line items after purchase, so an annual selection inside Stripe produces annual confirmation pricing even though checkout started with monthly metadata. Keep all five configured price IDs; the deployment verification still checks them.
+
+Reference: https://docs.stripe.com/payments/checkout/upsells
+
 Run `node scripts/verifyCheckoutPrices.js` from the backend with the server's environment to verify all five prices. Live verification and a Stripe test-mode checkout could not be completed because Stripe credentials are not available locally. Do not deploy only the frontend and assume the billing amounts have changed. Follow `cpanelskill.md` for frontend deployment and keep the backend application separate.
 
 After configuring those Stripe price IDs in the backend app's environment, pull `NEXTJS` and run `bash scripts/deploy-pricing-cpanel.sh` as the `vololead` account. The script checks prices using the new configuration and the existing backend environment before copying files. If the app variables are configured only in cPanel rather than in `backend/.env`, make those same variables available to the terminal process. Never print secrets to obtain them.

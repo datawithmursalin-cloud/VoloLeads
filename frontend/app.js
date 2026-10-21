@@ -19,7 +19,6 @@ function initializeVoloLeadsPage() {
     initAccordions();
     initFlipCards();
     initMobilePlansCarousel();
-    initPlanBillingSelector();
     initSubscriptionCheckout();
     initManageSubscriptionForm();
     initScheduleOnboardingPage();
@@ -1476,38 +1475,6 @@ function initEssentialSignupOffer() {
         try { sessionStorage.setItem(storageKey, 'true'); } catch { /* In-memory dismissal still works. */ }
         openInteractionDialog(dialog);
     }, 12000);
-}
-
-function initPlanBillingSelector() {
-    const selector = document.getElementById('plan-billing-selector');
-    if (!selector) return;
-    const rates = {
-        premium: { monthly: '1,699', annual: '1,535', total: '18,420', saving: '164', yearSaving: '1,968' },
-        custom_plus: { monthly: '2,999', annual: '2,685', total: '32,220', saving: '314', yearSaving: '3,768' }
-    };
-    const update = () => {
-        const cycle = selector.querySelector('input:checked')?.value || 'monthly';
-        const annual = cycle === 'annual';
-        for (const [plan, rate] of Object.entries(rates)) {
-            document.querySelector(`[data-billing-amount="${plan}"]`).textContent = `$${annual ? rate.annual : rate.monthly}`;
-            document.querySelector(`[data-billing-unit="${plan}"]`).textContent = annual ? '/month equivalent' : '/month';
-            document.querySelector(`[data-billing-price-row="${plan}"]`).setAttribute('aria-label', annual
-                ? `Annual billing: $${rate.annual} per month equivalent, $${rate.total} billed yearly`
-                : `Monthly billing: $${rate.monthly} per month`);
-            document.querySelector(`[data-billing-note="${plan}"]`).textContent = annual
-                ? `$${rate.total} billed annually. Save $${rate.saving}/month, $${rate.yearSaving}/year, compared with monthly billing.`
-                : `$${rate.monthly} billed monthly. Choose annual billing to save $${rate.yearSaving}/year.`;
-            document.querySelector(`[data-billing-back="${plan}"]`).innerHTML = annual
-                ? `<span>Monthly billing: $${rate.monthly}/month</span><strong>$${rate.annual}/month equivalent, billed annually</strong><span>$${rate.total}/year. Save $${rate.yearSaving}/year.</span>`
-                : `<strong>$${rate.monthly}/month, billed monthly</strong><span>Annual option: $${rate.annual}/month equivalent, $${rate.total} billed yearly. Save $${rate.yearSaving}/year.</span>`;
-            document.querySelectorAll(`.subscribe-btn[data-plan="${plan}"]`).forEach(button => {
-                button.dataset.billingCycle = cycle;
-                button.textContent = annual ? 'Subscribe annually' : 'Subscribe monthly';
-            });
-        }
-    };
-    selector.addEventListener('change', update);
-    update();
 }
 
 /* --- Subscription Checkout Logic --- */

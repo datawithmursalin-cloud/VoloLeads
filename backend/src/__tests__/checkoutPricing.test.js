@@ -1,5 +1,5 @@
 const { PLAN_CODES, getPlanPricing } = require('../config/billing');
-const { getVerifiedCheckoutLineItems } = require('../utils/checkoutPricing');
+const { getVerifiedCheckoutLineItems, getCheckoutBillingCycle } = require('../utils/checkoutPricing');
 
 describe('checkout price verification', () => {
   const savedEnv = { ...process.env };
@@ -77,5 +77,16 @@ describe('checkout price verification', () => {
     delete process.env.STRIPE_PRICE_PREMIUM_ANNUAL;
     await expect(getVerifiedCheckoutLineItems(stripe, PLAN_CODES.PREMIUM_MONTHLY, 'annual')).rejects.toThrow('Missing Stripe price');
     expect(stripe.prices.retrieve).not.toHaveBeenCalled();
+  });
+});
+
+describe('Stripe checkout billing choice', () => {
+  it.each([['month', 'monthly'], ['year', 'annual']])('uses the selected %s line item instead of the initial monthly metadata', async (interval, expected) => {
+    const stripe = { checkout: { sessions: { listLineItems: jest.fn().mockResolvedValue({
+      data: [{ price: { recurring: { interval, interval_count: 1 } } }]
+    }) } } };
+    const session = { id: 'cs_test', metadata: { billingCycle: 'monthly' } };
+    expect(await getCheckoutBillingCycle(stripe, session, session)).toBe(expected);
+    expect(stripe.checkout.sessions.listLineItems).toHaveBeenCalledWith('cs_test', { limit: 10 });
   });
 });
