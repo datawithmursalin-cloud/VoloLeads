@@ -32,6 +32,10 @@ The historical database plan-code names are retained for compatibility. The sepa
 
 Run `node scripts/verifyCheckoutPrices.js` from the backend with the server's environment to verify all five prices. Live verification and a Stripe test-mode checkout could not be completed because Stripe credentials are not available locally. Do not deploy only the frontend and assume the billing amounts have changed. Follow `cpanelskill.md` for frontend deployment and keep the backend application separate.
 
+After configuring those Stripe price IDs in the backend app's environment, pull `NEXTJS` and run `bash scripts/deploy-pricing-cpanel.sh` as the `vololead` account. The script checks prices using the new configuration and the existing backend environment before copying files. If the app variables are configured only in cPanel rather than in `backend/.env`, make those same variables available to the terminal process. Never print secrets to obtain them.
+
+The script backs up both application directories without environment files or dependencies. It preserves the routing and existing applications, builds the frontend with the cPanel resource settings, copies only the six required backend files, restarts both apps, and checks the site and API. This is an explicit billing release, separate from the usual frontend-only `.cpanel.yml` hook. No environment files, database schemas, or existing subscriptions are changed by the script.
+
 ## Validation
 
 - Production build uses webpack and the existing single-worker cPanel settings.

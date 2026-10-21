@@ -54,6 +54,12 @@ describe('subscriptionConfirmationEmail', () => {
       expect(html).not.toContain('$1,535/month');
     });
 
+    it('shows the original Scale monthly price', () => {
+      const details = getPlanEmailDetails(PLAN_CODES.CUSTOM_PLUS_MONTHLY);
+
+      expect(details.price).toBe('$2,999/month');
+    });
+
     it('uses the standard subject line', () => {
       expect(getSubscriptionEmailSubject(null)).toBe('Your VoloLeads payment was successful');
     });
