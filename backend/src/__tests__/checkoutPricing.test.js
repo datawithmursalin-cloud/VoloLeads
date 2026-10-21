@@ -29,10 +29,13 @@ describe('checkout price verification', () => {
     expect(getPlanPricing(code).listDisplay).toMatch('/month');
   });
 
-  it('preserves the existing Essential setup price ID and amount', async () => {
+  it('charges only the monthly Essential price even when legacy setup IDs remain configured', async () => {
+    process.env.STRIPE_PRICE_ESSENTIAL_WEEKLY_SETUP = 'unused_legacy_setup';
     expect(await getVerifiedCheckoutLineItems(stripe, PLAN_CODES.ESSENTIAL_MONTHLY)).toEqual([
-      { price: 'setup', quantity: 1 }, { price: 'essential', quantity: 1 }
+      { price: 'essential', quantity: 1 }
     ]);
+    expect(stripe.prices.retrieve).toHaveBeenCalledTimes(1);
+    expect(stripe.prices.retrieve).toHaveBeenCalledWith('essential');
   });
 
   it('rejects an old or weekly legacy fallback', async () => {
@@ -51,11 +54,12 @@ describe('checkout price verification', () => {
     await expect(getVerifiedCheckoutLineItems(stripe, PLAN_CODES.PREMIUM_MONTHLY)).rejects.toThrow('advertised monthly package');
   });
 
-  it('rejects a recurring setup fee', async () => {
-    stripe.prices.retrieve.mockImplementation(async id => id === 'setup'
-      ? { active: true, currency: 'usd', type: 'recurring', unit_amount: 17000 }
-      : monthlyPrice(73000));
-    await expect(getVerifiedCheckoutLineItems(stripe, PLAN_CODES.ESSENTIAL_MONTHLY)).rejects.toThrow('one-time USD');
+  it('supports Essential checkout with both setup-price variables removed', async () => {
+    delete process.env.STRIPE_PRICE_ESSENTIAL_MONTHLY_SETUP;
+    delete process.env.STRIPE_PRICE_ESSENTIAL_WEEKLY_SETUP;
+    expect(await getVerifiedCheckoutLineItems(stripe, PLAN_CODES.ESSENTIAL_MONTHLY)).toEqual([
+      { price: 'essential', quantity: 1 }
+    ]);
   });
 
   it.each([

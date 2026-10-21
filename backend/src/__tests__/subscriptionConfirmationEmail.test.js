@@ -80,6 +80,8 @@ describe('subscriptionConfirmationEmail', () => {
         expect(output).toContain('WAVV Triple Line Dialer included');
         expect(output).toContain('One-time signup bonus: 10,000 leads sourced using BatchLeads');
         expect(output).toContain('80 hours/month');
+        expect(output).toContain('no setup fee');
+        expect(output).not.toContain('setup fee deposit');
       }
     });
   });

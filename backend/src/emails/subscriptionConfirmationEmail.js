@@ -114,7 +114,7 @@ function getPlanEmailDetails(planCode, discountInfo = null, billingCycle = 'mont
         eyebrow: 'Dedicated Cold Calling Support',
         headline: 'Essential is active',
         summary: 'Your dedicated cold calling support plan is now live.',
-        note: `${discountNote}Your first checkout also includes the one-week setup fee deposit. Additional lead sourcing and CRM costs are separate. The signup bonus consists of sourced records, not qualified opportunities or guaranteed results.`,
+        note: `${discountNote}Billed monthly with no setup fee. Additional lead sourcing and CRM costs are separate. The signup bonus consists of sourced records, not qualified opportunities or guaranteed results.`,
         bullets: [
           '1 dedicated cold caller, 80 hours/month, with a VA manager',
           'WAVV Triple Line Dialer included',

@@ -24,7 +24,7 @@ The backend must have these active USD prices configured:
 - `STRIPE_PRICE_PREMIUM_ANNUAL`: 1842000 cents, yearly.
 - `STRIPE_PRICE_CUSTOM_PLUS_ANNUAL`: 3222000 cents, yearly.
 
-The existing Essential setup price is preserved. Its amount was not changed or verified against a live account. Legacy Essential price-ID fallback remains supported but must pass the same monthly amount and interval checks.
+Essential has no setup fee. New checkouts contain only the $730 monthly recurring price, even if old setup-price environment variables remain on the server. `STRIPE_PRICE_ESSENTIAL_MONTHLY_SETUP` and `STRIPE_PRICE_ESSENTIAL_WEEKLY_SETUP` can be removed from the backend environment after this release is deployed. The legacy recurring-price fallback remains supported but must pass the same monthly amount and interval checks. Existing Stripe prices and historical invoices are not deleted or changed.
 
 The checkout endpoint verifies the selected amount, currency, and interval before creating a session. An annual checkout never falls back to a monthly price. Promotion-code entry remains disabled for new checkouts, preserving the newer remote policy. Existing customer subscriptions are not changed.
 

@@ -22,15 +22,13 @@ const PLAN_CONFIG = {
     displayName: 'Essential Monthly',
     recurringPriceEnv: 'STRIPE_PRICE_ESSENTIAL_MONTHLY_RECURRING',
     recurringPriceEnvFallback: 'STRIPE_PRICE_ESSENTIAL_WEEKLY_RECURRING',
-    setupPriceEnv: 'STRIPE_PRICE_ESSENTIAL_MONTHLY_SETUP',
-    setupPriceEnvFallback: 'STRIPE_PRICE_ESSENTIAL_WEEKLY_SETUP',
     graceDaysAfterCancel: 7,
     billingInterval: 'month',
     pricing: {
       recurringAmountCents: 73000,
       currency: 'usd',
       listDisplay: '$730/month',
-      setupDisplay: '1 week of cost is used as a one-time setup fee at checkout',
+      setupDisplay: 'No setup fee',
       promoCode: 'COW2026E',
       promoDiscountCents: 5000,
       promoDisplay: '$680/month',
@@ -125,12 +123,7 @@ function getPlanPriceIds(planCode, billingCycle = 'monthly') {
   return {
     recurring: process.env[plan.recurringPriceEnv]
       || (plan.recurringPriceEnvFallback ? process.env[plan.recurringPriceEnvFallback] : '')
-      || '',
-    setup: plan.setupPriceEnv
-      ? (process.env[plan.setupPriceEnv]
-        || (plan.setupPriceEnvFallback ? process.env[plan.setupPriceEnvFallback] : '')
-        || '')
-      : ''
+      || ''
   };
 }
 

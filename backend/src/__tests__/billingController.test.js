@@ -48,7 +48,7 @@ describe('checkout billing selection', () => {
     expect(stripe.checkout.sessions.create).toHaveBeenCalledWith(expect.objectContaining({
       line_items: [{ price: id, quantity: 1 }],
       allow_promotion_codes: allowPromos,
-      metadata: { planCode: 'premium_monthly', billingCycle },
+      metadata: { planCode: 'premium_monthly', billingCycle, setupFeeIncluded: 'false' },
       subscription_data: { metadata: { planCode: 'premium_monthly', billingCycle, graceDaysAfterCancel: '7' } }
     }));
     expect(res.status).toHaveBeenCalledWith(200);
@@ -61,6 +61,28 @@ describe('checkout billing selection', () => {
       expect(res.status).toHaveBeenCalledWith(400);
     }
     expect(getStripeClient).not.toHaveBeenCalled();
+  });
+
+  it('creates Essential checkout without a setup fee even if old setup IDs remain', async () => {
+    process.env.STRIPE_PRICE_ESSENTIAL_MONTHLY_RECURRING = 'essential_monthly';
+    process.env.STRIPE_PRICE_ESSENTIAL_MONTHLY_SETUP = 'old_setup';
+    process.env.STRIPE_PRICE_ESSENTIAL_WEEKLY_SETUP = 'older_setup';
+    const stripe = {
+      prices: { retrieve: jest.fn().mockResolvedValue({
+        active: true, currency: 'usd', unit_amount: 73000, billing_scheme: 'per_unit',
+        recurring: { interval: 'month', interval_count: 1, usage_type: 'licensed' }
+      }) },
+      checkout: { sessions: { create: jest.fn().mockResolvedValue({ url: 'https://checkout.stripe.com/test' }) } }
+    };
+    getStripeClient.mockReturnValue(stripe);
+    const res = { status: jest.fn().mockReturnThis(), json: jest.fn().mockReturnThis() };
+    await createCheckoutSession({ body: { plan: 'essential' } }, res);
+    expect(stripe.checkout.sessions.create).toHaveBeenCalledWith(expect.objectContaining({
+      line_items: [{ price: 'essential_monthly', quantity: 1 }],
+      metadata: { planCode: 'essential_monthly', billingCycle: 'monthly', setupFeeIncluded: 'false' }
+    }));
+    expect(stripe.prices.retrieve).toHaveBeenCalledTimes(1);
+    expect(res.status).toHaveBeenCalledWith(200);
   });
 });
 

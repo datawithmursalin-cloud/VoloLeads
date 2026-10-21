@@ -410,7 +410,8 @@ async function createCheckoutSession(req, res) {
       allow_promotion_codes: false,
       metadata: {
         planCode,
-        billingCycle
+        billingCycle,
+        setupFeeIncluded: 'false'
       },
       subscription_data: {
         metadata: {
@@ -605,7 +606,9 @@ async function handleStripeWebhook(req, res) {
             currency: session.currency || null,
             discountAmountCents: discountInfo.discountCents || 0,
             promoCode: discountInfo.promoCode || null,
-            setupFeeIncluded: planCode === PLAN_CODES.ESSENTIAL_MONTHLY,
+            setupFeeIncluded: session.metadata && Object.prototype.hasOwnProperty.call(session.metadata, 'setupFeeIncluded')
+              ? session.metadata.setupFeeIncluded === 'true'
+              : planCode === PLAN_CODES.ESSENTIAL_MONTHLY,
             stripePriceIds: getStripePriceIds(stripeSubscription),
             stripePlanCode: stripeSubscription && stripeSubscription.metadata
               ? stripeSubscription.metadata.planCode || null
