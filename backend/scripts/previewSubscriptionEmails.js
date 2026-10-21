@@ -12,6 +12,8 @@ const APP_BASE_URL = 'https://vololeads.com';
 const SAMPLE_EMAIL = 'customer@example.com';
 
 const PREVIEWS = [
+  { filename: 'success-growth-annual.html', planCode: PLAN_CODES.PREMIUM_MONTHLY, billingCycle: 'annual', title: 'VoloLeads Growth Annual Email Preview' },
+  { filename: 'success-scale-annual.html', planCode: PLAN_CODES.CUSTOM_PLUS_MONTHLY, billingCycle: 'annual', title: 'VoloLeads Scale Annual Email Preview' },
   {
     filename: 'success-essential.html',
     planCode: PLAN_CODES.ESSENTIAL_MONTHLY,
@@ -22,7 +24,7 @@ const PREVIEWS = [
     filename: 'success-essential-discounted.html',
     planCode: PLAN_CODES.ESSENTIAL_MONTHLY,
     title: 'VoloLeads Essential Email Preview (COW Discount)',
-    discountInfo: { hasDiscount: true, promoCode: 'COW2026E', discountCents: 1000 }
+    discountInfo: { hasDiscount: true, promoCode: 'COW2026E', discountCents: 5000 }
   },
   {
     filename: 'success-premium.html',
@@ -57,7 +59,8 @@ for (const preview of PREVIEWS) {
     email: SAMPLE_EMAIL,
     planCode: preview.planCode,
     appBaseUrl: APP_BASE_URL,
-    discountInfo: preview.discountInfo
+    discountInfo: preview.discountInfo,
+    billingCycle: preview.billingCycle || 'monthly'
   });
 
   const document = buildSubscriptionEmailPreviewDocument({

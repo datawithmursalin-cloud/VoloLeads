@@ -18,8 +18,51 @@ const {
   processRenewalReminders,
   resolveStripePlanCode,
   computeServiceAccessEnd,
+  createCheckoutSession,
   handleStripeWebhook
 } = require('../controllers/billingController');
+
+describe('checkout billing selection', () => {
+  const savedEnv = { ...process.env };
+  beforeEach(() => {
+    jest.clearAllMocks();
+    process.env.STRIPE_PRICE_PREMIUM_MONTHLY = 'growth_monthly';
+    process.env.STRIPE_PRICE_PREMIUM_ANNUAL = 'growth_annual';
+  });
+  afterEach(() => { process.env = { ...savedEnv }; });
+
+  it.each([
+    ['monthly', 'growth_monthly', 169900, 'month', false],
+    ['annual', 'growth_annual', 1842000, 'year', false]
+  ])('checks out the selected %s price and records its cadence', async (billingCycle, id, amount, interval, allowPromos) => {
+    const stripe = {
+      prices: { retrieve: jest.fn().mockResolvedValue({
+        active: true, currency: 'usd', unit_amount: amount, billing_scheme: 'per_unit',
+        recurring: { interval, interval_count: 1, usage_type: 'licensed' }
+      }) },
+      checkout: { sessions: { create: jest.fn().mockResolvedValue({ url: 'https://checkout.stripe.com/test' }) } }
+    };
+    getStripeClient.mockReturnValue(stripe);
+    const res = { status: jest.fn().mockReturnThis(), json: jest.fn().mockReturnThis() };
+    await createCheckoutSession({ body: { plan: 'premium', billingCycle } }, res);
+    expect(stripe.checkout.sessions.create).toHaveBeenCalledWith(expect.objectContaining({
+      line_items: [{ price: id, quantity: 1 }],
+      allow_promotion_codes: allowPromos,
+      metadata: { planCode: 'premium_monthly', billingCycle },
+      subscription_data: { metadata: { planCode: 'premium_monthly', billingCycle, graceDaysAfterCancel: '7' } }
+    }));
+    expect(res.status).toHaveBeenCalledWith(200);
+  });
+
+  it('rejects annual Essential and invalid cadence without opening checkout', async () => {
+    for (const [plan, billingCycle] of [['essential', 'annual'], ['premium', 'weekly']]) {
+      const res = { status: jest.fn().mockReturnThis(), json: jest.fn().mockReturnThis() };
+      await createCheckoutSession({ body: { plan, billingCycle } }, res);
+      expect(res.status).toHaveBeenCalledWith(400);
+    }
+    expect(getStripeClient).not.toHaveBeenCalled();
+  });
+});
 
 describe('processRenewalReminders', () => {
   const now = new Date('2026-06-01T00:00:00.000Z');

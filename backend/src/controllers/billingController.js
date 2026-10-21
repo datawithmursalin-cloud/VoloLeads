@@ -3,6 +3,7 @@ const {
   getPlanCode,
   getPlanConfig,
   getPlanPriceIds,
+  getSubscriptionBillingCycle,
   normalizePlanCode,
   PLAN_CODES
 } = require('../config/billing');
@@ -18,6 +19,7 @@ const { sendEmail } = require('../utils/mailer');
 const { escapeHtml } = require('../utils/helpers');
 const { issueOnboardingAccessToken, isSubscriptionActive, delay } = require('../utils/subscriptionAccess');
 const logger = require('../utils/logger');
+const { getVerifiedCheckoutLineItems } = require('../utils/checkoutPricing');
 
 function getAppBaseUrl() {
   return (process.env.APP_BASE_URL || 'http://localhost:3000').replace(/\/$/, '');
@@ -30,35 +32,6 @@ function getApiBaseUrl() {
 function getEmailBaseUrl() {
   const baseUrl = getAppBaseUrl();
   return /localhost|127\.0\.0\.1/i.test(baseUrl) ? 'https://vololeads.com' : baseUrl;
-}
-
-function buildCheckoutLineItems(planCode) {
-  const priceIds = getPlanPriceIds(planCode);
-  const plan = getPlanConfig(planCode);
-
-  if (!plan || !priceIds || !priceIds.recurring) {
-    throw new Error(`Missing Stripe price configuration for ${planCode}`);
-  }
-
-  const items = [
-    {
-      price: priceIds.recurring,
-      quantity: 1
-    }
-  ];
-
-  if (normalizePlanCode(planCode) === PLAN_CODES.ESSENTIAL_MONTHLY) {
-    if (!priceIds.setup) {
-      throw new Error('Missing setup Stripe price for essential plan');
-    }
-
-    items.unshift({
-      price: priceIds.setup,
-      quantity: 1
-    });
-  }
-
-  return items;
 }
 
 function computeServiceAccessEnd(periodEnd, planCode) {
@@ -119,7 +92,7 @@ function buildAdminNewSubscriptionHtml({ email, planDisplayName, planCode, statu
 async function notifyAdminNewSubscription(details) {
   const notifyTo = getSubscriptionNotifyEmail();
 
-  const plan = getPlanConfig(details.planCode);
+  const plan = getPlanConfig(details.planCode, details.billingCycle);
   const planDisplayName = plan ? plan.displayName : details.planCode;
 
   try {
@@ -153,9 +126,11 @@ function inferPlanCodeFromStripeSubscription(subscription) {
   );
 
   for (const planCode of Object.values(PLAN_CODES)) {
-    const priceIds = getPlanPriceIds(planCode);
-    if (priceIds && priceIds.recurring && subscriptionPriceIds.has(priceIds.recurring)) {
-      return planCode;
+    for (const billingCycle of ['monthly', 'annual']) {
+      const priceIds = getPlanPriceIds(planCode, billingCycle);
+      if (priceIds && priceIds.recurring && subscriptionPriceIds.has(priceIds.recurring)) {
+        return planCode;
+      }
     }
   }
 
@@ -344,6 +319,7 @@ async function upsertSubscriptionFromStripe(stripeSubscriptionId, fallbackEmail 
     serviceAccessEndsAt,
     canceledAt: subscription.canceled_at ? new Date(subscription.canceled_at * 1000) : null,
     metadata: {
+      billingCycle: getSubscriptionBillingCycle(subscription),
       stripePriceIds: getStripePriceIds(subscription),
       stripePlanCode: subscription.metadata && subscription.metadata.planCode || null
     }
@@ -416,23 +392,30 @@ async function createCheckoutSession(req, res) {
       return res.status(400).json({ success: false, message: 'Invalid subscription plan selected.' });
     }
 
+    const billingCycle = req.body.billingCycle || 'monthly';
+    const plan = getPlanConfig(planCode, billingCycle);
+    if (!plan) {
+      return res.status(400).json({ success: false, message: 'Invalid billing option selected.' });
+    }
     const stripe = getStripeClient();
-    const plan = getPlanConfig(planCode);
     const appBaseUrl = getAppBaseUrl();
+    const lineItems = await getVerifiedCheckoutLineItems(stripe, planCode, billingCycle);
 
     const session = await stripe.checkout.sessions.create({
       mode: 'subscription',
-      line_items: buildCheckoutLineItems(planCode),
+      line_items: lineItems,
       success_url: `${getApiBaseUrl()}/api/billing/checkout-success?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${appBaseUrl}/cancel.html`,
       billing_address_collection: 'auto',
-      allow_promotion_codes: true,
+      allow_promotion_codes: false,
       metadata: {
-        planCode
+        planCode,
+        billingCycle
       },
       subscription_data: {
         metadata: {
           planCode,
+          billingCycle,
           graceDaysAfterCancel: String(plan.graceDaysAfterCancel)
         }
       }
@@ -578,6 +561,7 @@ async function handleStripeWebhook(req, res) {
           : null;
 
         const planCode = resolveCheckoutSessionPlanCode(session, stripeSubscription);
+        const billingCycle = getSubscriptionBillingCycle(stripeSubscription || session);
         const email = await resolveCheckoutSessionEmail(stripe, session);
 
         if (!planCode || !email) {
@@ -616,6 +600,7 @@ async function handleStripeWebhook(req, res) {
             ? new Date(stripeSubscription.canceled_at * 1000)
             : null,
           metadata: {
+            billingCycle,
             checkoutAmountTotalCents: Number.isInteger(session.amount_total) ? session.amount_total : null,
             currency: session.currency || null,
             discountAmountCents: discountInfo.discountCents || 0,
@@ -628,7 +613,7 @@ async function handleStripeWebhook(req, res) {
           }
         });
 
-        const plan = getPlanConfig(planCode);
+        const plan = getPlanConfig(planCode, billingCycle);
         const appBaseUrl = getEmailBaseUrl();
         const emailSubject = getSubscriptionEmailSubject(discountInfo);
         const onboardingAccessToken = issueOnboardingAccessToken(record, session.id);
@@ -641,13 +626,15 @@ async function handleStripeWebhook(req, res) {
               displayName: plan.displayName,
               email,
               discountInfo,
-              planCode
+              planCode,
+              billingCycle
             }),
             html: buildSubscriptionEmailHtml({
               email,
               planCode,
               appBaseUrl,
               discountInfo,
+              billingCycle,
               onboardingAccessToken
             })
           });
@@ -658,6 +645,7 @@ async function handleStripeWebhook(req, res) {
         await notifyAdminNewSubscription({
           email,
           planCode,
+          billingCycle,
           status: record.status,
           stripeSubscriptionId: session.subscription,
           stripeCustomerId: session.customer,

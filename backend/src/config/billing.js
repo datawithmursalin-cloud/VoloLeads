@@ -27,12 +27,13 @@ const PLAN_CONFIG = {
     graceDaysAfterCancel: 7,
     billingInterval: 'month',
     pricing: {
-      listDisplay: '$680/month',
-      listDisplayAlt: '$8.50/hour, billed monthly',
+      recurringAmountCents: 73000,
+      currency: 'usd',
+      listDisplay: '$730/month',
       setupDisplay: '1 week of cost is used as a one-time setup fee at checkout',
       promoCode: 'COW2026E',
       promoDiscountCents: 5000,
-      promoDisplay: '$630/month',
+      promoDisplay: '$680/month',
       promoExpiresLabel: COW_PROMO_EXPIRES_LABEL
     }
   },
@@ -43,10 +44,11 @@ const PLAN_CONFIG = {
     graceDaysAfterCancel: 7,
     billingInterval: 'month',
     pricing: {
-      listDisplay: '$1,235/month',
+      recurringAmountCents: 169900,
+      currency: 'usd',
+      listDisplay: '$1,699/month',
       promoCode: 'COW2026G',
       promoDiscountCents: 10000,
-      promoDisplay: '$1,135/month',
       promoExpiresLabel: COW_PROMO_EXPIRES_LABEL
     }
   },
@@ -57,11 +59,40 @@ const PLAN_CONFIG = {
     graceDaysAfterCancel: 7,
     billingInterval: 'month',
     pricing: {
+      recurringAmountCents: 299900,
+      currency: 'usd',
       listDisplay: '$2,999/month',
       promoCode: 'COW2026S',
       promoDiscountCents: 30000,
-      promoDisplay: '$2,699/month',
       promoExpiresLabel: COW_PROMO_EXPIRES_LABEL
+    }
+  }
+};
+
+// Billing cadence is stored separately from the historical plan-code names.
+const ANNUAL_PLAN_CONFIG = {
+  [PLAN_CODES.PREMIUM_MONTHLY]: {
+    displayName: 'Growth Annual',
+    recurringPriceEnv: 'STRIPE_PRICE_PREMIUM_ANNUAL',
+    pricing: {
+      recurringAmountCents: 1842000,
+      currency: 'usd',
+      listDisplay: '$18,420/year',
+      monthlyEquivalentDisplay: '$1,535/month',
+      monthlyOptionDisplay: '$1,699/month',
+      savingsDisplay: '$1,968/year'
+    }
+  },
+  [PLAN_CODES.CUSTOM_PLUS_MONTHLY]: {
+    displayName: 'Scale Annual',
+    recurringPriceEnv: 'STRIPE_PRICE_CUSTOM_PLUS_ANNUAL',
+    pricing: {
+      recurringAmountCents: 3222000,
+      currency: 'usd',
+      listDisplay: '$32,220/year',
+      monthlyEquivalentDisplay: '$2,685/month',
+      monthlyOptionDisplay: '$2,999/month',
+      savingsDisplay: '$3,768/year'
     }
   }
 };
@@ -78,12 +109,17 @@ function normalizePlanCode(planCode) {
   return Object.values(PLAN_CODES).includes(planCode) ? planCode : null;
 }
 
-function getPlanConfig(planCode) {
-  return PLAN_CONFIG[normalizePlanCode(planCode)] || null;
+function getPlanConfig(planCode, billingCycle = 'monthly') {
+  const normalized = normalizePlanCode(planCode);
+  const plan = PLAN_CONFIG[normalized];
+  if (!plan) return null;
+  if (billingCycle === 'monthly') return plan;
+  if (billingCycle !== 'annual' || !ANNUAL_PLAN_CONFIG[normalized]) return null;
+  return { ...plan, ...ANNUAL_PLAN_CONFIG[normalized], billingInterval: 'year' };
 }
 
-function getPlanPriceIds(planCode) {
-  const plan = getPlanConfig(planCode);
+function getPlanPriceIds(planCode, billingCycle = 'monthly') {
+  const plan = getPlanConfig(planCode, billingCycle);
   if (!plan) return null;
 
   return {
@@ -98,8 +134,8 @@ function getPlanPriceIds(planCode) {
   };
 }
 
-function getPlanPricing(planCode) {
-  const plan = getPlanConfig(planCode);
+function getPlanPricing(planCode, billingCycle = 'monthly') {
+  const plan = getPlanConfig(planCode, billingCycle);
   return plan && plan.pricing ? plan.pricing : null;
 }
 
@@ -117,6 +153,13 @@ function getPromoPricingByCode(promoCode) {
   return null;
 }
 
+function getSubscriptionBillingCycle(subscription) {
+  const items = subscription?.items?.data || [];
+  if (items.some(item => item.price?.recurring?.interval === 'year')) return 'annual';
+  if (items.some(item => item.price?.recurring?.interval === 'month')) return 'monthly';
+  return subscription?.metadata?.billingCycle === 'annual' ? 'annual' : 'monthly';
+}
+
 module.exports = {
   PLAN_CODES,
   LEGACY_PLAN_CODES,
@@ -126,5 +169,6 @@ module.exports = {
   getPlanConfig,
   getPlanPriceIds,
   getPlanPricing,
-  getPromoPricingByCode
+  getPromoPricingByCode,
+  getSubscriptionBillingCycle
 };

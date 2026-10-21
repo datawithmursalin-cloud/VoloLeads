@@ -3,7 +3,9 @@ const {
   getPlanCode,
   getPlanConfig,
   getPlanPriceIds,
-  normalizePlanCode
+  normalizePlanCode,
+  getPlanPricing,
+  getSubscriptionBillingCycle
 } = require('../config/billing');
 
 describe('billing plan configuration', () => {
@@ -22,6 +24,24 @@ describe('billing plan configuration', () => {
     expect(getPlanCode('essential')).toBe(PLAN_CODES.ESSENTIAL_MONTHLY);
     expect(normalizePlanCode('essential_weekly')).toBe(PLAN_CODES.ESSENTIAL_MONTHLY);
     expect(getPlanConfig('essential_weekly').billingInterval).toBe('month');
+  });
+
+  it('separates monthly prices from annual upfront totals', () => {
+    expect(getPlanPricing(PLAN_CODES.PREMIUM_MONTHLY).recurringAmountCents).toBe(169900);
+    expect(getPlanPricing(PLAN_CODES.PREMIUM_MONTHLY, 'annual').recurringAmountCents).toBe(1842000);
+    expect(getPlanPricing(PLAN_CODES.CUSTOM_PLUS_MONTHLY).recurringAmountCents).toBe(299900);
+    expect(getPlanPricing(PLAN_CODES.CUSTOM_PLUS_MONTHLY, 'annual').recurringAmountCents).toBe(3222000);
+    expect(getPlanConfig(PLAN_CODES.ESSENTIAL_MONTHLY, 'annual')).toBeNull();
+    expect(getPlanConfig(PLAN_CODES.PREMIUM_MONTHLY, 'weekly')).toBeNull();
+  });
+
+  it('uses the actual Stripe interval ahead of metadata for confirmation emails', () => {
+    expect(getSubscriptionBillingCycle({
+      metadata: { billingCycle: 'monthly' },
+      items: { data: [{ price: { recurring: { interval: 'year' } } }] }
+    })).toBe('annual');
+    expect(getSubscriptionBillingCycle({ metadata: { billingCycle: 'annual' } })).toBe('annual');
+    expect(getSubscriptionBillingCycle({})).toBe('monthly');
   });
 
   it('uses the new Stripe environment name before the legacy fallback', () => {

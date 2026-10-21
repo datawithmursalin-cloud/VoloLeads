@@ -12,16 +12,14 @@ function getSubscriptionEmailSubject(discountInfo = null) {
     : 'Your VoloLeads payment was successful';
 }
 
-function getSubscriptionEmailText({ displayName, email, discountInfo = null, planCode = null }) {
-  if (discountInfo && discountInfo.hasDiscount) {
-    const pricing = getPlanPricing(planCode);
-    const promoCode = discountInfo.promoCode || (pricing && pricing.promoCode) || 'your promo code';
-    const promoPrice = pricing && pricing.promoDisplay ? pricing.promoDisplay : 'your discounted rate';
-    const listPrice = pricing && pricing.listDisplay ? pricing.listDisplay : 'the standard rate';
-    return `Thanks for choosing VoloLeads. Your ${displayName} payment was successful and your subscription is now active for ${email} at ${promoPrice} (${promoCode} applied; regular price ${listPrice}).`;
-  }
-
-  return `Thanks for choosing VoloLeads. Your ${displayName} payment was successful and your subscription is now active for ${email}.`;
+function getSubscriptionEmailText({ displayName, email, discountInfo = null, planCode = null, billingCycle = 'monthly' }) {
+  const details = getPlanEmailDetails(planCode, discountInfo, billingCycle);
+  const price = details.price ? ` at ${details.price}` : '';
+  const original = details.originalPrice || details.listPrice;
+  const originalNote = original ? ` Original price: ${original}.` : '';
+  const publicNote = details.originalPrice && details.listPrice ? ` Public discounted price: ${details.listPrice}.` : '';
+  const promoNote = details.promoCode ? ` Applied code: ${details.promoCode}.` : '';
+  return `Thanks for choosing VoloLeads. Your ${displayName} payment was successful and your subscription is now active for ${email}${price}.${originalNote}${publicNote}${promoNote} ${details.note} Includes: ${details.bullets.join('; ')}.`;
 }
 
 function extractDiscountFromStripeObject(discountObject) {
@@ -52,7 +50,7 @@ async function resolveCheckoutDiscount(stripe, session, stripeSubscription) {
     });
 
     if (fullSession.total_details && fullSession.total_details.amount_discount) {
-      discountInfo.discountCents = fullSession.total_details.amount_discount;
+      // Checkout totals can include the setup fee; they are not a monthly discount.
       discountInfo.hasDiscount = true;
     }
 
@@ -74,77 +72,89 @@ async function resolveCheckoutDiscount(stripe, session, stripeSubscription) {
   return discountInfo;
 }
 
-function getPlanEmailDetails(planCode, discountInfo = null) {
+function formatRecurringPrice(cents, billingCycle) {
+  return `$${(cents / 100).toLocaleString('en-US', { maximumFractionDigits: 2 })}/${billingCycle === 'annual' ? 'year' : 'month'}`;
+}
+
+function getPlanEmailDetails(planCode, discountInfo = null, billingCycle = 'monthly') {
   const normalizedPlanCode = normalizePlanCode(planCode);
-  const pricing = getPlanPricing(planCode);
+  const pricing = getPlanPricing(planCode, billingCycle);
   const hasDiscount = Boolean(discountInfo && discountInfo.hasDiscount);
+  const promoCode = hasDiscount ? discountInfo.promoCode : null;
+  const knownPromo = promoCode ? getPromoPricingByCode(promoCode) : null;
+  const knownPlanPromo = billingCycle === 'monthly' && knownPromo && knownPromo.planCode === normalizedPlanCode;
+  const discountCents = hasDiscount
+    ? discountInfo.discountCents || (knownPlanPromo ? pricing.promoDiscountCents : 0)
+    : 0;
+  const price = pricing ? (hasDiscount
+    ? discountCents > 0
+      ? formatRecurringPrice(Math.max(0, pricing.recurringAmountCents - discountCents), billingCycle)
+      : 'See your Stripe receipt for your discounted recurring price'
+    : pricing.listDisplay) : '';
+  const priceDetails = {
+    price,
+    priceLabel: hasDiscount ? 'After applied discount' : billingCycle === 'annual' ? 'Annual payment, billed upfront' : 'Monthly package',
+    listPrice: pricing ? (hasDiscount ? pricing.listDisplay : pricing.originalDisplay || null) : null,
+    originalPrice: hasDiscount && pricing ? pricing.originalDisplay || null : null,
+    promoCode,
+    hasDiscount
+  };
+  const discountNote = hasDiscount
+    ? `Your checkout discount${promoCode ? ` (${promoCode})` : ''} is applied. See your Stripe receipt for its duration and billing details. `
+    : '';
+
+  const billingNote = billingCycle === 'annual' && pricing
+    ? `${pricing.monthlyEquivalentDisplay} equivalent, with ${pricing.listDisplay} billed upfront each year. Save ${pricing.savingsDisplay} compared with ${pricing.monthlyOptionDisplay} on monthly billing. `
+    : 'Billed monthly. ';
 
   switch (normalizedPlanCode) {
     case PLAN_CODES.ESSENTIAL_MONTHLY:
       return {
-        eyebrow: 'Staffing & Training',
+        ...priceDetails,
+        eyebrow: 'Dedicated Cold Calling Support',
         headline: 'Essential is active',
-        summary: hasDiscount
-          ? 'Your dedicated cold calling support plan is now live with your College of Wholesale partner rate.'
-          : 'Your dedicated cold calling support plan is now live.',
-        price: hasDiscount && pricing ? pricing.promoDisplay : (pricing && pricing.listDisplayAlt) || '$680/month',
-        listPrice: hasDiscount && pricing ? pricing.listDisplay : null,
-        promoCode: hasDiscount ? (discountInfo.promoCode || (pricing && pricing.promoCode)) : null,
-        note: hasDiscount && pricing
-          ? `Your partner discount (${discountInfo.promoCode || pricing.promoCode}) is applied every month through ${pricing.promoExpiresLabel}. Your first checkout also includes the one-week setup fee deposit.`
-          : 'Your first checkout also includes the one-week setup fee deposit.',
+        summary: 'Your dedicated cold calling support plan is now live.',
+        note: `${discountNote}Your first checkout also includes the one-week setup fee deposit. Additional lead sourcing and CRM costs are separate. The signup bonus consists of sourced records, not qualified opportunities or guaranteed results.`,
         bullets: [
-          '1 dedicated cold caller focused on your campaign',
-          'Setup, onboarding, and direct CRM integration',
+          '1 dedicated cold caller, 80 hours/month, with a VA manager',
+          'WAVV Triple Line Dialer included',
+          'One-time signup bonus: 10,000 leads sourced using BatchLeads, at no additional charge',
+          'Setup, training, and direct CRM integration',
           'Ongoing management and daily KPI reporting'
         ]
       };
     case PLAN_CODES.PREMIUM_MONTHLY:
       return {
+        ...priceDetails,
         eyebrow: 'Done-For-You System',
         headline: 'Growth is active',
-        summary: hasDiscount
-          ? 'Your outbound machine is ready to run with your College of Wholesale partner rate.'
-          : 'Your outbound machine is ready to run.',
-        price: hasDiscount && pricing ? pricing.promoDisplay : '$1,235/month',
-        listPrice: hasDiscount && pricing ? pricing.listDisplay : null,
-        promoCode: hasDiscount ? (discountInfo.promoCode || (pricing && pricing.promoCode)) : null,
-        note: hasDiscount && pricing
-          ? `Your partner discount (${discountInfo.promoCode || pricing.promoCode}) is applied every month through ${pricing.promoExpiresLabel}. No long-term contract — manage or cancel from your secure billing portal anytime.`
-          : 'No long-term contract. Manage or cancel from your secure billing portal anytime.',
+        summary: 'Your outbound machine is ready to run.',
+        note: `${billingNote}${discountNote}Manage your subscription and renewal from your secure billing portal.`,
         bullets: [
           '1 dedicated cold caller assigned to your campaign',
-          'Lead sourcing, dialer infrastructure, and data cleaning',
+          'Monthly lead sourcing, WAVV Triple Line Dialer, and data cleaning',
           'Daily QA monitoring, pipeline support, and CRM support'
         ]
       };
     case PLAN_CODES.CUSTOM_PLUS_MONTHLY:
       return {
+        ...priceDetails,
         eyebrow: 'Advanced Scaling',
         headline: 'Scale is active',
-        summary: hasDiscount
-          ? 'Your advanced scaling plan is now in motion with your College of Wholesale partner rate.'
-          : 'Your advanced scaling plan is now in motion.',
-        price: hasDiscount && pricing ? pricing.promoDisplay : '$2,999/month',
-        listPrice: hasDiscount && pricing ? pricing.listDisplay : null,
-        promoCode: hasDiscount ? (discountInfo.promoCode || (pricing && pricing.promoCode)) : null,
-        note: hasDiscount && pricing
-          ? `Your partner discount (${discountInfo.promoCode || pricing.promoCode}) is applied every month through ${pricing.promoExpiresLabel}. This plan is built for higher-volume operators and includes enterprise-level support.`
-          : 'This plan is built for higher-volume operators and includes enterprise-level support.',
+        summary: 'Your advanced scaling plan is now in motion.',
+        note: `${billingNote}${discountNote}This plan is built for higher-volume operators and includes enterprise-level support.`,
         bullets: [
-          'Higher calling volume with advanced KPI optimization',
-          '2 dedicated cold callers plus pipeline and CRM support',
+          'Advanced KPI optimization and monthly lead sourcing',
+          '2 dedicated cold callers, WAVV Triple Line Dialer, plus pipeline and CRM support',
           'Comps, targeted marketing, and AI automation support'
         ]
       };
     default:
       return {
+        ...priceDetails,
         eyebrow: 'Subscription Active',
         headline: 'Your VoloLeads plan is active',
         summary: 'Your subscription has been activated successfully.',
-        price: '',
-        listPrice: null,
-        promoCode: null,
         note: '',
         bullets: []
       };
@@ -152,21 +162,21 @@ function getPlanEmailDetails(planCode, discountInfo = null) {
 }
 
 function buildSubscriptionPriceMarkup(details) {
-  if (!details.price) {
-    return '';
-  }
-
-  if (details.listPrice && details.promoCode) {
-    return `<tr><td style="padding:0 0 6px 0;font-size:16px;line-height:1.4;color:#64748b;text-decoration:line-through;">${details.listPrice}</td></tr>`
-      + `<tr><td style="padding:0 0 8px 0;font-size:28px;line-height:1.2;font-weight:800;color:#ffffff;">${details.price}</td></tr>`
-      + `<tr><td style="padding:0 0 20px 0;"><div style="display:inline-block;padding:6px 12px;background:#1e3a2f;border:1px solid #34d399;border-radius:999px;font-size:11px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:#34d399;">Partner discount · ${details.promoCode}</div></td></tr>`;
-  }
-
-  return `<tr><td style="padding:0 0 20px 0;font-size:28px;line-height:1.2;font-weight:800;color:#ffffff;">${details.price}</td></tr>`;
+  if (!details.price) return '';
+  const original = details.originalPrice
+    ? `<tr><td style="padding:0 0 6px;color:#94a3b8;">Original: <s>${escapeHtml(details.originalPrice)}</s></td></tr>` : '';
+  const list = details.listPrice
+    ? `<tr><td style="padding:0 0 6px;font-size:16px;color:#94a3b8;">${details.hasDiscount ? 'Before applied discount' : 'Original'}: <s style="text-decoration:line-through;">${escapeHtml(details.listPrice)}</s></td></tr>` : '';
+  const badge = details.promoCode
+    ? `<tr><td style="padding:0 0 20px;color:#34d399;">Partner discount · ${escapeHtml(details.promoCode)}</td></tr>` : '';
+  return original + list
+    + `<tr><td style="padding:0 0 6px;color:#94a3b8;">${details.priceLabel}</td></tr>`
+    + `<tr><td style="padding:0 0 20px;font-size:28px;font-weight:800;color:#ffffff;">${escapeHtml(details.price)}</td></tr>`
+    + badge;
 }
 
-function buildSubscriptionEmailHtml({ email, planCode, appBaseUrl, discountInfo = null, onboardingAccessToken = null }) {
-  const details = getPlanEmailDetails(planCode, discountInfo);
+function buildSubscriptionEmailHtml({ email, planCode, appBaseUrl, discountInfo = null, onboardingAccessToken = null, billingCycle = 'monthly' }) {
+  const details = getPlanEmailDetails(planCode, discountInfo, billingCycle);
   const bulletMarkup = details.bullets
     .map(item => `<tr><td style="padding:0 0 12px 0;font-size:15px;line-height:1.6;color:#dbe4f0;"><span style="display:inline-block;width:20px;color:#f97316;font-weight:700;">&#8226;</span>${item}</td></tr>`)
     .join('');
@@ -201,7 +211,7 @@ function buildSubscriptionEmailHtml({ email, planCode, appBaseUrl, discountInfo 
               <td style="padding:0 0 10px 0;font-size:16px;line-height:1.7;color:#dbe4f0;">Thanks for choosing VoloLeads. Your subscription for <strong style="color:#ffffff;">${escapeHtml(email)}</strong> is now active.</td>
             </tr>
             ${priceMarkup}
-            ${details.note ? `<tr><td style="padding:0 0 24px 0;font-size:14px;line-height:1.7;color:#94a3b8;">${details.note}</td></tr>` : ''}
+            ${details.note ? `<tr><td style="padding:0 0 24px 0;font-size:14px;line-height:1.7;color:#94a3b8;">${escapeHtml(details.note)}</td></tr>` : ''}
           </table>
         </td>
       </tr>
@@ -241,7 +251,7 @@ function buildSubscriptionEmailPreviewDocument({ title, bodyHtml }) {
   <title>${title}</title>
 </head>
 <body>
-${bodyHtml.trim()}
+${bodyHtml.trim().split('\n').map(line => line.trimEnd()).join('\n')}
 </body>
 </html>`;
 }

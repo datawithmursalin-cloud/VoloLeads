@@ -372,10 +372,10 @@
                             Choose the tier that fits your business. All plans include
                             <span class="text-[#8e775d] dark:text-[#cfb078] font-bold">trained cold callers</span>,
                             <span class="text-[#8e775d] dark:text-[#cfb078] font-bold">daily KPI reporting</span>, and
-                            <span class="text-[#8e775d] dark:text-[#cfb078] font-bold">no long-term contracts</span>.
+                            <span class="text-[#8e775d] dark:text-[#cfb078] font-bold">dedicated management</span>.
                         </p>
                         <p class="text-xs md:text-sm text-[#8e775d] dark:text-[#cfb078] font-semibold mb-4">
-                            September College of Wholesale Discount — message College of Wholesale on TikTok or Instagram for your promo code.
+                            Monthly plans with dedicated callers, included dialer infrastructure, and clear pricing.
                         </p>
                         <p class="plans-tip text-xs md:text-sm text-slate-500 dark:text-slate-400 italic inline-flex items-center gap-2 justify-center md:justify-start">
                             <i class="fa-regular fa-lightbulb text-[#8e775d] dark:text-[#cfb078]" aria-hidden="true"></i>
@@ -389,15 +389,15 @@
                 <div class="plan-advisor-intro">
                     <span class="section-kicker">PLAN RECOMMENDER</span>
                     <h3 id="plan-advisor-title">Find your best-fit operating model.</h3>
-                    <p>Answer three quick questions. We’ll point you to the plan that matches your stack, caller count, and campaign pace.</p>
+                    <p>Answer three quick questions. We’ll point you to the plan that matches your lead-sourcing needs, caller count, and campaign pace.</p>
                 </div>
 
                 <form id="plan-advisor-form" class="plan-advisor-form">
                     <fieldset>
-                        <legend>What does your setup look like?</legend>
+                        <legend>How will you source ongoing leads?</legend>
                         <div class="advisor-options">
-                            <label><input type="radio" name="advisor-stack" value="owned" checked><span>I have a dialer + data</span></label>
-                            <label><input type="radio" name="advisor-stack" value="managed"><span>I want it managed</span></label>
+                            <label><input type="radio" name="advisor-stack" value="owned" checked><span>I’ll source ongoing leads</span></label>
+                            <label><input type="radio" name="advisor-stack" value="managed"><span>Manage ongoing sourcing for me</span></label>
                         </div>
                     </fieldset>
                     <fieldset>
@@ -421,11 +421,11 @@
                 <aside class="plan-advisor-result" aria-live="polite" aria-atomic="true">
                     <span class="plan-advisor-result-label">YOUR BEST FIT</span>
                     <h3 id="advisor-plan-name">Essential</h3>
-                    <p id="advisor-plan-reason">Your dialer and data are already in place, so the essential one-caller setup fits at any campaign pace.</p>
+                    <p id="advisor-plan-reason">Start with one dedicated caller, an included WAVV Triple Line Dialer, and a one-time signup bonus of 10,000 leads sourced using BatchLeads. You arrange any additional leads.</p>
                     <ul id="advisor-plan-highlights">
-                        <li>1 dedicated caller</li>
-                        <li>Uses your dialer and data</li>
-                        <li>Daily reporting and QA</li>
+                        <li>1 dedicated caller, 80 hours/month, for $730/month</li>
+                        <li>WAVV Triple Line Dialer included</li>
+                        <li>One-time signup bonus: 10,000 BatchLeads-sourced leads</li>
                     </ul>
                     <div class="plan-advisor-actions">
                         <button type="button" id="advisor-apply-plan">Use this plan</button>
@@ -444,6 +444,15 @@
                 </h3>
                 <p>We have <strong>limited seats available</strong> this month. Reserve your spot before they’re filled.</p>
             </aside>
+
+            <fieldset class="plan-billing-selector" id="plan-billing-selector">
+                <legend>Choose Growth &amp; Scale billing</legend>
+                <div class="plan-billing-options">
+                    <label><input type="radio" name="plan-billing" value="monthly"><span>Pay monthly</span></label>
+                    <label><input type="radio" name="plan-billing" value="annual" checked><span>Pay annually &amp; save</span></label>
+                </div>
+                <p>Annual plans are paid upfront for the year. The lower monthly equivalent applies only to annual billing. Essential is billed monthly.</p>
+            </fieldset>
 
             <!-- Pricing carousel with flip cards -->
             <div class="plans-carousel-shell relative">
@@ -464,15 +473,15 @@
                             </div>
                             <h3 class="plan-title text-2xl font-bold text-brand-navy dark:text-white mb-2">Essential</h3>
                             <p class="text-slate-500 dark:text-slate-400 text-sm mb-2 font-semibold">Dedicated Cold Calling Support</p>
-                            <p class="text-slate-600 dark:text-slate-300 text-xs mb-6 leading-relaxed">Staffing & training service for investors with existing tech stack.</p>
+                            <p class="text-slate-600 dark:text-slate-300 text-xs mb-6 leading-relaxed">Dedicated calling support with an included dialer and a one-time lead signup bonus.</p>
 
-                            <div class="plan-price-block plan-price-block--promo mb-6">
-                                <div class="plan-price-row">
-                                    <span class="plan-price-list">$680</span>
-                                    <span class="plan-price font-extrabold text-brand-navy dark:text-white">$630</span>
+                            <div class="plan-price-block mb-6">
+                                <div class="plan-price-row" aria-label="$730 per month">
+                                    <span class="plan-price font-extrabold text-brand-navy dark:text-white">$730</span>
                                     <span class="plan-price-unit text-slate-500 dark:text-slate-400">/month</span>
                                 </div>
-                                <p class="plan-billing-note text-xs text-[#8e775d] dark:text-[#cfb078]"><strong>September College of Wholesale Discount</strong> — enter the discount code to receive $50 off.</p>
+                                <p class="plan-essential-bonus"><strong>10,000 leads signup bonus</strong></p>
+                                <p class="plan-billing-note text-xs text-[#8e775d] dark:text-[#cfb078]">Billed monthly. One-time setup fee shown at checkout.</p>
                             </div>
 
                             <ul class="plan-feature-list space-y-1.5 mb-5 flex-grow text-xs">
@@ -490,7 +499,7 @@
                                 </li>
                                 <li class="flex items-start">
                                     <i class="fa-solid fa-circle text-brand-orange mt-1.5 mr-2 flex-shrink-0" style="font-size: 0.4rem;"></i>
-                                    <span class="text-slate-600 dark:text-slate-400">Full <strong>setup & training</strong> in your dialer</span>
+                                    <span class="text-slate-600 dark:text-slate-400">Full <strong>setup & training</strong> with WAVV Triple Line Dialer included</span>
                                 </li>
                                 <li class="flex items-start">
                                     <i class="fa-solid fa-circle text-brand-orange mt-1.5 mr-2 flex-shrink-0" style="font-size: 0.4rem;"></i>
@@ -498,11 +507,11 @@
                                 </li>
                                 <li class="flex items-start">
                                     <i class="fa-solid fa-circle text-brand-orange mt-1.5 mr-2 flex-shrink-0" style="font-size: 0.4rem;"></i>
-                                    <span class="text-slate-600 dark:text-slate-400"><strong>Ongoing management</strong> & support</span>
+                                    <span class="text-slate-600 dark:text-slate-400"><strong>Ongoing management</strong> & daily reporting</span>
                                 </li>
                                 <li class="flex items-start">
                                     <i class="fa-solid fa-info text-amber-500 mt-1.5 mr-2 flex-shrink-0" style="font-size: 0.75rem;"></i>
-                                    <span class="text-slate-500 dark:text-slate-400 italic">You manage: dialer, software, leads, and data</span>
+                                    <span class="text-slate-500 dark:text-slate-400 italic">You manage: CRM costs and any additional lead sourcing</span>
                                 </li>
                                 <li class="flex items-start">
                                     <i class="fa-solid fa-info text-slate-500 mt-1.5 mr-2 flex-shrink-0" style="font-size: 0.6rem;"></i>
@@ -522,6 +531,8 @@
                         <!-- BACK: Services -->
                         <div class="backface-hidden absolute w-full h-full overflow-hidden bg-gradient-to-br from-orange-50 to-orange-100 dark:from-orange-900/20 dark:to-orange-800/20 rounded-2xl shadow-lg p-8 border-2 border-brand-orange dark:border-orange-600 flex flex-col" style="backface-visibility: hidden; transform: rotateY(180deg);">
                             <h3 class="text-xl font-bold text-brand-navy dark:text-white mb-3">Everything in Essential</h3>
+                            <p class="plan-back-price"><strong>$730/month</strong></p>
+                            <p class="plan-essential-bonus"><strong>10,000 leads signup bonus</strong></p>
 
                             <ul class="space-y-2 flex-grow text-xs">
                                 <li class="flex items-start gap-2">
@@ -530,7 +541,7 @@
                                     </div>
                                     <div>
                                         <p class="font-bold text-brand-navy dark:text-white">Onboarding & Setup</p>
-                                        <p class="text-slate-600 dark:text-slate-400">Full dialer setup, initial training, ongoing management</p>
+                                        <p class="text-slate-600 dark:text-slate-400">WAVV Triple Line Dialer included, with setup, training, and ongoing management</p>
                                     </div>
                                 </li>
 
@@ -550,7 +561,7 @@
                                     </div>
                                     <div>
                                         <p class="font-bold text-brand-navy dark:text-white">1 Dedicated Cold Caller</p>
-                                        <p class="text-slate-600 dark:text-slate-400">A personal caller focused on your campaign outcomes</p>
+                                        <p class="text-slate-600 dark:text-slate-400">80 hours/month of dedicated calling support for your campaign</p>
                                     </div>
                                 </li>
 
@@ -590,7 +601,7 @@
                                     </div>
                                     <div>
                                         <p class="font-bold text-brand-navy dark:text-white">You Manage</p>
-                                        <p class="text-slate-600 dark:text-slate-400">Dialer, software, CRM, lead lists & data</p>
+                                        <p class="text-slate-600 dark:text-slate-400">CRM costs and any additional lead sourcing</p>
                                     </div>
                                 </li>
                             </ul>
@@ -615,25 +626,25 @@
                         <!-- FRONT: Plan Details -->
                         <div class="backface-hidden absolute inset-0 w-full h-full bg-white dark:bg-slate-800 rounded-2xl shadow-2xl p-8 border-2 border-brand-orange relative flex flex-col" style="backface-visibility: hidden;">
                             <div class="mb-4 mt-6">
-                                <span class="inline-block px-3 py-1 bg-orange-100 dark:bg-orange-900/30 text-brand-orange dark:text-orange-400 text-[10px] leading-tight font-bold rounded-full uppercase tracking-wide">Everything in Essential + Growth facilities</span>
+                                <span class="inline-block px-3 py-1 bg-orange-100 dark:bg-orange-900/30 text-brand-orange dark:text-orange-400 text-[10px] leading-tight font-bold rounded-full uppercase tracking-wide">Managed sourcing + Growth services</span>
                             </div>
                             <h3 class="plan-title text-3xl font-bold text-brand-navy dark:text-white mb-2">Growth</h3>
                             <p class="text-slate-600 dark:text-slate-400 text-sm mb-2 font-semibold">The "Outbound Machine"</p>
                             <p class="text-slate-600 dark:text-slate-400 text-xs mb-6">Complete plug-and-play system that removes technical burden.</p>
 
-                            <div class="plan-price-block plan-price-block--promo mb-6">
-                                <div class="plan-price-row">
-                                    <span class="plan-price-list">$1,535</span>
-                                    <span class="plan-price font-extrabold text-[#8e775d] dark:text-[#c9a34a]">$1,295</span>
-                                    <span class="plan-price-unit text-slate-500 dark:text-slate-400">/month</span>
+                            <div class="plan-price-block mb-6">
+                                <div class="plan-monthly-price">Monthly billing: $1,699/month</div>
+                                <div class="plan-price-row" data-billing-price-row="premium" aria-label="Annual billing: $1,535 per month equivalent, $18,420 billed yearly">
+                                    <span class="plan-price font-extrabold text-brand-navy dark:text-white" data-billing-amount="premium">$1,535</span>
+                                    <span class="plan-price-unit text-slate-500 dark:text-slate-400" data-billing-unit="premium">/month equivalent</span>
                                 </div>
-                                <p class="plan-billing-note text-xs text-[#8e775d] dark:text-[#cfb078]"><strong>September College of Wholesale Discount</strong> — enter the discount code to receive the $1,295 September rate.</p>
+                                <p data-billing-note="premium" class="plan-billing-note text-xs text-[#8e775d] dark:text-[#cfb078]">$18,420 billed annually. Save $164/month, $1,968/year, compared with monthly billing.</p>
                             </div>
 
                             <ul class="plan-feature-list space-y-1.5 mb-5 flex-grow text-xs">
                                 <li class="flex items-start">
                                     <i class="fa-solid fa-layer-group text-brand-orange mt-1 mr-2 flex-shrink-0" style="font-size: 0.65rem;"></i>
-                                    <span class="text-slate-600 dark:text-slate-400"><strong>Everything in Essential</strong> is included.</span>
+                                    <span class="text-slate-600 dark:text-slate-400"><strong>Dedicated caller, training, management, and reporting</strong> included.</span>
                                 </li>
                                 <li class="flex items-start">
                                     <i class="fa-solid fa-circle text-brand-orange mt-1.5 mr-2 flex-shrink-0" style="font-size: 0.4rem;"></i>
@@ -661,8 +672,8 @@
                                 </li>
                             </ul>
 
-                            <button type="button" class="subscribe-btn w-full py-4 px-6 bg-brand-orange hover:bg-orange-600 text-white font-bold text-center rounded-lg shadow-lg hover:shadow-xl transition-all" data-plan="premium">
-                                Subscribe Now
+                            <button type="button" class="subscribe-btn w-full py-4 px-6 bg-brand-orange hover:bg-orange-600 text-white font-bold text-center rounded-lg shadow-lg hover:shadow-xl transition-all" data-plan="premium" data-billing-cycle="annual">
+                                Subscribe annually
                             </button>
                             <p class="text-[11px] text-slate-500 dark:text-slate-400 text-center mt-2">Secure checkout powered by Stripe</p>
                             <p class="text-[11px] text-slate-400 dark:text-slate-500 text-center mt-2 group-hover:text-brand-orange transition-colors">
@@ -672,7 +683,8 @@
 
                         <!-- BACK: Services -->
                         <div class="backface-hidden absolute inset-0 w-full h-full overflow-hidden bg-gradient-to-br from-orange-50 to-orange-100 dark:from-orange-900/20 dark:to-orange-800/20 rounded-2xl shadow-2xl p-8 border-2 border-brand-orange dark:border-orange-600 flex flex-col" style="backface-visibility: hidden; transform: rotateY(180deg);">
-                            <h3 class="text-xl font-bold text-brand-navy dark:text-white mb-3">Everything in Essential + Growth facilities</h3>
+                            <h3 class="text-xl font-bold text-brand-navy dark:text-white mb-3">Managed sourcing + Growth services</h3>
+                            <p class="plan-back-price" data-billing-back="premium"><span>Monthly billing: $1,699/month</span><strong>$1,535/month equivalent, billed annually</strong><span>$18,420/year. Save $1,968/year.</span></p>
 
                             <ul class="space-y-2 flex-grow text-xs">
                                 <li class="flex items-start gap-2">
@@ -756,8 +768,8 @@
                                 </li>
                             </ul>
 
-                            <button type="button" class="subscribe-btn w-full py-3 px-4 bg-brand-orange hover:bg-orange-600 text-white font-bold text-center rounded-lg shadow-lg transition-all mt-4" data-plan="premium">
-                                Subscribe Now
+                            <button type="button" class="subscribe-btn w-full py-3 px-4 bg-brand-orange hover:bg-orange-600 text-white font-bold text-center rounded-lg shadow-lg transition-all mt-4" data-plan="premium" data-billing-cycle="annual">
+                                Subscribe annually
                             </button>
                             <p class="text-[11px] text-slate-600 dark:text-slate-400 text-center mt-2">Secure checkout powered by Stripe</p>
                         </div>
@@ -771,19 +783,19 @@
                         <!-- FRONT: Plan Details -->
                         <div class="backface-hidden absolute w-full h-full bg-white dark:bg-slate-800 rounded-2xl shadow-lg p-8 border border-slate-200 dark:border-slate-700 flex flex-col" style="backface-visibility: hidden; overflow: visible;">
                             <div class="mb-4">
-                                <span class="inline-block px-3 py-1 bg-slate-900 dark:bg-slate-700 text-white dark:text-slate-100 text-[10px] leading-tight font-bold rounded-full uppercase tracking-wide">Everything in Growth + Scale facilities</span>
+                                <span class="inline-block px-3 py-1 bg-slate-900 dark:bg-slate-700 text-white dark:text-slate-100 text-[10px] leading-tight font-bold rounded-full uppercase tracking-wide">Growth services + Scale support</span>
                             </div>
                             <h3 class="plan-title text-2xl font-bold text-brand-navy dark:text-white mb-2">Scale</h3>
                             <p class="text-slate-600 dark:text-slate-400 text-sm mb-2 font-semibold">Scale Mode & Advanced Optimization</p>
                             <p class="text-slate-600 dark:text-slate-400 text-xs mb-6">For high-volume operators with data-driven execution.</p>
 
-                            <div class="plan-price-block plan-price-block--promo mb-6">
-                                <div class="plan-price-row">
-                                    <span class="plan-price-list">$2,999</span>
-                                    <span class="plan-price font-extrabold text-brand-orange">$2,699</span>
-                                    <span class="plan-price-unit text-slate-500 dark:text-slate-400">/month</span>
+                            <div class="plan-price-block mb-6">
+                                <div class="plan-monthly-price">Monthly billing: $2,999/month</div>
+                                <div class="plan-price-row" data-billing-price-row="custom_plus" aria-label="Annual billing: $2,685 per month equivalent, $32,220 billed yearly">
+                                    <span class="plan-price font-extrabold text-brand-navy dark:text-white" data-billing-amount="custom_plus">$2,685</span>
+                                    <span class="plan-price-unit text-slate-500 dark:text-slate-400" data-billing-unit="custom_plus">/month equivalent</span>
                                 </div>
-                                <p class="plan-billing-note text-xs text-[#8e775d] dark:text-[#cfb078]"><strong>September College of Wholesale Discount</strong> — get your code by messaging College of Wholesale on TikTok or Instagram.</p>
+                                <p data-billing-note="custom_plus" class="plan-billing-note text-xs text-[#8e775d] dark:text-[#cfb078]">$32,220 billed annually. Save $314/month, $3,768/year, compared with monthly billing.</p>
                             </div>
 
                             <ul class="plan-feature-list space-y-1.5 mb-5 flex-grow text-[11px]">
@@ -825,8 +837,8 @@
                                 </li>
                             </ul>
 
-                            <button type="button" class="subscribe-btn w-full py-3 px-6 bg-slate-900 dark:bg-slate-700 hover:bg-slate-800 dark:hover:bg-slate-600 text-white font-bold text-center rounded-lg transition-colors" data-plan="custom_plus">
-                                Subscribe Now
+                            <button type="button" class="subscribe-btn w-full py-3 px-6 bg-slate-900 dark:bg-slate-700 hover:bg-slate-800 dark:hover:bg-slate-600 text-white font-bold text-center rounded-lg transition-colors" data-plan="custom_plus" data-billing-cycle="annual">
+                                Subscribe annually
                             </button>
                             <p class="text-[11px] text-slate-500 dark:text-slate-400 text-center mt-2">Secure checkout powered by Stripe</p>
                             <p class="text-[11px] text-slate-400 dark:text-slate-500 text-center mt-2 group-hover:text-brand-orange transition-colors">
@@ -836,7 +848,8 @@
 
                         <!-- BACK: Services -->
                         <div class="backface-hidden absolute w-full h-full overflow-hidden bg-gradient-to-br from-orange-50 to-orange-100 dark:from-orange-900/20 dark:to-orange-800/20 rounded-2xl shadow-lg p-8 border-2 border-brand-orange dark:border-orange-600 flex flex-col" style="backface-visibility: hidden; transform: rotateY(180deg);">
-                            <h3 class="text-xl font-bold text-brand-navy dark:text-white mb-3">Everything in Growth + Scale facilities</h3>
+                            <h3 class="text-xl font-bold text-brand-navy dark:text-white mb-3">Growth services + Scale support</h3>
+                            <p class="plan-back-price" data-billing-back="custom_plus"><span>Monthly billing: $2,999/month</span><strong>$2,685/month equivalent, billed annually</strong><span>$32,220/year. Save $3,768/year.</span></p>
 
                             <ul class="space-y-1.5 flex-grow text-[11px]">
 
@@ -931,8 +944,8 @@
                                 </li>
                             </ul>
 
-                            <button type="button" class="subscribe-btn w-full py-3 px-4 bg-brand-orange hover:bg-orange-600 text-white font-bold text-center rounded-lg shadow-lg transition-all mt-4" data-plan="custom_plus">
-                                Subscribe Now
+                            <button type="button" class="subscribe-btn w-full py-3 px-4 bg-brand-orange hover:bg-orange-600 text-white font-bold text-center rounded-lg shadow-lg transition-all mt-4" data-plan="custom_plus" data-billing-cycle="annual">
+                                Subscribe annually
                             </button>
                             <p class="text-[11px] text-slate-600 dark:text-slate-400 text-center mt-2">Secure checkout powered by Stripe</p>
                         </div>
@@ -1094,11 +1107,11 @@
                 </div>
                 <div class="comparison-table-wrap" role="region" aria-label="Plan comparison" tabindex="0">
                     <table class="comparison-table">
-                        <thead><tr><th>Plan</th><th>Best for</th><th>Included</th><th>You handle</th><th>Monthly</th></tr></thead>
+                        <thead><tr><th>Plan</th><th>Best for</th><th>Included</th><th>You handle</th><th>Billing options</th></tr></thead>
                         <tbody>
-                            <tr><th>Essential</th><td data-label="Best for">Teams with an existing stack</td><td data-label="Included">1 caller, training, management, KPI reports</td><td data-label="You handle">Data, dialer, CRM costs</td><td data-label="Monthly"><strong>$630</strong><small>September COW price</small></td></tr>
-                            <tr class="is-featured"><th>Growth <span>Most popular</span></th><td data-label="Best for">Operators wanting a turnkey outbound system</td><td data-label="Included">Caller, data, dialer, QA, CRM support</td><td data-label="You handle">Closing qualified opportunities</td><td data-label="Monthly"><strong>$1,295</strong><small>September COW price</small></td></tr>
-                            <tr><th>Scale</th><td data-label="Best for">High-volume, multi-market teams</td><td data-label="Included">More volume, priority data, deeper optimization</td><td data-label="You handle">Acquisitions and dispositions</td><td data-label="Monthly"><strong>$2,699</strong><small>September COW price</small></td></tr>
+                            <tr><th>Essential</th><td data-label="Best for">Investors managing their ongoing lead sourcing</td><td data-label="Included">1 caller, 80 hours/month, manager, training, CRM integration, daily reports, WAVV Triple Line Dialer, one-time signup bonus of 10,000 BatchLeads-sourced leads</td><td data-label="You handle">CRM costs and any additional lead sourcing</td><td data-label="Monthly"><strong>$730/month</strong><small>Monthly package price</small></td></tr>
+                            <tr class="is-featured"><th>Growth <span>Most popular</span></th><td data-label="Best for">Operators wanting a turnkey outbound system</td><td data-label="Included">Caller, data, dialer, QA, CRM support</td><td data-label="You handle">Closing qualified opportunities</td><td data-label="Monthly"><strong>$1,699/month billed monthly</strong><small>Annual: $1,535/month equivalent</small><small>$18,420 billed yearly. Save $1,968/year.</small></td></tr>
+                            <tr><th>Scale</th><td data-label="Best for">High-volume, multi-market teams</td><td data-label="Included">More volume, priority data, deeper optimization</td><td data-label="You handle">Acquisitions and dispositions</td><td data-label="Monthly"><strong>$2,999/month billed monthly</strong><small>Annual: $2,685/month equivalent</small><small>$32,220 billed yearly. Save $3,768/year.</small></td></tr>
                             <tr><th>Custom+</th><td data-label="Best for">Complex or multi-seat operations</td><td data-label="Included">Custom staffing, workflows and automation</td><td data-label="You handle">Defined together</td><td data-label="Monthly"><strong>Custom</strong><small>Scoped to your operation</small></td></tr>
                         </tbody>
                     </table>
@@ -1115,8 +1128,8 @@
                     <table class="comparison-table diy-table">
                         <thead><tr><th>Operating category</th><th>DIY</th><th>VoloLeads</th></tr></thead>
                         <tbody>
-                            <tr class="diy-cost-row"><th>Base monthly cost</th><td data-label="DIY"><strong>$800+</strong><small>No guarantee on quality</small></td><td data-label="VoloLeads"><strong>From $630</strong><small>Managed support</small></td></tr>
-                            <tr><th>Data + dialer</th><td data-label="DIY">Source, fund and configure vendors</td><td data-label="VoloLeads">Included on managed plans</td></tr>
+                            <tr class="diy-cost-row"><th>Base monthly cost</th><td data-label="DIY"><strong>$800+</strong><small>No guarantee on quality</small></td><td data-label="VoloLeads"><strong>From $730/month</strong><small>Managed support</small></td></tr>
+                            <tr><th>Data + dialer</th><td data-label="DIY">Source, fund and configure vendors</td><td data-label="VoloLeads">WAVV Triple Line Dialer included in Essential, Growth and Scale; Essential includes a one-time 10,000-lead BatchLeads signup bonus</td></tr>
                             <tr><th>Recruiting + training</th><td data-label="DIY">Hire, replace and coach callers</td><td data-label="VoloLeads">Wholesale-trained talent</td></tr>
                             <tr><th>Quality assurance</th><td data-label="DIY">Review recordings yourself</td><td data-label="VoloLeads">Daily audits and coaching</td></tr>
                             <tr><th>CRM setup</th><td data-label="DIY">Build stages, fields and routing</td><td data-label="VoloLeads">Setup and ongoing support</td></tr>
@@ -1130,10 +1143,10 @@
 
             <div class="mt-12 text-center border-t border-slate-200 dark:border-slate-700 pt-8 reveal-on-scroll">
                 <p class="text-sm text-[#8e775d] dark:text-[#cfb078] font-semibold mb-3 max-w-4xl mx-auto">
-                    🎆 <strong>September College of Wholesale Discount</strong> — Limited-time savings on Essential, Growth, and Scale plans. Message College of Wholesale on TikTok or Instagram for your promo code.
+                    <strong>Save with annual billing.</strong> Growth is $1,699/month when billed monthly, or $1,535/month equivalent with $18,420 billed annually, saving $1,968/year. Scale is $2,999/month when billed monthly, or $2,685/month equivalent with $32,220 billed annually, saving $3,768/year.
                 </p>
                 <p class="text-xs text-slate-400 dark:text-slate-500 max-w-4xl mx-auto leading-relaxed">
-                    * All plans include dedicated talent and management. <strong>Dialer software and lead data costs may apply separately based on volume.</strong> No long-term contracts—cancel anytime. Ready to scale? Book a consultation to customize your plan.
+                    Essential includes WAVV Triple Line Dialer and a <strong>one-time signup bonus of 10,000 leads sourced using BatchLeads</strong> at no additional charge. These are sourced records, not qualified opportunities or guaranteed results. Additional lead sourcing and CRM costs are separate. Growth and Scale include their listed monthly lead-sourcing services. Manage your subscription and renewal through the billing portal.
                 </p>
             </div>
 
@@ -1743,9 +1756,9 @@
             <div class="section-kicker text-center reveal-on-scroll">QUICK ANSWERS</div>
             <h2 id="faq-preview-title" class="reveal-on-scroll delay-100">Before we build your campaign.</h2>
             <div class="faq-preview-list reveal-on-scroll delay-200">
-                <details><summary>Do you provide the dialer?<i class="fa-solid fa-plus" aria-hidden="true"></i></summary><p>Growth and Scale include managed dialer infrastructure. Essential is designed for teams that already have their own stack.</p></details>
-                <details><summary>Do you provide leads?<i class="fa-solid fa-plus" aria-hidden="true"></i></summary><p>Managed plans include lead data and targeted public-record lists. We confirm volume and market fit during onboarding.</p></details>
-                <details><summary>Can I cancel anytime?<i class="fa-solid fa-plus" aria-hidden="true"></i></summary><p>Yes. There are no long-term contracts; subscription terms and any setup fee are shown clearly at checkout.</p></details>
+                <details><summary>Do you provide the dialer?<i class="fa-solid fa-plus" aria-hidden="true"></i></summary><p>Yes. Essential includes WAVV Triple Line Dialer, as do Growth and Scale. Essential also includes a one-time signup bonus of 10,000 leads sourced using BatchLeads at no additional charge. It is not a monthly lead allowance; any additional lead sourcing is separate.</p></details>
+                <details><summary>Do you provide leads?<i class="fa-solid fa-plus" aria-hidden="true"></i></summary><p>Essential includes a one-time signup bonus of 10,000 leads sourced using BatchLeads at no additional charge. It is not a monthly allowance. Growth and Scale include the monthly lead-sourcing services listed in their plans.</p></details>
+                <details><summary>Can I cancel anytime?<i class="fa-solid fa-plus" aria-hidden="true"></i></summary><p>You can manage cancellation and renewal through the billing portal. Annual Growth and Scale plans are paid upfront for the year; their lower monthly equivalents are not monthly charges. Billing terms and any setup fee are shown at checkout.</p></details>
                 <details><summary>When does onboarding start?<i class="fa-solid fa-plus" aria-hidden="true"></i></summary><p>Onboarding begins after checkout, starting with campaign intake, access collection, and success criteria.</p></details>
                 <details><summary>What happens after checkout?<i class="fa-solid fa-plus" aria-hidden="true"></i></summary><p>You receive the onboarding steps, schedule the kickoff, and begin campaign setup with your assigned team.</p></details>
             </div>
@@ -1973,6 +1986,16 @@
     </div>
 </section>
 
+        <dialog id="essential-offer-dialog" class="essential-offer-dialog" aria-labelledby="essential-offer-title" aria-describedby="essential-offer-description">
+            <button type="button" class="essential-offer-close" data-dialog-close aria-label="Close Essential signup offer" autofocus><span aria-hidden="true">&times;</span></button>
+            <div class="essential-offer-content">
+                <p class="essential-offer-kicker">ESSENTIAL SIGNUP BONUS</p>
+                <h2 id="essential-offer-title"><span>10,000 Leads!</span><br>Yours at signup.</h2>
+                <p id="essential-offer-description">Sign up for Essential at <strong>$730/month</strong> and receive a <strong>one-time bonus of 10,000 leads sourced using BatchLeads</strong>, at no additional charge.</p>
+                <button type="button" class="essential-offer-cta" id="essential-offer-view-plan">View Essential <span aria-hidden="true">&rarr;</span></button>
+                <button type="button" class="essential-offer-dismiss" data-dialog-close>Not now</button>
+            </div>
+        </dialog>
     </main>
 
     <section class="prefooter-cta" aria-label="Book a strategy call">

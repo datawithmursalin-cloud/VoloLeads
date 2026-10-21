@@ -1,5 +1,5 @@
 const getStripeClient = require('../config/stripe');
-const { getPlanConfig } = require('../config/billing');
+const { getPlanConfig, getSubscriptionBillingCycle } = require('../config/billing');
 const SubscriptionStore = require('../repositories/subscriptions');
 const ContactForms = require('../repositories/contactForms');
 const { createMeetEvent } = require('../utils/googleMeet');
@@ -27,8 +27,8 @@ const logger = require('../utils/logger');
 
 const DEFAULT_SUBSCRIPTION_NOTIFY_EMAIL = 'vololeads@gmail.com';
 
-function getPlanDisplayName(planCode) {
-  const plan = getPlanConfig(planCode);
+function getPlanDisplayName(planCode, billingCycle = 'monthly') {
+  const plan = getPlanConfig(planCode, billingCycle);
   return plan ? plan.displayName : planCode;
 }
 
@@ -215,7 +215,7 @@ async function resolveSubscriptionFromAccessPayload(payload) {
 }
 
 function buildVerifiedAccessResponse(subscription) {
-  const planDisplayName = getPlanDisplayName(subscription.planCode);
+  const planDisplayName = getPlanDisplayName(subscription.planCode, getSubscriptionBillingCycle(subscription));
   const bookingToken = issueBookingToken(subscription);
 
   return {
@@ -360,7 +360,7 @@ async function verifySubscriberAccess(req, res) {
 async function scheduleSubscriberMeeting(req, res) {
   try {
     const subscription = req.subscriber;
-    const planDisplayName = getPlanDisplayName(subscription.planCode);
+    const planDisplayName = getPlanDisplayName(subscription.planCode, getSubscriptionBillingCycle(subscription));
 
     if (subscription.onboardingMeetingScheduledAt) {
       return res.status(409).json({
