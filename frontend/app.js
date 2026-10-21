@@ -1474,7 +1474,7 @@ function initEssentialSignupOffer() {
         window.__essentialOfferShown = true;
         try { sessionStorage.setItem(storageKey, 'true'); } catch { /* In-memory dismissal still works. */ }
         openInteractionDialog(dialog);
-    }, 12000);
+    }, 3000);
 }
 
 /* --- Subscription Checkout Logic --- */

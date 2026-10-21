@@ -10,7 +10,7 @@ The user clarified that the lower Growth and Scale prices require annual billing
 
 Essential includes WAVV Triple Line Dialer and a one-time signup bonus of 10,000 leads sourced using BatchLeads. Its card shows the short bold line requested by the user, "10,000 leads signup bonus." No delivery date, skip tracing, recurring free replenishment, or BatchLeads account access has been promised. The bonus has not been added to other plans.
 
-The centered popup appears after 12 seconds, once per tab session. It can be closed with its close button, Not now, Escape, or the backdrop. It skips visitors using a form, viewing another dialog, checking out, or visiting the contact section. View Essential takes the visitor to the Essential card.
+The centered popup appears after 3 seconds, once per tab session. It can be closed with its close button, Not now, Escape, or the backdrop. It skips visitors using a form, viewing another dialog, checking out, or visiting the contact section. View Essential takes the visitor to the Essential card.
 
 ## Billing configuration before release
 
