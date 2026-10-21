@@ -32,7 +32,7 @@ The historical database plan-code names are retained for compatibility. The sepa
 
 ## Billing selection inside Stripe Checkout
 
-The website has no billing selector. Growth and Scale buttons start with their monthly prices and tell customers to choose monthly or annual billing in Stripe. The cards continue to explain both rates and the annual upfront totals.
+The website has no billing selector. Growth and Scale buttons start with their monthly prices and tell customers to choose monthly or annual billing in Stripe. Their cards and comparison table emphasize $1,535/month and $2,685/month with "Billed annually upfront" directly below, followed by the smaller monthly rates of $1,699 and $2,999.
 
 Configure these Dashboard-only subscription upsells before deploying this version:
 
