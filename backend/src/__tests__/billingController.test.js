@@ -27,14 +27,18 @@ describe('checkout billing selection', () => {
   beforeEach(() => {
     jest.clearAllMocks();
     process.env.STRIPE_PRICE_PREMIUM_MONTHLY = 'growth_monthly';
-    process.env.STRIPE_PRICE_PREMIUM_ANNUAL = 'growth_annual';
+    process.env.STRIPE_PRICE_CUSTOM_PLUS_MONTHLY = 'scale_monthly';
+    process.env.STRIPE_PRICE_PREMIUM_ANNUAL = 'old_growth_annual';
+    process.env.STRIPE_PRICE_CUSTOM_PLUS_ANNUAL = 'old_scale_annual';
   });
   afterEach(() => { process.env = { ...savedEnv }; });
 
   it.each([
-    ['monthly', 'growth_monthly', 169900, 'month', false],
-    ['annual', 'growth_annual', 1842000, 'year', false]
-  ])('checks out the selected %s price and records its cadence', async (billingCycle, id, amount, interval, allowPromos) => {
+    ['premium', 'premium_monthly', 'growth_monthly', 169900],
+    ['custom_plus', 'custom_plus_monthly', 'scale_monthly', 299900]
+  ])('checks out %s monthly and allows Stripe promotion codes', async (requestPlan, planCode, id, amount) => {
+    const billingCycle = 'monthly';
+    const interval = 'month';
     const stripe = {
       prices: { retrieve: jest.fn().mockResolvedValue({
         active: true, currency: 'usd', unit_amount: amount, billing_scheme: 'per_unit',
@@ -44,18 +48,18 @@ describe('checkout billing selection', () => {
     };
     getStripeClient.mockReturnValue(stripe);
     const res = { status: jest.fn().mockReturnThis(), json: jest.fn().mockReturnThis() };
-    await createCheckoutSession({ body: { plan: 'premium', billingCycle } }, res);
+    await createCheckoutSession({ body: { plan: requestPlan, billingCycle } }, res);
     expect(stripe.checkout.sessions.create).toHaveBeenCalledWith(expect.objectContaining({
       line_items: [{ price: id, quantity: 1 }],
-      allow_promotion_codes: allowPromos,
-      metadata: { planCode: 'premium_monthly', billingCycle, setupFeeIncluded: 'false' },
-      subscription_data: { metadata: { planCode: 'premium_monthly', billingCycle, graceDaysAfterCancel: '7' } }
+      allow_promotion_codes: true,
+      metadata: { planCode, billingCycle, setupFeeIncluded: 'false' },
+      subscription_data: { metadata: { planCode, billingCycle, graceDaysAfterCancel: '7' } }
     }));
     expect(res.status).toHaveBeenCalledWith(200);
   });
 
-  it('rejects annual Essential and invalid cadence without opening checkout', async () => {
-    for (const [plan, billingCycle] of [['essential', 'annual'], ['premium', 'weekly']]) {
+  it('rejects all annual and invalid cadence requests even when annual price IDs remain configured', async () => {
+    for (const [plan, billingCycle] of [['essential', 'annual'], ['premium', 'annual'], ['custom_plus', 'annual'], ['premium', 'weekly']]) {
       const res = { status: jest.fn().mockReturnThis(), json: jest.fn().mockReturnThis() };
       await createCheckoutSession({ body: { plan, billingCycle } }, res);
       expect(res.status).toHaveBeenCalledWith(400);
@@ -79,6 +83,7 @@ describe('checkout billing selection', () => {
     await createCheckoutSession({ body: { plan: 'essential' } }, res);
     expect(stripe.checkout.sessions.create).toHaveBeenCalledWith(expect.objectContaining({
       line_items: [{ price: 'essential_monthly', quantity: 1 }],
+      allow_promotion_codes: false,
       metadata: { planCode: 'essential_monthly', billingCycle: 'monthly', setupFeeIncluded: 'false' }
     }));
     expect(stripe.prices.retrieve).toHaveBeenCalledTimes(1);
@@ -224,7 +229,7 @@ describe('Stripe status synchronization', () => {
 });
 
 
-describe('checkout without promotions', () => {
+describe('checkout promotion codes', () => {
   const priceEnv = 'STRIPE_PRICE_PREMIUM_MONTHLY';
   const originalPrice = process.env[priceEnv];
 
@@ -234,7 +239,7 @@ describe('checkout without promotions', () => {
     jest.clearAllMocks();
   });
 
-  it('creates a full-price subscription without a promo-code field', async () => {
+  it('starts at the regular monthly price and leaves discount redemption to Stripe', async () => {
     process.env[priceEnv] = 'price_growth_regular';
     const create = jest.fn().mockResolvedValue({ url: 'https://checkout.stripe.com/test' });
     getStripeClient.mockReturnValue({
@@ -251,7 +256,7 @@ describe('checkout without promotions', () => {
     expect(create).toHaveBeenCalledWith(expect.objectContaining({
       mode: 'subscription',
       line_items: [{ price: 'price_growth_regular', quantity: 1 }],
-      allow_promotion_codes: false
+      allow_promotion_codes: true
     }));
     expect(create.mock.calls[0][0]).not.toHaveProperty('discounts');
     expect(res.status).toHaveBeenCalledWith(200);

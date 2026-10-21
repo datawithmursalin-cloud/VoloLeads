@@ -2,6 +2,9 @@ const { getPlanConfig, getPlanPriceIds, getSubscriptionBillingCycle } = require(
 
 // Validate resolved IDs, including legacy fallbacks, before accepting a new checkout.
 async function getVerifiedCheckoutLineItems(stripe, planCode, billingCycle = 'monthly') {
+  if (billingCycle !== 'monthly') {
+    throw new Error('Only monthly billing is available for new checkouts');
+  }
   const plan = getPlanConfig(planCode, billingCycle);
   const ids = getPlanPriceIds(planCode, billingCycle);
   if (!plan || !ids || !ids.recurring) {

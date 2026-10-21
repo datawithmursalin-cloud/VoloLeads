@@ -62,25 +62,16 @@ describe('checkout price verification', () => {
     ]);
   });
 
-  it.each([
-    [PLAN_CODES.PREMIUM_MONTHLY, 'STRIPE_PRICE_PREMIUM_ANNUAL', 1842000],
-    [PLAN_CODES.CUSTOM_PLUS_MONTHLY, 'STRIPE_PRICE_CUSTOM_PLUS_ANNUAL', 3222000]
-  ])('requires the annual upfront price for %s', async (code, envName, amount) => {
-    process.env[envName] = 'annual';
-    stripe.prices.retrieve.mockResolvedValue({ ...monthlyPrice(amount), recurring: { interval: 'year', interval_count: 1, usage_type: 'licensed' } });
-    expect(await getVerifiedCheckoutLineItems(stripe, code, 'annual')).toEqual([{ price: 'annual', quantity: 1 }]);
-    stripe.prices.retrieve.mockResolvedValue(monthlyPrice(amount));
-    await expect(getVerifiedCheckoutLineItems(stripe, code, 'annual')).rejects.toThrow('advertised annual package');
-  });
-
-  it('never falls back to a monthly price for an unconfigured annual plan', async () => {
-    delete process.env.STRIPE_PRICE_PREMIUM_ANNUAL;
-    await expect(getVerifiedCheckoutLineItems(stripe, PLAN_CODES.PREMIUM_MONTHLY, 'annual')).rejects.toThrow('Missing Stripe price');
+  it.each(Object.values(PLAN_CODES))('rejects annual checkout for %s even with legacy annual IDs configured', async code => {
+    process.env.STRIPE_PRICE_PREMIUM_ANNUAL = 'old_growth_annual';
+    process.env.STRIPE_PRICE_CUSTOM_PLUS_ANNUAL = 'old_scale_annual';
+    await expect(getVerifiedCheckoutLineItems(stripe, code, 'annual')).rejects.toThrow('Only monthly billing');
     expect(stripe.prices.retrieve).not.toHaveBeenCalled();
   });
+
 });
 
-describe('Stripe checkout billing choice', () => {
+describe('historical Stripe checkout billing choice', () => {
   it.each([['month', 'monthly'], ['year', 'annual']])('uses the selected %s line item instead of the initial monthly metadata', async (interval, expected) => {
     const stripe = { checkout: { sessions: { listLineItems: jest.fn().mockResolvedValue({
       data: [{ price: { recurring: { interval, interval_count: 1 } } }]

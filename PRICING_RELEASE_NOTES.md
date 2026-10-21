@@ -1,59 +1,50 @@
 # Pricing update, October 22, 2026
 
-The user clarified that the lower Growth and Scale prices require annual billing.
+All new subscriptions are billed monthly. Annual billing has been removed from the website and the checkout endpoint. The user will remove the Growth and Scale subscription upsells in Stripe.
 
-| Plan | Monthly billing | Annual billing, paid upfront | Savings against monthly billing |
+| Plan | Regular monthly price | Advertised price with a valid promo code | Monthly savings |
 | --- | --- | --- | --- |
-| Essential | $730/month | Not offered | Not applicable |
-| Growth | $1,699/month | $18,420/year, equivalent to $1,535/month | $1,968/year |
-| Scale | $2,999/month | $32,220/year, equivalent to $2,685/month | $3,768/year |
+| Essential | $730/month | No advertised coupon offer | Not applicable |
+| Growth | $1,699/month | $1,535/month | $164/month |
+| Scale | $2,999/month | $2,685/month | $314/month |
 
-Essential includes WAVV Triple Line Dialer and a one-time signup bonus of 10,000 leads sourced using BatchLeads. Its card shows the short bold line requested by the user, "10,000 leads signup bonus." No delivery date, skip tracing, recurring free replenishment, or BatchLeads account access has been promised. The bonus has not been added to other plans.
+Growth and Scale cards show the crossed-out regular price, prominent discounted monthly price, and a savings badge. The front and reverse sides, comparison table, plan finder, and FAQ describe monthly billing. The offer requires a valid Stripe promotion code; it is not applied automatically. The user manages codes and discount terms in Stripe, and requested that the cards avoid a fixed coupon duration.
 
-The centered popup appears after 3 seconds, once per tab session. It can be closed with its close button, Not now, Escape, or the backdrop. It skips visitors using a form, viewing another dialog, checking out, or visiting the contact section. View Essential takes the visitor to the Essential card.
+Essential includes WAVV Triple Line Dialer and a one-time signup bonus of 10,000 leads sourced using BatchLeads. Its card shows "10,000 leads signup bonus." No delivery date, skip tracing, recurring free replenishment, or BatchLeads account access has been promised. The bonus has not been added to other plans.
 
-## Billing configuration before release
+The centered popup appears after 3 seconds, once per tab session. It closes with its close button, Not now, Escape, or the backdrop. It skips visitors using a form, viewing another dialog, checking out, or visiting the contact section. View Essential takes the visitor to the Essential card.
 
-The local code and preview are updated. No cPanel deployment, Stripe price creation, subscription migration, or email sending was performed.
+## Stripe configuration
 
-The backend must have these active USD prices configured:
+The backend requires these active USD prices:
 
 - `STRIPE_PRICE_ESSENTIAL_MONTHLY_RECURRING`: 73000 cents, monthly.
 - `STRIPE_PRICE_PREMIUM_MONTHLY`: 169900 cents, monthly.
 - `STRIPE_PRICE_CUSTOM_PLUS_MONTHLY`: 299900 cents, monthly.
-- `STRIPE_PRICE_PREMIUM_ANNUAL`: 1842000 cents, yearly.
-- `STRIPE_PRICE_CUSTOM_PLUS_ANNUAL`: 3222000 cents, yearly.
 
-Essential has no setup fee. New checkouts contain only the $730 monthly recurring price, even if old setup-price environment variables remain on the server. `STRIPE_PRICE_ESSENTIAL_MONTHLY_SETUP` and `STRIPE_PRICE_ESSENTIAL_WEEKLY_SETUP` can be removed from the backend environment after this release is deployed. The legacy recurring-price fallback remains supported but must pass the same monthly amount and interval checks. Existing Stripe prices and historical invoices are not deleted or changed.
+Growth and Scale Checkout sessions enable customer-entered promotion codes. Create a customer-facing promotion code for each coupon and restrict the coupon to its matching product in Stripe. New sessions start at the regular monthly price; Stripe applies and validates the code. Essential promotion-code entry stays disabled.
 
-The checkout endpoint verifies the selected amount, currency, and interval before creating a session. An annual checkout never falls back to a monthly price. Promotion-code entry remains disabled for new checkouts, preserving the newer remote policy. Existing customer subscriptions are not changed.
+Remove the Growth and Scale upsell configurations from their monthly Price details pages in Stripe. This Dashboard-only setting must be removed by the user, as requested. Annual Checkout API requests are rejected, and the deployment verifier checks only the three monthly prices. Old annual price variables can remain for historical subscription lookup, but are not required for deployment. Historical annual billing information remains available to webhook and email handling for existing subscriptions or in-flight sessions.
 
-The historical database plan-code names are retained for compatibility. The separate `billingCycle` field is recorded in Stripe metadata and existing subscription metadata. Confirmation and onboarding emails use the actual Stripe interval when available.
+Essential has no setup fee. Old setup-price environment variables are ignored. The legacy Essential recurring-price fallback remains supported but must pass the same monthly amount and interval checks.
 
-## Billing selection inside Stripe Checkout
+The historical database plan-code names are retained. New Checkout metadata records monthly billing. Stripe discounts are not hardcoded or automatically attached from a request-body promo code. Existing subscriptions, Stripe prices, and invoices are not migrated or deleted.
 
-The website has no billing selector. Growth and Scale buttons start with their monthly prices and tell customers to choose monthly or annual billing in Stripe. Their cards and comparison table emphasize $1,535/month and $2,685/month with savings of $164/month and $314/month directly below, followed by struck-through monthly rates of $1,699 and $2,999. A short note by checkout explains that the annual rate is paid upfront.
+## Deployment
 
-Configure these Dashboard-only subscription upsells before deploying this version:
+No cPanel deployment, Stripe price or coupon creation, subscription migration, or email sending was performed locally. Live Stripe verification requires the server environment.
 
-- Growth: open the $1,699/month Price details page. Under Upsells, select the $18,420/year price.
-- Scale: open the $2,999/month Price details page. Under Upsells, select the $32,220/year price.
+After configuring the three monthly price IDs and removing the Stripe upsells, pull `NEXTJS` and run `bash scripts/deploy-pricing-cpanel.sh` as the `vololead` account. The script verifies the monthly prices using the existing backend environment before copying files. If variables are configured only in cPanel rather than `backend/.env`, make them available to the terminal process without printing secrets.
 
-Each pair must belong to the same product and use the same currency and tax behavior. Stripe then presents both options in eligible hosted subscription checkouts. Creating two prices alone does not enable the chooser. Essential remains monthly only, without an upsell or setup fee.
+The script backs up both app directories without environment files or dependencies. It preserves routing, builds the frontend with the cPanel resource settings, copies only the six billing backend files, restarts both apps, and checks the site and API. This billing release is separate from the usual frontend-only `.cpanel.yml` hook. No environment files, database schemas, or existing subscriptions are changed by the script.
 
-The completion webhook retrieves the actual Checkout line items after purchase, so an annual selection inside Stripe produces annual confirmation pricing even though checkout started with monthly metadata. Keep all five configured price IDs; the deployment verification still checks them.
+## Copy and local preview
 
-Reference: https://docs.stripe.com/payments/checkout/upsells
-
-Run `node scripts/verifyCheckoutPrices.js` from the backend with the server's environment to verify all five prices. Live verification and a Stripe test-mode checkout could not be completed because Stripe credentials are not available locally. Do not deploy only the frontend and assume the billing amounts have changed. Follow `cpanelskill.md` for frontend deployment and keep the backend application separate.
-
-After configuring those Stripe price IDs in the backend app's environment, pull `NEXTJS` and run `bash scripts/deploy-pricing-cpanel.sh` as the `vololead` account. The script checks prices using the new configuration and the existing backend environment before copying files. If the app variables are configured only in cPanel rather than in `backend/.env`, make those same variables available to the terminal process. Never print secrets to obtain them.
-
-The script backs up both application directories without environment files or dependencies. It preserves the routing and existing applications, builds the frontend with the cPanel resource settings, copies only the six required backend files, restarts both apps, and checks the site and API. This is an explicit billing release, separate from the usual frontend-only `.cpanel.yml` hook. No environment files, database schemas, or existing subscriptions are changed by the script.
+Applied the unslop skill to homepage marketing copy, campaign setup explanations, plan descriptions, and the plan finder. Kept customer testimonials unchanged. Simplified vague or inflated wording into concrete service descriptions. Savings badges and offer notes support light and dark themes.
 
 ## Validation
 
 - Production build uses webpack and the existing single-worker cPanel settings.
-- Relevant billing, email, meeting, and subscription-access tests pass.
-- Email previews include separate annual Growth and Scale examples.
-- Browser checks cover billing selection, the dismissible popup, and mobile/desktop layouts.
+- Billing regression tests cover monthly checkout, Growth and Scale promotion-code entry, Essential without a setup fee, and rejection of annual requests even with old annual price variables present.
+- Historical subscription and email handling retains support for already-created annual subscriptions.
+- Browser checks cover both themes and mobile/desktop pricing layouts.

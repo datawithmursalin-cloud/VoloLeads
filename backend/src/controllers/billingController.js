@@ -394,7 +394,7 @@ async function createCheckoutSession(req, res) {
 
     const billingCycle = req.body.billingCycle || 'monthly';
     const plan = getPlanConfig(planCode, billingCycle);
-    if (!plan) {
+    if (billingCycle !== 'monthly' || !plan) {
       return res.status(400).json({ success: false, message: 'Invalid billing option selected.' });
     }
     const stripe = getStripeClient();
@@ -407,7 +407,7 @@ async function createCheckoutSession(req, res) {
       success_url: `${getApiBaseUrl()}/api/billing/checkout-success?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${appBaseUrl}/cancel.html`,
       billing_address_collection: 'auto',
-      allow_promotion_codes: false,
+      allow_promotion_codes: planCode !== PLAN_CODES.ESSENTIAL_MONTHLY,
       metadata: {
         planCode,
         billingCycle,

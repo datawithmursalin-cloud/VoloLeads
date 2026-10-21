@@ -67,7 +67,8 @@ const PLAN_CONFIG = {
   }
 };
 
-// Billing cadence is stored separately from the historical plan-code names.
+// Retain annual details for historical subscriptions and in-flight webhook events.
+// New checkout sessions and deployment checks support monthly billing only.
 const ANNUAL_PLAN_CONFIG = {
   [PLAN_CODES.PREMIUM_MONTHLY]: {
     displayName: 'Growth Annual',

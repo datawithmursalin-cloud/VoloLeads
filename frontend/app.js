@@ -1503,7 +1503,7 @@ function initSubscriptionCheckout() {
                     headers: {
                         'Content-Type': 'application/json',
                     },
-                    body: JSON.stringify({ plan, billingCycle: button.dataset.billingCycle || 'monthly' })
+                    body: JSON.stringify({ plan })
                 });
 
                 const data = await response.json().catch(() => ({}));
@@ -2433,12 +2433,12 @@ function initPlanRecommender() {
             highlights: ['1 dedicated caller, 80 hours/month, for $730/month', 'WAVV Triple Line Dialer included', 'One-time signup bonus: 10,000 BatchLeads-sourced leads']
         },
         'Growth': {
-            reason: 'You want ongoing monthly lead sourcing and campaign infrastructure managed for you, at $1,699/month billed monthly, or $1,535/month equivalent with $18,420 billed annually, saving $1,968/year.',
-            highlights: ['Managed campaign infrastructure', 'Dedicated caller support', 'Reporting, QA, and optimization']
+            reason: 'Get a managed caller, monthly leads, and dialer setup. Growth is $1,535/month with a valid promo code, or $1,699/month without a code.',
+            highlights: ['Monthly leads and dialer setup', 'Dedicated caller support', 'Reporting, QA, and optimization']
         },
         'Scale': {
-            reason: 'Two dedicated callers with managed monthly lead sourcing fit Scale at $2,999/month billed monthly, or $2,685/month equivalent with $32,220 billed annually, saving $3,768/year.',
-            highlights: ['2 managed callers', 'Focused or consistent campaign', 'Advanced reporting and optimization']
+            reason: 'Get two managed callers and monthly leads. Scale is $2,685/month with a valid promo code, or $2,999/month without a code.',
+            highlights: ['2 managed callers', 'More calling capacity', 'Advanced reporting and optimization']
         },
         'Custom+': {
             reason: 'Three or more callers or a multi-market campaign requires a custom capacity plan.',
