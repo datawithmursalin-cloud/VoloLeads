@@ -2430,7 +2430,7 @@ function initPlanRecommender() {
     const plans = {
         'Essential': {
             reason: 'Start with one dedicated caller, an included WAVV Triple Line Dialer, and a one-time signup bonus of 10,000 leads sourced using BatchLeads. You arrange any additional leads.',
-            highlights: ['1 dedicated caller, 80 hours/month, for $730/month', 'WAVV Triple Line Dialer included', 'One-time signup bonus: 10,000 BatchLeads-sourced leads']
+            highlights: ['1 dedicated caller, 100 hours/month, at $6 / hour. Billed $730 monthly, plus $150 one-time setup fee', 'WAVV Triple Line Dialer included ($120 / month value)', 'One-time signup bonus: 10,000 BatchLeads-sourced leads']
         },
         'Growth': {
             reason: 'Get a managed caller, monthly leads, and dialer setup. Growth is $1,535/month with a valid promo code, or $1,699/month without a code.',

@@ -20,7 +20,18 @@ async function getVerifiedCheckoutLineItems(stripe, planCode, billingCycle = 'mo
     || recurring.transform_quantity) {
     throw new Error(`Stripe recurring price for ${planCode} must match the advertised ${billingCycle} package`);
   }
-  return [{ price: ids.recurring, quantity: 1 }];
+  const lineItems = [{ price: ids.recurring, quantity: 1 }];
+  if (plan.pricing.setupAmountCents) {
+    lineItems.push({
+      price_data: {
+        currency: plan.pricing.currency,
+        unit_amount: plan.pricing.setupAmountCents,
+        product_data: { name: 'Essential one-time setup fee' }
+      },
+      quantity: 1
+    });
+  }
+  return lineItems;
 }
 
 async function getCheckoutBillingCycle(stripe, session, subscription) {

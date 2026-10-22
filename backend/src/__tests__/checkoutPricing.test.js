@@ -29,10 +29,11 @@ describe('checkout price verification', () => {
     expect(getPlanPricing(code).listDisplay).toMatch('/month');
   });
 
-  it('charges only the monthly Essential price even when legacy setup IDs remain configured', async () => {
+  it('charges the monthly Essential price plus a $150 one-time setup fee', async () => {
     process.env.STRIPE_PRICE_ESSENTIAL_WEEKLY_SETUP = 'unused_legacy_setup';
     expect(await getVerifiedCheckoutLineItems(stripe, PLAN_CODES.ESSENTIAL_MONTHLY)).toEqual([
-      { price: 'essential', quantity: 1 }
+      { price: 'essential', quantity: 1 },
+      { price_data: { currency: 'usd', unit_amount: 15000, product_data: { name: 'Essential one-time setup fee' } }, quantity: 1 }
     ]);
     expect(stripe.prices.retrieve).toHaveBeenCalledTimes(1);
     expect(stripe.prices.retrieve).toHaveBeenCalledWith('essential');
@@ -54,11 +55,12 @@ describe('checkout price verification', () => {
     await expect(getVerifiedCheckoutLineItems(stripe, PLAN_CODES.PREMIUM_MONTHLY)).rejects.toThrow('advertised monthly package');
   });
 
-  it('supports Essential checkout with both setup-price variables removed', async () => {
+  it('charges the setup fee without relying on old setup-price variables', async () => {
     delete process.env.STRIPE_PRICE_ESSENTIAL_MONTHLY_SETUP;
     delete process.env.STRIPE_PRICE_ESSENTIAL_WEEKLY_SETUP;
     expect(await getVerifiedCheckoutLineItems(stripe, PLAN_CODES.ESSENTIAL_MONTHLY)).toEqual([
-      { price: 'essential', quantity: 1 }
+      { price: 'essential', quantity: 1 },
+      { price_data: { currency: 'usd', unit_amount: 15000, product_data: { name: 'Essential one-time setup fee' } }, quantity: 1 }
     ]);
   });
 

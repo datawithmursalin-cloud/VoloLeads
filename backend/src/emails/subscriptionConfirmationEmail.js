@@ -114,10 +114,10 @@ function getPlanEmailDetails(planCode, discountInfo = null, billingCycle = 'mont
         eyebrow: 'Dedicated Cold Calling Support',
         headline: 'Essential is active',
         summary: 'Your dedicated cold calling support plan is now live.',
-        note: `${discountNote}Billed monthly with no setup fee. Additional lead sourcing and CRM costs are separate. The signup bonus consists of sourced records, not qualified opportunities or guaranteed results.`,
+        note: `${discountNote}Billed monthly. $150 one-time setup fee. Additional lead sourcing and CRM costs are separate. The signup bonus consists of sourced records, not qualified opportunities or guaranteed results.`,
         bullets: [
-          '1 dedicated cold caller, 80 hours/month, with a VA manager',
-          'WAVV Triple Line Dialer included',
+          '1 dedicated cold caller and 1 VA manager, 100 hours/month each',
+          'WAVV Triple Line Dialer included ($120 / month value)',
           'One-time signup bonus: 10,000 leads sourced using BatchLeads, at no additional charge',
           'Setup, training, and direct CRM integration',
           'Ongoing management and daily KPI reporting'
@@ -132,6 +132,8 @@ function getPlanEmailDetails(planCode, discountInfo = null, billingCycle = 'mont
         note: `${billingNote}${discountNote}Manage your subscription and renewal from your secure billing portal.`,
         bullets: [
           '1 dedicated cold caller assigned to your campaign',
+          '1 VA manager for 120 hours/month',
+          '1 on 1 Q&A Sessions',
           'Monthly lead sourcing, WAVV Triple Line Dialer, and data cleaning',
           'Daily QA monitoring, pipeline support, and CRM support'
         ]

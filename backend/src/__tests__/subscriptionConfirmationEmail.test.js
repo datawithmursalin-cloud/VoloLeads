@@ -79,8 +79,8 @@ describe('subscriptionConfirmationEmail', () => {
       for (const output of [buildSubscriptionEmailHtml(args), getSubscriptionEmailText(args)]) {
         expect(output).toContain('WAVV Triple Line Dialer included');
         expect(output).toContain('One-time signup bonus: 10,000 leads sourced using BatchLeads');
-        expect(output).toContain('80 hours/month');
-        expect(output).toContain('no setup fee');
+        expect(output).toContain('100 hours/month');
+        expect(output).toContain('$150 one-time setup fee');
         expect(output).not.toContain('setup fee deposit');
       }
     });

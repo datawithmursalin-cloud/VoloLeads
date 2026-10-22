@@ -411,7 +411,7 @@ async function createCheckoutSession(req, res) {
       metadata: {
         planCode,
         billingCycle,
-        setupFeeIncluded: 'false'
+        setupFeeIncluded: String(Boolean(plan.pricing.setupAmountCents))
       },
       subscription_data: {
         metadata: {

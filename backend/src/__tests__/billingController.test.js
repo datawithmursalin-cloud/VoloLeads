@@ -67,7 +67,7 @@ describe('checkout billing selection', () => {
     expect(getStripeClient).not.toHaveBeenCalled();
   });
 
-  it('creates Essential checkout without a setup fee even if old setup IDs remain', async () => {
+  it('creates Essential checkout with a $150 one-time fee even if old setup IDs remain', async () => {
     process.env.STRIPE_PRICE_ESSENTIAL_MONTHLY_RECURRING = 'essential_monthly';
     process.env.STRIPE_PRICE_ESSENTIAL_MONTHLY_SETUP = 'old_setup';
     process.env.STRIPE_PRICE_ESSENTIAL_WEEKLY_SETUP = 'older_setup';
@@ -82,9 +82,12 @@ describe('checkout billing selection', () => {
     const res = { status: jest.fn().mockReturnThis(), json: jest.fn().mockReturnThis() };
     await createCheckoutSession({ body: { plan: 'essential' } }, res);
     expect(stripe.checkout.sessions.create).toHaveBeenCalledWith(expect.objectContaining({
-      line_items: [{ price: 'essential_monthly', quantity: 1 }],
+      line_items: [
+        { price: 'essential_monthly', quantity: 1 },
+        { price_data: { currency: 'usd', unit_amount: 15000, product_data: { name: 'Essential one-time setup fee' } }, quantity: 1 }
+      ],
       allow_promotion_codes: false,
-      metadata: { planCode: 'essential_monthly', billingCycle: 'monthly', setupFeeIncluded: 'false' }
+      metadata: { planCode: 'essential_monthly', billingCycle: 'monthly', setupFeeIncluded: 'true' }
     }));
     expect(stripe.prices.retrieve).toHaveBeenCalledTimes(1);
     expect(res.status).toHaveBeenCalledWith(200);
