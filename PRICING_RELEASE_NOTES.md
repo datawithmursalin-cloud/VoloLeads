@@ -26,7 +26,7 @@ Growth and Scale Checkout sessions enable customer-entered promotion codes. Crea
 
 Remove the Growth and Scale upsell configurations from their monthly Price details pages in Stripe. This Dashboard-only setting must be removed by the user, as requested. Annual Checkout API requests are rejected, and the deployment verifier checks only the three monthly prices. Old annual price variables can remain for historical subscription lookup, but are not required for deployment. Historical annual billing information remains available to webhook and email handling for existing subscriptions or in-flight sessions.
 
-Essential has no setup fee. Old setup-price environment variables are ignored. The legacy Essential recurring-price fallback remains supported but must pass the same monthly amount and interval checks.
+Essential has a $150 one-time setup fee in addition to the $730 monthly charge. Checkout adds the setup fee as a one-time line item from the billing configuration. Old setup-price environment variables are ignored. The legacy Essential recurring-price fallback remains supported but must pass the same monthly amount and interval checks.
 
 The historical database plan-code names are retained. New Checkout metadata records monthly billing. Stripe discounts are not hardcoded or automatically attached from a request-body promo code. Existing subscriptions, Stripe prices, and invoices are not migrated or deleted.
 
@@ -45,6 +45,6 @@ Applied the unslop skill to homepage marketing copy, campaign setup explanations
 ## Validation
 
 - Production build uses webpack and the existing single-worker cPanel settings.
-- Billing regression tests cover monthly checkout, Growth and Scale promotion-code entry, Essential without a setup fee, and rejection of annual requests even with old annual price variables present.
+- Billing regression tests cover monthly checkout, Growth and Scale promotion-code entry, Essential with a $150 one-time setup fee, and rejection of annual requests even with old annual price variables present.
 - Historical subscription and email handling retains support for already-created annual subscriptions.
 - Browser checks cover both themes and mobile/desktop pricing layouts.

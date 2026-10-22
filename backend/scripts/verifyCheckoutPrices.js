@@ -10,7 +10,8 @@ async function main() {
     const billingCycle = 'monthly';
     try {
       await getVerifiedCheckoutLineItems(stripe, code, billingCycle);
-      console.log(`${code} (${billingCycle}): verified ${getPlanPricing(code, billingCycle).listDisplay}${code === PLAN_CODES.ESSENTIAL_MONTHLY ? '; no setup fee' : ''}`);
+      const pricing = getPlanPricing(code, billingCycle);
+      console.log(`${code} (${billingCycle}): verified ${pricing.listDisplay}${pricing.setupDisplay ? `; ${pricing.setupDisplay}` : ''}`);
     } catch {
       failed = true;
       console.error(`${code} (${billingCycle}): verification failed. Check the configured Stripe price amount, currency, and interval.`);
