@@ -13,7 +13,7 @@ Production site: **https://vololeads.com**
 
 ## Prerequisites
 
-- **Node.js** 16+ and npm 8+
+- **Node.js** 22.23.4+, 24.22.1+, or 26.12.1+ on the corresponding supported major release, and npm 8+
 - **PostgreSQL** (local Docker, local install, or remote)
 - **Stripe** account (test mode for local dev)
 - **SMTP** credentials (for contact/subscription emails)

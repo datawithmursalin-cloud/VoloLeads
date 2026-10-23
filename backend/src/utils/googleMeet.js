@@ -1,4 +1,4 @@
-const { v4: uuidv4 } = require('uuid');
+const { randomUUID } = require('node:crypto');
 const logger = require('./logger');
 const {
   buildMeetingWindow,
@@ -79,7 +79,7 @@ async function createMeetEvent({
     attendees: [{ email, displayName: name }],
     conferenceData: {
       createRequest: {
-        requestId: uuidv4(),
+        requestId: randomUUID(),
         conferenceSolutionKey: { type: 'hangoutsMeet' }
       }
     },
