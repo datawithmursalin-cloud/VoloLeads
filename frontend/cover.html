@@ -1,0 +1,366 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0f172a">
+  <title>VoloLeads — LinkedIn Cover</title>
+  <style>
+    :root {
+      --navy: #0f172a;
+      --navy-deep: #070d1b;
+      --slate: #94a3b8;
+      --white: #ffffff;
+      --orange: #f97316;
+      --orange-hot: #fb923c;
+      --cover-width: 1584;
+      --cover-height: 396;
+    }
+
+    * { box-sizing: border-box; }
+
+    html,
+    body {
+      min-height: 100%;
+      margin: 0;
+    }
+
+    body {
+      display: grid;
+      place-items: center;
+      overflow: hidden;
+      background: #050914;
+      font-family: Inter, "Avenir Next", Avenir, Helvetica, sans-serif;
+    }
+
+    .cover {
+      position: relative;
+      width: 1584px;
+      height: 396px;
+      overflow: hidden;
+      isolation: isolate;
+      color: var(--white);
+      background:
+        radial-gradient(circle at 35% 44%, rgba(249, 115, 22, 0.1), transparent 25%),
+        linear-gradient(105deg, var(--navy-deep) 0%, var(--navy) 58%, #111c34 100%);
+      transform-origin: center;
+    }
+
+    .cover::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: -3;
+      background-image:
+        linear-gradient(rgba(255, 255, 255, 0.022) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.022) 1px, transparent 1px);
+      background-size: 66px 66px;
+      mask-image: linear-gradient(90deg, #000 0%, #000 62%, transparent 86%);
+    }
+
+    .cover::after {
+      content: "";
+      position: absolute;
+      top: -290px;
+      left: 176px;
+      width: 660px;
+      height: 660px;
+      z-index: -2;
+      border: 1px solid rgba(249, 115, 22, 0.14);
+      border-radius: 50%;
+      box-shadow:
+        0 0 0 68px rgba(249, 115, 22, 0.018),
+        0 0 0 136px rgba(249, 115, 22, 0.01);
+    }
+
+    .flare {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 430px;
+      height: 5px;
+      background: linear-gradient(90deg, var(--orange), var(--orange-hot), transparent);
+    }
+
+    .divider {
+      position: absolute;
+      top: 62px;
+      bottom: 57px;
+      left: 778px;
+      width: 1px;
+      background: linear-gradient(180deg, transparent, rgba(148, 163, 184, 0.18) 20%, rgba(148, 163, 184, 0.18) 80%, transparent);
+    }
+
+    .divider::after {
+      content: "";
+      position: absolute;
+      top: 88px;
+      left: -2px;
+      width: 5px;
+      height: 46px;
+      border-radius: 999px;
+      background: var(--orange);
+      box-shadow: 0 0 20px rgba(249, 115, 22, 0.34);
+    }
+
+    .safe-zone {
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      width: 285px;
+      height: 235px;
+      background: radial-gradient(circle at 80px 230px, rgba(2, 6, 23, 0.4), transparent 67%);
+      pointer-events: none;
+    }
+
+    .brand {
+      position: absolute;
+      top: 42px;
+      right: 95px;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 14px;
+    }
+
+    .brand-mark {
+      width: 48px;
+      height: 48px;
+      display: grid;
+      place-items: center;
+      overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 14px;
+      background: rgba(255, 255, 255, 0.96);
+      box-shadow: 0 12px 30px rgba(2, 6, 23, 0.35);
+    }
+
+    .brand-mark img {
+      width: 42px;
+      height: 42px;
+      object-fit: contain;
+    }
+
+    .brand-name {
+      font-size: 25px;
+      font-weight: 800;
+      letter-spacing: -0.8px;
+    }
+
+    .brand-name span { color: var(--orange); }
+
+    .message {
+      position: absolute;
+      right: 95px;
+      top: 126px;
+      width: 690px;
+      text-align: right;
+    }
+
+    .eyebrow {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 10px;
+      margin-bottom: 13px;
+      color: #fdba74;
+      font-size: 14px;
+      font-weight: 800;
+      letter-spacing: 2.4px;
+      text-transform: uppercase;
+    }
+
+    .eyebrow::before {
+      content: "";
+      width: 34px;
+      height: 3px;
+      border-radius: 999px;
+      background: var(--orange);
+    }
+
+    h1 {
+      max-width: 690px;
+      margin: 0;
+      font-size: 47px;
+      line-height: 0.98;
+      font-weight: 800;
+      letter-spacing: -2.7px;
+    }
+
+    h1 em {
+      color: var(--orange);
+      font-style: normal;
+    }
+
+    .subline {
+      margin: 19px 0 0;
+      color: #cbd5e1;
+      font-size: 17px;
+      font-weight: 500;
+      letter-spacing: -0.15px;
+    }
+
+    .subline strong {
+      color: var(--white);
+      font-weight: 700;
+    }
+
+    .pipeline {
+      position: absolute;
+      left: 410px;
+      top: 92px;
+      width: 330px;
+      height: 216px;
+    }
+
+    .pipeline-path {
+      position: absolute;
+      top: 107px;
+      left: 41px;
+      width: 230px;
+      height: 1px;
+      background: linear-gradient(90deg, rgba(249, 115, 22, 0.18), rgba(249, 115, 22, 0.88));
+      transform: rotate(-18deg);
+      transform-origin: left center;
+      box-shadow: 0 0 16px rgba(249, 115, 22, 0.2);
+    }
+
+    .node {
+      position: absolute;
+      display: grid;
+      place-items: center;
+      width: 82px;
+      height: 82px;
+      border: 1px solid rgba(255, 255, 255, 0.11);
+      border-radius: 20px;
+      background: rgba(15, 23, 42, 0.68);
+      box-shadow: 0 16px 38px rgba(2, 6, 23, 0.34);
+      backdrop-filter: blur(12px);
+    }
+
+    .node::before {
+      content: "";
+      width: 26px;
+      height: 26px;
+      border: 2px solid rgba(255, 255, 255, 0.78);
+      border-radius: 50%;
+    }
+
+    .node::after {
+      position: absolute;
+      left: 0;
+      bottom: 9px;
+      width: 100%;
+      color: var(--slate);
+      font-size: 8px;
+      font-weight: 800;
+      letter-spacing: 1.2px;
+      text-align: center;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+    .node-one { left: 0; bottom: 5px; }
+    .node-two { left: 119px; top: 61px; }
+    .node-three {
+      right: 0;
+      top: 0;
+      border-color: rgba(249, 115, 22, 0.5);
+      background: linear-gradient(145deg, rgba(249, 115, 22, 0.98), rgba(234, 88, 12, 0.9));
+      box-shadow: 0 18px 44px rgba(249, 115, 22, 0.24);
+    }
+
+    .node-one::after {
+      content: "Conversations";
+      font-size: 6.75px;
+      letter-spacing: 0.55px;
+    }
+    .node-two::after { content: "Qualified"; }
+    .node-three::after { content: "Deals"; color: rgba(255, 255, 255, 0.88); }
+
+    .node-two::before {
+      border-radius: 9px;
+      transform: rotate(45deg);
+    }
+
+    .node-three::before {
+      width: 29px;
+      height: 20px;
+      border-width: 0 0 3px 3px;
+      border-radius: 2px;
+      transform: rotate(-45deg) translate(2px, -3px);
+    }
+
+    .url {
+      position: absolute;
+      right: 95px;
+      bottom: 36px;
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      color: #e2e8f0;
+      font-size: 15px;
+      font-weight: 700;
+      letter-spacing: 0.35px;
+    }
+
+    .url::before {
+      content: "";
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--orange);
+      box-shadow: 0 0 0 5px rgba(249, 115, 22, 0.13);
+    }
+
+    @media (prefers-reduced-motion: no-preference) {
+      .node-three { animation: glow 3s ease-in-out infinite; }
+      @keyframes glow {
+        50% { box-shadow: 0 20px 70px rgba(249, 115, 22, 0.43); }
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Export this 1584 × 396 canvas as PNG for a LinkedIn personal cover. -->
+  <main class="cover" id="linkedin-cover" aria-label="VoloLeads LinkedIn cover">
+    <div class="flare"></div>
+    <div class="safe-zone" aria-hidden="true"></div>
+    <div class="divider" aria-hidden="true"></div>
+
+    <div class="brand">
+      <div class="brand-mark">
+        <img src="png/logo.webp" alt="VoloLeads logo">
+      </div>
+      <div class="brand-name">Volo<span>Leads</span></div>
+    </div>
+
+    <section class="message">
+      <div class="eyebrow">Lead generation, redefined</div>
+      <h1>More conversations.<br>More <em>deals.</em></h1>
+      <p class="subline"><strong>Wholesale-trained cold callers</strong> · Daily KPIs · Managed quality</p>
+    </section>
+
+    <div class="pipeline" aria-hidden="true">
+      <div class="pipeline-path"></div>
+      <div class="node node-one"></div>
+      <div class="node node-two"></div>
+      <div class="node node-three"></div>
+    </div>
+
+    <div class="url">vololeads.com</div>
+  </main>
+
+  <script>
+    const cover = document.querySelector('.cover');
+
+    function fitCover() {
+      const scale = Math.min(window.innerWidth / 1584, window.innerHeight / 396);
+      cover.style.transform = `scale(${scale})`;
+    }
+
+    fitCover();
+    window.addEventListener('resize', fitCover);
+  </script>
+</body>
+</html>
