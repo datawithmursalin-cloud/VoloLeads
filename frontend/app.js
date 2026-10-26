@@ -28,6 +28,7 @@ function initializeVoloLeadsPage() {
     initDecorativeIcons();
     initGuidedHowItWorks();
     initPlanRecommender();
+    initEssentialSignupOffer();
     initTrustpilotCarousel();
     initDeliverablePreviews();
     initAudioBreakdowns();
@@ -1446,6 +1447,36 @@ function initDecorativeIcons() {
     });
 }
 
+function initEssentialSignupOffer() {
+    const dialog = document.getElementById('essential-offer-dialog');
+    if (!dialog || dialog.dataset.initialized) return;
+    dialog.dataset.initialized = 'true';
+    initInteractionDialog(dialog);
+    const storageKey = 'vololeads-essential-offer-seen';
+    let seen = Boolean(window.__essentialOfferShown);
+    try { seen = seen || sessionStorage.getItem(storageKey) === 'true'; } catch { /* Storage may be disabled. */ }
+    if (seen) return;
+
+    document.getElementById('essential-offer-view-plan')?.addEventListener('click', () => {
+        dialog.close();
+        const card = document.querySelector('[data-plan-card="Essential"]');
+        if (!card) return;
+        if (card.querySelector('.is-flipped')) flipCard(card);
+        card.scrollIntoView({ block: 'center', behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
+        card.focus({ preventScroll: true });
+    });
+
+    window.setTimeout(() => {
+        if (!dialog.isConnected || document.hidden || location.hash === '#contact'
+            || document.activeElement?.matches('input, textarea, select, [contenteditable="true"]')
+            || document.querySelector('dialog[open]')
+            || [...document.querySelectorAll('.subscribe-btn')].some(button => button.disabled)) return;
+        window.__essentialOfferShown = true;
+        try { sessionStorage.setItem(storageKey, 'true'); } catch { /* In-memory dismissal still works. */ }
+        openInteractionDialog(dialog);
+    }, 3000);
+}
+
 /* --- Subscription Checkout Logic --- */
 function initSubscriptionCheckout() {
     const subscribeButtons = document.querySelectorAll('.subscribe-btn[data-plan]');
@@ -2398,16 +2429,16 @@ function initPlanRecommender() {
 
     const plans = {
         'Essential': {
-            reason: 'Your dialer and data are already in place, so the essential one-caller setup fits at any campaign pace.',
-            highlights: ['1 dedicated caller', 'Uses your dialer and data', 'Daily reporting and QA']
+            reason: 'Start with one dedicated caller, an included WAVV Triple Line Dialer, and a one-time signup bonus of 10,000 leads sourced using BatchLeads. You arrange any additional leads.',
+            highlights: ['1 dedicated caller, 100 hours/month, at $6 / hour. Billed $730 monthly, plus $150 one-time setup fee', 'WAVV Triple Line Dialer included ($120 / month value)', 'One-time signup bonus: 10,000 BatchLeads-sourced leads']
         },
         'Growth': {
-            reason: 'You want a consistent campaign with the operating stack managed for you.',
-            highlights: ['Managed campaign infrastructure', 'Dedicated caller support', 'Reporting, QA, and optimization']
+            reason: 'Get a managed caller, monthly leads, and dialer setup. Growth is $1,535/month with a valid promo code, or $1,699/month without a code.',
+            highlights: ['Monthly leads and dialer setup', 'Dedicated caller support', 'Reporting, QA, and optimization']
         },
         'Scale': {
-            reason: 'A managed two-caller campaign at a focused or consistent pace fits the Scale plan.',
-            highlights: ['2 managed callers', 'Focused or consistent campaign', 'Advanced reporting and optimization']
+            reason: 'Get two managed callers and monthly leads. Scale is $2,685/month with a valid promo code, or $2,999/month without a code.',
+            highlights: ['2 managed callers', 'More calling capacity', 'Advanced reporting and optimization']
         },
         'Custom+': {
             reason: 'Three or more callers or a multi-market campaign requires a custom capacity plan.',
@@ -2443,8 +2474,7 @@ function initPlanRecommender() {
         const volume = getValue('advisor-volume');
 
         if (callers === 'three-plus' || volume === 'multi') recommendation = 'Custom+';
-        else if (stack === 'managed' && callers === 'two') recommendation = 'Scale';
-        else if (callers === 'two') recommendation = 'Custom+';
+        else if (callers === 'two') recommendation = 'Scale';
         else if (stack === 'owned') recommendation = 'Essential';
         else recommendation = 'Growth';
 
@@ -2781,8 +2811,8 @@ function initDeliverablePreviews() {
     const deliverables = {
         report: {
             title: 'Daily call report',
-            intro: 'Each VA’s end-of-shift report shows dial capacity, call outcomes, and immediate follow-up priorities.',
-            preview: '<div class="sample-metrics"><div><span>Dials / hour</span><strong>Up to 300</strong></div><div><span>Shift length</span><strong>4 hours</strong></div><div><span>Daily dials</span><strong>Up to 1,200</strong></div><div><span>Dialer</span><strong>Triple line</strong></div></div><div class="sample-callout"><span>POWER DIALING CAPACITY</span><p>Using a triple-line power dialer, a VA can place up to 1,200 dials across a four-hour shift. Actual totals vary by list quality, pickup rate, and campaign conditions.</p></div>'
+            intro: 'Each VA’s end-of-shift report shows call outcomes and immediate follow-up priorities.',
+            preview: '<div class="sample-metrics"><div><span>Reporting</span><strong>Daily</strong></div><div><span>Outcomes</span><strong>Tracked</strong></div><div><span>Follow-up</span><strong>Prioritized</strong></div><div><span>Dialer</span><strong>WAVV Triple Line</strong></div></div><div class="sample-callout"><span>DAILY CAMPAIGN REPORTING</span><p>Your report tracks completed calls, seller responses, and follow-up priorities so you can review campaign progress with your VA manager.</p></div>'
         },
         notes: {
             title: 'Lead notes',

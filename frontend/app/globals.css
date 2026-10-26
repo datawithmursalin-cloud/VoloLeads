@@ -12,3 +12,14 @@ html.dark {
 body {
   margin: 0;
 }
+
+/* The imported pages share one layout root, including before hydration. */
+#legacy-root {
+  flex: 1 0 auto;
+  width: 100%;
+  min-width: 0;
+}
+
+html {
+  scrollbar-gutter: stable;
+}

@@ -19,7 +19,7 @@ existing backend.
 ## Applications
 
 There are two independent CloudLinux Passenger Node.js applications. Both use
-Node.js `22.23.2` in Production mode.
+Node.js `22.23.4` in Production mode, verified on October 23, 2026.
 
 ### Backend — preserve during frontend work
 

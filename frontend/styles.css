@@ -824,7 +824,7 @@ textarea:focus {
    ============================================ */
 @media print {
     nav,
-    footer,
+    :is(body, body > :where(#legacy-root)) > footer,
     .no-print {
         display: none !important;
     }
@@ -2237,6 +2237,49 @@ html.dark #plans .plans-partnership-system {
     font-size: clamp(0.95rem, 1.2vw, 1.05rem) !important;
 }
 
+#plans .plan-regular-price {
+    margin: 0 0 .6rem;
+    color: #64748b;
+    font-size: .9rem;
+    line-height: 1.4;
+}
+
+#plans .plan-regular-price s {
+    text-decoration-thickness: 1.5px;
+}
+
+#plans .plan-savings-label {
+    display: inline-flex;
+    align-items: center;
+    margin: .4rem 0 .55rem;
+    padding: .3rem .65rem;
+    border: 1px solid rgba(234, 88, 12, .2);
+    border-radius: .5rem;
+    background: #fff7ed;
+    color: #9a3412;
+    font-size: .85rem;
+    font-weight: 700;
+    line-height: 1.4;
+}
+
+#plans .plan-offer-note {
+    margin: 0;
+    color: #64748b;
+    font-size: .78rem;
+    line-height: 1.5;
+}
+
+.dark #plans .plan-regular-price,
+.dark #plans .plan-offer-note {
+    color: #cbd5e1;
+}
+
+.dark #plans .plan-savings-label {
+    border-color: rgba(251, 146, 60, .3);
+    background: rgba(249, 115, 22, .1);
+    color: #fdba74;
+}
+
 @media (min-width: 1024px) {
     #plans .plan-price {
         font-size: clamp(2.75rem, 3.25vw, 3.45rem) !important;
@@ -2707,20 +2750,20 @@ a.rounded-full:hover {
     color: #f8fafc;
 }
 
-html.dark *,
-html.dark *::before,
-html.dark *::after {
+html *,
+html *::before,
+html *::after {
     text-shadow: none !important;
 }
 
-html.dark .shadow-sm,
-html.dark .shadow,
-html.dark .shadow-md,
-html.dark .shadow-lg,
-html.dark .shadow-xl,
-html.dark .shadow-2xl,
-html.dark [class*="shadow-"] {
-    box-shadow: none !important;
+/* Shared shadow geometry keeps both themes visually consistent. */
+html .shadow-sm,
+html .shadow,
+html .shadow-md,
+html .shadow-lg,
+html .shadow-xl,
+html .shadow-2xl {
+    box-shadow: 0 8px 24px -12px rgba(15, 23, 42, 0.24) !important;
 }
 
 html.dark #plans .perspective-1000,
@@ -2773,11 +2816,11 @@ html.dark body::before {
         linear-gradient(to bottom, rgba(148, 163, 184, 0.1) 1px, transparent 1px);
 }
 
-body > nav,
-body > main,
-body > footer,
-body > header,
-body > article {
+
+:is(body, body > :where(#legacy-root)) > main,
+:is(body, body > :where(#legacy-root)) > footer,
+:is(body, body > :where(#legacy-root)) > header,
+:is(body, body > :where(#legacy-root)) > article {
     position: relative;
     z-index: 1;
 }
@@ -2787,22 +2830,22 @@ html.dark body {
     background: #020617 !important;
 }
 
-body > main:not(#main-content),
-body > section {
+:is(body, body > :where(#legacy-root)) > main:not(#main-content),
+:is(body, body > :where(#legacy-root)) > section {
     isolation: isolate;
     background:
         radial-gradient(circle at 50% 0%, rgba(249, 115, 22, 0.09), transparent 32rem),
         linear-gradient(135deg, #fff7ed 0%, #ffffff 52%, #f8fafc 100%);
 }
 
-html.dark body > main:not(#main-content),
-html.dark body > section {
+html.dark :is(body, body > :where(#legacy-root)) > main:not(#main-content),
+html.dark :is(body, body > :where(#legacy-root)) > section {
     background: #020617 !important;
 }
 
-body:not(.site-preload) > main:not(#main-content),
-body:not(.site-preload) > header,
-body:not(.site-preload) > article {
+:is(body:not(.site-preload), body:not(.site-preload) > :where(#legacy-root)) > main:not(#main-content),
+:is(body:not(.site-preload), body:not(.site-preload) > :where(#legacy-root)) > header,
+:is(body:not(.site-preload), body:not(.site-preload) > :where(#legacy-root)) > article {
     background:
         linear-gradient(to bottom, rgba(248, 250, 252, 0.18) 0%, rgba(248, 250, 252, 0.76) 21rem, #f8fafc 32rem),
         linear-gradient(to right, rgba(148, 163, 184, 0.22) 1px, transparent 1px),
@@ -2812,9 +2855,9 @@ body:not(.site-preload) > article {
     background-position: center top !important;
 }
 
-html.dark body:not(.site-preload) > main:not(#main-content),
-html.dark body:not(.site-preload) > header,
-html.dark body:not(.site-preload) > article {
+html.dark :is(body:not(.site-preload), body:not(.site-preload) > :where(#legacy-root)) > main:not(#main-content),
+html.dark :is(body:not(.site-preload), body:not(.site-preload) > :where(#legacy-root)) > header,
+html.dark :is(body:not(.site-preload), body:not(.site-preload) > :where(#legacy-root)) > article {
     background:
         linear-gradient(to bottom, rgba(2, 6, 23, 0.18) 0%, rgba(2, 6, 23, 0.78) 13rem, #020617 22rem),
         linear-gradient(to right, rgba(148, 163, 184, 0.08) 1px, transparent 1px),
@@ -2824,16 +2867,16 @@ html.dark body:not(.site-preload) > article {
     background-position: center top !important;
 }
 
-body:not(.site-preload) > main:not(#main-content),
-body:not(.site-preload) > header,
-body:not(.site-preload) > article {
+:is(body:not(.site-preload), body:not(.site-preload) > :where(#legacy-root)) > main:not(#main-content),
+:is(body:not(.site-preload), body:not(.site-preload) > :where(#legacy-root)) > header,
+:is(body:not(.site-preload), body:not(.site-preload) > :where(#legacy-root)) > article {
     position: relative;
     isolation: isolate;
 }
 
-body:not(.site-preload) > main:not(#main-content)::before,
-body:not(.site-preload) > header::before,
-body:not(.site-preload) > article::before {
+:is(body:not(.site-preload), body:not(.site-preload) > :where(#legacy-root)) > main:not(#main-content)::before,
+:is(body:not(.site-preload), body:not(.site-preload) > :where(#legacy-root)) > header::before,
+:is(body:not(.site-preload), body:not(.site-preload) > :where(#legacy-root)) > article::before {
     content: none;
     position: absolute;
     inset: 0 0 auto;
@@ -2850,24 +2893,24 @@ body:not(.site-preload) > article::before {
     -webkit-mask-image: linear-gradient(to bottom, #000 0%, rgba(0, 0, 0, 0.82) 42%, transparent 100%);
 }
 
-body:not(.site-preload) > main:not(#main-content) > *,
-body:not(.site-preload) > header > *,
-body:not(.site-preload) > article > * {
+:is(body:not(.site-preload), body:not(.site-preload) > :where(#legacy-root)) > main:not(#main-content) > *,
+:is(body:not(.site-preload), body:not(.site-preload) > :where(#legacy-root)) > header > *,
+:is(body:not(.site-preload), body:not(.site-preload) > :where(#legacy-root)) > article > * {
     position: relative;
     z-index: 1;
 }
 
-html.dark body:not(.site-preload) > main:not(#main-content)::before,
-html.dark body:not(.site-preload) > header::before,
-html.dark body:not(.site-preload) > article::before {
+html.dark :is(body:not(.site-preload), body:not(.site-preload) > :where(#legacy-root)) > main:not(#main-content)::before,
+html.dark :is(body:not(.site-preload), body:not(.site-preload) > :where(#legacy-root)) > header::before,
+html.dark :is(body:not(.site-preload), body:not(.site-preload) > :where(#legacy-root)) > article::before {
     opacity: 0.65;
     background-image:
         linear-gradient(to right, rgba(148, 163, 184, 0.12) 1px, transparent 1px),
         linear-gradient(to bottom, rgba(148, 163, 184, 0.08) 1px, transparent 1px);
 }
 
-html.dark body > main:not(#main-content) > .absolute[class*="blur-"],
-html.dark body > section > .absolute[class*="blur-"],
+html.dark :is(body, body > :where(#legacy-root)) > main:not(#main-content) > .absolute[class*="blur-"],
+html.dark :is(body, body > :where(#legacy-root)) > section > .absolute[class*="blur-"],
 html.dark .animate-blob,
 html.dark .mix-blend-screen,
 html.dark .mix-blend-multiply {
@@ -2902,8 +2945,8 @@ nav.fixed.top-6 {
     overscroll-behavior: contain;
 }
 
-body > main:not(#main-content),
-body > section {
+:is(body, body > :where(#legacy-root)) > main:not(#main-content),
+:is(body, body > :where(#legacy-root)) > section {
     padding-top: var(--nav-clearance) !important;
     padding-bottom: var(--page-bottom-space) !important;
     padding-left: var(--site-edge) !important;
@@ -2998,7 +3041,7 @@ body > section {
 .utility-shell h1,
 .utility-success-shell h1,
 .utility-status-card h1,
-body > section h1 {
+:is(body, body > :where(#legacy-root)) > section h1 {
     font-size: clamp(2.3rem, 7vw, 4rem) !important;
     line-height: 1.06 !important;
     text-wrap: balance;
@@ -3010,37 +3053,37 @@ body > section h1 {
     text-wrap: pretty;
 }
 
-footer {
+:is(body, body > :where(#legacy-root)) > footer {
     padding-top: clamp(2rem, 4vw, 3rem) !important;
     padding-bottom: clamp(2rem, 4vw, 3rem) !important;
 }
 
-footer .grid {
+:is(body, body > :where(#legacy-root)) > footer .grid {
     gap: clamp(1.5rem, 3vw, 2.25rem) !important;
 }
 
 @media (min-width: 1024px) {
-    footer {
+    :is(body, body > :where(#legacy-root)) > footer {
         padding-top: 2.5rem !important;
         padding-bottom: 2rem !important;
     }
 
-    footer .grid {
+    :is(body, body > :where(#legacy-root)) > footer .grid {
         grid-template-columns: minmax(18rem, 2fr) repeat(4, minmax(8rem, 1fr)) !important;
         gap: 2rem !important;
         align-items: start;
         margin-bottom: 2rem !important;
     }
 
-    footer h4 {
+    :is(body, body > :where(#legacy-root)) > footer h4 {
         margin-bottom: 0.75rem !important;
     }
 
-    footer ul.space-y-2 > :not([hidden]) ~ :not([hidden]) {
+    :is(body, body > :where(#legacy-root)) > footer ul.space-y-2 > :not([hidden]) ~ :not([hidden]) {
         margin-top: 0.35rem !important;
     }
 
-    footer .border-t {
+    :is(body, body > :where(#legacy-root)) > footer .border-t {
         padding-top: 1.5rem !important;
     }
 }
@@ -3077,7 +3120,7 @@ footer .grid {
     .utility-shell h1,
     .utility-success-shell h1,
     .utility-status-card h1,
-    body > section h1 {
+    :is(body, body > :where(#legacy-root)) > section h1 {
         font-size: clamp(2.15rem, 10vw, 3rem) !important;
     }
 
@@ -3128,7 +3171,7 @@ footer .grid {
         padding: 1.1rem !important;
     }
 
-    body > main:not(#main-content) .utility-status-card {
+    :is(body, body > :where(#legacy-root)) > main:not(#main-content) .utility-status-card {
         margin-top: 1rem !important;
     }
 
@@ -3178,7 +3221,7 @@ footer .grid {
         margin-bottom: 0 !important;
     }
 
-    footer .grid {
+    :is(body, body > :where(#legacy-root)) > footer .grid {
         grid-template-columns: 1fr !important;
     }
 }
@@ -3270,8 +3313,8 @@ footer .grid {
 }
 
 /* Keep insight articles as one continuous editorial surface. */
-body:not(.site-preload) > header.insight-hero-bg,
-body:not(.site-preload) > article.insight-article {
+:is(body:not(.site-preload), body:not(.site-preload) > :where(#legacy-root)) > header.insight-hero-bg,
+:is(body:not(.site-preload), body:not(.site-preload) > :where(#legacy-root)) > article.insight-article {
     background:
         linear-gradient(to bottom, rgba(248, 250, 252, 0.08) 0%, rgba(248, 250, 252, 0.9) 10rem, #f8fafc 100%),
         linear-gradient(to right, rgba(148, 163, 184, 0.2) 1px, transparent 1px),
@@ -3282,8 +3325,8 @@ body:not(.site-preload) > article.insight-article {
     border-bottom: 0 !important;
 }
 
-html.dark body:not(.site-preload) > header.insight-hero-bg,
-html.dark body:not(.site-preload) > article.insight-article {
+html.dark :is(body:not(.site-preload), body:not(.site-preload) > :where(#legacy-root)) > header.insight-hero-bg,
+html.dark :is(body:not(.site-preload), body:not(.site-preload) > :where(#legacy-root)) > article.insight-article {
     background:
         linear-gradient(to bottom, rgba(2, 6, 23, 0.08) 0%, rgba(2, 6, 23, 0.82) 9rem, #020617 100%),
         linear-gradient(to right, rgba(148, 163, 184, 0.075) 1px, transparent 1px),
@@ -3293,12 +3336,12 @@ html.dark body:not(.site-preload) > article.insight-article {
     background-position: center top !important;
 }
 
-body:not(.site-preload) > article.insight-article {
+:is(body:not(.site-preload), body:not(.site-preload) > :where(#legacy-root)) > article.insight-article {
     padding-top: clamp(1.75rem, 4vw, 2.75rem) !important;
 }
 
 /* Final utility page spacing override: keep checkout/status cards directly under nav. */
-body > main.utility-page-main {
+:is(body, body > :where(#legacy-root)) > main.utility-page-main {
     display: grid !important;
     justify-items: center !important;
     align-items: start !important;
@@ -3320,20 +3363,20 @@ body > main.utility-page-main {
     background-position: center top !important;
 }
 
-body > main.utility-page-main > section {
+:is(body, body > :where(#legacy-root)) > main.utility-page-main > section {
     width: min(100%, 64rem) !important;
     margin-left: auto !important;
     margin-right: auto !important;
 }
 
 @media (max-width: 640px) {
-    body > main.utility-page-main {
+    :is(body, body > :where(#legacy-root)) > main.utility-page-main {
         padding-top: calc(var(--nav-clearance) + 0.75rem) !important;
         padding-bottom: 2.5rem !important;
     }
 }
 
-html.dark body > main.utility-page-main {
+html.dark :is(body, body > :where(#legacy-root)) > main.utility-page-main {
     background:
         linear-gradient(to bottom, rgba(2, 6, 23, 0.12) 0%, rgba(2, 6, 23, 0.82) 8rem, #020617 14rem),
         linear-gradient(to right, rgba(148, 163, 184, 0.075) 1px, transparent 1px),
@@ -4725,6 +4768,7 @@ html.dark .daily-items > button > i:first-child {
     position: relative;
     overflow: hidden;
     padding: 1.35rem;
+    border: 1px solid transparent;
     border-radius: 1.1rem;
     color: #fff;
     background: #0f1b2d;
@@ -4790,6 +4834,7 @@ html.dark .daily-items > button > i:first-child {
 
 #advisor-apply-plan {
     padding: .7rem .9rem;
+    border: 1px solid transparent;
     border-radius: .65rem;
     color: #fff;
     background: #f97316;
@@ -6468,3 +6513,74 @@ html:not(.dark) .whatsapp-launcher:hover {
 html:not(.dark) .whatsapp-launcher-label small { color: #64748b; }
 html:not(.dark) .whatsapp-launcher-label strong { color: #0f1b2d; }
 html:not(.dark) .whatsapp-launcher-status { border-color: #fff; }
+
+/* Keep original and monthly package prices legible on both card faces. */
+#plans .plan-monthly-price,
+#plans .plan-back-price {
+    color: #64748b;
+    font-size: .875rem;
+    line-height: 1.5;
+    margin-bottom: .5rem;
+}
+
+#plans .plan-back-price span,
+#plans .plan-back-price strong {
+    display: block;
+}
+
+#plans .plan-back-price strong {
+    color: #0f1b2d;
+    font-size: 1.1rem;
+}
+
+.dark #plans .plan-monthly-price,
+.dark #plans .plan-back-price {
+    color: #cbd5e1;
+}
+
+.dark #plans .plan-back-price strong {
+    color: #fff;
+}
+
+#plans .plan-essential-bonus {
+    margin: .5rem 0;
+    color: #0f1b2d;
+    font-size: .875rem;
+    line-height: 1.5;
+}
+
+#plans .plan-essential-bonus strong { font-weight: 800; }
+.dark #plans .plan-essential-bonus { color: #f8fafc; }
+
+.essential-offer-dialog {
+    color-scheme: light;
+    margin: auto;
+    width: min(29rem, calc(100% - 2rem));
+    max-height: calc(100dvh - 2rem);
+    padding: 0;
+    overflow-y: auto;
+    border: 1px solid #e2e8f0;
+    border-radius: 1.5rem;
+    color: #0f1b2d;
+    background: #fff;
+    box-shadow: 0 24px 80px rgba(15, 27, 45, .22);
+}
+.essential-offer-dialog::backdrop { background: rgba(15, 27, 45, .38); backdrop-filter: blur(3px); }
+.essential-offer-content { padding: 2.5rem 2rem 1.5rem; }
+.essential-offer-kicker { margin: 0 0 1.25rem; font-size: .7rem; letter-spacing: .14em; font-weight: 800; color: #b94a0a; }
+.essential-offer-dialog h2 { margin: 0 0 1.25rem; font-size: clamp(2rem, 7vw, 2.8rem); font-weight: 800; line-height: 1.12; letter-spacing: -.04em; }
+.essential-offer-dialog h2 span { color: #e55b0a; }
+.essential-offer-dialog #essential-offer-description { font-size: .9375rem; line-height: 1.75; color: #475569; margin: 0 0 1.75rem; }
+.essential-offer-close { position: absolute; top: .75rem; right: .75rem; display: grid; place-items: center; width: 2.5rem; height: 2.5rem; border-radius: 50%; color: #64748b; font-size: 1.75rem; background: transparent; border: 0; cursor: pointer; }
+.essential-offer-close:hover { background: #f1f5f9; }
+.essential-offer-cta { display: flex; width: 100%; justify-content: space-between; align-items: center; padding: .9rem 1.2rem; border: 0; border-radius: .75rem; background: #0f1b2d; color: #fff; font-weight: 700; cursor: pointer; }
+.essential-offer-cta:hover { background: #253a54; }
+.essential-offer-dismiss { display: block; margin: .8rem auto 0; padding: .45rem 1rem; color: #64748b; background: transparent; border: 0; font-size: .875rem; cursor: pointer; }
+.essential-offer-dialog button:focus-visible { outline: 3px solid #f97316; outline-offset: 3px; }
+.dark .essential-offer-dialog { color-scheme: dark; color: #f8fafc; border-color: #334155; background: #172235; }
+.dark .essential-offer-kicker, .dark .essential-offer-dialog h2 span { color: #fb923c; }
+.dark .essential-offer-dialog #essential-offer-description, .dark .essential-offer-dismiss, .dark .essential-offer-close { color: #cbd5e1; }
+.dark .essential-offer-cta { color: #0f1b2d; background: #f97316; }
+.dark .essential-offer-cta:hover { background: #fb923c; }
+.dark .essential-offer-close:hover { background: #253a54; }
+@media (max-width: 400px) { .essential-offer-content { padding: 2.5rem 1.5rem 1.25rem; } }

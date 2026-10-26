@@ -1,3 +1,16 @@
+const request = require('supertest');
+const express = require('express');
+
+jest.mock('../config/secrets', () => ({
+  getJwtSecret: () => 'test-only-signing-secret-for-router-regressions'
+}));
+
+// Exercise the real routers without starting the server or connecting to a database.
+const app = express();
+app.use(express.json());
+app.use('/api/health', require('../routes/health'));
+app.use('/api/auth', require('../routes/auth'));
+
 describe('Health Check', () => {
   it('should return 200 OK', async () => {
     const res = await request(app)
