@@ -26,7 +26,7 @@ jobs:
         run: npm ci --omit=dev --ignore-scripts --no-audit --no-fund
       - name: Regression checks
         run: |
-          node --test scripts/__tests__/frontendDeployment.test.js scripts/__tests__/frontendTracing.test.js scripts/__tests__/frontendPrebuilt.test.js
+          node --test scripts/__tests__/frontendDeployment.test.js scripts/__tests__/frontendTracing.test.js scripts/__tests__/frontendPrebuilt.test.js scripts/__tests__/frontendLogging.test.js
           bash -n scripts/deploy-frontend-cpanel.sh scripts/deploy-pricing-cpanel.sh
       - name: Build production frontend
         working-directory: frontend

@@ -70,6 +70,7 @@ for (const phase of ['install', 'build', 'startup']) {
     if (phase === 'startup') f.options.probeCandidate = async () => { throw new Error('simulated startup failure'); };
     await assert.rejects(deploy(f.options), /simulated/);
     f.assertOldFiles();
+    assert.deepEqual(fs.readdirSync(path.join(f.options.base, 'vololeads', 'frontend-releases')), []);
     assert.equal(fs.existsSync(path.join(f.live, 'current')), false);
     assert.equal(fs.existsSync(path.join(f.live, 'tmp', 'restart.txt')), false);
   });

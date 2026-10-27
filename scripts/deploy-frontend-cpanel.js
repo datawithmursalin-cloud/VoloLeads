@@ -10,12 +10,22 @@ const delay = milliseconds => new Promise(resolve => setTimeout(resolve, millise
 function runCommand(command, args, { cwd, env, logFile }) {
   return new Promise((resolve, reject) => {
     const child = spawn(command, args, { cwd, env, stdio: ['ignore', 'pipe', 'pipe'] });
+    let logError;
     for (const [stream, output] of [[child.stdout, process.stdout], [child.stderr, process.stderr]]) {
-      stream.on('data', chunk => { fs.appendFileSync(logFile, chunk); output.write(chunk); });
+      stream.on('data', chunk => {
+        output.write(chunk);
+        if (logError) return;
+        try { fs.appendFileSync(logFile, chunk); }
+        catch (error) {
+          logError = new Error(`Cannot write deployment log (${error.code || error.message}). Check account disk quota.`, { cause: error });
+          child.kill('SIGTERM');
+        }
+      });
     }
     child.once('error', reject);
     child.once('close', (code, signal) => {
-      if (code === 0) resolve();
+      if (logError) reject(logError);
+      else if (code === 0) resolve();
       else reject(new Error(`${path.basename(command)} failed (${signal || `exit ${code}`}).`));
     });
   });
@@ -38,10 +48,15 @@ async function probeCandidate(candidate, env, logFile, buildId) {
   });
   let output = '';
   let failure;
-  child.stdout.on('data', chunk => { output += chunk; fs.appendFileSync(logFile, chunk); });
-  child.stderr.on('data', chunk => fs.appendFileSync(logFile, chunk));
+  const record = chunk => {
+    if (failure) return;
+    try { fs.appendFileSync(logFile, chunk); }
+    catch (error) { failure = new Error(`Cannot write candidate log (${error.code || error.message}). Check account disk quota.`); child.kill('SIGTERM'); }
+  };
+  child.stdout.on('data', chunk => { output += chunk; record(chunk); });
+  child.stderr.on('data', record);
   child.once('error', error => { failure = error; });
-  child.once('exit', (code, signal) => { failure = new Error(`Candidate server exited (${signal || code}).`); });
+  child.once('exit', (code, signal) => { failure ||= new Error(`Candidate server exited (${signal || code}).`); });
   try {
     for (let attempt = 0; attempt < 80; attempt++) {
       if (failure) throw failure;
@@ -176,14 +191,22 @@ async function deploy(options = {}) {
       } catch (rollbackError) {
         console.error(`Automatic rollback failed: ${rollbackError.message}. Restore from ${backup}.`);
       }
-    } else console.error('Deployment stopped before activation. The running frontend was not modified.');
-    console.error(`Candidate retained: ${candidate}`);
+    } else {
+      console.error('Deployment stopped before activation. The running frontend was not modified.');
+      // Only this run's newly created candidate is disposable. Never prune older
+      // releases here: running Passenger workers may still be using them.
+      try {
+        fs.rmSync(candidate, { recursive: true, force: true });
+        console.error('Removed this failed candidate to reclaim deployment disk space.');
+      } catch (cleanupError) { console.error(`Failed candidate cleanup: ${cleanupError.message}. Path: ${candidate}`); }
+    }
+    if (promoted) console.error(`Candidate retained for rollback investigation: ${candidate}`);
     console.error(`Build/startup log: ${logFile}`);
     throw error;
   }
 }
 
-module.exports = { deploy, probeCandidate, readPage };
+module.exports = { runCommand, deploy, probeCandidate, readPage };
 
 if (require.main === module) {
   deploy().catch(error => { console.error(error.message); process.exitCode = 1; });

@@ -159,7 +159,7 @@ their own release rather than reading a half-rebuilt `.next` directory.
 On first use, `next-server.js` supports the existing flat application as a
 fallback when there is no release pointer. Do not delete the old root `.next`,
 old release directories, or backups while they may be needed for rollback or
-by running Passenger workers. Logs and failed candidates are retained; monitor
+by running Passenger workers. Logs are retained; candidates that fail before activation are removed automatically; monitor
 disk usage and prune only releases known to be unused.
 
 Legacy HTML and runtime scripts use literal file read paths. Asset reads are
@@ -168,6 +168,13 @@ with `fs.readFile(path.join(process.cwd(), arbitraryName))`: file tracing can
 expand that read across the entire release, including dependencies and `.next`,
 and exhaust shared-host memory during "Collecting build traces". Prerender
 source maps are disabled to reduce memory use after static generation.
+
+Pricing deployment backups contain only the bootstrap, stylesheet, and billing
+files replaced by the deployment. They exclude full builds, dependencies and
+uploads. A pre-activation failure removes only the new candidate created by
+that run. Existing releases and older backups require an explicit review before
+cleanup because workers or rollback may still need them. Log write failures
+stop subprocesses cleanly and report a disk quota error.
 
 ### Build failures
 

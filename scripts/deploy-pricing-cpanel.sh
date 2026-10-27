@@ -27,10 +27,26 @@ echo 'Verifying the configured Stripe prices before deployment...'
 
 backup="/home/vololead/deployment-backups/vololeads-$(date -u +%Y%m%dT%H%M%SZ)-$$"
 mkdir -p "$backup"
-tar --exclude='./node_modules' --exclude='./.env' --exclude='./.env.*' \
-  -czf "$backup/frontend.tar.gz" -C "$frontend" .
-tar --exclude='./node_modules' --exclude='./.env' --exclude='./.env.*' --exclude='./public/uploads' \
-  -czf "$backup/backend.tar.gz" -C "$backend" .
+# The frontend deployer keeps its own pointer/bootstrap rollback. Preserve only
+# files this pricing deployment replaces, not duplicate build output or uploads.
+tar -czf "$backup/frontend.tar.gz" -C "$frontend" next-server.js
+billing_files=(
+  src/config/billing.js
+  src/controllers/billingController.js
+  src/controllers/subscriberMeetingController.js
+  src/emails/subscriptionConfirmationEmail.js
+  src/utils/checkoutPricing.js
+  scripts/verifyCheckoutPrices.js
+)
+existing_files=()
+for relative in "${billing_files[@]}"; do
+  [[ ! -f "$backend/$relative" ]] || existing_files+=("$relative")
+done
+if (( ${#existing_files[@]} )); then
+  tar -czf "$backup/backend.tar.gz" -C "$backend" "${existing_files[@]}"
+else
+  tar -czf "$backup/backend.tar.gz" --files-from /dev/null
+fi
 cp -p /home/vololead/public_html/styles.css "$backup/public-styles.css"
 printf 'Application backup: %s\n' "$backup"
 trap 'echo "Deployment stopped. Keep the backup above for recovery." >&2' ERR
@@ -39,13 +55,7 @@ echo 'Downloading and checking an isolated frontend release...'
 bash "$repo/scripts/deploy-frontend-cpanel.sh"
 
 echo 'Updating the billing files in the existing backend app...'
-for relative in \
-  src/config/billing.js \
-  src/controllers/billingController.js \
-  src/controllers/subscriberMeetingController.js \
-  src/emails/subscriptionConfirmationEmail.js \
-  src/utils/checkoutPricing.js \
-  scripts/verifyCheckoutPrices.js; do
+for relative in "${billing_files[@]}"; do
   install -D -m 644 "$repo/backend/$relative" "$backend/$relative"
 done
 mkdir -p "$backend/tmp"
