@@ -153,7 +153,7 @@ async function deploy(options = {}) {
     });
     let env = buildEnvironment();
     if (prebuilt) await (options.installPrebuilt || installPrebuilt)({ candidate, repo, env, logFile, run, revision: fullRevision });
-    await run('npm', ['ci', '--omit=dev', '--ignore-scripts', '--no-audit', '--no-fund'], { cwd: candidate, env, logFile });
+    if (!prebuilt) await run('npm', ['ci', '--omit=dev', '--ignore-scripts', '--no-audit', '--no-fund'], { cwd: candidate, env, logFile });
     // Load the existing application's env for the build without copying or logging it.
     if (options.loadEnvironment) options.loadEnvironment(live, candidate);
     else createRequire(path.join(candidate, 'package.json'))('@next/env').loadEnvConfig(live);

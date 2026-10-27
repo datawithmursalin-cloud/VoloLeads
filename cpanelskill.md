@@ -56,14 +56,13 @@ Normal deployments MUST NOT compile on cPanel.
 
 `.github/workflows/frontend-build.yml` builds every NEXTJS commit on Linux with
 Node 22, runs regression and production checks, and publishes a prerelease
-`frontend-<full commit SHA>` containing `.next` without its build cache. It uses
+`frontend-<full commit SHA>` containing `.next` without its build cache and production `node_modules`. It uses
 no production environment or application secrets. The API proxy reads its backend
 URL at request time from the existing Passenger environment.
 
 The cPanel shell wrapper always sets `VOLOLEADS_PREBUILT=1`. Deployment downloads
 the archive for the exact checked-out commit, streams its SHA-256 verification,
-checks archive paths and commit/lockfile/platform metadata, and installs runtime
-dependencies with lifecycle scripts disabled. It never invokes `next build`.
+checks archive paths and commit/lockfile/platform metadata, and extracts production dependencies built on Linux. It never invokes npm or `next build`.
 Wait for the matching GitHub Actions run to succeed before deploying. Missing,
 corrupt or incompatible artifacts fail before activation; there is no automatic
 fallback to compiling on the host. Existing probe, promotion and rollback checks
@@ -71,7 +70,7 @@ still apply. No GitHub token is needed by cPanel because the repository and
 compiled website releases are public. Downloaded archive files are removed after
 successful extraction and validation.
 
-Production runtime and npm still consume resources. This removes compilation
+Production runtime and archive extraction still consume resources. This removes compilation
 and tracing from the account, but does not guarantee a resource ceiling under
 arbitrary application traffic. Do not increase worker counts or run parallel
 deployments.
@@ -137,7 +136,7 @@ frontend deployments from running at once.
 
 1. Copy source into a new directory under `frontend-releases`. Exclude
    `.next`, `node_modules`, `tmp`, `current`, and repository `.env` files.
-2. Download and verify the prebuilt `.next` for this exact commit, then run `npm ci --omit=dev --ignore-scripts` there, using the committed lockfile.
+2. Download and verify the prebuilt `.next` for this exact commit, extract production dependencies from the same archive, matched to the committed lockfile.
    Existing live dependencies and `.next` are not modified.
 3. Load the existing app's environment for the candidate process without
    copying or printing environment files. No compilation runs on cPanel.

@@ -45,4 +45,4 @@ jobs:
         run: |
           node scripts/package-frontend-build.js
           node scripts/verify-frontend-package.js
-          gh release create "frontend-${GITHUB_SHA}" frontend-build.tar.gz frontend-build.tar.gz.sha256 --target "$GITHUB_SHA" --prerelease --latest=false --title "Frontend build ${GITHUB_SHA:0:12}" --notes 'Linux Node 22 production build. No application secrets are used. cPanel verifies the commit, lockfile and checksum before activation.'
+          gh release create "frontend-${GITHUB_SHA}" frontend-build.tar.gz frontend-build.tar.gz.sha256 --target "$GITHUB_SHA" --prerelease --latest=false --title "Frontend build ${GITHUB_SHA:0:12}" --notes 'Linux Node 22 production build with runtime dependencies. No application secrets are used. cPanel verifies the commit, lockfile and checksum before activation.'

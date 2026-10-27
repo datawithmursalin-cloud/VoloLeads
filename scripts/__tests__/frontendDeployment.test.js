@@ -237,7 +237,7 @@ test('prebuilt deployment downloads and checks the build without invoking compil
   };
   await deploy(f.options);
   assert.ok(installed);
-  assert.deepEqual(f.calls.map(call => call.command), ['npm']);
+  assert.deepEqual(f.calls.map(call => call.command), []);
 });
 
 test('prebuilt download failure preserves the live application without installing anything', async t => {

@@ -11,7 +11,6 @@ async function main() {
   const candidate = fs.mkdtempSync(path.join(os.tmpdir(), 'vololeads-package-'));
   try {
     fs.cpSync(path.join(repo, 'frontend'), candidate, { recursive: true, filter: source => !['node_modules', '.next'].includes(path.relative(path.join(repo, 'frontend'), source).split(path.sep)[0]) });
-    fs.symlinkSync(path.join(repo, 'frontend', 'node_modules'), path.join(candidate, 'node_modules'));
     await installPrebuilt({ candidate, repo, env: process.env, logFile: '', revision: execFileSync('git', ['rev-parse', 'HEAD'], { encoding: 'utf8' }).trim(),
       async run(command, args) {
         if (command === 'curl') fs.copyFileSync(path.join(repo, args.at(-1).endsWith('.sha256') ? 'frontend-build.tar.gz.sha256' : 'frontend-build.tar.gz'), args[args.indexOf('--output') + 1]);

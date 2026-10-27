@@ -33,9 +33,9 @@ async function installPrebuilt({ candidate, repo, env, logFile, run, revision })
   }
   const expected = fs.readFileSync(checksum, 'utf8').trim().split(/\s+/)[0];
   if (!/^[a-f0-9]{64}$/.test(expected) || await sha256(archive) !== expected) throw new Error('Prebuilt archive checksum mismatch.');
-  // Only our .next output belongs in this archive. Reject traversal before extraction.
+  // Only our .next output and production dependencies belongs in this archive. Reject traversal before extraction.
   const entries = execFileSync('tar', ['-tzf', archive], { encoding: 'utf8', maxBuffer: 16 * 1024 * 1024 }).trim().split('\n');
-  if (entries.some(entry => !entry.startsWith('.next/') || entry.split('/').includes('..') || entry.includes('\\'))) throw new Error('Unexpected prebuilt archive path.');
+  if (entries.some(entry => (!entry.startsWith('.next/') && !entry.startsWith('node_modules/')) || entry.split('/').includes('..') || entry.includes('\\'))) throw new Error('Unexpected prebuilt archive path.');
   await run('tar', ['-xzf', archive, '--no-same-owner', '--no-same-permissions', '-C', candidate], { cwd: candidate, env, logFile });
   const metadata = JSON.parse(fs.readFileSync(path.join(candidate, '.next', 'vololeads-build.json'), 'utf8'));
   validateMetadata(metadata, revision, await sha256(path.join(repo, 'frontend', 'package-lock.json')));
