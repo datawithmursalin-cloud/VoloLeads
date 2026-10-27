@@ -36,7 +36,7 @@ No cPanel deployment, Stripe price or coupon creation, subscription migration, o
 
 After configuring the three monthly price IDs and removing the Stripe upsells, pull `NEXTJS` and run `bash scripts/deploy-pricing-cpanel.sh` as the `vololead` account. The script verifies the monthly prices using the existing backend environment before copying files. If variables are configured only in cPanel rather than `backend/.env`, make them available to the terminal process without printing secrets.
 
-The script backs up both app directories without environment files or dependencies. It preserves routing, builds the frontend with the cPanel resource settings, copies only the six billing backend files, restarts both apps, and checks the site and API. This billing release is separate from the usual frontend-only `.cpanel.yml` hook. No environment files, database schemas, or existing subscriptions are changed by the script.
+The script backs up both app directories without environment files or dependencies. It delegates frontend deployment to the isolated release script, which builds and checks the candidate before activation and restores the previous frontend on activation-check failure. After the frontend succeeds, the pricing script copies only the six billing backend files, restarts the backend, and checks the site and API. This billing release is separate from the frontend-only `.cpanel.yml` hook. For website-only changes use `bash scripts/deploy-frontend-cpanel.sh`. No environment files, database schemas, or existing subscriptions are changed by the script.
 
 ## Copy and local preview
 

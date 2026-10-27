@@ -36,7 +36,9 @@ Passenger settings must continue to point to the backend above.
 
 ### Frontend — Next.js
 
-- Physical app root: `/home/vololead/vololeads/frontend`
+- Registered Passenger app root: `/home/vololead/vololeads/frontend`
+- Active release pointer: `/home/vololead/vololeads/frontend/current`
+- Immutable releases: `/home/vololead/vololeads/frontend-releases/<release>`
 - cPanel application root: `vololeads/frontend`
 - URL: `https://vololeads.com/`
 - Passenger base URI: `/` (blank path in the cPanel URL field)
@@ -62,36 +64,30 @@ The frontend build must use webpack:
 next build --webpack
 ```
 
-`frontend/package.json` uses a path-safe postinstall command that resolves the
-build script from `INIT_CWD`. `frontend/scripts/build-next.js` changes to the
-frontend project root before invoking Next.js. Keep this arrangement; it avoids
-cPanel running the build from the virtual environment's `lib` directory.
+`npm run build` and the path-safe postinstall command both use
+`frontend/scripts/build-next.js`. The script resolves the project from its own
+location, not an inherited `INIT_CWD`, and always uses webpack. It starts the
+Next CLI with `UV_THREADPOOL_SIZE=1`, `RAYON_NUM_THREADS=1`, and
+`NODE_OPTIONS` extended with `--v8-pool-size=1`. Build children inherit these
+limits. Existing heap limits or other `NODE_OPTIONS` are preserved.
 
-If cPanel still runs the lifecycle script from the wrong directory, use:
-
-```bash
-cd /home/vololead/vololeads/frontend
-npm install --omit=dev --ignore-scripts
-node /home/vololead/vololeads/frontend/scripts/build-next.js
-```
-
-Do not use the default build from an unexpected working directory. Errors such
-as “couldn't find any pages or app directory”, missing `scripts/build-next.js`,
-Wasm out-of-memory, `Resource temporarily unavailable`, or `SIGABRT` usually
-indicate a wrong working directory or the host resource limit.
+Next's one-worker configuration alone does not limit Node's internal thread
+pools. A host can still refuse a build if the account has exhausted its PMEM or
+NPROC allowance; do not claim that any build flag guarantees otherwise.
 
 ## Normal cPanel update workflow
 
+For frontend, footer, Compliance, and other website updates, use the frontend
+release script. Do not run the pricing/backend deployment script for these.
+
 ### Git Version Control interface
 
-1. Open Git Version Control for the VoloLeads repository.
-2. Confirm the checked-out branch is `NEXTJS`.
-3. Click **Update from Remote**. This only pulls the branch.
-4. Click **Deploy HEAD Commit**. This runs `.cpanel.yml`.
-5. Restart the frontend Node.js application if Passenger does not reload it.
-6. Hard-refresh the browser and purge LiteSpeed cache if old CSS or assets remain.
-
-Do not repeat the manual copy step when the deployment hook succeeds.
+1. Confirm the repository is on `NEXTJS`.
+2. Click **Update from Remote**.
+3. Click **Deploy HEAD Commit**. `.cpanel.yml` invokes
+   `bash scripts/deploy-frontend-cpanel.sh`.
+4. The script builds, checks, activates, restarts, and verifies the frontend.
+   Do not run a second copy/install/build step in the live app directory.
 
 ### Terminal workflow
 
@@ -99,27 +95,61 @@ Do not repeat the manual copy step when the deployment hook succeeds.
 cd /home/vololead/repositories/VoloLeads
 git switch NEXTJS
 git pull --ff-only origin NEXTJS
+bash scripts/deploy-frontend-cpanel.sh
 ```
 
-The repository's `.cpanel.yml` deploys the frontend to the Passenger app root
-and syncs only the stylesheet to `public_html`:
+The existing `vololead` account, Node 22 virtual environment, Passenger app root,
+and startup filename `next-server.js` stay in place. `flock` prevents two
+frontend deployments from running at once.
+
+### Release and failure behavior
+
+1. Copy source into a new directory under `frontend-releases`. Exclude
+   `.next`, `node_modules`, `tmp`, `current`, and repository `.env` files.
+2. Run `npm ci --omit=dev --ignore-scripts` there, using the committed lockfile.
+   Existing live dependencies and `.next` are not modified.
+3. Load the existing app's environment for the candidate process without
+   copying or printing environment files, then run the low-thread webpack build.
+4. Start the candidate on an ephemeral **127.0.0.1-only** port and check the
+   homepage, Compliance, and Terms routes. Stop the candidate test process.
+5. Save the previous startup file, release pointer, and public stylesheet under
+   `deployment-backups/frontend-<release>`. Atomically replace `current`, install
+   the release-aware startup file, sync the public stylesheet, and request a
+   Passenger restart.
+6. Verify those same public routes return Next.js markup and the expected
+   `X-VoloLeads-Build` header. If activation verification fails, restore the
+   previous pointer, startup file, and stylesheet and request another restart.
+
+A dependency-install, build, or candidate-start failure leaves the live app
+untouched. No normal frontend deployment writes to or restarts the backend.
+The active pointer is resolved once per worker; old workers remain pinned to
+their own release rather than reading a half-rebuilt `.next` directory.
+
+On first use, `next-server.js` supports the existing flat application as a
+fallback when there is no release pointer. Do not delete the old root `.next`,
+old release directories, or backups while they may be needed for rollback or
+by running Passenger workers. Logs and failed candidates are retained; monitor
+disk usage and prune only releases known to be unused.
+
+### Build failures
+
+The command prints the candidate path and a private log file under
+`/home/vololead/deployment-logs`. If a worker still aborts, inspect that log and
+cPanel **Metrics → Resource Usage** at the failure time, particularly physical
+memory (PMEM) and process/thread counts (NPROC). Do not rerun builds in parallel,
+blindly increase heap size beyond the account allowance, or rebuild in the live
+app directory. A failed build should now leave the current release serving.
+
+### Regression checks
 
 ```bash
-cp -a frontend/. /home/vololead/vololeads/frontend/
-cp -f frontend/styles.css /home/vololead/public_html/styles.css
+node --test scripts/__tests__/frontendDeployment.test.js
+bash -n scripts/deploy-frontend-cpanel.sh scripts/deploy-pricing-cpanel.sh
 ```
 
-After syncing files manually:
-
-```bash
-source /home/vololead/nodevenv/vololeads/frontend/22/bin/activate
-cd /home/vololead/vololeads/frontend
-npm install --omit=dev
-touch tmp/restart.txt
-```
-
-If `npm install` fails during postinstall, use the `--ignore-scripts` and
-explicit build commands in the build section, then touch `tmp/restart.txt`.
+The tests cover install/build/startup failures, successful promotion, rollback
+to flat and release-based apps, preserving environment and existing build files,
+thread-setting inheritance, stale `INIT_CWD`, and worker release isolation.
 
 ## Passenger routing invariants
 
@@ -184,8 +214,8 @@ Passenger mapping or purging stale LiteSpeed cache.
 - **No pages or app directory:** Next.js was launched outside the frontend
   root. Run the build from `/home/vololead/vololeads/frontend`.
 - **Wasm OOM, thread resource errors, or SIGABRT:** preserve the one-worker
-  webpack configuration and avoid parallel builds. Let a prior Passenger build
-  finish before retrying.
+  webpack configuration and low-thread build wrapper. Inspect the saved build
+  log and PMEM/NPROC faults. Only retry using the isolated release script.
 - **Live site shows `Index of /`:** inspect the root `.htaccess` and confirm
   the frontend Passenger block above. Restore the legacy `index.html` only as a
   temporary rollback while repairing routing; it is not the Next.js deployment.

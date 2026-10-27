@@ -1,19 +1,23 @@
 const { spawnSync } = require('node:child_process');
 const path = require('node:path');
+const { buildEnvironment } = require('./build-environment');
 
-const projectRoot = process.env.INIT_CWD || path.resolve(__dirname, '..');
+const projectRoot = path.resolve(__dirname, '..');
 process.chdir(projectRoot);
 
-const nextExecutable = process.platform === 'win32' ? 'next.cmd' : 'next';
-const nextBin = path.join(projectRoot, 'node_modules', '.bin', nextExecutable);
-const result = spawnSync(nextBin, ['build', '--webpack'], {
+const nextBin = require.resolve('next/dist/bin/next');
+const result = spawnSync(process.execPath, [nextBin, 'build', '--webpack'], {
   stdio: 'inherit',
-  shell: process.platform === 'win32',
+  env: buildEnvironment(),
 });
 
 if (result.error) {
   console.error(`Unable to start Next.js build: ${result.error.message}`);
   process.exit(1);
+}
+
+if (result.signal) {
+  console.error(`Next.js build aborted with ${result.signal}. Check the build log and cPanel PMEM/NPROC faults.`);
 }
 
 process.exit(result.status ?? 1);
