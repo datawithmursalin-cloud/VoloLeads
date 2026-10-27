@@ -88,3 +88,7 @@ __pycache__/
 /tailwind.css
 /terms-condition.html
 /thank-you.html
+
+# CI release archives
+/frontend-build.tar.gz
+/frontend-build.tar.gz.sha256

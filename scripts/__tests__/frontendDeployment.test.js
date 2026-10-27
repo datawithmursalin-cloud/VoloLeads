@@ -222,3 +222,30 @@ test('running Passenger workers stay pinned to their release after promotion', {
   assert.match(await (await fetch(firstUrl)).text(), /__next one/);
   await probeCandidate(second, process.env, path.join(temporary, 'probe.log'), 'two');
 });
+
+test('prebuilt deployment downloads and checks the build without invoking compilation', async t => {
+  const f = fixture(t);
+  f.options.prebuilt = true;
+  f.options.fullRevision = 'a'.repeat(40);
+  let installed = false;
+  f.options.installPrebuilt = async ({ candidate, revision }) => {
+    assert.equal(revision, f.options.fullRevision);
+    fs.mkdirSync(path.join(candidate, '.next'));
+    fs.writeFileSync(path.join(candidate, '.next', 'BUILD_ID'), 'new-build');
+    installed = true;
+  };
+  await deploy(f.options);
+  assert.ok(installed);
+  assert.deepEqual(f.calls.map(call => call.command), ['npm']);
+});
+
+test('prebuilt download failure preserves the live application without installing anything', async t => {
+  const f = fixture(t);
+  f.options.prebuilt = true;
+  f.options.fullRevision = 'a'.repeat(40);
+  f.options.installPrebuilt = async () => { throw new Error('artifact unavailable'); };
+  await assert.rejects(deploy(f.options), /artifact unavailable/);
+  assert.equal(f.calls.length, 0);
+  f.assertOldFiles();
+  assert.equal(fs.existsSync(path.join(f.live, 'current')), false);
+});

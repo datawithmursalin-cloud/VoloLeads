@@ -35,7 +35,7 @@ cp -p /home/vololead/public_html/styles.css "$backup/public-styles.css"
 printf 'Application backup: %s\n' "$backup"
 trap 'echo "Deployment stopped. Keep the backup above for recovery." >&2' ERR
 
-echo 'Building and checking an isolated frontend release...'
+echo 'Downloading and checking an isolated frontend release...'
 bash "$repo/scripts/deploy-frontend-cpanel.sh"
 
 echo 'Updating the billing files in the existing backend app...'

@@ -1,0 +1,48 @@
+name: Build cPanel frontend
+on:
+  push:
+    branches: [NEXTJS]
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: frontend-build-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  build:
+    runs-on: ubuntu-22.04
+    timeout-minutes: 20
+    env:
+      NEXT_TELEMETRY_DISABLED: '1'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+      - name: Install without postinstall builds
+        working-directory: frontend
+        run: npm ci --omit=dev --ignore-scripts --no-audit --no-fund
+      - name: Regression checks
+        run: |
+          node --test scripts/__tests__/frontendDeployment.test.js scripts/__tests__/frontendTracing.test.js scripts/__tests__/frontendPrebuilt.test.js
+          bash -n scripts/deploy-frontend-cpanel.sh scripts/deploy-pricing-cpanel.sh
+      - name: Build production frontend
+        working-directory: frontend
+        run: npm run build
+      - name: Check production server
+        run: |
+          node - <<'NODE'
+          const fs = require('node:fs');
+          const path = require('node:path');
+          const { probeCandidate } = require('./scripts/deploy-frontend-cpanel');
+          probeCandidate(path.resolve('frontend'), process.env, '/tmp/frontend-probe.log', fs.readFileSync('frontend/.next/BUILD_ID', 'utf8').trim()).catch(error => { console.error(error); process.exitCode = 1; });
+          NODE
+      - name: Package and publish build for this commit
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          node scripts/package-frontend-build.js
+          node scripts/verify-frontend-package.js
+          gh release create "frontend-${GITHUB_SHA}" frontend-build.tar.gz frontend-build.tar.gz.sha256 --target "$GITHUB_SHA" --prerelease --latest=false --title "Frontend build ${GITHUB_SHA:0:12}" --notes 'Linux Node 22 production build. No application secrets are used. cPanel verifies the commit, lockfile and checksum before activation.'

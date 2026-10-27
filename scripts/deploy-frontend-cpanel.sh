@@ -17,4 +17,6 @@ set -u
 export UV_THREADPOOL_SIZE=1
 export RAYON_NUM_THREADS=1
 export NODE_OPTIONS="${NODE_OPTIONS:+$NODE_OPTIONS }--v8-pool-size=1"
+# Shared account has 700 MB PMEM and 100 processes. Never compile here.
+export VOLOLEADS_PREBUILT=1
 node "$repo/scripts/deploy-frontend-cpanel.js"

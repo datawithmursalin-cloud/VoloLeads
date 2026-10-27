@@ -2,6 +2,7 @@ const fs = require('node:fs');
 const path = require('node:path');
 const { spawn, execFileSync } = require('node:child_process');
 const { createRequire } = require('node:module');
+const { installPrebuilt } = require('./frontend-prebuilt');
 const { buildEnvironment } = require('../frontend/scripts/build-environment');
 
 const delay = milliseconds => new Promise(resolve => setTimeout(resolve, milliseconds));
@@ -100,6 +101,8 @@ async function deploy(options = {}) {
   const probe = options.probeCandidate || probeCandidate;
   const verifyPublic = options.checkPublic || checkPublic;
   const revision = options.revision || execFileSync('git', ['-C', repo, 'rev-parse', '--short=12', 'HEAD'], { encoding: 'utf8' }).trim();
+  const prebuilt = options.prebuilt ?? process.env.VOLOLEADS_PREBUILT === '1';
+  const fullRevision = prebuilt ? (options.fullRevision || execFileSync('git', ['-C', repo, 'rev-parse', 'HEAD'], { encoding: 'utf8' }).trim()) : null;
   const release = `${new Date().toISOString().replace(/[:.]/g, '-')}-${revision}-${process.pid}`;
   const candidate = path.join(base, 'vololeads', 'frontend-releases', release);
   const logs = path.join(base, 'deployment-logs');
@@ -123,7 +126,7 @@ async function deploy(options = {}) {
   let promoted = false;
 
   try {
-    console.log(`Building isolated frontend release: ${release}`);
+    console.log(`Preparing isolated frontend release: ${release}`);
     console.log(`Build log: ${logFile}`);
     fs.cpSync(path.join(repo, 'frontend'), candidate, {
       recursive: true,
@@ -134,12 +137,13 @@ async function deploy(options = {}) {
       },
     });
     let env = buildEnvironment();
+    if (prebuilt) await (options.installPrebuilt || installPrebuilt)({ candidate, repo, env, logFile, run, revision: fullRevision });
     await run('npm', ['ci', '--omit=dev', '--ignore-scripts', '--no-audit', '--no-fund'], { cwd: candidate, env, logFile });
     // Load the existing application's env for the build without copying or logging it.
     if (options.loadEnvironment) options.loadEnvironment(live, candidate);
     else createRequire(path.join(candidate, 'package.json'))('@next/env').loadEnvConfig(live);
     env = buildEnvironment();
-    await run(process.execPath, [path.join(candidate, 'scripts', 'build-next.js')], { cwd: candidate, env, logFile });
+    if (!prebuilt) await run(process.execPath, [path.join(candidate, 'scripts', 'build-next.js')], { cwd: candidate, env, logFile });
     const buildId = fs.readFileSync(path.join(candidate, '.next', 'BUILD_ID'), 'utf8').trim();
     if (!buildId) throw new Error('The candidate build has no BUILD_ID.');
     await probe(candidate, env, logFile, buildId);

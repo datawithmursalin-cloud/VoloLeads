@@ -48,6 +48,34 @@ Passenger settings must continue to point to the backend above.
 The frontend is served by Passenger at the domain root. It must not be copied
 over the backend or treated as a static `public_html/index.html` site.
 
+## Resource limits and prebuilt releases
+
+Verified in cPanel on October 28, 2026: 700 MB physical memory and 100
+processes/threads for the whole account. Builds hit PMEM and NPROC faults.
+Normal deployments MUST NOT compile on cPanel.
+
+`.github/workflows/frontend-build.yml` builds every NEXTJS commit on Linux with
+Node 22, runs regression and production checks, and publishes a prerelease
+`frontend-<full commit SHA>` containing `.next` without its build cache. It uses
+no production environment or application secrets. The API proxy reads its backend
+URL at request time from the existing Passenger environment.
+
+The cPanel shell wrapper always sets `VOLOLEADS_PREBUILT=1`. Deployment downloads
+the archive for the exact checked-out commit, streams its SHA-256 verification,
+checks archive paths and commit/lockfile/platform metadata, and installs runtime
+dependencies with lifecycle scripts disabled. It never invokes `next build`.
+Wait for the matching GitHub Actions run to succeed before deploying. Missing,
+corrupt or incompatible artifacts fail before activation; there is no automatic
+fallback to compiling on the host. Existing probe, promotion and rollback checks
+still apply. No GitHub token is needed by cPanel because the repository and
+compiled website releases are public. Downloaded archive files are removed after
+successful extraction and validation.
+
+Production runtime and npm still consume resources. This removes compilation
+and tracing from the account, but does not guarantee a resource ceiling under
+arbitrary application traffic. Do not increase worker counts or run parallel
+deployments.
+
 ## Next.js build rules
 
 The shared host has limited memory, processes, and threads. Keep the existing
@@ -88,7 +116,8 @@ release script. Do not run the pricing/backend deployment script for these.
 2. Click **Update from Remote**.
 3. Click **Deploy HEAD Commit**. `.cpanel.yml` invokes
    `bash scripts/deploy-frontend-cpanel.sh`.
-4. The script builds, checks, activates, restarts, and verifies the frontend.
+4. Wait for the matching GitHub build, then deploy. The script downloads, checks,
+   activates, restarts, and verifies the frontend.
    Do not run a second copy/install/build step in the live app directory.
 
 ### Terminal workflow
@@ -108,10 +137,10 @@ frontend deployments from running at once.
 
 1. Copy source into a new directory under `frontend-releases`. Exclude
    `.next`, `node_modules`, `tmp`, `current`, and repository `.env` files.
-2. Run `npm ci --omit=dev --ignore-scripts` there, using the committed lockfile.
+2. Download and verify the prebuilt `.next` for this exact commit, then run `npm ci --omit=dev --ignore-scripts` there, using the committed lockfile.
    Existing live dependencies and `.next` are not modified.
 3. Load the existing app's environment for the candidate process without
-   copying or printing environment files, then run the low-thread webpack build.
+   copying or printing environment files. No compilation runs on cPanel.
 4. Start the candidate on an ephemeral **127.0.0.1-only** port and check the
    homepage, Compliance, and Terms routes. Stop the candidate test process.
 5. Save the previous startup file, release pointer, and public stylesheet under
