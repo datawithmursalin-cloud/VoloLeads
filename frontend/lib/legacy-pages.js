@@ -6,6 +6,7 @@ const pages = {
   'index.html': 'index.html',
   '404.html': '404.html',
   'cancel.html': 'cancel.html',
+  'compliance.html': 'compliance.html',
   'custom-quote.html': 'custom-quote.html',
   'disclaimer.html': 'disclaimer.html',
   'faqs.html': 'faqs.html',
