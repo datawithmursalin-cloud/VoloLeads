@@ -31,6 +31,17 @@ function runCommand(command, args, { cwd, env, logFile }) {
   });
 }
 
+async function restartFrontend() {
+  if (process.env.VOLOLEADS_CPANEL_RESTART !== '1') return;
+  // CloudLinux/LiteSpeed may keep workers alive after restart.txt changes.
+  // Discard selector output because it can contain application environment data.
+  await new Promise((resolve, reject) => {
+    const child = spawn('cloudlinux-selector', ['restart', '--json', '--interpreter', 'nodejs', '--user', 'vololead', '--app-root', 'vololeads/frontend'], { stdio: 'ignore' });
+    child.once('error', () => reject(new Error('Unable to request the cPanel frontend restart.')));
+    child.once('close', code => code === 0 ? resolve() : reject(new Error('cPanel frontend restart failed. Inspect the frontend app status in cPanel.')));
+  });
+}
+
 async function readPage(url, buildId) {
   const response = await fetch(url, { signal: AbortSignal.timeout(8000), redirect: 'error' });
   if (!response.ok) throw new Error(`Frontend check returned HTTP ${response.status}.`);
@@ -115,6 +126,7 @@ async function deploy(options = {}) {
   const run = options.runCommand || runCommand;
   const probe = options.probeCandidate || probeCandidate;
   const verifyPublic = options.checkPublic || checkPublic;
+  const restart = options.restartFrontend || restartFrontend;
   const revision = options.revision || execFileSync('git', ['-C', repo, 'rev-parse', '--short=12', 'HEAD'], { encoding: 'utf8' }).trim();
   const prebuilt = options.prebuilt ?? process.env.VOLOLEADS_PREBUILT === '1';
   const fullRevision = prebuilt ? (options.fullRevision || execFileSync('git', ['-C', repo, 'rev-parse', 'HEAD'], { encoding: 'utf8' }).trim()) : null;
@@ -174,6 +186,7 @@ async function deploy(options = {}) {
     replaceFile(styles, fs.readFileSync(path.join(candidate, 'styles.css')));
     fs.mkdirSync(path.join(live, 'tmp'), { recursive: true });
     fs.writeFileSync(path.join(live, 'tmp', 'restart.txt'), release);
+    await restart();
     await verifyPublic(buildId);
     console.log(`Frontend release is healthy: ${release}`);
     console.log(`Previous release and activation backup retained: ${backup}`);
@@ -187,6 +200,7 @@ async function deploy(options = {}) {
         if (oldStyles !== null) replaceFile(styles, oldStyles);
         else if (fs.existsSync(styles)) fs.unlinkSync(styles);
         fs.writeFileSync(path.join(live, 'tmp', 'restart.txt'), `rollback-${release}`);
+        await restart();
         console.error('Frontend activation failed; restored the previous release and requested a restart.');
       } catch (rollbackError) {
         console.error(`Automatic rollback failed: ${rollbackError.message}. Restore from ${backup}.`);

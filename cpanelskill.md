@@ -145,7 +145,10 @@ frontend deployments from running at once.
 5. Save the previous startup file, release pointer, and public stylesheet under
    `deployment-backups/frontend-<release>`. Atomically replace `current`, install
    the release-aware startup file, sync the public stylesheet, and request a
-   Passenger restart.
+   managed frontend restart with `cloudlinux-selector restart --json --interpreter nodejs
+   --user vololead --app-root vololeads/frontend`. Selector output is suppressed
+   to avoid exposing app environment data. The restart.txt marker alone did not
+   replace the LiteSpeed worker on this host.
 6. Verify those same public routes return Next.js markup and the expected
    `X-VoloLeads-Build` header. If activation verification fails, restore the
    previous pointer, startup file, and stylesheet and request another restart.

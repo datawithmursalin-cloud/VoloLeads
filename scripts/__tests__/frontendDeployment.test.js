@@ -250,3 +250,26 @@ test('prebuilt download failure preserves the live application without installin
   f.assertOldFiles();
   assert.equal(fs.existsSync(path.join(f.live, 'current')), false);
 });
+
+
+test('activation requests a managed restart before public verification', async t => {
+  const f = fixture(t);
+  const order = [];
+  f.options.restartFrontend = async () => {
+    assert.ok(fs.existsSync(path.join(f.live, 'current')));
+    order.push('restart');
+  };
+  f.options.checkPublic = async () => { order.push('verify'); };
+  await deploy(f.options);
+  assert.deepEqual(order, ['restart', 'verify']);
+});
+
+test('public-check failure requests another managed restart after rollback', async t => {
+  const f = fixture(t);
+  const order = [];
+  f.options.restartFrontend = async () => { order.push(fs.existsSync(path.join(f.live, 'current')) ? 'activate' : 'rollback'); };
+  f.options.checkPublic = async () => { throw new Error('unhealthy public build'); };
+  await assert.rejects(deploy(f.options), /unhealthy/);
+  assert.deepEqual(order, ['activate', 'rollback']);
+  f.assertOldFiles();
+});
