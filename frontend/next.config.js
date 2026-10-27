@@ -1,6 +1,10 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   poweredByHeader: false,
+  // Releases are self-contained. Never infer a tracing root above this directory.
+  outputFileTracingRoot: __dirname,
+  // Prerender source maps add memory overhead after static page generation.
+  enablePrerenderSourceMaps: false,
   async headers() {
     return [{
       source: '/:path*',

@@ -57,6 +57,8 @@ low-resource settings in `frontend/next.config.js`:
 - `experimental.memoryBasedWorkersCount: false`
 - `experimental.staticGenerationMaxConcurrency: 1`
 - `experimental.webpackMemoryOptimizations: true`
+- `enablePrerenderSourceMaps: false`
+- `outputFileTracingRoot: __dirname`
 
 The frontend build must use webpack:
 
@@ -131,6 +133,13 @@ old release directories, or backups while they may be needed for rollback or
 by running Passenger workers. Logs and failed candidates are retained; monitor
 disk usage and prune only releases known to be unused.
 
+Legacy HTML and runtime scripts use literal file read paths. Asset reads are
+anchored to the literal `png` and `audio` directories. Do not replace these
+with `fs.readFile(path.join(process.cwd(), arbitraryName))`: file tracing can
+expand that read across the entire release, including dependencies and `.next`,
+and exhaust shared-host memory during "Collecting build traces". Prerender
+source maps are disabled to reduce memory use after static generation.
+
 ### Build failures
 
 The command prints the candidate path and a private log file under
@@ -143,7 +152,7 @@ app directory. A failed build should now leave the current release serving.
 ### Regression checks
 
 ```bash
-node --test scripts/__tests__/frontendDeployment.test.js
+node --test scripts/__tests__/frontendDeployment.test.js scripts/__tests__/frontendTracing.test.js
 bash -n scripts/deploy-frontend-cpanel.sh scripts/deploy-pricing-cpanel.sh
 ```
 
