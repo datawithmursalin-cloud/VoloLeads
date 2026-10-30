@@ -685,6 +685,7 @@ function initContactForm() {
     const referralSelect = document.getElementById('referral-source');
     const referralOtherRow = document.getElementById('referral-other-row');
     const referralOtherInput = document.getElementById('referral-source-other');
+    const referralDetailsLabel = document.getElementById('referral-details-label');
     
     // 1. Service Selection -> Toggle Quantity Dropdown
     if (serviceSelect) {
@@ -741,20 +742,24 @@ function initContactForm() {
         });
     }
 
-    // 3. Referral Source -> Toggle Other Details Input
+    // 3. Referral Source -> Toggle Other Details or Required Username Input
     if (referralSelect) {
-        const syncReferralOtherField = function() {
-            const isOther = this.value === 'Other';
+        const syncReferralOtherField = function(event) {
+            const needsUsername = this.value === 'TikTok' || this.value === 'College of Wholesale';
+            const needsDetails = this.value === 'Other' || needsUsername;
 
             if (referralOtherRow) {
-                referralOtherRow.classList.toggle('hidden', !isOther);
+                referralOtherRow.classList.toggle('hidden', !needsDetails);
+            }
+
+            if (referralDetailsLabel) {
+                referralDetailsLabel.textContent = needsUsername ? "What's your username?" : 'Please tell us where';
             }
 
             if (referralOtherInput) {
-                if (isOther) {
-                    referralOtherInput.setAttribute('required', 'true');
-                } else {
-                    referralOtherInput.removeAttribute('required');
+                referralOtherInput.required = needsDetails;
+                referralOtherInput.placeholder = needsUsername ? '@yourusername' : 'Tell us where you heard about us';
+                if (!needsDetails || event?.type === 'change') {
                     referralOtherInput.value = '';
                 }
             }

@@ -14,6 +14,12 @@ const {
 } = require('../emails/meetingConfirmationEmail');
 const logger = require('../utils/logger');
 
+function getReferralDetailsLabel(referralSource) {
+  return ['TikTok', 'College of Wholesale'].includes(referralSource)
+    ? `${referralSource} Username`
+    : 'Referral Details';
+}
+
 function buildContactFormNotificationText(sanitized, meeting = null) {
   const lines = [
     'New VoloLeads contact form submission.',
@@ -28,6 +34,9 @@ function buildContactFormNotificationText(sanitized, meeting = null) {
     `Preferred Time: ${sanitized.preferredTime || 'N/A'}`,
     `Timezone: ${sanitized.preferredTimezone}`,
     `Referral Source: ${sanitized.referralSource}`,
+    ...(sanitized.referralSourceOther
+      ? [`${getReferralDetailsLabel(sanitized.referralSource)}: ${sanitized.referralSourceOther}`]
+      : []),
     `Message: ${sanitized.message || '(no message)'}`,
     '',
     `Time (UTC): ${new Date().toISOString()}`
@@ -52,6 +61,9 @@ function buildContactFormNotificationHtml(sanitized, meeting = null) {
     ['Preferred Time', sanitized.preferredTime || 'N/A'],
     ['Timezone', sanitized.preferredTimezone],
     ['Referral Source', sanitized.referralSource],
+    ...(sanitized.referralSourceOther
+      ? [[getReferralDetailsLabel(sanitized.referralSource), sanitized.referralSourceOther]]
+      : []),
     ['Message', sanitized.message || '(no message)'],
     ['Time (UTC)', new Date().toISOString()]
   ];
@@ -199,6 +211,16 @@ exports.submitContactForm = async (req, res) => {
 
     // Sanitize input data
     const sanitized = sanitizeContactForm(req.body);
+
+    if (
+      ['TikTok', 'College of Wholesale'].includes(sanitized.referralSource)
+      && (typeof sanitized.referralSourceOther !== 'string' || !sanitized.referralSourceOther.trim())
+    ) {
+      return res.status(400).json({
+        success: false,
+        message: 'Username is required when selecting TikTok or College of Wholesale'
+      });
+    }
 
     if (sanitized.preferredDate && !sanitized.preferredTime) {
       return res.status(400).json({
