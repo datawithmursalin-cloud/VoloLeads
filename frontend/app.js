@@ -362,9 +362,9 @@ function renderUniversalFooter() {
         <div class="container mx-auto px-6">
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8 mb-8">
                 <div class="lg:col-span-2">
-                    <a href="index.html#home" class="flex items-center space-x-2 mb-4">
-                        <img src="./png/logo.webp" alt="" aria-hidden="true" class="site-brand-logo site-brand-logo-sm">
-                        <span class="text-white text-xl font-bold">VoloLeads</span>
+                    <a href="index.html#home" class="flex items-center gap-0.5 site-brand-lockup mb-4">
+                        <img src="./png/logo/vololeads-logo.svg" alt="" aria-hidden="true" class="site-brand-logo site-brand-logo-sm">
+                        <span class="site-wordmark site-wordmark--on-dark text-xl"><span class="site-wordmark-volo">Volo</span><span class="site-wordmark-leads">Leads</span></span>
                     </a>
                     <p class="text-sm max-w-sm">Managed acquisition teams for real estate wholesalers. We run the pipeline; you close.</p>
                 </div>
@@ -462,7 +462,7 @@ function initWhatsAppWidget() {
                 <p class="whatsapp-response-note"><span aria-hidden="true"></span> We typically reply within a few minutes.</p>
                 <div class="whatsapp-support-routes">
                     <a class="whatsapp-support-route" href="https://wa.me/${phoneNumber}?text=${salesMessage}">
-                        <span class="whatsapp-route-avatar whatsapp-route-avatar--brand"><img src="./png/logo.webp" alt=""></span>
+                        <span class="whatsapp-route-avatar whatsapp-route-avatar--brand"><img src="./png/logo/vololeads-logo.svg" alt=""></span>
                         <span class="whatsapp-route-copy">
                             <strong>Sales &amp; Strategy</strong>
                             <small><span aria-hidden="true"></span> Online now</small>

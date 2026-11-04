@@ -4,6 +4,7 @@ import path from 'node:path';
 const contentTypes = {
   '.mp3': 'audio/mpeg',
   '.png': 'image/png',
+  '.svg': 'image/svg+xml',
   '.webp': 'image/webp'
 };
 

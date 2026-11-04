@@ -41,8 +41,8 @@
 }
 
 .site-brand-logo-sm {
-    width: 1.25rem;
-    height: 1.25rem;
+    width: 2rem;
+    height: 2rem;
 }
 
 .utility-shell,
@@ -3147,10 +3147,10 @@ nav.fixed.top-6 {
     }
 
     nav.fixed.top-6 .site-nav-logo {
-        width: 1.2rem !important;
-        height: 1.2rem !important;
-        min-width: 1.2rem !important;
-        flex-basis: 1.2rem !important;
+        width: 1.65rem !important;
+        height: 1.65rem !important;
+        min-width: 1.65rem !important;
+        flex-basis: 1.65rem !important;
     }
 
     nav.fixed.top-6 a span {
@@ -6584,3 +6584,28 @@ html:not(.dark) .whatsapp-launcher-status { border-color: #fff; }
 .dark .essential-offer-cta:hover { background: #fb923c; }
 .dark .essential-offer-close:hover { background: #253a54; }
 @media (max-width: 400px) { .essential-offer-content { padding: 2.5rem 1.5rem 1.25rem; } }
+
+/* ========== WORDMARK ==========
+   Mark nearly touching the text; "Volo" navy (white on dark), "Leads" brand orange. */
+.site-wordmark {
+    font-weight: 800;
+    letter-spacing: -0.01em;
+    line-height: 1;
+}
+
+.site-wordmark-volo {
+    color: #0f172a;
+}
+
+.dark .site-wordmark-volo,
+.site-wordmark--on-dark .site-wordmark-volo {
+    color: #ffffff;
+}
+
+.site-wordmark-leads {
+    color: #f97316;
+}
+
+.site-brand-lockup {
+    gap: 0.125rem !important;
+}
