@@ -6609,3 +6609,154 @@ html:not(.dark) .whatsapp-launcher-status { border-color: #fff; }
 .site-brand-lockup {
     gap: 0.125rem !important;
 }
+
+/* ========== HERO AUDIENCE TAGS + RESULTS NOTE ========== */
+.hero-audience-tags {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.5rem;
+    margin: -0.75rem 0 2rem;
+    padding: 0;
+    list-style: none;
+}
+
+.hero-audience-tags a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 2.25rem;
+    padding: 0.4rem 1rem;
+    border: 1px solid #e2e8f0;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.8);
+    color: #0f172a;
+    font-size: 0.85rem;
+    font-weight: 700;
+    transition: border-color 0.2s ease, color 0.2s ease;
+}
+
+.hero-audience-tags a:hover,
+.hero-audience-tags a:focus-visible {
+    border-color: #f97316;
+    color: #ea580c;
+}
+
+html.dark .hero-audience-tags a {
+    border-color: #334155;
+    background: rgba(15, 23, 42, 0.8);
+    color: #f1f5f9;
+}
+
+html.dark .hero-audience-tags a:hover,
+html.dark .hero-audience-tags a:focus-visible {
+    border-color: #f97316;
+    color: #fb923c;
+}
+
+/* Footnote: #home p rules force body-size text, so match their specificity. */
+#home p.hero-results-note {
+    max-width: 40rem;
+    margin: 1rem auto 0;
+    color: #94a3b8;
+    font-size: 0.8rem !important;
+    line-height: 1.5 !important;
+    text-align: center;
+}
+
+/* ========== TESTIMONIALS PROOF LINE ========== */
+.testimonials-proof-line {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 1rem;
+    padding: 0.5rem 1rem;
+    border-radius: 999px;
+    background: #fff7ed;
+    color: #9a3412;
+    font-size: 0.95rem;
+    font-weight: 700;
+}
+
+.testimonials-proof-line i { color: #f97316; }
+
+html.dark .testimonials-proof-line {
+    background: rgba(249, 115, 22, 0.12);
+    color: #fdba74;
+}
+
+/* ========== WHO WE WORK WITH ========== */
+.who-section {
+    padding: 7rem 0;
+    background: #f8fafc;
+}
+
+.who-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1.25rem;
+}
+
+.who-card {
+    display: flex;
+    flex-direction: column;
+    padding: 2rem;
+    border: 1px solid #e2e8f0;
+    border-radius: 1.3rem;
+    background: #fff;
+    scroll-margin-top: 8rem;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.who-card:hover,
+.who-card:target {
+    border-color: rgba(249, 115, 22, 0.45);
+    box-shadow: 0 18px 40px rgba(15, 23, 42, 0.08);
+}
+
+.who-card > i {
+    width: 3rem;
+    height: 3rem;
+    display: grid;
+    place-items: center;
+    border-radius: 0.8rem;
+    color: #f97316;
+    background: #fff7ed;
+}
+
+.who-card h3 {
+    margin: 1.5rem 0 0.6rem;
+    color: #0f172a;
+    font-size: 1.2rem;
+    font-weight: 850;
+}
+
+.who-card p {
+    flex: 1;
+    margin-bottom: 1.5rem;
+    color: #64748b;
+    line-height: 1.65;
+}
+
+.who-card-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    color: #ea580c;
+    font-size: 0.9rem;
+    font-weight: 800;
+}
+
+.who-card-link i { transition: transform 0.2s ease; }
+.who-card-link:hover i { transform: translateX(3px); }
+
+html.dark .who-section { background: #0f172a; }
+html.dark .who-card { border-color: #334155; background: #1e293b; }
+html.dark .who-card > i { background: rgba(249, 115, 22, 0.1); }
+html.dark .who-card h3 { color: #f8fafc; }
+html.dark .who-card p { color: #94a3b8; }
+html.dark .who-card-link { color: #fb923c; }
+
+@media (max-width: 900px) {
+    .who-section { padding: 4.5rem 0; }
+    .who-grid { grid-template-columns: 1fr; }
+}

@@ -777,10 +777,12 @@ function initCounterAnimation() {
     const counters = document.querySelectorAll('.counter-animate');
     if (!counters.length) return;
 
+    // The HTML already ships the final values (for crawlers, link previews and no-JS
+    // visitors). Count up from zero only when motion is allowed.
     const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
     const setCounterValue = (counter, value) => {
-        counter.textContent = Math.round(value).toLocaleString();
+        counter.textContent = Math.round(value).toLocaleString('en-US');
     };
 
     const animateCounter = (counter) => {
@@ -793,9 +795,11 @@ function initCounterAnimation() {
 
         const duration = Number(counter.dataset.duration) || 1200;
         const startTime = performance.now();
+        setCounterValue(counter, 0);
 
         const update = (now) => {
-            const progress = Math.min((now - startTime) / duration, 1);
+            // rAF timestamps can precede startTime by a frame; clamp so the count never goes negative.
+            const progress = Math.min(Math.max((now - startTime) / duration, 0), 1);
             const eased = 1 - Math.pow(1 - progress, 3);
             setCounterValue(counter, target * eased);
             if (progress < 1) requestAnimationFrame(update);
