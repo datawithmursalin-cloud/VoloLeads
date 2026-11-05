@@ -34,7 +34,7 @@ Commits on `Rebranding` (newest first):
 | `8863d17` | **Phase 2:** homepage repositioning (investors, wholesalers, agents), real counter values in HTML, founder line, 30-minute calls, "Who we work with" section |
 | `e8bb3e3` | **Phase 1:** wordmark ("Volo" navy/white + "Leads" `#F97316`), brand-src image sources |
 
-Not committed on purpose: `.claude/` (local preview config) and `frontend/modifications/` (the owner's handoff zip and logo files).
+Not committed on purpose: `.claude/` (local preview config). `frontend/modifications/` holds dated files for upcoming website changes (see its README); it is cleared once a change ships.
 
 **Deploy safety:** `.github/workflows/frontend-build.yml` only builds and deploys on pushes to `NEXTJS`. Work and push freely on `Rebranding`. **Never merge into `NEXTJS` or push to it** without the owner's explicit go-ahead after the final review.
 
