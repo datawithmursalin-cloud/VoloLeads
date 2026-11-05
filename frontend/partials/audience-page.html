@@ -1,0 +1,56 @@
+<!-- Who We Serve page (/who-we-serve/<slug>), filled from content/audiences.json by lib/legacy-pages.js. -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{title}}</title>
+    <meta name="description" content="{{description}}">
+</head>
+<body class="bg-brand-light dark:bg-slate-950 text-brand-navy dark:text-slate-100 font-sans antialiased flex flex-col min-h-screen">
+    <!-- site:header -->
+    <main class="plan-page service-page audience-page flex-grow" id="main-content">
+        <div class="max-w-6xl mx-auto">
+            <nav class="resources-breadcrumb" aria-label="Breadcrumb"><a href="/">Home</a><span aria-hidden="true">/</span><a href="/who-we-serve">Who we serve</a><span aria-hidden="true">/</span><span>{{name}}</span></nav>
+            <header class="service-hero">
+                <p class="plan-page-eyebrow">{{eyebrow}}</p>
+                <h1>{{headline}}</h1>
+                <p class="plan-page-tagline">{{lede}}</p>
+                <div class="service-actions">
+                    <a href="/contact?service={{slug}}" class="site-pill site-pill--filled">Book a strategy call</a>
+                    {{secondaryCta}}
+                </div>
+            </header>
+            <section class="plan-page-section">
+                <p class="plan-page-kicker">The challenge</p>
+                <h2>{{challengeTitle}}</h2>
+                <ul class="plan-page-included">{{challenges}}</ul>
+            </section>
+            <section class="plan-page-section">
+                <p class="plan-page-kicker">How VoloLeads helps</p>
+                <h2>Services built for {{nameLower}}</h2>
+                <div class="service-plan-links">{{services}}</div>
+            </section>
+            <section class="plan-page-section">
+                <p class="plan-page-kicker">How it works</p>
+                <h2>From strategy call to seller conversations</h2>
+                <ol class="plan-page-steps service-steps">{{steps}}</ol>
+            </section>
+            <section class="plan-page-section">
+                <p class="plan-page-kicker">Where to start</p>
+                <h2>{{plansTitle}}</h2>
+                {{plans}}
+            </section>
+            <section class="plan-page-section">
+                <p class="plan-page-kicker">The Acquisition Blueprint</p>
+                <h2>Playbooks for {{nameLower}}</h2>
+                <div class="resources-cards">{{playbooks}}</div>
+            </section>
+            <section class="resources-more">
+                <div><h2>Book a strategy call</h2><p>30 minutes to talk through your market, your team and where VoloLeads fits.</p></div>
+                <div class="resources-more-links"><a href="/contact?service={{slug}}" class="site-pill site-pill--filled">Book a strategy call</a><a href="/call-recordings" class="site-pill site-pill--outline">Hear real calls</a></div>
+            </section>
+        </div>
+    </main>
+    <!-- site:footer -->
+</body>
+</html>

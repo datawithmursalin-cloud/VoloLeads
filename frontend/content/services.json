@@ -4,6 +4,24 @@
       "slug": "cold-callers",
       "name": "Cold Callers",
       "promise": "Trained acquisitions callers who qualify sellers so you can focus on motivated conversations.",
+      "overviewTitle": "Calling is a full-time job. Managing callers is another.",
+      "overview": [
+        "Most acquisition teams know cold calling works. The hard part is doing it every day: hiring callers, training them on qualification, watching their numbers and replacing the ones who stall. That management work is what usually breaks a calling program, not the dialing itself.",
+        "With VoloLeads you get a trained caller and a VA manager who oversees them. Your caller works your list during Eastern time hours, qualifies every interested seller on Motivation, Timeline, Condition and Price, and sends the lead to your CRM with notes your acquisitions team can act on.",
+        "You stay in the conversations that make money: following up with motivated sellers, making offers and closing."
+      ],
+      "fit": [
+        "You have a market and a list, and want consistent seller conversations",
+        "You have hired callers before and spent more time managing than closing",
+        "You want daily numbers you can check without chasing anyone",
+        "You want qualified sellers delivered with notes, not just phone numbers"
+      ],
+      "youProvide": [
+        "Your target market and seller criteria",
+        "CRM access, or agreement on where leads should be delivered",
+        "A list to call on Essential after the signup bonus; Growth and Scale lists are sourced for you",
+        "Fast follow-up on the qualified sellers we hand over"
+      ],
       "audiences": [
         "Investors",
         "Wholesalers"
@@ -78,6 +96,23 @@
       "slug": "lead-generation",
       "name": "Lead Generation & Skip Tracing",
       "promise": "Fresh seller lists from public records, cleaned and skip traced for your next campaign.",
+      "overviewTitle": "A caller is only as good as the list.",
+      "overview": [
+        "Dialing old or poorly targeted records burns hours on wrong numbers, disconnected lines and owners with no reason to sell. Good lists start with signals of motivation and end with clean, current contact details.",
+        "We pull records from public sources such as tax delinquency, probate, code violation and vacancy data, add for-sale-by-owner listings, and skip trace them through XLeads and DealMachine. Records are cleaned and de-duplicated before they reach a dialer. On Scale, lists are stacked so owners who show up on more than one signal get priority.",
+        "On Growth and Scale, list pulling runs every month so your callers always have fresh records. Before calling, lists are screened against national and applicable state Do Not Call lists, as described in our Compliance Policy."
+      ],
+      "fit": [
+        "You are running out of fresh records to call",
+        "Your current lists have high wrong-number or duplicate rates",
+        "You want lists built around motivation signals, not just equity",
+        "You would rather not manage data subscriptions and skip tracing yourself"
+      ],
+      "youProvide": [
+        "Your target markets and property types",
+        "Any criteria to include or exclude, such as price range or ownership length",
+        "Where the records should be delivered: your CRM or dialer"
+      ],
       "audiences": [
         "Investors",
         "Wholesalers"
@@ -149,6 +184,23 @@
       "slug": "crm-setup",
       "name": "CRM Setup",
       "promise": "An acquisitions CRM that keeps your leads, follow-up and handoffs organized.",
+      "overviewTitle": "Leads don’t get lost in a good system.",
+      "overview": [
+        "Seller leads go cold in spreadsheets, inboxes and half-built CRMs. A callback gets missed, a follow-up date slips, and a motivated seller signs with someone else.",
+        "We build your CRM in GoHighLevel or Podio around how your team actually acquires property: pipeline stages from new lead to closed deal, custom fields for MTCP notes and property details, automations that assign leads and schedule follow-up, and connections to the dialer and data tools in your workflow.",
+        "Your existing records are imported, so you start with your full history instead of a blank screen."
+      ],
+      "fit": [
+        "Your leads live in spreadsheets, notes or several different tools",
+        "Follow-up depends on someone remembering",
+        "You are adding callers or acquisition reps and need clear handoffs",
+        "You are moving to GoHighLevel or Podio and want it built right the first time"
+      ],
+      "youProvide": [
+        "A walkthrough of your current process and deal stages",
+        "Admin access to the CRM and connected tools",
+        "An export of the records you want imported"
+      ],
       "audiences": [
         "Investors",
         "Wholesalers",
@@ -209,6 +261,22 @@
       "slug": "comps-deal-analysis",
       "name": "Comps & Deal Analysis",
       "promise": "Know your numbers before you make an offer.",
+      "overviewTitle": "The profit is made at the offer.",
+      "overview": [
+        "A qualified seller is only an opportunity if the numbers work. Offer too high and the margin disappears. Offer too low and another buyer gets the deal.",
+        "We pull comparable sales, prepare repair estimates based on square footage using a rehab cost calculator, and calculate your maximum and lowest allowable offers (MAO and LAO). You get a short deal recap with the numbers and the assumptions behind them, so your acquisitions team can review it before getting back to the seller.",
+        "Comps are delivered as soon as a lead is qualified and submitted, while the seller conversation is still fresh."
+      ],
+      "fit": [
+        "Your team spends hours running comps on every lead",
+        "You want consistent offer math across your acquisition reps",
+        "You are entering a new market and want a second set of eyes on values"
+      ],
+      "youProvide": [
+        "The property address and seller notes for each qualified lead",
+        "Your buy box and offer formula, if you use one",
+        "Your exit strategy for the property: wholesale, flip or hold"
+      ],
       "audiences": [
         "Investors",
         "Wholesalers"
@@ -262,6 +330,22 @@
       "slug": "agent-appointment-setting",
       "name": "Appointment Setting for Agents",
       "promise": "Seller conversations that turn into listing appointments.",
+      "overviewTitle": "Prospecting takes hours. A listing appointment takes one.",
+      "overview": [
+        "Expired listings, FSBO sellers and homeowners in pre-foreclosure all have a reason to talk to an agent. Reaching them takes persistent calling and follow-up, which is hard to fit around showings, listings and closings.",
+        "Our callers work those lists for you. They learn each seller’s situation, timing and interest in listing, and book interested sellers straight onto your calendar. Every appointment comes with notes, so you walk in knowing what matters to the seller.",
+        "All calling follows our Do Not Call screening and compliance procedures."
+      ],
+      "fit": [
+        "You want more listing appointments without daily prospecting",
+        "You have expired, FSBO or pre-foreclosure lists you are not working",
+        "Your calendar has room for more seller appointments"
+      ],
+      "youProvide": [
+        "Your market and the lists you want worked",
+        "Your calendar availability and booking rules",
+        "Your talking points and how you want to be introduced"
+      ],
       "audiences": [
         "Agents"
       ],
@@ -305,6 +389,21 @@
       "slug": "consulting",
       "name": "Consulting",
       "promise": "Wholesaling and market guidance from operators who run acquisition teams every day.",
+      "overviewTitle": "Advice from people who run the floor.",
+      "overview": [
+        "A lot of real estate advice comes from people selling courses. Our consulting comes from the team that runs acquisition campaigns every day: building lists, managing callers, reviewing calls and running the numbers on deals.",
+        "Bring the questions you are stuck on: which market to enter, whether a deal makes sense, how to structure your calling operation, or how VoloLeads would fit into your current setup. We work through them with you one-on-one, and you leave with clear next steps."
+      ],
+      "fit": [
+        "You are choosing between markets",
+        "You want a second opinion on a deal",
+        "You are building or fixing an acquisitions process",
+        "You want to see how an outsourced calling team would fit your business"
+      ],
+      "youProvide": [
+        "Your questions and goals ahead of the call",
+        "Any numbers, deals or reports you want reviewed"
+      ],
       "audiences": [
         "Investors",
         "Wholesalers"
@@ -353,6 +452,22 @@
       "slug": "ai-workflows",
       "name": "AI Workflows",
       "promise": "Connect your CRM, dialer and reporting to reduce repetitive work.",
+      "overviewTitle": "Let software handle the busywork around the call.",
+      "overview": [
+        "In most acquisitions operations, a lot of time goes to the work around the call: moving data between tools, updating records, pulling KPI reports, chasing callbacks and summarizing calls for review.",
+        "We build AI connectors around the CRM, dialer and reporting tools your campaign already uses, so that work happens automatically and consistently. On the Scale plan, AI also handles SMS replies and answers inbound calls as a voice receptionist, so a seller calling back reaches someone instead of voicemail.",
+        "Outbound seller calls always stay human. AI supports your team; it does not replace the conversation."
+      ],
+      "fit": [
+        "Your team spends hours on data entry and reporting",
+        "Seller callbacks go to voicemail",
+        "You want KPI reports without building them by hand"
+      ],
+      "youProvide": [
+        "A list of the tools in your workflow",
+        "Access to the accounts we connect",
+        "For SMS: consented contacts and registration such as A2P 10DLC"
+      ],
       "audiences": [
         "Investors",
         "Wholesalers",
@@ -413,6 +528,21 @@
       "slug": "virtual-assistants",
       "name": "General VA Services",
       "promise": "Trained VAs for the work that fills your day.",
+      "overviewTitle": "Your time is worth more than admin.",
+      "overview": [
+        "Data entry, list cleaning, scheduling, follow-up and inbox management keep a real estate business running, but they don’t need the owner’s time.",
+        "Our VAs are trained and ready to take that work on. Tell us what fills your day, and we will scope a role around those tasks and how your team hands off work, with clear communication from the start."
+      ],
+      "fit": [
+        "You spend hours each week on admin",
+        "Follow-up slips when you get busy",
+        "You need help across several small tasks, not one big project"
+      ],
+      "youProvide": [
+        "A list of tasks and the tools used for each",
+        "Access to the accounts your VA will work in",
+        "One point of contact for questions"
+      ],
       "audiences": [
         "Investors",
         "Wholesalers",
@@ -462,6 +592,22 @@
       "slug": "team-training",
       "name": "Team Training",
       "promise": "Coach your existing VAs using their real seller conversations.",
+      "overviewTitle": "Your VAs already dial. Make every call count.",
+      "overview": [
+        "Many teams have VAs who make plenty of calls but struggle to qualify sellers, handle objections or leave notes the acquisitions team can use. More calls won’t fix that. Better calls will.",
+        "Team Training is coaching built on your team’s own live call recordings. Over three one-hour sessions across three days, the VoloLeads team that trains our own callers reviews real conversations with your VAs and works on MTCP qualification, objection handling, call flow, dialer and CRM habits, and daily KPI and QA routines.",
+        "Your team also gets one month of access to the acquisitions training app, so they can keep practicing after the sessions."
+      ],
+      "fit": [
+        "Your team already has VAs making seller calls",
+        "Your callers talk to sellers but don’t fully qualify them",
+        "You want a repeatable framework, not one-off tips"
+      ],
+      "youProvide": [
+        "Recent call recordings from your VAs",
+        "Up to 5 VAs available for the three sessions",
+        "Your current script and lead criteria"
+      ],
       "audiences": [
         "Investors",
         "Wholesalers",

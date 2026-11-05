@@ -215,6 +215,7 @@ function renderBlueprintPage(slug) {
     lede: escapeHtml(page.lede),
     intro: escapeHtml(page.intro),
     sections,
+    takeaways: page.takeaways ? `<aside class="blueprint-takeaways" aria-labelledby="blueprint-takeaways-title"><p class="plan-page-kicker" id="blueprint-takeaways-title">Key takeaways</p><ul>${page.takeaways.map(point => `<li>${escapeHtml(point)}</li>`).join('')}</ul></aside>` : '',
     disclaimer: page.disclaimer ? `<p class="blueprint-disclaimer">${escapeHtml(page.disclaimer)}</p>` : '',
     draftNotice: page.status === 'draft' ? '<p class="blueprint-draft" role="note">Draft for review: this page is awaiting VoloLeads approval.</p>' : '',
     helps: page.helps.map(help => `<a href="${help.href}" class="plan-page-other"><strong>${escapeHtml(help.title)}</strong><span>See the service <span aria-hidden="true">&rarr;</span></span></a>`).join(''),
@@ -267,7 +268,12 @@ function renderServicePage(slug) {
     promise: escapeHtml(service.promise),
     slug: escapeHtml(slug),
     audiences: service.audiences.map(audience => `<li>${escapeHtml(audience)}</li>`).join(''),
-    primaryCta: service.price ? `<a href="${contactUrl}" class="site-pill site-pill--filled">Get Started</a>` : cta,
+    // Services sold inside a plan start at the plans; the rest start with a quote.
+    primaryCta: service.price
+      ? `<a href="${contactUrl}" class="site-pill site-pill--filled">Get Started</a>`
+      : service.plans.length ? '<a href="/pricing" class="site-pill site-pill--filled">Get Started</a>' : cta,
+    overview: service.overview ? `<section class="plan-page-section"><p class="plan-page-kicker">Why it matters</p><h2>${escapeHtml(service.overviewTitle)}</h2><div class="service-overview">${service.overview.map(text => `<p>${escapeHtml(text)}</p>`).join('')}</div></section>` : '',
+    fit: service.fit ? `<section class="plan-page-section service-fit"><div><p class="plan-page-kicker">Is it right for you?</p><h2>A good fit if</h2><ul class="service-checklist">${service.fit.map(text => `<li>${escapeHtml(text)}</li>`).join('')}</ul></div>${service.youProvide ? `<div><p class="plan-page-kicker">Getting started</p><h2>What we need from you</h2><ul class="service-checklist">${service.youProvide.map(text => `<li>${escapeHtml(text)}</li>`).join('')}</ul></div>` : ''}</section>` : '',
     included: service.included.map(item => `<li><strong>${escapeHtml(item.title)}</strong><span>${escapeHtml(item.text)}</span></li>`).join(''),
     note: service.note ? `<p class="service-note">${escapeHtml(service.note)}</p>` : '',
     steps: service.steps.map((step, index) => `<li><span class="plan-step-index">${String(index + 1).padStart(2, '0')}</span><strong>${escapeHtml(step.title)}</strong><span>${escapeHtml(step.text)}</span></li>`).join(''),
@@ -282,6 +288,65 @@ function renderServicePage(slug) {
   return readServiceTemplate().replace(/\{\{(\w+)\}\}/g, (token, key) => key in fill ? fill[key] : token);
 }
 
+// Who We Serve routes (/who-we-serve, /who-we-serve/<slug>) link services, plans and
+// Blueprint playbooks by slug, so names and plan facts come from their own data files.
+const readAudiences = () => JSON.parse(fs.readFileSync(path.join(process.cwd(), 'content', 'audiences.json'), 'utf8'));
+const readAudienceTemplate = () => fs.readFileSync(path.join(process.cwd(), 'partials', 'audience-page.html'), 'utf8');
+const readAudiencesHubTemplate = () => fs.readFileSync(path.join(process.cwd(), 'partials', 'audiences-hub.html'), 'utf8');
+const AUDIENCE_SLUGS = ['wholesalers', 'investors', 'agents'];
+
+function renderAudiencesHub() {
+  const cards = readAudiences().audiences.map(audience => `<a class="service-card" href="/who-we-serve/${escapeHtml(audience.slug)}">
+    <i class="fa-solid fa-${escapeHtml(audience.icon)}" aria-hidden="true"></i>
+    <h2>${escapeHtml(audience.name)}</h2><p>${escapeHtml(audience.lede)}</p>
+    <span class="service-card-link">See how we help <span aria-hidden="true">&rarr;</span></span>
+  </a>`).join('');
+  return readAudiencesHubTemplate().replace('{{cards}}', () => cards);
+}
+
+function renderAudiencePage(slug) {
+  const audience = readAudiences().audiences.find(item => item.slug === slug);
+  if (!audience) return null;
+  const services = readServices().services;
+  const plans = readPlanData().plans;
+  const group = blueprintGroups().find(item => item.id === audience.playbooks);
+  if (!group) throw new Error(`Unknown Blueprint group for audience: ${audience.playbooks}`);
+  const serviceCards = audience.services.map(entry => {
+    const service = services.find(item => item.slug === entry.slug);
+    if (!service) throw new Error(`Unknown service for audience: ${entry.slug}`);
+    return `<a href="/services/${escapeHtml(service.slug)}" class="plan-page-other"><strong>${escapeHtml(service.name)}</strong><span>${escapeHtml(entry.text)}</span><span class="service-card-link">Explore service &rarr;</span></a>`;
+  }).join('');
+  const planCards = audience.plans.map(entry => {
+    const plan = plans.find(item => item.slug === entry.slug);
+    if (!plan) throw new Error(`Unknown plan for audience: ${entry.slug}`);
+    return `<a href="/plans/${escapeHtml(plan.slug)}" class="plan-page-other"><strong>${escapeHtml(plan.name)}</strong><span>${escapeHtml(entry.text)}</span><span class="service-card-link">View plan details &rarr;</span></a>`;
+  }).join('');
+  const hasPlans = audience.plans.length > 0;
+  const fill = {
+    title: escapeHtml(audience.title),
+    description: escapeHtml(audience.description),
+    name: escapeHtml(audience.name),
+    nameLower: escapeHtml(audience.name.toLowerCase()),
+    slug: escapeHtml(audience.slug),
+    eyebrow: escapeHtml(audience.eyebrow),
+    headline: audience.headline, // trusted content: allows one <span> accent
+    lede: escapeHtml(audience.lede),
+    secondaryCta: hasPlans
+      ? '<a href="/pricing" class="site-pill site-pill--outline">Explore the plans</a>'
+      : `<a href="/custom-quote?service=${escapeHtml(audience.slug)}" class="site-pill site-pill--outline">Get a Quote</a>`,
+    challengeTitle: escapeHtml(audience.challengeTitle),
+    challenges: audience.challenges.map(item => `<li><strong>${escapeHtml(item.title)}</strong><span>${escapeHtml(item.text)}</span></li>`).join(''),
+    services: serviceCards,
+    steps: audience.steps.map((step, index) => `<li><span class="plan-step-index">${String(index + 1).padStart(2, '0')}</span><strong>${escapeHtml(step.title)}</strong><span>${escapeHtml(step.text)}</span></li>`).join(''),
+    plansTitle: hasPlans ? 'Plans that fit' : 'Priced around your market',
+    plans: hasPlans
+      ? `<div class="service-plan-links">${planCards}</div>`
+      : `<div class="service-standalone"><div><p class="plan-page-kicker">Available on its own</p><h3>Custom quote</h3><p>${escapeHtml(audience.planNote)}</p></div><a href="/custom-quote?service=${escapeHtml(audience.slug)}" class="site-pill site-pill--filled">Get a Quote</a></div>`,
+    playbooks: group.items.map(item => `<a href="${item.href}" class="resources-card"><strong>${escapeHtml(item.title)}</strong><span>${escapeHtml(item.summary)}</span><em>Read the playbook <span aria-hidden="true">&rarr;</span></em></a>`).join('')
+  };
+  return readAudienceTemplate().replace(/\{\{(\w+)\}\}/g, (token, key) => (key in fill ? fill[key] : token));
+}
+
 const BLUEPRINT_SLUGS = ['fix-and-flip', 'buy-and-hold', 'seller-finance', 'seller-listing-opportunities', 'buyer-opportunities', 'listing-marketing-support', 'how-we-operate', 'tcpa-compliance', 'ai-workflows'];
 
 // Route list is fixed (it is built at import time, before any cwd is known); page content
@@ -291,6 +356,8 @@ const PLAN_SLUGS = ['essential', 'growth', 'scale', 'custom-plus'];
 export const legacyRouteParams = [
   { slug: ['services'] },
   ...SERVICE_SLUGS.map(slug => ({ slug: ['services', slug] })),
+  { slug: ['who-we-serve'] },
+  ...AUDIENCE_SLUGS.map(slug => ({ slug: ['who-we-serve', slug] })),
   ...Object.keys(pages).filter(route => route && route !== '404.html').map(route => ({ slug: route.split('/') })),
   ...PLAN_SLUGS.map(slug => ({ slug: ['plans', slug] })),
   { slug: ['resources'] },
@@ -314,6 +381,11 @@ export function getLegacyPage(route) {
     source = renderServicesHub();
   } else if (route.startsWith('services/')) {
     source = renderServicePage(route.slice('services/'.length));
+    if (!source) return null;
+  } else if (route === 'who-we-serve') {
+    source = renderAudiencesHub();
+  } else if (route.startsWith('who-we-serve/')) {
+    source = renderAudiencePage(route.slice('who-we-serve/'.length));
     if (!source) return null;
   } else if (Object.hasOwn(pages, route)) {
     source = readPages[pages[route]]();

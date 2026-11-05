@@ -1,0 +1,109 @@
+{
+  "_comment": "Who We Serve pages (/who-we-serve and /who-we-serve/<slug>). services = slugs in services.json, plans = slugs in plans.json, playbooks = a group id in blueprint.json. No lead counts or results here (owner rule).",
+  "audiences": [
+    {
+      "slug": "wholesalers",
+      "name": "Wholesalers",
+      "icon": "handshake",
+      "summary": "Motivated sellers in your pipeline every week.",
+      "eyebrow": "For wholesalers",
+      "headline": "More motivated sellers. <span>Less time on the phone.</span>",
+      "title": "Seller Acquisition Teams for Wholesalers | VoloLeads",
+      "description": "VoloLeads finds, calls and qualifies motivated sellers for wholesalers, with trained callers, fresh skip-traced lists, CRM setup and comps.",
+      "lede": "Wholesaling runs on seller conversations. We find, call and qualify motivated sellers so you can spend your time on offers, contracts and buyers.",
+      "challengeTitle": "What holds most wholesalers back",
+      "challenges": [
+        { "title": "Not enough conversations", "text": "Cold calling is a volume game, and few wholesalers can dial all day and still run their deals." },
+        { "title": "Callers who don't last", "text": "Hiring, training and managing VAs takes time, and an unmanaged caller's numbers drop fast." },
+        { "title": "Leads without context", "text": "A \"hot lead\" with no notes means another call just to learn the basics." },
+        { "title": "Stale lists", "text": "Calling the same old records burns hours on wrong numbers and owners with no reason to sell." }
+      ],
+      "services": [
+        { "slug": "cold-callers", "text": "A trained caller and a VA manager who qualify every seller on Motivation, Timeline, Condition and Price." },
+        { "slug": "lead-generation", "text": "Public-record and FSBO lists, skip traced and cleaned, pulled every month on Growth and Scale." },
+        { "slug": "crm-setup", "text": "Pipelines and follow-up automations so no motivated seller slips through." },
+        { "slug": "comps-deal-analysis", "text": "Comps, repair estimates and MAO/LAO math as soon as a lead is qualified." }
+      ],
+      "steps": [
+        { "title": "Strategy call", "text": "30 minutes on your market, lists and seller criteria." },
+        { "title": "Onboarding", "text": "Access, script and lead routing set up over 2–3 days." },
+        { "title": "Calling and daily QA", "text": "Your caller works your campaign with daily call reviews and coaching." },
+        { "title": "Leads in your CRM", "text": "Qualified sellers arrive with full MTCP notes, ready for your offer." }
+      ],
+      "plans": [
+        { "slug": "essential", "text": "You already have lists and want a dedicated, managed caller." },
+        { "slug": "growth", "text": "You want a turnkey system: a managed caller plus monthly leads." },
+        { "slug": "scale", "text": "You're ready for two callers, more volume and comps on qualified leads." }
+      ],
+      "playbooks": "wholesalers"
+    },
+    {
+      "slug": "investors",
+      "name": "Investors & flippers",
+      "icon": "house-signal",
+      "summary": "Off-market deals without running a call floor.",
+      "eyebrow": "For investors",
+      "headline": "Off-market deals <span>without running a call floor.</span>",
+      "title": "Off-Market Seller Leads for Real Estate Investors | VoloLeads",
+      "description": "VoloLeads runs seller outreach for fix-and-flip, buy-and-hold and creative-finance investors: targeted lists, trained callers, comps and consulting.",
+      "lede": "Whether you flip, hold or buy on terms, the best deals come from talking to owners before a property is listed. We run that outreach for you, with a manager who reports back every day.",
+      "challengeTitle": "Why off-market buying is hard to scale",
+      "challenges": [
+        { "title": "Competing on the MLS", "text": "Listed properties come with retail prices and a crowd of other buyers." },
+        { "title": "No time to prospect", "text": "Projects, tenants and closings leave little time for daily seller calls." },
+        { "title": "A calling team is its own business", "text": "Hiring, scripts, dialers, QA and reporting add up quickly." },
+        { "title": "Every lead needs numbers", "text": "Comps and repair estimates take hours if you run them on every lead yourself." }
+      ],
+      "services": [
+        { "slug": "lead-generation", "text": "Lists built around distress and motivation signals, skip traced and cleaned before anyone dials." },
+        { "slug": "cold-callers", "text": "Trained callers who find owners ready to sell and capture what you need to judge the deal." },
+        { "slug": "comps-deal-analysis", "text": "Comparable sales, repair estimates based on square footage and offer math on qualified leads." },
+        { "slug": "consulting", "text": "Market selection and deal reviews with operators who run acquisition teams every day." }
+      ],
+      "steps": [
+        { "title": "Strategy call", "text": "Your markets, buy box and strategy: flip, hold or terms." },
+        { "title": "Lists and setup", "text": "We build the lists, script and routing around your criteria." },
+        { "title": "Calling and daily QA", "text": "Callers work your campaign with daily reviews and reports." },
+        { "title": "Qualified leads", "text": "Sellers arrive with full MTCP notes, with comps included on Scale." }
+      ],
+      "plans": [
+        { "slug": "growth", "text": "A managed caller plus monthly leads, without building anything yourself." },
+        { "slug": "scale", "text": "Two callers, about 50,000 records a month, comps and targeted campaigns." },
+        { "slug": "custom-plus", "text": "Several markets or a larger team, scoped around your operation." }
+      ],
+      "playbooks": "investors"
+    },
+    {
+      "slug": "agents",
+      "name": "Agents",
+      "icon": "calendar-days",
+      "summary": "Seller conversations that turn into listings.",
+      "eyebrow": "For agents",
+      "headline": "Seller conversations <span>that turn into listings.</span>",
+      "title": "Listing Appointment Setting for Real Estate Agents | VoloLeads",
+      "description": "VoloLeads callers work expired, FSBO and pre-foreclosure lists for real estate agents and book seller appointments on your calendar.",
+      "lede": "Listings start with homeowners who need to sell. Our callers work your seller lists and book appointments on your calendar, so you can spend your time with clients.",
+      "challengeTitle": "Where agents lose time",
+      "challenges": [
+        { "title": "Prospecting eats the day", "text": "Calling expired and FSBO lists takes hours you'd rather spend at appointments." },
+        { "title": "Follow-up slips", "text": "Many sellers aren't ready on the first call, and follow-up is easy to lose track of." },
+        { "title": "Admin piles up", "text": "Listing paperwork, scheduling and inbox management pull you away from clients." },
+        { "title": "Inquiries go cold", "text": "Buyer and seller inquiries cool off fast without a quick response." }
+      ],
+      "services": [
+        { "slug": "agent-appointment-setting", "text": "Callers work your expired, FSBO and pre-foreclosure lists and book interested sellers on your calendar." },
+        { "slug": "virtual-assistants", "text": "Trained VAs for follow-up, scheduling, listing admin and inbox management." },
+        { "slug": "crm-setup", "text": "A CRM that tracks every seller and buyer conversation with clear next steps." },
+        { "slug": "ai-workflows", "text": "AI connectors that cut data entry and reporting around your calls." }
+      ],
+      "steps": [
+        { "title": "Plan the outreach", "text": "Agree on your lists, market and appointment criteria." },
+        { "title": "Call and qualify", "text": "Callers start seller conversations and confirm interest in listing." },
+        { "title": "Book the appointment", "text": "Interested sellers are scheduled on your calendar, with notes." }
+      ],
+      "plans": [],
+      "planNote": "Agent services are scoped to your market and lists, so they're priced by custom quote. Setup fee and minimum term are confirmed in your quote.",
+      "playbooks": "agents"
+    }
+  ]
+}

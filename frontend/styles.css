@@ -8738,3 +8738,28 @@ html.dark .service-tags li { border-color: #334155; color: #cbd5e1; }
 html.dark .service-card p, html.dark .service-note, html.dark .service-standalone p, html.dark .service-plan-links p { color: #94a3b8; }
 @media (max-width: 1023px) { .service-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 @media (max-width: 640px) { .service-grid, .service-proof { grid-template-columns: 1fr; } .service-card { padding: 1.5rem; } }
+
+/* ============================================
+   Expanded service, Blueprint and Who We Serve content
+   ============================================ */
+.service-overview { display: grid; gap: 1rem; max-width: 48rem; margin-top: 1.25rem; }
+.service-overview p { color: #475569; font-size: 1.05rem; line-height: 1.75; }
+.service-overview p:first-child { color: #334155; font-size: 1.15rem; }
+.service-fit { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 2.5rem; }
+.service-fit h2 { font-size: clamp(1.5rem, 3vw, 2rem); }
+.service-checklist { display: grid; gap: 0.75rem; margin: 1.25rem 0 0; padding: 0; list-style: none; }
+.service-checklist li { position: relative; padding-left: 1.6rem; color: #334155; line-height: 1.6; }
+.service-checklist li::before { content: ""; position: absolute; left: 0.2rem; top: 0.5rem; width: 0.7rem; height: 0.4rem; border-left: 2px solid #f97316; border-bottom: 2px solid #f97316; transform: rotate(-45deg); }
+.blueprint-takeaways { margin-top: 2.75rem; padding: 1.5rem 1.75rem; border: 1px solid #fed7aa; border-left: 4px solid #f97316; border-radius: 1rem; background: #fff7ed; }
+.blueprint-takeaways ul { display: grid; gap: 0.5rem; margin: 0.75rem 0 0; padding: 0; list-style: none; }
+.blueprint-takeaways li { position: relative; padding-left: 1.4rem; color: #334155; line-height: 1.55; }
+.blueprint-takeaways li::before { content: ""; position: absolute; left: 0.15rem; top: 0.45rem; width: 0.65rem; height: 0.38rem; border-left: 2px solid #f97316; border-bottom: 2px solid #f97316; transform: rotate(-45deg); }
+.audience-page .resources-cards { grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr)); margin-top: 1.25rem; }
+@media (max-width: 767px) {
+    .service-fit { grid-template-columns: 1fr; gap: 2rem; }
+}
+html.dark .service-overview p { color: #94a3b8; }
+html.dark .service-overview p:first-child,
+html.dark .service-checklist li,
+html.dark .blueprint-takeaways li { color: #cbd5e1; }
+html.dark .blueprint-takeaways { border-color: #7c2d12; border-left-color: #fb923c; background: rgba(249, 115, 22, 0.08); }

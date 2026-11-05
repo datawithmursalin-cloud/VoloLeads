@@ -15,6 +15,7 @@ function initializeVoloLeadsPage() {
     initThemePreference();
     initFormAttribution();
     initContactForm();
+    initServicePrefill();
     initFormSecurity();
     initCounterAnimation();
     initRevealOnScroll();
@@ -851,6 +852,17 @@ function initFormAttribution(search = window.location.search) {
     }
 }
 
+// Plan-page CTAs pass ?service=<Plan name>; pre-select it when the visitor hasn't chosen yet.
+function initServicePrefill() {
+    const select = document.getElementById('service-select');
+    const requested = (new URLSearchParams(window.location.search).get('service') || '').trim().toLowerCase();
+    if (!select || !requested || select.value) return;
+    const option = [...select.options].find(item => item.value && item.value.toLowerCase() === requested);
+    if (!option) return;
+    select.value = option.value;
+    select.dispatchEvent(new Event('change', { bubbles: true }));
+}
+
 function initContactForm() {
     const serviceSelect = document.getElementById('service-select');
     const dateInput = document.getElementById('preferred-date');
@@ -1311,7 +1323,12 @@ function initPremiumButtons() {
         '.mobile-sticky-cta'
     ].join(',');
 
-    document.querySelectorAll(selector).forEach(button => button.classList.add('premium-motion-button'));
+    // Only button-shaped elements: an inline text link (e.g. the footer "Contact") can't clip
+    // the shine pseudo-element, which then shows as a stray gray shape beside the text.
+    document.querySelectorAll(selector).forEach(button => {
+        if (getComputedStyle(button).display === 'inline') return;
+        button.classList.add('premium-motion-button');
+    });
 }
 
 function initAnimatedFaqDetails(reduceMotion) {
