@@ -43,7 +43,7 @@ async function restartFrontend() {
 }
 
 async function readPage(url, buildId) {
-  const response = await fetch(url, { signal: AbortSignal.timeout(8000), redirect: 'error' });
+  const response = await fetch(url, { signal: AbortSignal.timeout(8000), redirect: 'follow' });
   if (!response.ok) throw new Error(`Frontend check returned HTTP ${response.status}.`);
   if (response.headers.get('x-vololeads-build') !== buildId) throw new Error('Frontend is not serving the expected build yet.');
   const html = await response.text();
@@ -73,7 +73,7 @@ async function probeCandidate(candidate, env, logFile, buildId) {
       if (failure) throw failure;
       const match = output.match(/VoloLeads frontend listening: (\d+)/);
       if (match) {
-        for (const route of ['/', '/compliance.html', '/terms-condition.html']) {
+        for (const route of ['/', '/compliance', '/terms']) {
           await readPage(`http://127.0.0.1:${match[1]}${route}`, buildId);
         }
         return;
@@ -107,7 +107,7 @@ async function checkPublic(buildId) {
   let lastError;
   for (let attempt = 0; attempt < 12; attempt++) {
     try {
-      for (const route of ['/', '/compliance.html', '/terms-condition.html']) {
+      for (const route of ['/', '/compliance', '/terms']) {
         await readPage(`https://vololeads.com${route}?deployment=${encodeURIComponent(buildId)}`, buildId);
       }
       return;

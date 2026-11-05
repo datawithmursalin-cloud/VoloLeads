@@ -1,0 +1,19 @@
+{
+  "/cancel.html": "/cancel",
+  "/compliance.html": "/compliance",
+  "/custom-quote.html": "/custom-quote",
+  "/disclaimer.html": "/disclaimer",
+  "/faqs.html": "/faqs",
+  "/manage-subscription.html": "/manage-subscription",
+  "/privacy-policy.html": "/privacy-policy",
+  "/refund-policy.html": "/refund-policy",
+  "/schedule-onboarding.html": "/schedule-onboarding",
+  "/success.html": "/success",
+  "/thank-you.html": "/thank-you",
+  "/index.html": "/",
+  "/terms-condition.html": "/terms",
+  "/insights-deal.html": "/resources/deal-structures",
+  "/insights-intelligence.html": "/resources/targeting-by-intelligence",
+  "/insights-kpi.html": "/resources/performance-analytics",
+  "/insights-market.html": "/resources/market-seasonality"
+}

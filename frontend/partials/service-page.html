@@ -1,0 +1,55 @@
+<!-- Service detail template, filled from content/services.json. -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{title}}</title>
+    <meta name="description" content="{{description}}">
+</head>
+<body class="bg-brand-light dark:bg-slate-950 text-brand-navy dark:text-slate-100 font-sans antialiased flex flex-col min-h-screen">
+    <!-- site:header -->
+    <main class="plan-page service-page flex-grow" id="main-content">
+        <div class="max-w-6xl mx-auto">
+            <nav class="resources-breadcrumb" aria-label="Breadcrumb"><a href="/">Home</a><span aria-hidden="true">/</span><a href="/services">Services</a><span aria-hidden="true">/</span><span>{{name}}</span></nav>
+            <header class="service-hero">
+                <p class="plan-page-eyebrow">VoloLeads services</p>
+                <h1>{{name}}</h1>
+                <p class="plan-page-tagline">{{promise}}</p>
+                <ul class="service-tags" aria-label="Who this service is for">{{audiences}}</ul>
+                <div class="service-actions">
+                    <a href="/contact?service={{slug}}" class="site-pill site-pill--outline">Book a Call</a>
+                    {{primaryCta}}
+                </div>
+            </header>
+            <section class="plan-page-section">
+                <p class="plan-page-kicker">What's included</p>
+                <h2>The work we take on</h2>
+                <ul class="plan-page-included">{{included}}</ul>
+                {{note}}
+            </section>
+            <section class="plan-page-section">
+                <p class="plan-page-kicker">How it works</p>
+                <h2>From first conversation to delivery</h2>
+                <ol class="plan-page-steps service-steps">{{steps}}</ol>
+            </section>
+            {{tools}}
+            <section class="plan-page-section">
+                <p class="plan-page-kicker">How you get it</p>
+                <h2>Choose the scope that fits</h2>
+                {{plans}}
+                <div class="service-standalone">
+                    <div><p class="plan-page-kicker">Available on its own</p><h3>{{standalonePrice}}</h3><p>{{standaloneNote}}</p></div>
+                    {{standaloneCta}}
+                </div>
+            </section>
+            {{proof}}
+            {{resource}}
+            <section class="resources-more">
+                <div><h2>Book a strategy call</h2><p>30 minutes to discuss your market, team and next campaign.</p></div>
+                <div class="resources-more-links"><a href="/contact?service={{slug}}" class="site-pill site-pill--filled">Book a strategy call</a></div>
+            </section>
+        </div>
+    </main>
+    <!-- site:footer -->
+</body>
+</html>

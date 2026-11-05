@@ -50,6 +50,7 @@ describe('checkout billing selection', () => {
     const res = { status: jest.fn().mockReturnThis(), json: jest.fn().mockReturnThis() };
     await createCheckoutSession({ body: { plan: requestPlan, billingCycle } }, res);
     expect(stripe.checkout.sessions.create).toHaveBeenCalledWith(expect.objectContaining({
+      cancel_url: expect.stringMatching(/\/cancel$/),
       line_items: [{ price: id, quantity: 1 }],
       allow_promotion_codes: true,
       metadata: { planCode, billingCycle, setupFeeIncluded: 'false' },

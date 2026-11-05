@@ -1,0 +1,525 @@
+{
+  "services": [
+    {
+      "slug": "cold-callers",
+      "name": "Cold Callers",
+      "promise": "Trained acquisitions callers who qualify sellers so you can focus on motivated conversations.",
+      "audiences": [
+        "Investors",
+        "Wholesalers"
+      ],
+      "icon": "headset",
+      "included": [
+        {
+          "title": "Dedicated callers",
+          "text": "Your caller works Eastern time hours on your campaign."
+        },
+        {
+          "title": "Full MTCP qualification",
+          "text": "Motivation, Timeline, Condition and Price captured for your acquisitions team."
+        },
+        {
+          "title": "Dialer and CRM workflow",
+          "text": "WAVV triple-line dialer included. Callers can also work in your dialer and CRM."
+        },
+        {
+          "title": "Daily quality assurance",
+          "text": "KPI monitoring, call reviews and coaching from your VA manager."
+        },
+        {
+          "title": "Daily reports",
+          "text": "See activity and seller conversations, with full notes delivered to your CRM."
+        },
+        {
+          "title": "Caller replacement",
+          "text": "If your caller underperforms, we replace them with a new VA."
+        }
+      ],
+      "steps": [
+        {
+          "title": "Strategy call",
+          "text": "Review your market, list and seller criteria."
+        },
+        {
+          "title": "Onboarding",
+          "text": "Set up access, script and routing over 2–3 days."
+        },
+        {
+          "title": "Calling and QA",
+          "text": "Your caller makes seller calls with daily reviews and coaching."
+        },
+        {
+          "title": "Lead handoff",
+          "text": "Seller leads reach your CRM with full MTCP notes."
+        }
+      ],
+      "plans": [
+        "essential",
+        "growth",
+        "scale"
+      ],
+      "tools": [
+        "WAVV",
+        "GoHighLevel"
+      ],
+      "note": "Consistent seller leads every month. Results vary by market and list type.",
+      "proof": [
+        {
+          "file": "one-caller-one-month.webp",
+          "alt": "One VoloLeads caller in July 2026: 32,170 dials, 4,302 seller conversations, 35 seller leads."
+        },
+        {
+          "file": "four-month-consistency.webp",
+          "alt": "One VoloLeads caller's seller leads by month, May to August 2026: 33, 32, 32 and 32."
+        }
+      ]
+    },
+    {
+      "slug": "lead-generation",
+      "name": "Lead Generation & Skip Tracing",
+      "promise": "Fresh seller lists from public records, cleaned and skip traced for your next campaign.",
+      "audiences": [
+        "Investors",
+        "Wholesalers"
+      ],
+      "icon": "database",
+      "included": [
+        {
+          "title": "Public-record lists",
+          "text": "Tax delinquencies, probates, code violations and vacant properties."
+        },
+        {
+          "title": "FSBO lists",
+          "text": "For-sale-by-owner records for your outreach."
+        },
+        {
+          "title": "Skip tracing",
+          "text": "XLeads and DealMachine skip tracing included in Growth and Scale."
+        },
+        {
+          "title": "List cleaning",
+          "text": "De-duplication and clean records before dialing. Scale also includes list stacking."
+        },
+        {
+          "title": "Monthly list pulling",
+          "text": "Automatic list pulling for Growth and Scale campaigns."
+        },
+        {
+          "title": "Ongoing sourcing",
+          "text": "Essential includes a one-time signup bonus. You source ongoing leads on that plan."
+        }
+      ],
+      "steps": [
+        {
+          "title": "Choose your market",
+          "text": "Agree on geography and list criteria."
+        },
+        {
+          "title": "Pull and prepare",
+          "text": "Source records, skip trace and clean the list."
+        },
+        {
+          "title": "Deliver and refresh",
+          "text": "Load the records into your workflow and refresh according to your plan."
+        }
+      ],
+      "plans": [
+        "essential",
+        "growth",
+        "scale"
+      ],
+      "tools": [
+        "XLeads",
+        "DealMachine"
+      ],
+      "note": "Sourced records are not qualified opportunities or guaranteed results.",
+      "planFeatures": {
+        "essential": [
+          "10,000-lead signup bonus"
+        ],
+        "growth": [
+          "Data and lead acquisition"
+        ],
+        "scale": [
+          "About 50,000 records a month"
+        ]
+      }
+    },
+    {
+      "slug": "crm-setup",
+      "name": "CRM Setup",
+      "promise": "An acquisitions CRM that keeps your leads, follow-up and handoffs organized.",
+      "audiences": [
+        "Investors",
+        "Wholesalers",
+        "Agents"
+      ],
+      "icon": "layer-group",
+      "included": [
+        {
+          "title": "Pipelines and fields",
+          "text": "Stages and custom fields built around your acquisition process."
+        },
+        {
+          "title": "Automations and routing",
+          "text": "Assign leads and organize follow-up across your team."
+        },
+        {
+          "title": "Dialer and data integration",
+          "text": "Connect the tools used in your agreed workflow."
+        },
+        {
+          "title": "Data import",
+          "text": "Bring your existing lead records into the CRM."
+        },
+        {
+          "title": "One-time build",
+          "text": "Scope the setup around your team and current process."
+        },
+        {
+          "title": "Ongoing support",
+          "text": "Support depends on your subscription and agreed scope."
+        }
+      ],
+      "steps": [
+        {
+          "title": "Map your workflow",
+          "text": "Review your stages, tools and handoff requirements."
+        },
+        {
+          "title": "Build the CRM",
+          "text": "Configure fields, pipelines, routing and data import."
+        },
+        {
+          "title": "Review together",
+          "text": "Walk through the setup and confirm your support scope."
+        }
+      ],
+      "plans": [
+        "growth",
+        "scale"
+      ],
+      "tools": [
+        "GoHighLevel",
+        "Podio"
+      ],
+      "planNote": "Growth and Scale include CRM support. Confirm the scope of your build on a strategy call."
+    },
+    {
+      "slug": "comps-deal-analysis",
+      "name": "Comps & Deal Analysis",
+      "promise": "Know your numbers before you make an offer.",
+      "audiences": [
+        "Investors",
+        "Wholesalers"
+      ],
+      "icon": "chart-bar",
+      "included": [
+        {
+          "title": "Comparable sales",
+          "text": "Review comparable properties to inform your offer."
+        },
+        {
+          "title": "Repair estimates",
+          "text": "Repair estimates based on square footage using a rehab cost calculator."
+        },
+        {
+          "title": "Offer math",
+          "text": "MAO and LAO calculations for your acquisitions team."
+        },
+        {
+          "title": "Deal recaps",
+          "text": "A summary of the numbers and assumptions behind the analysis."
+        },
+        {
+          "title": "Market targeting",
+          "text": "Scale includes targeted campaigns using Redfin market analysis."
+        }
+      ],
+      "steps": [
+        {
+          "title": "Submit a qualified lead",
+          "text": "Share the property details and seller notes."
+        },
+        {
+          "title": "Review the numbers",
+          "text": "We prepare comps, repair estimates and offer math."
+        },
+        {
+          "title": "Use your recap",
+          "text": "Your team reviews the analysis before making an offer."
+        }
+      ],
+      "plans": [
+        "scale"
+      ],
+      "tools": [
+        "Redfin"
+      ],
+      "note": "Comps are delivered as soon as a lead is qualified and submitted."
+    },
+    {
+      "slug": "agent-appointment-setting",
+      "name": "Appointment Setting for Agents",
+      "promise": "Seller conversations that turn into listing appointments.",
+      "audiences": [
+        "Agents"
+      ],
+      "icon": "calendar-days",
+      "included": [
+        {
+          "title": "Seller outreach",
+          "text": "Callers work your expired, FSBO and pre-foreclosure lists."
+        },
+        {
+          "title": "Seller qualification",
+          "text": "Understand the seller’s situation, timing and interest in listing."
+        },
+        {
+          "title": "Calendar booking",
+          "text": "Book appointments directly on your calendar."
+        },
+        {
+          "title": "Conversation handoff",
+          "text": "Seller notes give you context for the appointment."
+        }
+      ],
+      "steps": [
+        {
+          "title": "Plan the outreach",
+          "text": "Agree on your lists, market and appointment criteria."
+        },
+        {
+          "title": "Call and qualify",
+          "text": "Your callers start seller conversations and confirm fit."
+        },
+        {
+          "title": "Book the appointment",
+          "text": "Interested sellers are scheduled on your calendar."
+        }
+      ],
+      "plans": [],
+      "tools": []
+    },
+    {
+      "slug": "consulting",
+      "name": "Consulting",
+      "promise": "Wholesaling and market guidance from operators who run acquisition teams every day.",
+      "audiences": [
+        "Investors",
+        "Wholesalers"
+      ],
+      "icon": "comments",
+      "included": [
+        {
+          "title": "Individual calls",
+          "text": "Discuss your current challenges directly with our team."
+        },
+        {
+          "title": "Market selection",
+          "text": "Work through the markets you are considering."
+        },
+        {
+          "title": "Deal analysis",
+          "text": "Review deal questions and the assumptions behind your numbers."
+        },
+        {
+          "title": "Service Q&A",
+          "text": "Understand how the VoloLeads team fits into your operation."
+        }
+      ],
+      "steps": [
+        {
+          "title": "Bring your questions",
+          "text": "Share your market, deal or operational priorities."
+        },
+        {
+          "title": "Work through the details",
+          "text": "Review your questions with our team."
+        },
+        {
+          "title": "Choose next steps",
+          "text": "Leave with actions to apply to your acquisition process."
+        }
+      ],
+      "plans": [
+        "growth",
+        "scale"
+      ],
+      "tools": [],
+      "planNote": "Growth includes 1-on-1 Q&A sessions. Scale includes everything in Growth. Standalone consulting is scoped separately."
+    },
+    {
+      "slug": "ai-workflows",
+      "name": "AI Workflows",
+      "promise": "Connect your CRM, dialer and reporting to reduce repetitive work.",
+      "audiences": [
+        "Investors",
+        "Wholesalers",
+        "Agents"
+      ],
+      "icon": "bolt",
+      "included": [
+        {
+          "title": "AI connectors",
+          "text": "Scope connectors around your CRM, dialer and supported tools."
+        },
+        {
+          "title": "KPI tracking",
+          "text": "Bring activity and performance reporting into your workflow."
+        },
+        {
+          "title": "Data workflows",
+          "text": "Coordinate skip tracing and data tasks within the agreed scope."
+        },
+        {
+          "title": "Call QA summaries",
+          "text": "Summaries and monitoring to support human review."
+        },
+        {
+          "title": "SMS and inbound voice",
+          "text": "Scale includes SMS handling and an AI voice receptionist for inbound calls."
+        },
+        {
+          "title": "Human outbound callers",
+          "text": "Your outbound seller conversations are handled by people."
+        }
+      ],
+      "steps": [
+        {
+          "title": "Map the work",
+          "text": "Identify repetitive tasks and review your current tools."
+        },
+        {
+          "title": "Confirm the scope",
+          "text": "Agree on supported connections, data flow and review points."
+        },
+        {
+          "title": "Build and review",
+          "text": "Configure the workflow and check it with your team."
+        }
+      ],
+      "plans": [
+        "scale"
+      ],
+      "tools": [],
+      "planNote": "Scale includes SMS and inbound voice automation. Other workflows are available by custom quote.",
+      "resource": {
+        "href": "/resources/ai-workflows",
+        "label": "Read how we use AI workflows"
+      }
+    },
+    {
+      "slug": "virtual-assistants",
+      "name": "General VA Services",
+      "promise": "Trained VAs for the work that fills your day.",
+      "audiences": [
+        "Investors",
+        "Wholesalers",
+        "Agents"
+      ],
+      "icon": "users",
+      "included": [
+        {
+          "title": "Data entry and list cleaning",
+          "text": "Keep records organized and ready for your team."
+        },
+        {
+          "title": "Follow-up and scheduling",
+          "text": "Help manage follow-up tasks and calendar coordination."
+        },
+        {
+          "title": "Social media support",
+          "text": "Assistance with your agreed social media tasks."
+        },
+        {
+          "title": "Inbox management",
+          "text": "Help organize email and routine responses."
+        },
+        {
+          "title": "Other admin by request",
+          "text": "Discuss the administrative work your operation needs."
+        }
+      ],
+      "steps": [
+        {
+          "title": "Define the role",
+          "text": "List the tasks, tools and responsibilities you need covered."
+        },
+        {
+          "title": "Agree on the scope",
+          "text": "Confirm priorities and how your team will hand off work."
+        },
+        {
+          "title": "Start the workflow",
+          "text": "Your VA begins the agreed tasks with clear communication."
+        }
+      ],
+      "plans": [],
+      "tools": []
+    },
+    {
+      "slug": "team-training",
+      "name": "Team Training",
+      "promise": "Coach your existing VAs using their real seller conversations.",
+      "audiences": [
+        "Investors",
+        "Wholesalers",
+        "Agents"
+      ],
+      "icon": "book-open",
+      "included": [
+        {
+          "title": "Your team’s call recordings",
+          "text": "Coaching is based on your team’s live call recordings."
+        },
+        {
+          "title": "MTCP qualification",
+          "text": "Practice Motivation, Timeline, Condition and Price."
+        },
+        {
+          "title": "Objections and call flow",
+          "text": "Review how your VAs handle objections and move the conversation forward."
+        },
+        {
+          "title": "Dialer and CRM workflow",
+          "text": "Connect calling habits with useful notes and lead handoffs."
+        },
+        {
+          "title": "Daily KPI and QA habits",
+          "text": "Build a routine for reviewing activity and call quality."
+        },
+        {
+          "title": "Acquisitions training app",
+          "text": "Includes one month of access to the acquisitions training app."
+        }
+      ],
+      "steps": [
+        {
+          "title": "Book a strategy call",
+          "text": "Discuss your existing team and training needs."
+        },
+        {
+          "title": "Schedule the sessions",
+          "text": "Arrange three one-hour sessions over three days."
+        },
+        {
+          "title": "Coach from real calls",
+          "text": "Review recordings with the VoloLeads team that trains our callers."
+        },
+        {
+          "title": "Apply the training",
+          "text": "Your team puts the framework into practice with the training app."
+        }
+      ],
+      "plans": [],
+      "tools": [],
+      "price": "$200 per team",
+      "priceNote": "Up to 5 VAs · 3 one-hour sessions over 3 days",
+      "resource": {
+        "href": "https://vololeads-acquisitions-training.onrender.com/",
+        "label": "Explore the acquisitions training app"
+      }
+    }
+  ]
+}

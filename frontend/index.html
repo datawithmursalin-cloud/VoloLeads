@@ -73,20 +73,20 @@
 
             <!-- Audience tags: equal weight, each jumps to its "Who we work with" card -->
             <ul class="hero-audience-tags reveal-on-scroll delay-200" aria-label="Who we work with">
-                <li><a href="#who-investors">Investors</a></li>
-                <li><a href="#who-wholesalers">Wholesalers</a></li>
-                <li><a href="#who-agents">Agents</a></li>
+                <li><a href="/" data-scroll-target="who-investors">Investors</a></li>
+                <li><a href="/" data-scroll-target="who-wholesalers">Wholesalers</a></li>
+                <li><a href="/" data-scroll-target="who-agents">Agents</a></li>
             </ul>
 
             <!-- CTA Buttons: Primary (Start Scaling) and Secondary (Hear Live Calls) -->
             <div class="flex flex-col sm:flex-row justify-center gap-4 mb-8 reveal-on-scroll delay-300">
                 <!-- Primary CTA: Scroll to contact form - More specific with urgency -->
-                <a href="#contact" class="px-8 py-4 bg-brand-orange hover:bg-orange-600 text-white font-bold rounded-full shadow-lg shadow-orange-400 dark:shadow-orange-900/50 transition-all transform hover:-translate-y-1 flex items-center justify-center gap-2 group">
+                <a href="/contact" class="px-8 py-4 bg-brand-orange hover:bg-orange-600 text-white font-bold rounded-full shadow-lg shadow-orange-400 dark:shadow-orange-900/50 transition-all transform hover:-translate-y-1 flex items-center justify-center gap-2 group">
                     <span>Schedule Free Strategy Call</span>
                     <i class="fa-solid fa-arrow-right group-hover:translate-x-1 transition-transform" aria-hidden="true"></i>
                 </a>
                 <!-- Secondary CTA: View social proof -->
-                <a href="#insights" class="px-8 py-4 bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm border border-slate-200 dark:border-slate-700 hover:border-brand-orange text-brand-navy dark:text-slate-100 font-bold rounded-full shadow-md transition-all flex items-center justify-center gap-2">
+                <a href="/call-recordings" class="px-8 py-4 bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm border border-slate-200 dark:border-slate-700 hover:border-brand-orange text-brand-navy dark:text-slate-100 font-bold rounded-full shadow-md transition-all flex items-center justify-center gap-2">
                     <i class="fa-solid fa-headphones" aria-hidden="true"></i>
                     <span>Listen to real calls</span>
                 </a>
@@ -333,7 +333,7 @@
                     <article class="plan-card plan-card--custom reveal-on-scroll delay-300" data-plan-card="Custom+">
                     <h3 class="plan-card-name">Custom+</h3>
                     <p class="plan-card-for">3+ callers or multi-market</p>
-                    <form class="team-builder" action="/custom-quote.html" method="get" data-team-builder aria-labelledby="card-builder-title">
+                    <form class="team-builder" action="/custom-quote" method="get" data-team-builder aria-labelledby="card-builder-title">
                     <p class="team-builder-title" id="card-builder-title">Build your team</p>
                     <fieldset><legend>Callers</legend><div class="team-chips"><label class="team-chip"><input type="radio" name="callers" value="3"><span>3</span></label><label class="team-chip"><input type="radio" name="callers" value="4-5" checked><span>4–5</span></label><label class="team-chip"><input type="radio" name="callers" value="6-9"><span>6–9</span></label><label class="team-chip"><input type="radio" name="callers" value="10+"><span>10+</span></label></div></fieldset>
                     <fieldset><legend>Lead sourcing</legend><div class="team-chips"><label class="team-chip"><input type="radio" name="sourcing" value="voloLeads" checked><span>We source</span></label><label class="team-chip"><input type="radio" name="sourcing" value="client"><span>You source</span></label></div></fieldset>
@@ -413,7 +413,7 @@
                     <p class="text-slate-600 dark:text-slate-400 mb-6 text-lg leading-relaxed">
                         Hear the moments our QA team looks for: natural rapport, calm objection handling, precise qualification, and useful notes for acquisitions.
                     </p>
-                    <a href="#plans" class="text-brand-orange font-bold hover:text-orange-700 transition-colors inline-flex items-center gap-2 text-lg group">
+                    <a href="/pricing" class="text-brand-orange font-bold hover:text-orange-700 transition-colors inline-flex items-center gap-2 text-lg group">
                         Hire this talent <i class="fa-solid fa-arrow-right group-hover:translate-x-1 transition-transform"></i>
                     </a>
 
@@ -909,7 +909,7 @@
                 <details><summary>When does onboarding start?<i class="fa-solid fa-plus" aria-hidden="true"></i></summary><p>After checkout, we send you the intake form and collect campaign access. We then agree on your lead criteria.</p></details>
                 <details><summary>What happens after checkout?<i class="fa-solid fa-plus" aria-hidden="true"></i></summary><p>You receive the onboarding steps, schedule the kickoff, and begin campaign setup with your assigned team.</p></details>
             </div>
-            <a href="faqs.html" class="faq-all-link">See all frequently asked questions <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
+            <a href="/faqs" class="faq-all-link">See all frequently asked questions <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
         </div>
     </section>
 
@@ -969,7 +969,7 @@
                 <form id="contact-form" class="space-y-6">
                 <div class="form-section-label"><span>01</span><div><strong>Contact Info</strong><small>Where we can reach you</small></div></div>
                 <!-- Redirect URL after successful form submission -->
-                <input type="hidden" name="redirect" value="thank-you.html">
+                <input type="hidden" name="redirect" value="/thank-you">
 
                 <!-- Bot Check: Hidden field to prevent automated submissions -->
                 <input type="checkbox" name="botcheck" class="hidden" style="display: none;">
@@ -1149,11 +1149,11 @@
     <section class="prefooter-cta" aria-label="Book a strategy call">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div><span>READY WHEN YOU ARE</span><h2>Put a dedicated team on your next campaign.</h2></div>
-            <a href="#contact">Book a Strategy Call <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
+            <a href="/contact">Book a Strategy Call <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
         </div>
     </section>
 
-    <a href="#contact" class="mobile-sticky-cta" aria-label="Book a Strategy Call — opens the strategy call form">
+    <a href="/contact" class="mobile-sticky-cta" aria-label="Book a Strategy Call — opens the strategy call form">
         <span class="sticky-cta-context" aria-hidden="true">LET'S TALK</span>
         <span class="sticky-cta-copy"><i class="fa-solid fa-comments" aria-hidden="true"></i><span data-sticky-cta-label>Book a Strategy Call</span></span>
         <i class="fa-solid fa-arrow-right sticky-cta-arrow" aria-hidden="true"></i>

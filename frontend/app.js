@@ -3,6 +3,7 @@
    ============================================ */
 
 let themeListeners;
+let navigationListeners;
 
 function initializeVoloLeadsPage() {
     initPageLoadAnimation();
@@ -37,6 +38,7 @@ function initializeVoloLeadsPage() {
     initAudioBreakdowns();
     initBookingSummary();
     initWhatsAppWidget();
+    initCleanNavigation();
 
     // Cookie consent banner initialization
     initCookieConsentBanner();
@@ -122,6 +124,52 @@ function initPageLoadAnimation() {
         body.classList.add('site-loaded');
         body.classList.remove('site-preload');
     });
+}
+
+/* Clean section navigation also accepts bookmarked hash URLs. */
+function initCleanNavigation() {
+    navigationListeners?.abort();
+    navigationListeners = new AbortController();
+    const sections = { '/pricing': 'plans', '/call-recordings': 'insights', '/contact': 'contact', '/testimonials': 'testimonials', '/about': 'about' };
+    const scrollToSection = (id, smooth = false) => {
+        const target = document.getElementById(id);
+        if (!target) return;
+        target.setAttribute('tabindex', '-1');
+        target.focus({ preventScroll: true });
+        target.scrollIntoView({ block: 'start', behavior: smooth && !window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'smooth' : 'instant' });
+    };
+    const hash = window.location.hash.slice(1);
+    const initialTarget = sections[location.pathname] || hash;
+    if (hash && document.getElementById(hash)) {
+        const cleanPath = Object.keys(sections).find(route => sections[route] === hash) || location.pathname;
+        history.replaceState(history.state, '', cleanPath + location.search);
+    }
+    if (initialTarget) document.fonts.ready.then(() => scrollToSection(initialTarget));
+    document.addEventListener('click', event => {
+        const link = event.target.closest('a[href]');
+        if (!link || event.defaultPrevented || event.button !== 0 || event.ctrlKey || event.metaKey || event.shiftKey || event.altKey || link.target === '_blank' || link.hasAttribute('download')) return;
+        const url = new URL(link.href, location.href);
+        if (url.origin !== location.origin) return;
+        const target = link.dataset.scrollTarget || (url.pathname === location.pathname && url.search === location.search ? url.hash.slice(1) : '');
+        if (!target || !document.getElementById(target)) return;
+        event.preventDefault();
+        scrollToSection(target, true);
+    }, { capture: true, signal: navigationListeners.signal });
+}
+
+// Keep access tokens out of query strings and remove the incoming fragment after reading it.
+function readOnboardingToken() {
+    const url = new URL(location.href);
+    const token = new URLSearchParams(url.hash.slice(1)).get('access_token') || url.searchParams.get('access_token');
+    if (token) {
+        try { sessionStorage.setItem('vololeads-onboarding-token', token); } catch (error) {}
+        url.hash = '';
+        url.searchParams.delete('access_token');
+        history.replaceState(history.state, '', url.pathname + url.search);
+        return token;
+    }
+    if (url.searchParams.has('session_id') || url.searchParams.has('email')) return null;
+    try { return sessionStorage.getItem('vololeads-onboarding-token'); } catch (error) { return null; }
 }
 
 /* --- Color Theme --- */
@@ -228,7 +276,7 @@ function initProofStack() {
 }
 
 /* --- Custom+ team builder -> custom-quote form ---
-   The builder is a plain GET form to /custom-quote.html (team size and add-ons only,
+   The builder is a plain GET form to /custom-quote (team size and add-ons only,
    never personal details). Pre-select the seat count and summarise the choices. */
 function initQuotePrefillFromTeamBuilder() {
     const form = document.querySelector('.custom-quote-form');
@@ -1208,7 +1256,7 @@ function initKpiStorytelling() {
 
 function initPremiumButtons() {
     const selector = [
-        'a[href="#contact"]',
+        'a[href="/contact"]',
         '.subscribe-btn',
         '#submit-btn',
         '.faq-all-link',
@@ -1555,7 +1603,7 @@ function initEssentialSignupOffer() {
     });
 
     window.setTimeout(() => {
-        if (!dialog.isConnected || document.hidden || location.hash === '#contact'
+        if (!dialog.isConnected || document.hidden || location.pathname === '/contact' || location.hash === '#contact'
             || document.activeElement?.matches('input, textarea, select, [contenteditable="true"]')
             || document.querySelector('dialog[open]')
             || [...document.querySelectorAll('.subscribe-btn')].some(button => button.disabled)) return;
@@ -1714,8 +1762,7 @@ function initScheduleOnboardingPage() {
     if (!loading || !denied || !shell || !form) return;
 
     const params = new URLSearchParams(window.location.search);
-    const hashParams = new URLSearchParams(window.location.hash.replace(/^#/, ''));
-    const accessToken = hashParams.get('access_token') || params.get('access_token');
+    const accessToken = readOnboardingToken();
     const sessionId = params.get('session_id');
     const legacyEmail = params.get('email');
     let bookingToken = null;
@@ -1943,15 +1990,19 @@ function initSubscriptionSuccessPage() {
     const scheduleLink = document.getElementById('schedule-onboarding-link');
     if (!scheduleLink) return;
 
-    const hashParams = new URLSearchParams(window.location.hash.replace(/^#/, ''));
-    const accessToken = hashParams.get('access_token');
+    const accessToken = readOnboardingToken();
 
     if (!accessToken) {
         scheduleLink.classList.add('hidden');
         return;
     }
 
-    scheduleLink.href = `schedule-onboarding.html#access_token=${encodeURIComponent(accessToken)}`;
+    scheduleLink.href = '/schedule-onboarding';
+    // If browser storage is disabled, carry the token in a fragment for the next page to consume.
+    try {
+        if (sessionStorage.getItem('vololeads-onboarding-token') === accessToken) return;
+    } catch (error) {}
+    scheduleLink.href += `#access_token=${encodeURIComponent(accessToken)}`;
 }
 
 function getTurnstileToken(scope) {
@@ -2142,7 +2193,7 @@ function initFormSecurity() {
 
                 if (response.ok) {
                     // Redirect to thank you page
-                    window.location.href = '/thank-you.html';
+                    window.location.href = '/thank-you';
                 } else {
                     const payload = await response.json().catch(() => ({}));
                     const errorMessage = payload.message

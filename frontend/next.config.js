@@ -5,6 +5,11 @@ const nextConfig = {
   outputFileTracingRoot: __dirname,
   // Prerender source maps add memory overhead after static page generation.
   enablePrerenderSourceMaps: false,
+  async redirects() {
+    return Object.entries(require('./legacy-redirects.json')).map(([source, destination]) => ({
+      source, destination, statusCode: 301
+    }));
+  },
   async headers() {
     return [{
       source: '/:path*',

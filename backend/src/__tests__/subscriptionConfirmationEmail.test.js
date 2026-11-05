@@ -167,3 +167,11 @@ describe('subscriptionConfirmationEmail', () => {
     expect(details.price).toContain('Stripe receipt');
   });
 });
+
+
+it('uses clean onboarding and billing links while retaining token transport', () => {
+  const html = buildSubscriptionEmailHtml({ email: 'test@example.com', planCode: PLAN_CODES.ESSENTIAL_MONTHLY, appBaseUrl: 'https://vololeads.com', onboardingAccessToken: 'test-token' });
+  expect(html).toContain('https://vololeads.com/schedule-onboarding#access_token=test-token');
+  expect(html).toContain('https://vololeads.com/manage-subscription');
+  expect(html).not.toContain('.html');
+});

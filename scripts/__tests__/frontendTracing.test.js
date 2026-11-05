@@ -68,3 +68,32 @@ test('all legacy pages and allowed runtime scripts still load', async t => {
     assert.equal((await GET(null, { params: Promise.resolve({ name }) })).status, 404);
   }
 });
+
+test('clean redirects resolve to traced pages and preserve resource articles', async t => {
+  const config = require('../../frontend/next.config');
+  const redirects = await config.redirects();
+  const source = fs.readFileSync(path.join(frontend, 'lib/legacy-pages.js'));
+  const { getLegacyPage, legacyRouteParams } = await import(`data:text/javascript;base64,${source.toString('base64')}`);
+  const previous = process.cwd();
+  process.chdir(frontend);
+  t.after(() => process.chdir(previous));
+  const routes = new Set(['', ...legacyRouteParams.map(({ slug }) => slug.join('/'))]);
+  for (const redirect of redirects) {
+    const route = redirect.destination.slice(1);
+    assert.equal(redirect.statusCode, 301);
+    assert.ok(routes.has(route), `Untraced redirect: ${redirect.source}`);
+    assert.ok(getLegacyPage(route)?.bodyHtml, `Missing redirect target: ${route}`);
+  }
+  for (const route of ['pricing', 'contact', 'call-recordings', 'about', 'testimonials']) {
+    assert.equal(getLegacyPage(route).canonical, '/');
+    assert.ok(getLegacyPage(route).bodyHtml.includes('id="contact"'));
+  }
+  for (const route of routes) {
+    const html = getLegacyPage(route).bodyHtml;
+    for (const [, serviceRoute] of html.matchAll(/href="\/(services(?:\/[a-z-]+)?)"/g)) {
+      assert.ok(routes.has(serviceRoute), `Untraced service link: ${serviceRoute}`);
+      assert.ok(getLegacyPage(serviceRoute), `Missing service link: ${serviceRoute}`);
+    }
+    assert.doesNotMatch(html, /(?:href|action)=["'][^"']*\.html(?:["'?#])/);
+  }
+});

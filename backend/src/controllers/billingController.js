@@ -228,7 +228,7 @@ function buildPaymentFailedEmailHtml({ email, planCode, appBaseUrl, invoiceUrl }
       'Use the secure billing portal below to update your card and retry payment.'
     ],
     ctaLabel: invoiceUrl ? 'View Invoice' : 'Update Billing Method',
-    ctaHref: invoiceUrl || `${appBaseUrl}/manage-subscription.html`,
+    ctaHref: invoiceUrl || `${appBaseUrl}/manage-subscription`,
     footerText: 'Once payment succeeds, VoloLeads will continue your service without interruption.'
   });
 }
@@ -250,7 +250,7 @@ function buildPaymentReminderEmailHtml({ email, planCode, appBaseUrl, renewalDat
       'You can review or change your payment method anytime from the billing portal.'
     ],
     ctaLabel: 'Review Billing Details',
-    ctaHref: `${appBaseUrl}/manage-subscription.html`,
+    ctaHref: `${appBaseUrl}/manage-subscription`,
     footerText: 'If everything looks good, no action is needed.'
   });
 }
@@ -358,7 +358,7 @@ async function processRenewalReminders(now = new Date(), options = {}) {
       const emailResult = await sendEmail({
         to: subscription.email,
         subject: reminder.subject,
-        text: `Your VoloLeads subscription is set to renew on ${formatDate(subscription.currentPeriodEnd)}. Review your billing details here: ${appBaseUrl}/manage-subscription.html`,
+        text: `Your VoloLeads subscription is set to renew on ${formatDate(subscription.currentPeriodEnd)}. Review your billing details here: ${appBaseUrl}/manage-subscription`,
         html: buildPaymentReminderEmailHtml({
           email: subscription.email,
           planCode: subscription.planCode,
@@ -405,7 +405,7 @@ async function createCheckoutSession(req, res) {
       mode: 'subscription',
       line_items: lineItems,
       success_url: `${getApiBaseUrl()}/api/billing/checkout-success?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${appBaseUrl}/cancel.html`,
+      cancel_url: `${appBaseUrl}/cancel`,
       billing_address_collection: 'auto',
       allow_promotion_codes: planCode !== PLAN_CODES.ESSENTIAL_MONTHLY,
       metadata: {
@@ -453,7 +453,7 @@ async function requestManageLink(req, res) {
 
     const portalSession = await stripe.billingPortal.sessions.create({
       customer: stripeCustomerId,
-      return_url: `${appBaseUrl}/manage-subscription.html`
+      return_url: `${appBaseUrl}/manage-subscription`
     });
 
     const subject = 'Your VoloLeads subscription management link';
@@ -494,7 +494,7 @@ async function redirectCheckoutSuccess(req, res) {
   try {
     const sessionId = (req.query.session_id || '').trim();
     if (!sessionId) {
-      return res.redirect(302, `${getAppBaseUrl()}/cancel.html`);
+      return res.redirect(302, `${getAppBaseUrl()}/cancel`);
     }
 
     const stripe = getStripeClient();
@@ -505,7 +505,7 @@ async function redirectCheckoutSuccess(req, res) {
       || session.payment_status !== 'paid'
       || session.status !== 'complete'
     ) {
-      return res.redirect(302, `${getAppBaseUrl()}/cancel.html`);
+      return res.redirect(302, `${getAppBaseUrl()}/cancel`);
     }
 
     let subscription = await findSubscriptionForCheckoutSession(sessionId);
@@ -515,16 +515,16 @@ async function redirectCheckoutSuccess(req, res) {
     }
 
     if (!subscription || !isSubscriptionActive(subscription)) {
-      return res.redirect(302, `${getAppBaseUrl()}/success.html`);
+      return res.redirect(302, `${getAppBaseUrl()}/success`);
     }
 
     const onboardingAccessToken = issueOnboardingAccessToken(subscription, sessionId);
-    const redirectUrl = `${getAppBaseUrl()}/success.html#access_token=${encodeURIComponent(onboardingAccessToken)}`;
+    const redirectUrl = `${getAppBaseUrl()}/success#access_token=${encodeURIComponent(onboardingAccessToken)}`;
 
     return res.redirect(302, redirectUrl);
   } catch (error) {
     logger.error(`Checkout success redirect error: ${error.message}`);
-    return res.redirect(302, `${getAppBaseUrl()}/success.html`);
+    return res.redirect(302, `${getAppBaseUrl()}/success`);
   }
 }
 
@@ -701,7 +701,7 @@ async function handleStripeWebhook(req, res) {
             await sendEmail({
               to: recipient,
               subject: 'Your VoloLeads payment needs attention',
-              text: `We could not process your latest VoloLeads renewal. Update your payment method here: ${invoice.hosted_invoice_url || `${appBaseUrl}/manage-subscription.html`}`,
+              text: `We could not process your latest VoloLeads renewal. Update your payment method here: ${invoice.hosted_invoice_url || `${appBaseUrl}/manage-subscription`}`,
               html: buildPaymentFailedEmailHtml({
                 email: recipient,
                 planCode,

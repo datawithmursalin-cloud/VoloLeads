@@ -2,26 +2,30 @@ import fs from 'node:fs';
 import path from 'node:path';
 
 const pages = {
-  '': 'index.html',
-  'index.html': 'index.html',
-  '404.html': '404.html',
-  'cancel.html': 'cancel.html',
-  'compliance.html': 'compliance.html',
-  'custom-quote.html': 'custom-quote.html',
-  'disclaimer.html': 'disclaimer.html',
-  'faqs.html': 'faqs.html',
-  'insights-deal.html': 'insights-deal.html',
-  'insights-intelligence.html': 'insights-intelligence.html',
-  'insights-kpi.html': 'insights-kpi.html',
-  'insights-market.html': 'insights-market.html',
-  'maintenance.html': 'maintenance.html',
-  'manage-subscription.html': 'manage-subscription.html',
-  'privacy-policy.html': 'privacy-policy.html',
-  'refund-policy.html': 'refund-policy.html',
-  'schedule-onboarding.html': 'schedule-onboarding.html',
-  'success.html': 'success.html',
-  'terms-condition.html': 'terms-condition.html',
-  'thank-you.html': 'thank-you.html'
+  "": "index.html",
+  "404.html": "404.html",
+  "maintenance.html": "maintenance.html",
+  "cancel": "cancel.html",
+  "compliance": "compliance.html",
+  "custom-quote": "custom-quote.html",
+  "disclaimer": "disclaimer.html",
+  "faqs": "faqs.html",
+  "manage-subscription": "manage-subscription.html",
+  "privacy-policy": "privacy-policy.html",
+  "refund-policy": "refund-policy.html",
+  "schedule-onboarding": "schedule-onboarding.html",
+  "success": "success.html",
+  "thank-you": "thank-you.html",
+  "terms": "terms-condition.html",
+  "resources/deal-structures": "insights-deal.html",
+  "resources/targeting-by-intelligence": "insights-intelligence.html",
+  "resources/performance-analytics": "insights-kpi.html",
+  "resources/market-seasonality": "insights-market.html",
+  "pricing": "index.html",
+  "call-recordings": "index.html",
+  "contact": "index.html",
+  "testimonials": "index.html",
+  "about": "index.html"
 };
 
 // Literal read paths keep Next.js file tracing out of node_modules and build output.
@@ -81,7 +85,7 @@ const escapeHtml = value => String(value ?? '')
 export function teamBuilderHtml(idPrefix) {
   const radios = (name, options, checked) => options.map(([value, label]) => `<label class="team-chip"><input type="radio" name="${name}" value="${value}"${value === checked ? ' checked' : ''}><span>${label}</span></label>`).join('');
   const boxes = (name, options) => options.map(([value, label]) => `<label class="team-chip"><input type="checkbox" name="${name}" value="${value}"><span>${label}</span></label>`).join('');
-  return `<form class="team-builder" action="/custom-quote.html" method="get" data-team-builder aria-labelledby="${idPrefix}-title">
+  return `<form class="team-builder" action="/custom-quote" method="get" data-team-builder aria-labelledby="${idPrefix}-title">
     <p class="team-builder-title" id="${idPrefix}-title">Build your team</p>
     <fieldset><legend>Callers</legend><div class="team-chips">${radios('callers', [['3', '3'], ['4-5', '4–5'], ['6-9', '6–9'], ['10+', '10+']], '4-5')}</div></fieldset>
     <fieldset><legend>Lead sourcing</legend><div class="team-chips">${radios('sourcing', [['voloLeads', 'We source'], ['client', 'You source']], 'voloLeads')}</div></fieldset>
@@ -131,8 +135,8 @@ function renderPlanPage(slug) {
   if (!plan) return null;
   const isCustom = !plan.checkout;
   const ctas = isCustom
-    ? '<a href="#plan-builder" class="site-pill site-pill--filled plan-page-cta">Build your team</a><a href="/custom-quote.html" class="site-pill site-pill--outline plan-page-cta">Request a custom quote</a>'
-    : `<button type="button" class="subscribe-btn site-pill site-pill--filled plan-page-cta" data-plan="${escapeHtml(plan.checkout)}">Subscribe now</button><p class="plan-stripe-note">${plan.price.save ? 'Enter your promo code in Stripe checkout.' : 'Secure checkout powered by Stripe'}</p><a href="/?service=${encodeURIComponent(plan.name)}#contact" class="site-pill site-pill--outline plan-page-cta">Book a strategy call</a>`;
+    ? '<a href="/plans/custom-plus" data-scroll-target="plan-builder" class="site-pill site-pill--filled plan-page-cta">Build your team</a><a href="/custom-quote" class="site-pill site-pill--outline plan-page-cta">Request a custom quote</a>'
+    : `<button type="button" class="subscribe-btn site-pill site-pill--filled plan-page-cta" data-plan="${escapeHtml(plan.checkout)}">Subscribe now</button><p class="plan-stripe-note">${plan.price.save ? 'Enter your promo code in Stripe checkout.' : 'Secure checkout powered by Stripe'}</p><a href="/contact?service=${encodeURIComponent(plan.name)}" class="site-pill site-pill--outline plan-page-cta">Book a strategy call</a>`;
   const fill = {
     title: `${plan.name} Plan for Real Estate Investors | VoloLeads`,
     description: `${plan.tagline} See what's included in VoloLeads ${plan.name}, how it works and what to expect in your first month.`,
@@ -141,7 +145,7 @@ function renderPlanPage(slug) {
     tagline: escapeHtml(plan.tagline),
     priceBlock: planPriceHtml(plan),
     ctas: `<div class="plan-page-ctas">${ctas}</div>`,
-    ownLeads: plan.ownLeads ? `<aside class="plan-page-callout reveal-on-scroll"><p><strong>${escapeHtml(plan.ownLeads)}</strong> Ask about it on your strategy call.</p><a href="/?service=${encodeURIComponent(plan.name)}#contact" class="site-pill site-pill--outline">Ask on a strategy call</a></aside>` : '',
+    ownLeads: plan.ownLeads ? `<aside class="plan-page-callout reveal-on-scroll"><p><strong>${escapeHtml(plan.ownLeads)}</strong> Ask about it on your strategy call.</p><a href="/contact?service=${encodeURIComponent(plan.name)}" class="site-pill site-pill--outline">Ask on a strategy call</a></aside>` : '',
     included: plan.included.map(item => `<li><strong>${escapeHtml(item.title)}</strong><span>${escapeHtml(item.text)}</span></li>`).join(''),
     steps: data.howItWorks.map((step, index) => `<li><span class="plan-step-index">${String(index + 1).padStart(2, '0')}</span><strong>${escapeHtml(step.title)}</strong><span>${escapeHtml(step.text)}</span></li>`).join(''),
     firstMonth: data.firstMonth.map(item => `<li><strong>${escapeHtml(item.when)}</strong><span>${escapeHtml(item.text)}</span></li>`).join(''),
@@ -222,6 +226,62 @@ function renderBlueprintPage(slug) {
   return readBlueprintTemplate().replace(/\{\{(\w+)\}\}/g, (token, key) => (key in fill ? fill[key] : token));
 }
 
+// Service routes share templates and use the existing plan facts for package details.
+const readServices = () => JSON.parse(fs.readFileSync(path.join(process.cwd(), 'content', 'services.json'), 'utf8'));
+const readServiceTemplate = () => fs.readFileSync(path.join(process.cwd(), 'partials', 'service-page.html'), 'utf8');
+const readServicesHubTemplate = () => fs.readFileSync(path.join(process.cwd(), 'partials', 'services-hub.html'), 'utf8');
+const SERVICE_SLUGS = ['cold-callers', 'lead-generation', 'crm-setup', 'comps-deal-analysis', 'agent-appointment-setting', 'consulting', 'ai-workflows', 'virtual-assistants', 'team-training'];
+
+function renderServicesHub() {
+  const cards = readServices().services.map(service => `<a class="service-card" href="/services/${escapeHtml(service.slug)}">
+    <i class="fa-solid fa-${escapeHtml(service.icon)}" aria-hidden="true"></i>
+    <h2>${escapeHtml(service.name)}</h2><p>${escapeHtml(service.promise)}</p>
+    <span class="service-card-link">Explore service <span aria-hidden="true">&rarr;</span></span>
+  </a>`).join('');
+  return readServicesHubTemplate().replace('{{cards}}', () => cards);
+}
+
+function renderServicePage(slug) {
+  const service = readServices().services.find(item => item.slug === slug);
+  if (!service) return null;
+  const planData = readPlanData().plans;
+  const contactUrl = `/contact?service=${encodeURIComponent(slug)}`;
+  const quoteUrl = `/custom-quote?service=${encodeURIComponent(slug)}`;
+  const cta = service.price
+    ? `<a href="${contactUrl}" class="site-pill site-pill--filled">Book a strategy call</a>`
+    : `<a href="${quoteUrl}" class="site-pill site-pill--filled">Get a Quote</a>`;
+  const plans = service.plans.map(planSlug => {
+    const plan = planData.find(item => item.slug === planSlug);
+    if (!plan) throw new Error(`Unknown plan for service: ${planSlug}`);
+    const features = (service.planFeatures?.[planSlug] || []).map(title => {
+      const feature = plan.included.find(item => item.title === title);
+      if (!feature) throw new Error(`Missing plan fact: ${planSlug}/${title}`);
+      return `<p><strong>${escapeHtml(feature.title)}</strong> ${escapeHtml(feature.text)}</p>`;
+    }).join('');
+    return `<a href="/plans/${escapeHtml(plan.slug)}" class="plan-page-other"><strong>${escapeHtml(plan.name)}</strong><span>${escapeHtml(plan.audience)}</span>${features}<span class="service-card-link">View plan details &rarr;</span></a>`;
+  }).join('');
+  const fill = {
+    title: escapeHtml(`${service.name} for Real Estate Investors | VoloLeads`),
+    description: escapeHtml(service.promise),
+    name: escapeHtml(service.name),
+    promise: escapeHtml(service.promise),
+    slug: escapeHtml(slug),
+    audiences: service.audiences.map(audience => `<li>${escapeHtml(audience)}</li>`).join(''),
+    primaryCta: service.price ? `<a href="${contactUrl}" class="site-pill site-pill--filled">Get Started</a>` : cta,
+    included: service.included.map(item => `<li><strong>${escapeHtml(item.title)}</strong><span>${escapeHtml(item.text)}</span></li>`).join(''),
+    note: service.note ? `<p class="service-note">${escapeHtml(service.note)}</p>` : '',
+    steps: service.steps.map((step, index) => `<li><span class="plan-step-index">${String(index + 1).padStart(2, '0')}</span><strong>${escapeHtml(step.title)}</strong><span>${escapeHtml(step.text)}</span></li>`).join(''),
+    tools: service.tools.length ? `<section class="plan-page-section"><p class="plan-page-kicker">Tools we use</p><h2>Part of your workflow</h2><ul class="service-tags">${service.tools.map(tool => `<li>${escapeHtml(tool)}</li>`).join('')}</ul></section>` : '',
+    plans: plans ? `<p class="service-note">${escapeHtml(service.planNote || 'Available within these plans. Review each plan for its scope and current pricing.')}</p><div class="service-plan-links">${plans}</div>` : '',
+    standalonePrice: escapeHtml(service.price || 'Custom quote'),
+    standaloneNote: escapeHtml(service.priceNote || 'Setup fee and minimum term are confirmed in your quote.'),
+    standaloneCta: cta,
+    proof: service.proof ? `<section class="plan-page-section"><p class="plan-page-kicker">From the calling floor</p><h2>Real campaign activity</h2><div class="service-proof">${service.proof.map(proof => `<figure><img src="/legacy-assets/png/proof/${escapeHtml(proof.file)}" alt="${escapeHtml(proof.alt)}" width="1200" height="675" loading="lazy"></figure>`).join('')}</div><p class="service-note">Historical campaign reports. Results vary by market and list type.</p></section>` : '',
+    resource: service.resource ? `<p class="service-resource"><a href="${escapeHtml(service.resource.href)}">${escapeHtml(service.resource.label)} <span aria-hidden="true">&rarr;</span></a></p>` : ''
+  };
+  return readServiceTemplate().replace(/\{\{(\w+)\}\}/g, (token, key) => key in fill ? fill[key] : token);
+}
+
 const BLUEPRINT_SLUGS = ['fix-and-flip', 'buy-and-hold', 'seller-finance', 'seller-listing-opportunities', 'buyer-opportunities', 'listing-marketing-support', 'how-we-operate', 'tcpa-compliance', 'ai-workflows'];
 
 // Route list is fixed (it is built at import time, before any cwd is known); page content
@@ -229,11 +289,18 @@ const BLUEPRINT_SLUGS = ['fix-and-flip', 'buy-and-hold', 'seller-finance', 'sell
 const PLAN_SLUGS = ['essential', 'growth', 'scale', 'custom-plus'];
 
 export const legacyRouteParams = [
-  ...Object.keys(pages).filter(Boolean).map(route => ({ slug: [route] })),
+  { slug: ['services'] },
+  ...SERVICE_SLUGS.map(slug => ({ slug: ['services', slug] })),
+  ...Object.keys(pages).filter(route => route && route !== '404.html').map(route => ({ slug: route.split('/') })),
   ...PLAN_SLUGS.map(slug => ({ slug: ['plans', slug] })),
   { slug: ['resources'] },
   ...BLUEPRINT_SLUGS.map(slug => ({ slug: ['resources', slug] }))
 ];
+
+function decodeMetadata(text) {
+  const entities = { amp: '&', quot: '"', lt: '<', gt: '>', '#39': "'" };
+  return text.replace(/&(amp|quot|lt|gt|#39);/g, (_, entity) => entities[entity]);
+}
 
 function getMatch(source, expression) {
   return source.match(expression)?.[1]?.trim() || '';
@@ -243,7 +310,14 @@ export function getLegacyPage(route) {
   let source;
   const planMatch = /^plans\/([a-z-]+)$/.exec(route);
   const blueprintMatch = /^resources\/([a-z-]+)$/.exec(route);
-  if (planMatch) {
+  if (route === 'services') {
+    source = renderServicesHub();
+  } else if (route.startsWith('services/')) {
+    source = renderServicePage(route.slice('services/'.length));
+    if (!source) return null;
+  } else if (Object.hasOwn(pages, route)) {
+    source = readPages[pages[route]]();
+  } else if (planMatch) {
     source = renderPlanPage(planMatch[1]);
     if (!source) return null;
   } else if (route === 'resources') {
@@ -252,9 +326,7 @@ export function getLegacyPage(route) {
     source = renderBlueprintPage(blueprintMatch[1]);
     if (!source) return null;
   } else {
-    const fileName = pages[route];
-    if (!fileName) return null;
-    source = readPages[fileName]();
+    return null;
   }
   const bodyMatch = source.match(/<body([^>]*)>([\s\S]*?)<\/body>/i);
   if (!bodyMatch) return null;
@@ -272,9 +344,10 @@ export function getLegacyPage(route) {
 
   return {
     bodyClass,
+    canonical: pages[route] === 'index.html' ? '/' : `/${route}`,
     bodyHtml,
     headStyles,
-    title: getMatch(source, /<title[^>]*>([\s\S]*?)<\/title>/i) || 'VoloLeads',
-    description: getMatch(source, /<meta[^>]+name=["']description["'][^>]+content=["']([^"']*)["']/i)
+    title: decodeMetadata(getMatch(source, /<title[^>]*>([\s\S]*?)<\/title>/i)) || 'VoloLeads',
+    description: decodeMetadata(getMatch(source, /<meta[^>]+name=["']description["'][^>]+content=["']([^"']*)["']/i))
   };
 }

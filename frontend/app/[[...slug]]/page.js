@@ -14,6 +14,7 @@ export async function generateMetadata({ params }) {
 
   return {
     title: page.title,
+    alternates: { canonical: page.canonical },
     description: page.description || undefined
   };
 }

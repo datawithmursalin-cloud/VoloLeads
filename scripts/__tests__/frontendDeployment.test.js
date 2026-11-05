@@ -157,7 +157,10 @@ function fakeRelease(folder, name) {
   fs.writeFileSync(path.join(folder, 'node_modules', 'next', 'index.js'), `
     const fs = require('node:fs');
     const path = require('node:path');
-    module.exports = options => ({ prepare: async () => {}, getRequestHandler: () => (_request, response) => response.end(fs.readFileSync(path.join(options.dir, 'page.html'))) });
+    module.exports = options => ({ prepare: async () => {}, getRequestHandler: () => (request, response) => {
+      if (!['/', '/compliance', '/terms'].includes(request.url)) { response.statusCode = 404; return response.end(); }
+      response.end(fs.readFileSync(path.join(options.dir, 'page.html')));
+    } });
   `);
   fs.copyFileSync(path.join(root, 'frontend', 'next-server.js'), path.join(folder, 'next-server.js'));
 }

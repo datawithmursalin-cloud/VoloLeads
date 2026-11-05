@@ -185,8 +185,8 @@ function buildSubscriptionEmailHtml({ email, planCode, appBaseUrl, discountInfo 
   const priceMarkup = buildSubscriptionPriceMarkup(details);
   const statusLabel = details.promoCode ? 'Partner discount applied' : 'Payment successful';
   const scheduleHref = onboardingAccessToken
-    ? `${appBaseUrl}/schedule-onboarding.html#access_token=${encodeURIComponent(onboardingAccessToken)}`
-    : `${appBaseUrl}/success.html`;
+    ? `${appBaseUrl}/schedule-onboarding#access_token=${encodeURIComponent(onboardingAccessToken)}`
+    : `${appBaseUrl}/success`;
   const scheduleCta = onboardingAccessToken
     ? `<tr><td style="padding:0 12px 0 0;"><table role="presentation" cellpadding="0" cellspacing="0" border="0"><tr><td style="border-radius:999px;background:#f97316;"><a href="${scheduleHref}" style="display:inline-block;padding:14px 22px;font-size:14px;font-weight:700;color:#ffffff;text-decoration:none;">Schedule Onboarding Call</a></td></tr></table></td></tr>`
     : '';
@@ -233,7 +233,7 @@ function buildSubscriptionEmailHtml({ email, planCode, appBaseUrl, discountInfo 
             ${scheduleCta}
             <tr>
               <td style="border-radius:999px;background:#1e293b;border:1px solid #334155;">
-                <a href="${appBaseUrl}/manage-subscription.html" style="display:inline-block;padding:14px 22px;font-size:14px;font-weight:700;color:#ffffff;text-decoration:none;">Manage Subscription</a>
+                <a href="${appBaseUrl}/manage-subscription" style="display:inline-block;padding:14px 22px;font-size:14px;font-weight:700;color:#ffffff;text-decoration:none;">Manage Subscription</a>
               </td>
             </tr>
           </table>
