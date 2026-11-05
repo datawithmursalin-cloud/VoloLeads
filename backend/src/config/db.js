@@ -93,6 +93,7 @@ async function initSchema() {
 
     ALTER TABLE contact_forms ADD COLUMN IF NOT EXISTS meet_link TEXT;
     ALTER TABLE contact_forms ADD COLUMN IF NOT EXISTS calendar_event_id TEXT;
+    ALTER TABLE contact_forms ADD COLUMN IF NOT EXISTS attribution JSONB NOT NULL DEFAULT '{}'::jsonb;
 
     CREATE TABLE IF NOT EXISTS visitor_events (
       id BIGSERIAL PRIMARY KEY,

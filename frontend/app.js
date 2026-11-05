@@ -4,6 +4,7 @@
 
 let themeListeners;
 let navigationListeners;
+let formAttribution = {};
 
 function initializeVoloLeadsPage() {
     initPageLoadAnimation();
@@ -12,6 +13,7 @@ function initializeVoloLeadsPage() {
     initQuotePrefillFromTeamBuilder();
     updateCopyrightYear();
     initThemePreference();
+    initFormAttribution();
     initContactForm();
     initFormSecurity();
     initCounterAnimation();
@@ -153,6 +155,7 @@ function initCleanNavigation() {
         const target = link.dataset.scrollTarget || (url.pathname === location.pathname && url.search === location.search ? url.hash.slice(1) : '');
         if (!target || !document.getElementById(target)) return;
         event.preventDefault();
+        initFormAttribution(url.search);
         scrollToSection(target, true);
     }, { capture: true, signal: navigationListeners.signal });
 }
@@ -428,9 +431,22 @@ function initMobileSheet(shell) {
     sheet.querySelectorAll('a').forEach(link => link.addEventListener('click', () => setOpen(false)));
 
     document.addEventListener('keydown', event => {
-        if (event.key !== 'Escape' || sheet.hidden) return;
-        setOpen(false);
-        button.focus();
+        if (sheet.hidden) return;
+        if (event.key === 'Escape') {
+            setOpen(false);
+            button.focus();
+        } else if (event.key === 'Tab') {
+            const controls = [button, ...sheet.querySelectorAll('a[href], button, select')].filter(control => control.getClientRects().length);
+            const first = controls[0];
+            const last = controls[controls.length - 1];
+            if (event.shiftKey && document.activeElement === first) {
+                event.preventDefault();
+                last.focus();
+            } else if (!event.shiftKey && document.activeElement === last) {
+                event.preventDefault();
+                first.focus();
+            }
+        }
     });
 
     window.matchMedia('(min-width: 1024px)').addEventListener('change', event => {
@@ -801,6 +817,37 @@ async function loadAvailableMeetingSlots({
         console.error('Meeting availability error:', error);
         resetTimeSelect(timeSelect, 'Unable to load times');
         if (timeSelect) timeSelect.removeAttribute('required');
+    }
+}
+
+// Keep only campaign labels for this tab. Never copy the full URL, tokens or contact details.
+// service tracks the referring CTA; tracking_service avoids overriding the visitor's selected service.
+function initFormAttribution(search = window.location.search) {
+    const fields = { src: 'src', service: 'tracking_service', utm_source: 'utm_source', utm_medium: 'utm_medium', utm_campaign: 'utm_campaign', utm_content: 'utm_content', utm_term: 'utm_term' };
+    const clean = value => typeof value === 'string' ? value.replace(/[\u0000-\u001f\u007f]/g, '').trim().slice(0, 200) : '';
+    let saved = formAttribution;
+    try { saved = JSON.parse(sessionStorage.getItem('vololeads-attribution-v1')) || saved; } catch (error) {}
+    const params = new URLSearchParams(search);
+    const next = {};
+    // A new campaign replaces old campaign tags; service-only CTAs retain the source.
+    const newCampaign = ['src', 'utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'utm_term'].some(key => params.has(key));
+    for (const key of Object.keys(fields)) {
+        const value = clean(params.has(key) ? params.get(key) : newCampaign && key !== 'service' ? '' : saved?.[key]);
+        if (value) next[key] = value;
+    }
+    formAttribution = next;
+    try { sessionStorage.setItem('vololeads-attribution-v1', JSON.stringify(next)); } catch (error) {}
+    const form = document.getElementById('contact-form');
+    if (!form) return;
+    for (const [key, name] of Object.entries(fields)) {
+        let input = form.querySelector(`input[type="hidden"][name="${name}"]`);
+        if (!input) {
+            input = document.createElement('input');
+            input.type = 'hidden';
+            input.name = name;
+            form.appendChild(input);
+        }
+        input.value = next[key] || '';
     }
 }
 
@@ -1430,13 +1477,27 @@ function initCounters() {
 function initAccordions() {
     const triggers = document.querySelectorAll('.accordion-trigger');
     
-    triggers.forEach(trigger => {
+    triggers.forEach((trigger, index) => {
+        const content = trigger.nextElementSibling;
+        if (!content) return;
+        trigger.id ||= `faq-trigger-${index}`;
+        content.id ||= `faq-panel-${index}`;
+        trigger.setAttribute('aria-controls', content.id);
+        content.setAttribute('role', 'region');
+        content.setAttribute('aria-labelledby', trigger.id);
+        const syncExpanded = () => {
+            const open = content.classList.contains('open');
+            trigger.setAttribute('aria-expanded', String(open));
+            content.setAttribute('aria-hidden', String(!open));
+            content.inert = !open;
+        };
+        syncExpanded();
         trigger.addEventListener('click', () => {
-            const content = trigger.nextElementSibling;
             const icon = trigger.querySelector('i');
             
             // Toggle Open Class
             content.classList.toggle('open');
+            syncExpanded();
             
             // Calculate height for smooth animation
             if (content.classList.contains('open')) {

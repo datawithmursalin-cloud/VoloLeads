@@ -8682,6 +8682,27 @@ html.dark .mega-plan-price { color: #f8fafc; }
 html.dark .mega-plan-for,
 html.dark .mega-plan-note { color: #94a3b8; }
 
+/* Shared keyboard access across imported pages. */
+.site-skip-link {
+    position: fixed;
+    top: 0.75rem;
+    left: 0.75rem;
+    z-index: 10000;
+    padding: 0.75rem 1rem;
+    border-radius: 0.5rem;
+    background: #0f172a;
+    color: #fff;
+    font-weight: 700;
+    transform: translateY(-200%);
+}
+.site-skip-link:focus { transform: translateY(0); }
+:where(a, button, input, select, textarea, summary):focus-visible {
+    outline: 3px solid #ea580c !important;
+    outline-offset: 3px;
+}
+html.dark :where(a, button, input, select, textarea, summary):focus-visible { outline-color: #fb923c !important; }
+#page-content { scroll-margin-top: var(--nav-clearance); }
+
 /* Services share the plan-page content patterns. */
 .service-page { padding: var(--nav-clearance) var(--site-edge) 4rem; }
 .service-hero { max-width: 54rem; padding-block: 1.5rem 2rem; }

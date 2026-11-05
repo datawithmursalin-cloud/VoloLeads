@@ -91,7 +91,15 @@ const truncateString = (str, length = 255) => {
 };
 
 const sanitizeContactForm = (data) => {
+  const attribution = {};
+  const fields = { src: 'src', service: 'tracking_service', utm_source: 'utm_source', utm_medium: 'utm_medium', utm_campaign: 'utm_campaign', utm_content: 'utm_content', utm_term: 'utm_term' };
+  for (const [key, field] of Object.entries(fields)) {
+    if (typeof data[field] !== 'string') continue;
+    const value = data[field].replace(/[\u0000-\u001f\u007f]/g, '').trim().slice(0, 200);
+    if (value) attribution[key] = value;
+  }
   return {
+    attribution,
     name: data.name?.trim() || '',
     email: data.email?.trim().toLowerCase() || '',
     phone: data.phone?.trim() || '',

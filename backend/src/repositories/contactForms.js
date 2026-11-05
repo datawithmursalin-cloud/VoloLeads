@@ -22,6 +22,7 @@ function mapContactForm(row) {
     ipAddress: row.ip_address,
     userAgent: row.user_agent,
     source: row.source,
+    attribution: row.attribution || {},
     status: row.status,
     notes: row.notes,
     createdAt: row.created_at,
@@ -45,11 +46,11 @@ async function create(data) {
     `INSERT INTO contact_forms (
        name, email, phone, company, service, quantity, preferred_date,
        preferred_time, preferred_timezone, referral_source, referral_source_other,
-       message, meet_link, calendar_event_id, ip_address, user_agent, source, status, notes, created_at, updated_at
+       message, meet_link, calendar_event_id, ip_address, user_agent, source, status, notes, attribution, created_at, updated_at
      ) VALUES (
        $1, $2, $3, $4, $5, $6, $7,
        $8, $9, $10, $11,
-       $12, $13, $14, $15, $16, $17, $18, $19, NOW(), NOW()
+       $12, $13, $14, $15, $16, $17, $18, $19, $20::jsonb, NOW(), NOW()
      )
      RETURNING *`,
     [
@@ -71,7 +72,8 @@ async function create(data) {
       data.userAgent || null,
       data.source,
       data.status || 'new',
-      data.notes || null
+      data.notes || null,
+      JSON.stringify(data.attribution || {})
     ]
   );
 

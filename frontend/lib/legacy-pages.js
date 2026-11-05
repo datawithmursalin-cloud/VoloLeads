@@ -338,13 +338,32 @@ export function getLegacyPage(route) {
     .filter(Boolean)
     .join('\n');
 
-  const bodyHtml = insertPartials(bodyMatch[2])
+  let bodyHtml = insertPartials(bodyMatch[2])
     .replace(/<script[\s\S]*?<\/script>/gi, '')
     .replace(/((?:src|href|data-src)=["'])(?:\.\/)?(png|audio)\//gi, '$1/legacy-assets/$2/');
+
+  // Keep legacy layout IDs intact; give every page a keyboard skip target.
+  const contentTag = ['main', 'article', 'section'].find(tag => new RegExp(`<${tag}\\b`, 'i').test(bodyHtml));
+  if (contentTag) {
+    let target;
+    bodyHtml = bodyHtml.replace(new RegExp(`<${contentTag}\\b([^>]*)>`, 'i'), (tag, attributes) => {
+      target = getMatch(attributes, /\bid=["']([^"']+)["']/i) || 'page-content';
+      return `<${contentTag}${attributes}${/\bid=/.test(attributes) ? '' : ` id="${target}"`} tabindex="-1">`;
+    });
+    bodyHtml = `<a href="#${target}" class="site-skip-link">Skip to main content</a>${bodyHtml}`;
+  }
+
+  const robots = getMatch(source, /<meta[^>]+name=["']robots["'][^>]+content=["']([^"']*)["']/i).toLowerCase().split(/[,\s]+/);
+  const draft = blueprintMatch && readBlueprint().pages.some(page => page.slug === blueprintMatch[1] && page.status === 'draft');
 
   return {
     bodyClass,
     canonical: pages[route] === 'index.html' ? '/' : `/${route}`,
+    ogImage: decodeMetadata(getMatch(source, /<meta[^>]+property=["']og:image["'][^>]+content=["']([^"']*)["']/i)) || undefined,
+    robots: {
+      index: !draft && route !== '404.html' && !robots.includes('noindex') && !robots.includes('none'),
+      follow: !robots.includes('nofollow') && !robots.includes('none')
+    },
     bodyHtml,
     headStyles,
     title: decodeMetadata(getMatch(source, /<title[^>]*>([\s\S]*?)<\/title>/i)) || 'VoloLeads',

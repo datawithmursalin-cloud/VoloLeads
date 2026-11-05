@@ -57,6 +57,15 @@ test('all legacy pages and allowed runtime scripts still load', async t => {
     const page = getLegacyPage(route);
     assert.ok(page?.bodyHtml, `Missing page: ${route}`);
     assert.ok(page.title);
+    const skipTarget = page.bodyHtml.match(/<a href="#([^"]+)" class="site-skip-link">/);
+    assert.ok(skipTarget, `Missing skip link: ${route}`);
+    assert.ok(page.bodyHtml.includes(`id="${skipTarget[1]}"`), `Missing skip target: ${route}`);
+    assert.equal((page.bodyHtml.match(/Skip to main content/g) || []).length, 1, route);
+    assert.equal(page.canonical, ['pricing', 'contact', 'call-recordings', 'about', 'testimonials'].includes(route) ? '/' : `/${route}`);
+    const draft = route.startsWith('resources/') && JSON.parse(fs.readFileSync('content/blueprint.json', 'utf8')).pages.some(item => `resources/${item.slug}` === route && item.status === 'draft');
+    const privatePage = ['success', 'cancel', 'thank-you', 'manage-subscription', 'schedule-onboarding', 'maintenance.html'].includes(route);
+    if (draft || privatePage) assert.equal(page.robots.index, false, route);
+    if (route.startsWith('services') || route.startsWith('plans/') || route === '') assert.equal(page.robots.index, true, route);
   }
   assert.equal(getLegacyPage('missing.html'), null);
   for (const name of ['app.js', 'icons.js']) {

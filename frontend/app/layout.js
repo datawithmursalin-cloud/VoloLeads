@@ -17,6 +17,22 @@ export const metadata = {
   }
 };
 
+const organization = {
+  '@context': 'https://schema.org',
+  '@type': 'Organization',
+  '@id': 'https://www.vololeads.com/#organization',
+  name: 'VoloLeads',
+  url: 'https://www.vololeads.com',
+  logo: 'https://www.vololeads.com/legacy-assets/png/logo.webp',
+  sameAs: [
+    'https://www.trustpilot.com/review/vololeads.com',
+    'https://www.linkedin.com/company/vololeads',
+    'https://www.facebook.com/vololeads',
+    'https://www.instagram.com/vololeads',
+    'https://x.com/vololeads'
+  ]
+};
+
 const themeBootstrap = `
   var savedTheme = null;
   try {
@@ -46,6 +62,7 @@ export default function RootLayout({ children }) {
       <head>
         <meta name="theme-color" content="#f8fafc" />
         <script dangerouslySetInnerHTML={{ __html: themeBootstrap }} />
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(organization).replace(/</g, '\\u003c') }} />
       </head>
       <body>{children}</body>
     </html>
