@@ -16,6 +16,7 @@ export async function generateMetadata({ params }, parent) {
 
   return {
     title: page.title,
+    ...(page.keywords ? { keywords: page.keywords } : {}),
     alternates: { canonical: page.canonical },
     description: page.description || undefined,
     robots: page.robots,
@@ -41,5 +42,10 @@ export default async function LegacyRoute({ params }) {
   const page = getLegacyPage(route);
   if (!page) notFound();
 
-  return <LegacyPage page={page} />;
+  return (
+    <>
+      {page.jsonLd ? <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(page.jsonLd).replace(/</g, '\\u003c') }} /> : null}
+      <LegacyPage page={page} />
+    </>
+  );
 }

@@ -963,7 +963,13 @@ function initCounterAnimation() {
 
     // The HTML already ships the final values (for crawlers, link previews and no-JS
     // visitors). Count up from zero only when motion is allowed.
-    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    // Search and AI crawlers render the page once and index whatever text is on screen.
+    // Resetting to 0 before the count-up made Google index "0+ Clients", so crawlers,
+    // headless renderers and background tabs keep the final values and never animate.
+    const isCrawler = /bot|crawl|spider|slurp|preview|headless|lighthouse|inspection/i.test(navigator.userAgent || '')
+        || navigator.webdriver === true
+        || document.visibilityState !== 'visible';
+    const reduceMotion = isCrawler || window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
     const setCounterValue = (counter, value) => {
         counter.textContent = Math.round(value).toLocaleString('en-US');
@@ -990,6 +996,8 @@ function initCounterAnimation() {
         };
 
         requestAnimationFrame(update);
+        // Safety net: if frames stall (throttled tab, snapshot renderer), never leave "0".
+        setTimeout(() => setCounterValue(counter, target), duration + 400);
     };
 
     if (reduceMotion) {

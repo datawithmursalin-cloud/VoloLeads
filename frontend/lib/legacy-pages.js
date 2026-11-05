@@ -262,8 +262,9 @@ function renderServicePage(slug) {
     return `<a href="/plans/${escapeHtml(plan.slug)}" class="plan-page-other"><strong>${escapeHtml(plan.name)}</strong><span>${escapeHtml(plan.audience)}</span>${features}<span class="service-card-link">View plan details &rarr;</span></a>`;
   }).join('');
   const fill = {
-    title: escapeHtml(`${service.name} for Real Estate Investors | VoloLeads`),
-    description: escapeHtml(service.promise),
+    title: escapeHtml(service.seoTitle || `${service.name} for Real Estate Investors | VoloLeads`),
+    description: escapeHtml(service.seoDescription || service.promise),
+    keywords: escapeHtml((service.keywords || []).join(', ')),
     name: escapeHtml(service.name),
     promise: escapeHtml(service.promise),
     slug: escapeHtml(slug),
@@ -325,6 +326,7 @@ function renderAudiencePage(slug) {
   const fill = {
     title: escapeHtml(audience.title),
     description: escapeHtml(audience.description),
+    keywords: escapeHtml((audience.keywords || []).join(', ')),
     name: escapeHtml(audience.name),
     nameLower: escapeHtml(audience.name.toLowerCase()),
     slug: escapeHtml(audience.slug),
@@ -428,9 +430,15 @@ export function getLegacyPage(route) {
   const robots = getMatch(source, /<meta[^>]+name=["']robots["'][^>]+content=["']([^"']*)["']/i).toLowerCase().split(/[,\s]+/);
   const draft = blueprintMatch && readBlueprint().pages.some(page => page.slug === blueprintMatch[1] && page.status === 'draft');
 
+  const canonical = pages[route] === 'index.html' ? '/' : `/${route}`;
+  const title = decodeMetadata(getMatch(source, /<title[^>]*>([\s\S]*?)<\/title>/i)) || 'VoloLeads';
+  const description = decodeMetadata(getMatch(source, /<meta[^>]+name=["']description["'][^>]+content=["']([^"']*)["']/i));
+
   return {
     bodyClass,
-    canonical: pages[route] === 'index.html' ? '/' : `/${route}`,
+    canonical,
+    keywords: decodeMetadata(getMatch(source, /<meta[^>]+name=["']keywords["'][^>]+content=["']([^"']*)["']/i)) || undefined,
+    jsonLd: buildJsonLd(route, canonical, title, description, source, bodyHtml),
     ogImage: decodeMetadata(getMatch(source, /<meta[^>]+property=["']og:image["'][^>]+content=["']([^"']*)["']/i)) || undefined,
     robots: {
       index: !draft && route !== '404.html' && !robots.includes('noindex') && !robots.includes('none'),
@@ -438,7 +446,130 @@ export function getLegacyPage(route) {
     },
     bodyHtml,
     headStyles,
-    title: decodeMetadata(getMatch(source, /<title[^>]*>([\s\S]*?)<\/title>/i)) || 'VoloLeads',
-    description: decodeMetadata(getMatch(source, /<meta[^>]+name=["']description["'][^>]+content=["']([^"']*)["']/i))
+    title,
+    description
   };
+}
+
+// Structured data (JSON-LD) for search engines and AI answer engines. Built from the
+// same content files as the pages, so it never says anything the page doesn't.
+const SITE_URL = 'https://www.vololeads.com';
+const ORG_ID = `${SITE_URL}/#organization`;
+const stripTags = html => decodeMetadata(html.replace(/<[^>]+>/g, ' ').replace(/&rarr;|&nbsp;/g, ' ').replace(/\s+/g, ' ').replace(/\s+([.,;:!?])/g, '$1').trim());
+
+function breadcrumbLd(bodyHtml, canonical) {
+  const nav = getMatch(bodyHtml, /<nav class="resources-breadcrumb"[^>]*>([\s\S]*?)<\/nav>/i);
+  if (!nav) return null;
+  const items = [...nav.matchAll(/<a href="([^"]+)">([\s\S]*?)<\/a>/g)].map(([, href, name]) => ({ href, name: stripTags(name) }));
+  const current = [...nav.matchAll(/<span>([\s\S]*?)<\/span>/g)].pop();
+  if (current) items.push({ href: canonical, name: stripTags(current[1]) });
+  return {
+    '@type': 'BreadcrumbList',
+    itemListElement: items.map((item, index) => ({ '@type': 'ListItem', position: index + 1, name: item.name, item: `${SITE_URL}${item.href === '/' ? '' : item.href}` }))
+  };
+}
+
+function faqLd(source) {
+  const questions = [...source.matchAll(/<button class="accordion-trigger[\s\S]*?<span[^>]*>([\s\S]*?)<\/span>[\s\S]*?<div class="accordion-content">([\s\S]*?)<\/div>\s*<\/div>\s*<\/div>/g)];
+  if (!questions.length) return null;
+  return {
+    '@type': 'FAQPage',
+    mainEntity: questions.map(([, question, answer]) => ({ '@type': 'Question', name: stripTags(question), acceptedAnswer: { '@type': 'Answer', text: stripTags(answer) } }))
+  };
+}
+
+function buildJsonLd(route, canonical, title, description, source, bodyHtml) {
+  const url = `${SITE_URL}${canonical === '/' ? '' : canonical}`;
+  const page = { '@type': 'WebPage', '@id': `${url}#webpage`, url, name: title, description: description || undefined, isPartOf: { '@id': `${SITE_URL}/#website` }, about: { '@id': ORG_ID } };
+  const graph = [page];
+  const serviceMatch = /^services\/([a-z-]+)$/.exec(route);
+  const blueprintMatch = /^resources\/([a-z-]+)$/.exec(route);
+  if (serviceMatch) {
+    const service = readServices().services.find(item => item.slug === serviceMatch[1]);
+    if (service) graph.push({
+      '@type': 'Service',
+      '@id': `${url}#service`,
+      name: service.name,
+      serviceType: service.name,
+      description: service.seoDescription || service.promise,
+      url,
+      provider: { '@id': ORG_ID },
+      areaServed: { '@type': 'Country', name: 'United States' },
+      audience: service.audiences.map(name => ({ '@type': 'BusinessAudience', name: `Real estate ${name.toLowerCase()}` })),
+      ...(service.price ? { offers: { '@type': 'Offer', price: '200', priceCurrency: 'USD', description: `${service.price}. ${service.priceNote}` } } : {}),
+      hasOfferCatalog: { '@type': 'OfferCatalog', name: `${service.name}: what's included`, itemListElement: service.included.map(item => ({ '@type': 'Offer', itemOffered: { '@type': 'Service', name: item.title, description: item.text } })) }
+    });
+  } else if (blueprintMatch && readBlueprint().pages.some(item => item.slug === blueprintMatch[1])) {
+    const article = readBlueprint().pages.find(item => item.slug === blueprintMatch[1]);
+    graph.push({ '@type': 'Article', '@id': `${url}#article`, headline: article.headline, description: article.lede, url, author: { '@id': ORG_ID }, publisher: { '@id': ORG_ID }, mainEntityOfPage: { '@id': `${url}#webpage` }, keywords: (article.takeaways || []).join(', ') || undefined });
+  } else if (route === 'faqs') {
+    const faq = faqLd(source);
+    if (faq) { page['@type'] = ['WebPage', 'FAQPage']; page.mainEntity = faq.mainEntity; }
+  }
+  const crumbs = breadcrumbLd(bodyHtml, canonical);
+  if (crumbs) graph.push(crumbs);
+  return { '@context': 'https://schema.org', '@graph': graph };
+}
+
+// Every indexable page, once, at its canonical URL (homepage section aliases and
+// noindex pages are left out). Used by app/sitemap.js.
+export function sitemapRoutes() {
+  const seen = new Set();
+  return ['', ...legacyRouteParams.map(param => param.slug.join('/'))].flatMap(route => {
+    const page = getLegacyPage(route);
+    if (!page || !page.robots.index || seen.has(page.canonical)) return [];
+    seen.add(page.canonical);
+    return [page.canonical];
+  });
+}
+
+// /llms.txt: a plain-language summary for AI answer engines (llmstxt.org format),
+// built from the same content files as the pages so facts never drift.
+export function buildLlmsTxt() {
+  const services = readServices().services;
+  const plans = readPlanData().plans;
+  const audiences = readAudiences().audiences;
+  const groups = blueprintGroups();
+  const drafts = new Set(readBlueprint().pages.filter(page => page.status === 'draft').map(page => `/resources/${page.slug}`));
+  const link = (label, href, text) => `- [${label}](${SITE_URL}${href})${text ? `: ${text}` : ''}`;
+  const planLine = plan => {
+    const price = plan.price.amount === 'Custom' ? 'custom quote' : `${plan.price.amount}${plan.price.unit ? ` ${plan.price.unit.replace('/ ', 'per ').replace('/', 'per ')}` : ''}${plan.price.terms ? ` (${plan.price.terms})` : ''}`;
+    return link(`${plan.name} plan`, `/plans/${plan.slug}`, `${plan.tagline} Price: ${price}`);
+  };
+  return [
+    '# VoloLeads',
+    '',
+    '> VoloLeads builds managed seller acquisition teams for real estate wholesalers, investors and agents in the United States: trained real estate cold callers and acquisition VAs, skip-traced seller lead generation, CRM setup, comps and deal analysis, and AI workflow automation. Every caller is overseen by a VA manager with daily QA and KPI reports.',
+    '',
+    'Key facts:',
+    '- Callers qualify motivated sellers on Motivation, Timeline, Condition and Price (MTCP) and deliver leads to the client CRM with full notes.',
+    '- Most campaigns generate 30–50+ seller leads per month, depending on list quality and whether SMS workflows are used. Results vary by market and list type.',
+    '- Setup takes 2–3 days after checkout and intake. Strategy calls are 30 minutes.',
+    '- Outbound seller calls are made by trained human callers, never AI or prerecorded voices. Lists are screened against national and applicable state Do Not Call lists daily.',
+    '- Growth and Scale records come from county government records, skip traced through data providers (XLeads and DealMachine).',
+    '- Follow-up and closing are handled by clients, so closing rates are not tied to VoloLeads leads.',
+    '- Plans are billed monthly with no long-term contracts.',
+    '',
+    '## Services',
+    ...services.map(service => link(service.name, `/services/${service.slug}`, service.seoDescription || service.promise)),
+    '',
+    '## Plans',
+    ...plans.map(planLine),
+    '',
+    '## Who we serve',
+    ...audiences.map(audience => link(audience.name, `/who-we-serve/${audience.slug}`, audience.lede)),
+    '',
+    '## Guides (The Acquisition Blueprint)',
+    // Draft articles stay out until approved (they're noindexed too).
+    ...groups.flatMap(group => group.items.filter(item => !drafts.has(item.href)).map(item => link(item.title, item.href, `${item.summary} (for ${group.label.toLowerCase()})`))),
+    '',
+    '## Company',
+    link('FAQs', '/faqs', 'Leads per month, TCPA compliance, lead sources, setup time and pricing.'),
+    link('Compliance Policy', '/compliance', 'TCPA, Do Not Call and SMS procedures.'),
+    link('Call recordings', '/call-recordings', 'Real VoloLeads seller calls with QA breakdowns.'),
+    link('Book a strategy call', '/contact'),
+    '- Email: syed@vololeads.com',
+    '- Reviews: https://www.trustpilot.com/review/vololeads.com',
+    ''
+  ].join('\n');
 }
