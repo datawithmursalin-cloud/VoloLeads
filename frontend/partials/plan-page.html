@@ -1,0 +1,75 @@
+<!-- Plan page template (/plans/<slug>), filled from content/plans.json by lib/legacy-pages.js. -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{title}}</title>
+    <meta name="description" content="{{description}}">
+</head>
+<body class="bg-brand-light dark:bg-slate-950 text-brand-navy dark:text-slate-100 font-sans antialiased flex flex-col min-h-screen">
+    <!-- site:header -->
+
+    <main class="plan-page flex-grow">
+        <div class="max-w-6xl mx-auto">
+            <nav class="resources-breadcrumb" aria-label="Breadcrumb"><a href="/">Home</a><span aria-hidden="true">/</span><a href="/#plans">Pricing</a><span aria-hidden="true">/</span><span>{{name}}</span></nav>
+
+            <section class="plan-page-hero reveal-on-scroll">
+                <div>
+                    <p class="plan-page-eyebrow">{{eyebrow}}</p>
+                    <h1>{{name}}</h1>
+                    <p class="plan-page-tagline">{{tagline}}</p>
+                </div>
+                <aside class="plan-page-price">{{priceBlock}}{{ctas}}</aside>
+            </section>
+
+            {{ownLeads}}
+
+            <section class="plan-page-section reveal-on-scroll">
+                <p class="plan-page-kicker">What's included</p>
+                <h2>Everything in {{name}}</h2>
+                <ul class="plan-page-included">{{included}}</ul>
+            </section>
+
+            <section class="plan-page-section reveal-on-scroll">
+                <p class="plan-page-kicker">How it works</p>
+                <h2>From strategy call to seller leads</h2>
+                <ol class="plan-page-steps">{{steps}}</ol>
+            </section>
+
+            <section class="plan-page-section plan-page-split reveal-on-scroll">
+                <div>
+                    <p class="plan-page-kicker">What to expect</p>
+                    <h2>Your first month</h2>
+                    <ul class="plan-page-timeline">{{firstMonth}}</ul>
+                    <p class="plan-page-promise"><strong>Consistent seller leads every month, each with full MTCP notes.</strong> Results vary by market and list type.</p>
+                </div>
+                <div class="plan-page-handle">
+                    <p class="plan-page-kicker">What you handle</p>
+                    <ul>{{youHandle}}</ul>
+                    <p class="plan-page-fineprint">{{fineprint}}</p>
+                    <p class="plan-page-fineprint">No long-term contracts.</p>
+                </div>
+            </section>
+
+            {{builder}}
+
+            <section class="plan-page-others reveal-on-scroll">
+                <p class="plan-page-kicker">Compare plans</p>
+                <div class="plan-page-others-links">{{others}}</div>
+            </section>
+
+            <section class="resources-more reveal-on-scroll">
+                <div>
+                    <h2>Book a strategy call</h2>
+                    <p>30 minutes to find the right fit for your market and team.</p>
+                </div>
+                <div class="resources-more-links">
+                    <a href="/?service={{serviceParam}}#contact" class="site-pill site-pill--filled">Book a strategy call</a>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- site:footer -->
+</body>
+</html>

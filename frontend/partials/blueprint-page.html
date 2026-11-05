@@ -1,0 +1,44 @@
+<!-- Acquisition Blueprint article template (/resources/<slug>), filled from content/blueprint.json by lib/legacy-pages.js. -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{pageTitle}}</title>
+    <meta name="description" content="{{description}}">
+</head>
+<body class="bg-brand-light dark:bg-slate-950 text-brand-navy dark:text-slate-100 font-sans antialiased flex flex-col min-h-screen">
+    <!-- site:header -->
+
+    <main class="blueprint-page flex-grow">
+        <article class="max-w-3xl mx-auto">
+            <nav class="resources-breadcrumb" aria-label="Breadcrumb"><a href="/">Home</a><span aria-hidden="true">/</span><a href="/resources">Resources</a><span aria-hidden="true">/</span><span>{{title}}</span></nav>
+            {{draftNotice}}
+            <p class="plan-page-eyebrow">{{eyebrow}}</p>
+            <h1>{{headline}}</h1>
+            <p class="blueprint-lede">{{lede}}</p>
+            <p class="blueprint-intro">{{intro}}</p>
+            {{sections}}
+            {{disclaimer}}
+            <aside class="blueprint-helps">
+                <p class="plan-page-kicker">How VoloLeads helps</p>
+                <div class="blueprint-helps-links">{{helps}}</div>
+            </aside>
+            <div class="resources-more">
+                <div>
+                    <h2>{{ctaTitle}}</h2>
+                    <p>{{ctaText}}</p>
+                </div>
+                <div class="resources-more-links">
+                    <a href="/#contact" class="site-pill site-pill--filled">Book a strategy call</a>
+                </div>
+            </div>
+            <nav class="blueprint-more" aria-label="More from the Acquisition Blueprint">
+                <p class="plan-page-kicker">{{moreLabel}}</p>
+                <div class="plan-page-others-links">{{related}}</div>
+            </nav>
+        </article>
+    </main>
+
+    <!-- site:footer -->
+</body>
+</html>

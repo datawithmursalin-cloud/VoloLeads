@@ -4,8 +4,9 @@
 
 function initializeVoloLeadsPage() {
     initPageLoadAnimation();
-    initMobileMenu();
-    renderUniversalFooter();
+    initSiteHeader();
+    initProofStack();
+    initQuotePrefillFromTeamBuilder();
     updateCopyrightYear();
     initDarkMode();
     initContactForm();
@@ -138,9 +139,11 @@ function initDarkMode() {
         console.warn('Dark mode preference unavailable', error);
     }
 
-    // Keep first visits in the readable day theme; a user's explicit choice
-    // still wins on every subsequent visit.
-    const initialDarkMode = savedTheme === 'true';
+    // Follow the device's light/dark setting until the visitor picks a theme
+    // with the toggle; that explicit choice is saved and wins from then on.
+    const systemDark = window.matchMedia('(prefers-color-scheme: dark)');
+    const hasSavedChoice = savedTheme === 'true' || savedTheme === 'false';
+    const initialDarkMode = hasSavedChoice ? savedTheme === 'true' : systemDark.matches;
 
     // Helper function to update icon
     const updateIcon = (icon, isDark) => {
@@ -186,9 +189,18 @@ function initDarkMode() {
         }
     };
 
-    const toggleDarkMode = () => applyTheme(!html.classList.contains('dark'), true);
+    let followSystem = !hasSavedChoice;
+    const toggleDarkMode = () => {
+        followSystem = false;
+        applyTheme(!html.classList.contains('dark'), true);
+    };
 
     applyTheme(initialDarkMode);
+
+    // Live-update when the device switches (e.g. sunset auto dark mode), unless the visitor chose.
+    systemDark.addEventListener('change', event => {
+        if (followSystem) applyTheme(event.matches);
+    });
 
     if (darkModeToggle) {
         darkModeToggle.addEventListener('click', toggleDarkMode);
@@ -199,43 +211,219 @@ function initDarkMode() {
     }
 }
 
-/* --- Mobile Menu Logic --- */
-function initMobileMenu() {
-    const menuBtn = document.getElementById('mobile-menu-btn');
-    const mobileMenu = document.getElementById('mobile-menu');
-    const menuIcon = document.getElementById('menu-icon');
+/* --- Shared Site Header (partials/site-header.html) ---
+   Announcement bar, mega menu panels (desktop) and the full-screen sheet (mobile). */
+const ANNOUNCEMENT_KEY = 'vl-announcement-dismissed';
+const MEGA_HOVER_DELAY = 150;
 
-    if (!menuBtn || !mobileMenu || !menuIcon) return;
+function initSiteHeader() {
+    const shell = document.querySelector('[data-site-header]');
+    if (!shell || shell.dataset.headerReady === 'true') return;
+    shell.dataset.headerReady = 'true';
 
-    const menuLinks = mobileMenu.querySelectorAll('a');
+    initAnnouncementBar(shell);
+    initMegaMenu(shell);
+    initMobileSheet(shell);
+}
 
-    // Toggle Menu Function
-    const toggleMenu = () => {
-        const isHidden = mobileMenu.classList.contains('hidden');
+/* --- Proof + software section ---
+   Loops the tool strip (hidden duplicates keep it seamless without repeating it to
+   screen readers) and highlights a category's tools while its card is hovered/focused. */
+function initProofStack() {
+    const section = document.getElementById('proof-stack');
+    if (!section || section.dataset.ready === 'true') return;
+    section.dataset.ready = 'true';
 
-        if (isHidden) {
-            // Open Menu
-            mobileMenu.classList.remove('hidden');
-            menuIcon.classList.remove('fa-bars');
-            menuIcon.classList.add('fa-xmark');
-        } else {
-            // Close Menu
-            mobileMenu.classList.add('hidden');
-            menuIcon.classList.remove('fa-xmark');
-            menuIcon.classList.add('fa-bars');
-        }
+    const marquee = section.querySelector('.tool-marquee');
+    const track = section.querySelector('.tool-marquee-track');
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (marquee && track && !reduceMotion) {
+        [...track.children].forEach(chip => {
+            const copy = chip.cloneNode(true);
+            copy.setAttribute('aria-hidden', 'true');
+            track.appendChild(copy);
+        });
+        marquee.classList.add('is-looping');
+        if (window.renderSiteIcons) window.renderSiteIcons(track);
+    }
+
+    const setActive = category => {
+        if (category) section.dataset.activeCategory = category;
+        else delete section.dataset.activeCategory;
+        section.querySelectorAll('.tool-category').forEach(card => {
+            card.classList.toggle('is-active', card.dataset.toolCategory === category);
+        });
     };
 
-    // Event Listener for Button
-    menuBtn.addEventListener('click', toggleMenu);
+    section.querySelectorAll('.tool-category').forEach(card => {
+        const category = card.dataset.toolCategory;
+        card.addEventListener('pointerenter', () => setActive(category));
+        card.addEventListener('pointerleave', () => setActive(null));
+        card.addEventListener('focus', () => setActive(category));
+        card.addEventListener('blur', () => setActive(null));
+    });
+}
 
-    // Close menu when a link is clicked
-    menuLinks.forEach(link => {
-        link.addEventListener('click', () => {
-            mobileMenu.classList.add('hidden');
-            menuIcon.classList.remove('fa-xmark');
-            menuIcon.classList.add('fa-bars');
+/* --- Custom+ team builder -> custom-quote form ---
+   The builder is a plain GET form to /custom-quote.html (team size and add-ons only,
+   never personal details). Pre-select the seat count and summarise the choices. */
+function initQuotePrefillFromTeamBuilder() {
+    const form = document.querySelector('.custom-quote-form');
+    if (!form) return;
+
+    const params = new URLSearchParams(window.location.search);
+    const callers = params.get('callers');
+    if (!callers) return;
+
+    const seatsByCallers = { '3': '2-3 Seats', '4-5': '4-9 Seats', '6-9': '4-9 Seats', '10+': '10+ Seats' };
+    const callerLabels = { '3': '3', '4-5': '4–5', '6-9': '6–9', '10+': '10+' };
+    const addonLabels = { crm: 'CRM setup', comps: 'Comps', ai: 'AI workflows', markets: 'Multiple markets' };
+
+    const service = form.querySelector('#service-select');
+    if (service) service.value = 'Custom Quote';
+
+    const quantity = form.querySelector('#quantity-select');
+    if (quantity && seatsByCallers[callers]) quantity.value = seatsByCallers[callers];
+
+    const message = form.querySelector('#contact-message');
+    if (message && !message.value.trim()) {
+        const addons = params.getAll('addons').map(key => addonLabels[key]).filter(Boolean);
+        const sourcing = params.get('sourcing') === 'client' ? 'I source my own leads' : 'VoloLeads sources the leads';
+        message.value = [
+            `Team builder: ${callerLabels[callers] || callers} callers`,
+            sourcing,
+            addons.length ? `Add-ons: ${addons.join(', ')}` : ''
+        ].filter(Boolean).join(' · ');
+    }
+}
+
+function initAnnouncementBar(shell) {
+    const dismiss = shell.querySelector('[data-announcement-dismiss]');
+    if (!dismiss) return;
+
+    dismiss.addEventListener('click', () => {
+        document.documentElement.classList.add('announcement-dismissed');
+        try {
+            localStorage.setItem(ANNOUNCEMENT_KEY, '1');
+        } catch (error) {
+            // Storage blocked: the bar stays hidden for this page view only.
+        }
+    });
+}
+
+function initMegaMenu(shell) {
+    const items = [...shell.querySelectorAll('[data-mega-item]')]
+        .map(item => ({
+            item,
+            trigger: item.querySelector('[data-mega-trigger]'),
+            panel: item.querySelector('[data-mega-panel]')
+        }))
+        .filter(entry => entry.trigger && entry.panel);
+    if (!items.length) return;
+
+    let hoverTimer = null;
+    const clearHoverTimer = () => {
+        window.clearTimeout(hoverTimer);
+        hoverTimer = null;
+    };
+
+    const setOpen = (entry, open) => {
+        entry.trigger.setAttribute('aria-expanded', String(open));
+        entry.panel.hidden = !open;
+        entry.item.classList.toggle('is-open', open);
+    };
+
+    const closeAll = (except) => items.forEach(entry => {
+        if (entry !== except) setOpen(entry, false);
+    });
+
+    const open = entry => {
+        closeAll(entry);
+        setOpen(entry, true);
+        if (window.renderSiteIcons) window.renderSiteIcons(entry.panel);
+    };
+
+    const openEntry = () => items.find(entry => !entry.panel.hidden);
+
+    items.forEach(entry => {
+        entry.trigger.addEventListener('click', () => {
+            clearHoverTimer();
+            if (entry.panel.hidden) open(entry);
+            else setOpen(entry, false);
         });
+
+        // Hover opens only for a real mouse; touch taps go through click.
+        entry.item.addEventListener('pointerenter', event => {
+            if (event.pointerType !== 'mouse') return;
+            clearHoverTimer();
+            hoverTimer = window.setTimeout(() => open(entry), MEGA_HOVER_DELAY);
+        });
+
+        entry.item.addEventListener('pointerleave', event => {
+            if (event.pointerType !== 'mouse') return;
+            clearHoverTimer();
+            hoverTimer = window.setTimeout(() => setOpen(entry, false), MEGA_HOVER_DELAY);
+        });
+
+        entry.item.addEventListener('focusout', event => {
+            if (!entry.item.contains(event.relatedTarget)) setOpen(entry, false);
+        });
+    });
+
+    document.addEventListener('keydown', event => {
+        if (event.key !== 'Escape') return;
+        const current = openEntry();
+        if (!current) return;
+        setOpen(current, false);
+        current.trigger.focus();
+    });
+
+    document.addEventListener('pointerdown', event => {
+        if (!items.some(entry => entry.item.contains(event.target))) closeAll();
+    });
+}
+
+function initMobileSheet(shell) {
+    const button = shell.querySelector('#mobile-menu-btn');
+    const sheet = shell.querySelector('#site-mobile-sheet');
+    const icon = shell.querySelector('#menu-icon');
+    if (!button || !sheet) return;
+
+    const setOpen = open => {
+        sheet.hidden = !open;
+        button.setAttribute('aria-expanded', String(open));
+        button.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+        document.documentElement.classList.toggle('site-sheet-open', open);
+        if (icon) {
+            icon.classList.toggle('fa-bars', !open);
+            icon.classList.toggle('fa-xmark', open);
+            delete icon.dataset.renderedIcon;
+        }
+        if (window.renderSiteIcons) window.renderSiteIcons(shell);
+    };
+
+    button.addEventListener('click', () => setOpen(sheet.hidden));
+
+    sheet.querySelectorAll('[data-mobile-accordion]').forEach(trigger => {
+        const panel = document.getElementById(trigger.getAttribute('aria-controls'));
+        if (!panel) return;
+        trigger.addEventListener('click', () => {
+            const expanded = trigger.getAttribute('aria-expanded') === 'true';
+            trigger.setAttribute('aria-expanded', String(!expanded));
+            panel.hidden = expanded;
+        });
+    });
+
+    sheet.querySelectorAll('a').forEach(link => link.addEventListener('click', () => setOpen(false)));
+
+    document.addEventListener('keydown', event => {
+        if (event.key !== 'Escape' || sheet.hidden) return;
+        setOpen(false);
+        button.focus();
+    });
+
+    window.matchMedia('(min-width: 1024px)').addEventListener('change', event => {
+        if (event.matches && !sheet.hidden) setOpen(false);
     });
 }
 
@@ -353,80 +541,6 @@ window.resetIcon = function(audioElement) {
 };
 
 /* --- Utilities --- */
-function renderUniversalFooter() {
-    const footer = document.querySelector('body > footer');
-    if (!footer) return;
-
-    footer.className = 'bg-brand-navy text-slate-400 py-12 border-t border-slate-800 scroll-mt-32';
-    footer.innerHTML = `
-        <div class="container mx-auto px-6">
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8 mb-8">
-                <div class="lg:col-span-2">
-                    <a href="index.html#home" class="flex items-center gap-0.5 site-brand-lockup mb-4">
-                        <img src="./png/logo/vololeads-logo.svg" alt="" aria-hidden="true" class="site-brand-logo site-brand-logo-sm">
-                        <span class="site-wordmark site-wordmark--on-dark text-xl"><span class="site-wordmark-volo">Volo</span><span class="site-wordmark-leads">Leads</span></span>
-                    </a>
-                    <p class="text-sm max-w-sm">Managed acquisition teams for real estate wholesalers. We run the pipeline; you close.</p>
-                </div>
-                <div>
-                    <h4 class="text-white font-bold mb-4">Navigate</h4>
-                    <ul class="space-y-2 text-sm">
-                        <li><a href="index.html#about" class="hover:text-brand-orange transition-colors">About Us</a></li>
-                        <li><a href="index.html#plans" class="hover:text-brand-orange transition-colors">Services</a></li>
-                        <li><a href="index.html#plans" class="hover:text-brand-orange transition-colors">Plans</a></li>
-                        <li><a href="index.html#insights" class="hover:text-brand-orange transition-colors">Insights</a></li>
-                        <li><a href="index.html#testimonials" class="hover:text-brand-orange transition-colors">Testimonials</a></li>
-                        <li><a href="index.html#contact" class="hover:text-brand-orange transition-colors">Contact</a></li>
-                        <li><a href="faqs.html" class="hover:text-brand-orange transition-colors">FAQs</a></li>
-                    </ul>
-                </div>
-                <div>
-                    <h4 class="text-white font-bold mb-4">Legal</h4>
-                    <ul class="space-y-2 text-sm">
-                        <li><a href="privacy-policy.html" class="hover:text-brand-orange transition-colors">Privacy Policy</a></li>
-                        <li><a href="terms-condition.html" class="hover:text-brand-orange transition-colors">Terms of Service</a></li>
-                        <li><a href="refund-policy.html" class="hover:text-brand-orange transition-colors">Refund Policy</a></li>
-                        <li><a href="compliance.html" class="hover:text-brand-orange transition-colors">Compliance</a></li>
-                        <li><a href="disclaimer.html" class="hover:text-brand-orange transition-colors">Disclaimer</a></li>
-                        <li><a href="manage-subscription.html" class="hover:text-brand-orange transition-colors">Manage Subscription</a></li>
-                    </ul>
-                </div>
-                <div>
-                    <h4 class="text-white font-bold mb-4">Contact</h4>
-                    <ul class="space-y-2 text-sm">
-                        <li>
-                            <a href="mailto:syed@vololeads.com" class="hover:text-brand-orange transition-colors">
-                                <i class="fa-regular fa-envelope mr-2 text-brand-orange"></i> syed@vololeads.com
-                            </a>
-                        </li>
-                        <li>
-                            <a href="https://wa.me/8801793716608" class="hover:text-brand-orange transition-colors">
-                                <i class="fa-brands fa-whatsapp mr-2 text-brand-orange"></i> WhatsApp Support
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-                <div>
-                    <h4 class="text-white font-bold mb-4">Follow Us</h4>
-                    <div class="flex gap-3">
-                        <a href="https://www.linkedin.com/company/vololeads" aria-label="LinkedIn" class="w-10 h-10 rounded-full bg-slate-800 hover:bg-brand-orange flex items-center justify-center transition-colors"><i class="fa-brands fa-linkedin-in"></i></a>
-                        <a href="https://www.facebook.com/vololeads" aria-label="Facebook" class="w-10 h-10 rounded-full bg-slate-800 hover:bg-brand-orange flex items-center justify-center transition-colors"><i class="fa-brands fa-facebook-f"></i></a>
-                        <a href="https://www.instagram.com/vololeads" aria-label="Instagram" class="w-10 h-10 rounded-full bg-slate-800 hover:bg-brand-orange flex items-center justify-center transition-colors"><i class="fa-brands fa-instagram"></i></a>
-                        <a href="https://x.com/vololeads" aria-label="X" class="w-10 h-10 rounded-full bg-slate-800 hover:bg-brand-orange flex items-center justify-center transition-colors"><i class="fa-brands fa-x-twitter"></i></a>
-                    </div>
-                </div>
-            </div>
-            <div class="border-t border-slate-800 pt-6 text-sm">
-                <p>&copy; <span id="current-year"></span> VoloLeads Agency. All rights reserved.</p>
-            </div>
-        </div>
-    `;
-
-    if (window.renderSiteIcons) {
-        window.renderSiteIcons(footer);
-    }
-}
-
 function updateCopyrightYear() {
     const yearSpan = document.getElementById('current-year');
     if (yearSpan) {
@@ -462,7 +576,7 @@ function initWhatsAppWidget() {
                 <p class="whatsapp-response-note"><span aria-hidden="true"></span> We typically reply within a few minutes.</p>
                 <div class="whatsapp-support-routes">
                     <a class="whatsapp-support-route" href="https://wa.me/${phoneNumber}?text=${salesMessage}">
-                        <span class="whatsapp-route-avatar whatsapp-route-avatar--brand"><img src="./png/logo/vololeads-logo.svg" alt=""></span>
+                        <span class="whatsapp-route-avatar whatsapp-route-avatar--brand"><img src="/legacy-assets/png/logo.webp" alt=""></span>
                         <span class="whatsapp-route-copy">
                             <strong>Sales &amp; Strategy</strong>
                             <small><span aria-hidden="true"></span> Online now</small>
@@ -556,7 +670,7 @@ window.scrollPricing = function(direction) {
     const slider = document.getElementById('pricing-slider');
     if (!slider) return;
 
-    const card = slider.querySelector('.perspective-1000');
+    const card = slider.querySelector('.plan-card, .perspective-1000');
     const gap = parseFloat(window.getComputedStyle(slider).columnGap) || 32;
     const scrollAmount = card ? card.getBoundingClientRect().width + gap : 400;
     const currentScroll = slider.scrollLeft;
@@ -1030,12 +1144,13 @@ function initKeywordUnderlineHighlights(reduceMotion) {
 }
 
 function initCompressedNavbar() {
-    const nav = document.querySelector('nav');
+    // Slides the announcement bar away once the visitor scrolls; the header bar stays.
+    const nav = document.querySelector('[data-site-header]');
     if (!nav) return;
 
     let ticking = false;
     const update = () => {
-        nav.classList.toggle('nav-compressed', window.scrollY > 72);
+        nav.classList.toggle('is-compressed', window.scrollY > 72);
         ticking = false;
     };
 
@@ -1967,6 +2082,24 @@ function equalizePlanCardHeights() {
 function initMobilePlansCarousel() {
     const plansGrid = document.getElementById('pricing-slider') || document.querySelector('#plans .plans-pricing-grid');
     if (!plansGrid) return;
+
+    // Grey out an arrow when the carousel is at that end.
+    const shell = plansGrid.closest('.plans-carousel-shell');
+    const prev = shell?.querySelector('.pricing-nav-prev');
+    const next = shell?.querySelector('.pricing-nav-next');
+    const updateArrows = () => {
+        const max = plansGrid.scrollWidth - plansGrid.clientWidth - 2;
+        if (prev) prev.disabled = plansGrid.scrollLeft <= 2;
+        if (next) next.disabled = plansGrid.scrollLeft >= max;
+        plansGrid.classList.toggle('is-at-start', plansGrid.scrollLeft <= 2);
+        plansGrid.classList.toggle('is-at-end', plansGrid.scrollLeft >= max);
+    };
+    if (!plansGrid.dataset.arrowsReady) {
+        plansGrid.dataset.arrowsReady = 'true';
+        plansGrid.addEventListener('scroll', () => window.requestAnimationFrame(updateArrows), { passive: true });
+        window.addEventListener('resize', updateArrows);
+    }
+    updateArrows();
 
     plansGrid.classList.add('scrollbar-hide');
     plansGrid.querySelectorAll('.perspective-1000').forEach(card => {

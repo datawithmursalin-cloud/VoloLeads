@@ -53,7 +53,7 @@ test('all legacy pages and allowed runtime scripts still load', async t => {
   const previous = process.cwd();
   process.chdir(frontend);
   t.after(() => process.chdir(previous));
-  for (const route of ['', ...legacyRouteParams.map(({ slug }) => slug[0])]) {
+  for (const route of ['', ...legacyRouteParams.map(({ slug }) => slug.join('/'))]) {
     const page = getLegacyPage(route);
     assert.ok(page?.bodyHtml, `Missing page: ${route}`);
     assert.ok(page.title);

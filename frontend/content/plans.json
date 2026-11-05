@@ -1,0 +1,102 @@
+{
+  "_comment": "Plan pages (/plans/<slug>) and plan facts. checkout = the backend plan key (Growth is premium, Scale is custom_plus). Prices, promo terms and fees must match Stripe.",
+  "howItWorks": [
+    { "title": "Strategy call", "text": "A 30-minute call to review your market, lists, goals and how your team works today." },
+    { "title": "Checkout and onboarding", "text": "Subscribe, complete intake and share CRM and dialer access. We assign your caller and VA manager." },
+    { "title": "Setup in 48–72 hours", "text": "Script, lead criteria and routing are configured. Calling starts once onboarding and access are complete." },
+    { "title": "Calling, daily QA and reports", "text": "Seller leads arrive in your CRM with full MTCP notes: Motivation, Timeline, Condition and Price." }
+  ],
+  "firstMonth": [
+    { "when": "Week 1", "text": "Kickoff, access set up, and your script and qualification rules agreed." },
+    { "when": "Week 2", "text": "Calling starts. Daily KPI reports and call reviews begin." },
+    { "when": "Weeks 3–4", "text": "QA coaching from real calls, plus list and script adjustments based on results." },
+    { "when": "Month end", "text": "KPI review with your VA manager and a plan for next month." }
+  ],
+  "plans": [
+    {
+      "slug": "essential",
+      "name": "Essential",
+      "checkout": "essential",
+      "tagline": "A dedicated caller for teams that source their own leads.",
+      "audience": "You source leads, we run the caller",
+      "price": { "amount": "$6", "unit": "/ hour", "terms": "Billed $730 monthly. $150 one-time setup fee." },
+      "cardPoints": ["1 dedicated caller, 100 hrs/month", "VA manager and daily reports", "WAVV Triple Line Dialer included", "10,000-lead signup bonus"],
+      "included": [
+        { "title": "1 dedicated cold caller", "text": "100 hours/month of calling (about 20 hours a week) on your campaign." },
+        { "title": "1 VA manager for 100 hours a month", "text": "Oversight, coaching and support for your caller." },
+        { "title": "Onboarding and setup", "text": "WAVV Triple Line Dialer included ($120 / month value), with setup, training and ongoing management." },
+        { "title": "Lead integration", "text": "Direct CRM integration per your workflow." },
+        { "title": "Trained and managed", "text": "Expert bilingual VAs with objection handling." },
+        { "title": "Daily KPI reporting", "text": "Track dials, conversations and performance every day." },
+        { "title": "10,000-lead signup bonus", "text": "A one-time bonus of 10,000 leads sourced using BatchLeads, at no additional charge." }
+      ],
+      "youHandle": ["CRM costs", "Any additional lead sourcing after the signup bonus"],
+      "fineprint": "The 10,000-lead bonus is sourced records, not qualified opportunities or guaranteed results. Additional lead sourcing and CRM costs are separate."
+    },
+    {
+      "slug": "growth",
+      "name": "Growth",
+      "checkout": "premium",
+      "popular": true,
+      "tagline": "A turnkey outbound system: a managed caller plus monthly leads.",
+      "audience": "A turnkey outbound system",
+      "price": { "was": "$1,699/month", "amount": "$1,535", "unit": "/month", "save": "Save $164/month", "terms": "With a valid promo code. Billed monthly." },
+      "cardPoints": ["Managed caller and VA manager", "25K leads/month (XLeads + DealMachine)", "Daily QA and coaching", "CRM support and 1-on-1 Q&A"],
+      "included": [
+        { "title": "Dedicated caller, fully managed", "text": "Training, management and reporting included." },
+        { "title": "1 VA manager for 120 hours a month", "text": "Hands-on oversight of your caller and campaign." },
+        { "title": "Data and lead acquisition", "text": "15K XLeads + 10K DealMachine leads every month." },
+        { "title": "Government and public-record lists", "text": "Probates, code violations, tax delinquencies and other county and municipal records." },
+        { "title": "Technical infrastructure", "text": "Triple-line dialer with rotating numbers and CRM access." },
+        { "title": "Backend automation", "text": "Automatic list pulling, data cleaning and AI callback routing." },
+        { "title": "Quality assurance", "text": "Daily call recordings, QA monitoring and continuous training." },
+        { "title": "Pipeline and CRM support", "text": "Setup help, follow-up flow, stage-by-stage lead progression and reporting." },
+        { "title": "1-on-1 Q&A sessions", "text": "Time with our team to work through your questions." }
+      ],
+      "youHandle": ["Closing qualified opportunities"],
+      "fineprint": "Growth pricing requires a valid promo code, entered in Stripe checkout. The regular price is $1,699/month."
+    },
+    {
+      "slug": "scale",
+      "name": "Scale",
+      "checkout": "custom_plus",
+      "tagline": "Two dedicated callers with more volume and priority support.",
+      "audience": "Two callers, more coverage",
+      "price": { "was": "$2,999/month", "amount": "$2,685", "unit": "/month", "save": "Save $314/month", "terms": "With a valid promo code. Billed monthly." },
+      "cardPoints": ["2 dedicated cold callers", "~50,000 records/month, list stacking", "Comps and targeted campaigns", "AI for SMS and inbound voice"],
+      "ownLeads": "Sourcing your own leads? 2 callers for $2,235/month.",
+      "included": [
+        { "title": "Everything in Growth", "text": "All Growth services are included." },
+        { "title": "2 dedicated cold callers", "text": "Two callers assigned to your campaigns." },
+        { "title": "Volume and velocity", "text": "Increased calling volume, faster routing and priority follow-up." },
+        { "title": "About 50,000 records a month", "text": "List stacking and priority targeting for motivated sellers." },
+        { "title": "Virtual D4D leads", "text": "Virtual driving-for-dollars leads integrated into your list stacking and outreach." },
+        { "title": "Performance analytics", "text": "Advanced KPI tracking with weekly optimization sessions." },
+        { "title": "Conversion support", "text": "Dedicated closer support for seller follow-up." },
+        { "title": "Running comparables", "text": "Comps on qualified leads for accurate offers." },
+        { "title": "Targeted marketing campaigns", "text": "Redfin Data Center targeting: high activity, low days on market, growing populations." },
+        { "title": "AI agent automation", "text": "SMS handling plus an AI voice receptionist for inbound calls." }
+      ],
+      "youHandle": ["Acquisitions and dispositions"],
+      "fineprint": "Scale pricing requires a valid promo code, entered in Stripe checkout. The regular price is $2,999/month."
+    },
+    {
+      "slug": "custom-plus",
+      "name": "Custom+",
+      "tagline": "Caller volume, markets, reporting and workflows built around your operation.",
+      "audience": "3+ callers or multi-market",
+      "price": { "amount": "Custom", "terms": "Scoped to your operation after a strategy call." },
+      "included": [
+        { "title": "Calling volume", "text": "Caller count, hours, routing and campaign capacity matched to your market." },
+        { "title": "1 VA manager for 80 hours a month", "text": "Oversight, coaching and support for your caller team." },
+        { "title": "Data and targeting", "text": "List stacking, market filters, priority targeting and lead source planning." },
+        { "title": "KPI reporting", "text": "Daily, weekly or custom dashboards for performance and QA visibility." },
+        { "title": "Pipeline and CRM", "text": "Setup support, follow-up workflow, tagging, stages and tracking." },
+        { "title": "Comps and campaigns", "text": "Running comps, Redfin market analysis and targeted marketing campaigns." },
+        { "title": "AI automation", "text": "SMS handling and AI voice receptionist options for inbound calls." }
+      ],
+      "youHandle": ["Defined together on your strategy call"],
+      "fineprint": "Setup fee and minimum term are confirmed in your quote."
+    }
+  ]
+}

@@ -1,0 +1,507 @@
+{
+  "_comment": "Acquisition Blueprint. groups drive the Resources menu and /resources hub; pages with 'body' render at /resources/<slug> from partials/blueprint-page.html. status 'draft' = written by Claude, awaiting owner review (shown on the page until approved).",
+  "groups": [
+    {
+      "id": "wholesalers",
+      "label": "Wholesalers",
+      "intro": "Find motivated sellers, structure the right offer and track what works.",
+      "items": [
+        {
+          "title": "Targeting by Intelligence",
+          "summary": "How we target seller motivation before we dial.",
+          "href": "/insights-intelligence.html"
+        },
+        {
+          "title": "Deal Structures",
+          "summary": "Three ways to structure a deal beyond cash.",
+          "href": "/insights-deal.html"
+        },
+        {
+          "title": "Market Seasonality",
+          "summary": "When seller motivation peaks in your market.",
+          "href": "/insights-market.html"
+        }
+      ]
+    },
+    {
+      "id": "investors",
+      "label": "Investors",
+      "intro": "Source the right off-market property for the way you invest.",
+      "items": [
+        {
+          "slug": "fix-and-flip"
+        },
+        {
+          "slug": "buy-and-hold"
+        },
+        {
+          "slug": "seller-finance"
+        }
+      ]
+    },
+    {
+      "id": "agents",
+      "label": "Agents",
+      "intro": "More listing conversations, better buyer follow-up and less admin.",
+      "items": [
+        {
+          "slug": "seller-listing-opportunities"
+        },
+        {
+          "slug": "buyer-opportunities"
+        },
+        {
+          "slug": "listing-marketing-support"
+        }
+      ]
+    },
+    {
+      "id": "how-we-work",
+      "label": "How we work",
+      "moreLabel": "More on how we work",
+      "intro": "How our teams run, report and stay compliant.",
+      "items": [
+        {
+          "slug": "how-we-operate"
+        },
+        {
+          "slug": "tcpa-compliance"
+        },
+        {
+          "title": "Performance Analytics",
+          "summary": "The daily KPIs we report on every caller.",
+          "href": "/insights-kpi.html"
+        },
+        {
+          "slug": "ai-workflows"
+        }
+      ]
+    }
+  ],
+  "pages": [
+    {
+      "slug": "fix-and-flip",
+      "status": "draft",
+      "group": "investors",
+      "eyebrow": "Investor Blueprint",
+      "title": "Fix and Flip",
+      "summary": "Find distressed properties with room for margin.",
+      "headline": "Fix and Flip: Buy the Margin, Not the House.",
+      "lede": "A flip is made or lost at purchase. The goal is to find sellers who value speed and certainty over top dollar, and to know your numbers before you make the offer.",
+      "intro": "Most flippers compete for the same listed properties and the same wholesale emails. The deals with real margin tend to come from conversations with owners before a property ever hits the market. That takes a steady pipeline of the right sellers, and the discipline to run the numbers on every one.",
+      "sections": [
+        {
+          "title": "Target the right distress",
+          "text": "Good flip candidates usually combine a dated or damaged property with an owner who needs to move on. We build lists around those signals so callers spend their time on owners who can say yes.",
+          "points": [
+            "Vacant and absentee-owned properties",
+            "Code violations and deferred maintenance",
+            "Tax delinquencies and pre-foreclosures",
+            "Probate and inherited properties"
+          ]
+        },
+        {
+          "title": "Qualify before you drive out",
+          "text": "Every lead comes back with full MTCP notes: the seller's Motivation, Timeline, property Condition and Price expectations. You see the repair picture and the seller's flexibility before you spend an afternoon on a walkthrough."
+        },
+        {
+          "title": "Know your maximum offer",
+          "text": "Work backward from the after-repair value. A common rule of thumb starts around 70% of ARV minus repairs, then adjusts for your market, holding costs and target profit. Comps and repair estimates based on square footage keep every offer grounded in numbers, not hope."
+        }
+      ],
+      "helps": [
+        {
+          "title": "Cold Callers",
+          "href": "/services/cold-callers"
+        },
+        {
+          "title": "Lead Generation & Skip Tracing",
+          "href": "/services/lead-generation"
+        },
+        {
+          "title": "Comps & Deal Analysis",
+          "href": "/services/comps-deal-analysis"
+        }
+      ],
+      "ctaTitle": "Fill your flip pipeline",
+      "ctaText": "Trained callers who find and qualify distressed sellers for you."
+    },
+    {
+      "slug": "buy-and-hold",
+      "status": "draft",
+      "group": "investors",
+      "eyebrow": "Investor Blueprint",
+      "title": "Buy and Hold",
+      "summary": "Off-market rentals from owners ready to sell.",
+      "headline": "Buy and Hold: Build the Portfolio Off-Market.",
+      "lede": "Rental portfolios grow fastest when you can buy below retail. Off-market sellers, especially tired landlords, often care more about an easy exit than the last dollar.",
+      "intro": "Long-term holds live or die on purchase price and cash flow. Buying on the MLS means competing with every other investor for the same thin margins. Talking directly to owners lets you find properties that cash flow from day one, or that are worth renovating and refinancing.",
+      "sections": [
+        {
+          "title": "Find the tired landlord",
+          "text": "Owners who are worn out by tenants, repairs or distance are some of the most motivated sellers in any market. We target them directly.",
+          "points": [
+            "Absentee and out-of-state owners",
+            "Long-held rentals with high equity",
+            "Properties with code or maintenance issues",
+            "Small multifamily owners"
+          ]
+        },
+        {
+          "title": "Ask the questions that matter for a hold",
+          "text": "Beyond MTCP, callers capture what a rental buyer needs to know: current occupancy, rent and lease terms, and the condition of major systems. That makes it fast to judge cash flow before you make an offer."
+        },
+        {
+          "title": "Plan the exit before you buy",
+          "text": "Whether you keep it as is or renovate, refinance and repeat, the numbers have to work at purchase. Run comps and rent estimates on every qualified lead so you only chase the properties that fit your criteria."
+        }
+      ],
+      "helps": [
+        {
+          "title": "Lead Generation & Skip Tracing",
+          "href": "/services/lead-generation"
+        },
+        {
+          "title": "Cold Callers",
+          "href": "/services/cold-callers"
+        },
+        {
+          "title": "CRM Setup",
+          "href": "/services/crm-setup"
+        }
+      ],
+      "ctaTitle": "Grow your rental portfolio",
+      "ctaText": "Off-market conversations with owners who are ready to sell."
+    },
+    {
+      "slug": "seller-finance",
+      "status": "draft",
+      "group": "investors",
+      "eyebrow": "Investor Blueprint",
+      "title": "Seller Finance",
+      "summary": "Spot owners open to terms instead of cash.",
+      "headline": "Seller Finance: When the Answer Is Terms, Not Price.",
+      "lede": "Some sellers will never accept a cash discount but will gladly take a fair price paid over time. Recognizing them on the first call opens deals your competitors pass on.",
+      "intro": "Seller financing lets you buy without a bank loan, with the owner carrying the note. It works best for owners who own free and clear or have high equity, and who value monthly income or a smoother tax picture over a lump sum. The skill is spotting these sellers early and knowing when to bring terms up.",
+      "sections": [
+        {
+          "title": "Who says yes to terms",
+          "text": "Terms conversations usually start with owners who don't need the cash right away.",
+          "points": [
+            "Free-and-clear or high-equity owners",
+            "Retiring landlords who want monthly income",
+            "Sellers whose price is above what a cash buyer will pay",
+            "Properties that are hard to finance traditionally"
+          ]
+        },
+        {
+          "title": "Listen for the signals",
+          "text": "Callers are trained to notice when price is the sticking point but timeline isn't. Phrases like \"I'm not in a rush\" or \"I don't need it all at once\" are a cue to explore terms instead of pushing a lower number."
+        },
+        {
+          "title": "Structure with professionals",
+          "text": "Interest rate, down payment, term and balloon all shape whether a deal works for both sides. Seller-financed deals involve lending and disclosure rules that vary by state, so close them with a real estate attorney or title company."
+        }
+      ],
+      "helps": [
+        {
+          "title": "Cold Callers",
+          "href": "/services/cold-callers"
+        },
+        {
+          "title": "Consulting",
+          "href": "/services/consulting"
+        },
+        {
+          "title": "Comps & Deal Analysis",
+          "href": "/services/comps-deal-analysis"
+        }
+      ],
+      "disclaimer": "This page is general information, not legal, tax or financial advice. Speak with a licensed attorney before structuring a seller-financed purchase.",
+      "ctaTitle": "Find sellers open to terms",
+      "ctaText": "Callers trained to spot terms opportunities on the first conversation."
+    },
+    {
+      "slug": "seller-listing-opportunities",
+      "status": "draft",
+      "group": "agents",
+      "eyebrow": "Agent Blueprint",
+      "title": "Seller Listing Opportunities",
+      "summary": "Expired, FSBO and pre-foreclosure conversations.",
+      "headline": "Seller Listing Opportunities: More Conversations, More Appointments.",
+      "lede": "Listings come from conversations with homeowners who need to sell. The hard part is having enough of them, consistently, without spending your whole day on the phone.",
+      "intro": "Expired listings, for-sale-by-owner sellers and homeowners facing foreclosure are some of the clearest signs that someone needs help selling. Each needs a different conversation, and all of them need persistent, professional follow-up. Our callers handle the dialing and qualifying so you can spend your time at the listing appointment.",
+      "sections": [
+        {
+          "title": "Work the lists that signal a move",
+          "text": "Each list has its own reason to call and its own opening.",
+          "points": [
+            "Expired and withdrawn listings",
+            "For sale by owner (FSBO)",
+            "Pre-foreclosure and probate",
+            "Long-time owners with high equity"
+          ]
+        },
+        {
+          "title": "Qualify, then book",
+          "text": "Callers confirm the seller's motivation, timeline, property condition and price expectations, then book qualified sellers straight onto your calendar with notes, so you walk in knowing what matters to them."
+        },
+        {
+          "title": "Follow up until the timing is right",
+          "text": "Many sellers aren't ready on the first call. A consistent follow-up rhythm keeps you in the conversation until they are. All calling is screened against Do Not Call lists and follows our compliance procedures."
+        }
+      ],
+      "helps": [
+        {
+          "title": "Appointment Setting for Agents",
+          "href": "/services/agent-appointment-setting"
+        },
+        {
+          "title": "Lead Generation & Skip Tracing",
+          "href": "/services/lead-generation"
+        },
+        {
+          "title": "Compliance",
+          "href": "/compliance.html"
+        }
+      ],
+      "ctaTitle": "Book more listing appointments",
+      "ctaText": "Callers who work your seller lists and fill your calendar."
+    },
+    {
+      "slug": "buyer-opportunities",
+      "status": "draft",
+      "group": "agents",
+      "eyebrow": "Agent Blueprint",
+      "title": "Buyer Opportunities",
+      "summary": "Fast follow-up that turns inquiries into showings.",
+      "headline": "Buyer Opportunities: Speed Wins the Showing.",
+      "lede": "Buyer inquiries go cold fast. The agent who responds first and keeps following up is usually the one who gets the showing.",
+      "intro": "Online inquiries, open-house sign-ins and past leads in your CRM are all buyers who raised a hand at some point. Most agents can't call every one quickly or keep following up for months. A dedicated VA can, so more of those leads become conversations, showings and closings.",
+      "sections": [
+        {
+          "title": "Respond while the lead is warm",
+          "text": "Fast first contact on new inquiries, with a short qualification on timeline, financing and what the buyer is looking for, then a hand-off to you when they're ready to see homes."
+        },
+        {
+          "title": "Revive the leads you already have",
+          "text": "Your CRM likely holds buyers who went quiet. Systematic re-engagement finds the ones whose timeline has arrived.",
+          "points": [
+            "Open-house sign-ins",
+            "Website and portal inquiries",
+            "Past leads that stopped responding",
+            "Renters in your farm area"
+          ]
+        },
+        {
+          "title": "Keep the pipeline organized",
+          "text": "Every conversation is logged in your CRM with notes and next steps, so nothing falls through the cracks between showings."
+        }
+      ],
+      "helps": [
+        {
+          "title": "General VA Services",
+          "href": "/services/virtual-assistants"
+        },
+        {
+          "title": "CRM Setup",
+          "href": "/services/crm-setup"
+        },
+        {
+          "title": "Appointment Setting for Agents",
+          "href": "/services/agent-appointment-setting"
+        }
+      ],
+      "ctaTitle": "Never let a buyer go cold",
+      "ctaText": "A trained VA who follows up on every inquiry."
+    },
+    {
+      "slug": "listing-marketing-support",
+      "status": "draft",
+      "group": "agents",
+      "eyebrow": "Agent Blueprint",
+      "title": "Listing Marketing Support",
+      "summary": "Video, social posts and listing admin, handled.",
+      "headline": "Listing Marketing Support: Win the Listing, Then Market It Well.",
+      "lede": "Sellers choose agents who market their home well. Listing video, social posts and clean MLS data take hours that most agents would rather spend with clients.",
+      "intro": "Great listing marketing is consistent, fast and accurate. Delegating the production work keeps every listing looking professional without pulling you away from appointments and negotiations.",
+      "sections": [
+        {
+          "title": "Listing video and social content",
+          "text": "Turn your footage and photos into short listing videos and social posts, by request, so every listing gets the same quality of promotion."
+        },
+        {
+          "title": "Listing admin, done right",
+          "text": "Delegate the repetitive work while you stay in control of what goes live.",
+          "points": [
+            "MLS photo uploads and data entry",
+            "Listing descriptions written to fair housing guidelines",
+            "Showing scheduling and feedback follow-up",
+            "Inbox and calendar management"
+          ]
+        },
+        {
+          "title": "Stay visible between listings",
+          "text": "Regular posts and simple market updates keep you in front of past clients and your sphere, the people most likely to refer your next listing."
+        }
+      ],
+      "helps": [
+        {
+          "title": "General VA Services",
+          "href": "/services/virtual-assistants"
+        },
+        {
+          "title": "AI Workflows",
+          "href": "/services/ai-workflows"
+        }
+      ],
+      "ctaTitle": "Hand off the marketing busywork",
+      "ctaText": "A trained VA for listing content and admin, by request."
+    },
+    {
+      "slug": "how-we-operate",
+      "status": "draft",
+      "group": "how-we-work",
+      "pageTitle": "How VoloLeads Operates | VoloLeads Resources",
+      "eyebrow": "How we work",
+      "title": "How We Operate",
+      "summary": "Onboarding, daily QA, reporting and management.",
+      "headline": "How We Operate: A Managed Team, Not Just a Caller.",
+      "lede": "Every VoloLeads campaign runs on the same routine: a clear setup, daily quality checks and reporting you can read in minutes.",
+      "intro": "Hiring a caller is easy. Keeping one productive, coached and accountable every day is the hard part. That management layer is what you get with VoloLeads: a trained caller, a VA manager who oversees them, and a daily rhythm of calling, review and reporting.",
+      "sections": [
+        {
+          "title": "Setup before the first dial",
+          "text": "We start with a 30-minute strategy call about your markets and goals. After checkout we collect access, agree your lead criteria and calling hours, and set up scripts and routing. Calling usually starts within 48–72 hours of completed onboarding."
+        },
+        {
+          "title": "A daily rhythm of calling and QA",
+          "text": "Callers work set calling blocks on your campaign. Their VA manager reviews calls every day, coaches on what to improve and keeps dispositions clean.",
+          "points": [
+            "Daily call reviews and coaching",
+            "Written scripts and calling-hour rules",
+            "Monitoring software on campaign activity",
+            "An underperforming caller is replaced with a new VA"
+          ]
+        },
+        {
+          "title": "Reporting you can act on",
+          "text": "You get a daily report on dials, conversations and leads, and a monthly report with VA timesheets, campaign KPIs, outbound and inbound call history, and the smart lists prepared for your campaign."
+        }
+      ],
+      "helps": [
+        {
+          "title": "Cold Callers",
+          "href": "/services/cold-callers"
+        },
+        {
+          "title": "Team Training",
+          "href": "/services/team-training"
+        },
+        {
+          "title": "Performance Analytics",
+          "href": "/insights-kpi.html"
+        }
+      ],
+      "ctaTitle": "See the routine on your campaign",
+      "ctaText": "A 30-minute strategy call to map your setup."
+    },
+    {
+      "slug": "tcpa-compliance",
+      "status": "draft",
+      "group": "how-we-work",
+      "pageTitle": "TCPA and Calling Compliance | VoloLeads Resources",
+      "eyebrow": "How we work",
+      "title": "TCPA Compliance",
+      "summary": "DNC screening, opt-outs and how our callers stay compliant.",
+      "headline": "TCPA and Calling Compliance: How Our Callers Work.",
+      "lede": "Cold calling property owners comes with real rules. Our procedures are built around them, from the list we dial to how a call ends.",
+      "intro": "The Telephone Consumer Protection Act (TCPA), Do Not Call rules and state calling laws shape how outbound campaigns must run. Our approach combines daily Do Not Call screening, trained human callers, respectful conversations, opt-out handling and campaign reporting. The full detail is in our Compliance Policy.",
+      "sections": [
+        {
+          "title": "Screened lists, every day",
+          "text": "Contacts come from property-data and skip-tracing providers such as XLeads, DealMachine and PropStream. Skip tracing finds contact details; it does not give permission to call.",
+          "points": [
+            "Screened against national and applicable state Do Not Call lists before a list is exported",
+            "DNC checks refreshed daily before each calling session",
+            "Contacts marked Do Not Contact or Not Interested are excluded",
+            "Calling hours set per market from written rules"
+          ]
+        },
+        {
+          "title": "Human callers, honest introductions",
+          "text": "Outbound calls are made by trained human VAs through third-party dialers, with no AI-generated or prerecorded voices. Callers say they are calling on behalf of a partner interested in buying in the area, never claim to be the buyer, and do not pressure or argue with owners who decline."
+        },
+        {
+          "title": "Respecting requests to stop",
+          "text": "If an owner is not interested, the call ends respectfully and the contact is marked Not Interested. A request to stop contact is marked Do Not Contact and excluded from future lists. For SMS, clients supply documented opt-in consent and registration such as A2P 10DLC, and STOP replies end messaging immediately."
+        }
+      ],
+      "disclaimer": "This page summarises our procedures and is not legal advice. Our procedures reduce risk but cannot guarantee a campaign will never receive a complaint or claim, and VoloLeads does not offer contractual indemnification. Read the full Compliance Policy and Terms of Service before purchasing.",
+      "helps": [
+        {
+          "title": "Compliance Policy",
+          "href": "/compliance.html"
+        },
+        {
+          "title": "Terms of Service",
+          "href": "/terms-condition.html"
+        },
+        {
+          "title": "FAQs",
+          "href": "/faqs.html"
+        }
+      ],
+      "ctaTitle": "Questions about compliance?",
+      "ctaText": "Talk through your markets and requirements on a strategy call."
+    },
+    {
+      "slug": "ai-workflows",
+      "status": "draft",
+      "group": "how-we-work",
+      "pageTitle": "How Our AI Workflows Work | VoloLeads Resources",
+      "eyebrow": "How we work",
+      "title": "AI Workflows",
+      "summary": "Where AI helps, and where people stay in charge.",
+      "headline": "AI Workflows: Automation Around the Call, Not Instead of It.",
+      "lede": "We use AI where it saves time without losing judgment: routing, reporting, follow-up and inbound coverage. Outbound seller calls stay human.",
+      "intro": "Most of the busywork in an acquisitions operation happens around the call: moving data between tools, logging notes, chasing replies and pulling reports. AI connectors that plug into your CRM and dialer handle that work, so your callers and your team spend their time on conversations.",
+      "sections": [
+        {
+          "title": "Connected to your CRM and dialer",
+          "text": "AI connectors move data between the tools you already use and keep records tidy.",
+          "points": [
+            "KPI tracking and report preparation",
+            "Skip-tracing and list-cleaning support",
+            "Call QA summaries and monitoring",
+            "Callback routing and data cleaning"
+          ]
+        },
+        {
+          "title": "SMS and inbound voice coverage",
+          "text": "On the Scale plan, AI automation handles SMS replies and acts as a voice receptionist for inbound calls, so a seller calling back is answered instead of reaching voicemail. SMS runs only on client-supplied, consented contacts, and STOP replies end messaging immediately."
+        },
+        {
+          "title": "People stay in charge",
+          "text": "Outbound seller calls are made by trained human VAs, never AI or prerecorded voices. AI workflows are set up and reviewed by our team and built around your process; we only connect the tools your campaign actually uses."
+        }
+      ],
+      "helps": [
+        {
+          "title": "AI Workflows service",
+          "href": "/services/ai-workflows"
+        },
+        {
+          "title": "CRM Setup",
+          "href": "/services/crm-setup"
+        },
+        {
+          "title": "Scale plan",
+          "href": "/plans/scale"
+        }
+      ],
+      "ctaTitle": "Automate the busywork",
+      "ctaText": "Map the AI workflows that fit your stack on a strategy call."
+    }
+  ]
+}

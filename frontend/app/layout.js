@@ -10,13 +10,10 @@ export const metadata = {
   twitter: { card: 'summary_large_image', images: ['/legacy-assets/png/logo/og-image.png'] },
   title: 'VoloLeads',
   description: 'VoloLeads provides trained acquisition specialists, daily QA, and executive reporting for real estate teams.',
+  // Original site icon (png/logo.webp), as before the rebrand.
   icons: {
-    icon: [
-      { url: '/legacy-assets/png/logo/favicon-32.png', sizes: '32x32', type: 'image/png' },
-      { url: '/legacy-assets/png/logo/icon-192.png', sizes: '192x192', type: 'image/png' },
-      { url: '/legacy-assets/png/logo/icon-512.png', sizes: '512x512', type: 'image/png' }
-    ],
-    apple: { url: '/legacy-assets/png/logo/apple-touch-icon.png', sizes: '180x180', type: 'image/png' }
+    icon: '/legacy-assets/png/logo.webp',
+    apple: '/legacy-assets/png/logo.webp'
   }
 };
 
@@ -27,9 +24,18 @@ const themeBootstrap = `
       localStorage.setItem('dark-mode', 'true');
       savedTheme = 'true';
     }
-    if (savedTheme === 'true') {
+    // No saved choice: follow the device setting. Runs before first paint, so no flash.
+    var useDark = savedTheme === 'true' || (savedTheme !== 'false' &&
+      window.matchMedia('(prefers-color-scheme: dark)').matches);
+    if (useDark) {
       document.documentElement.classList.add('dark');
       document.documentElement.style.colorScheme = 'dark';
+    }
+  } catch (error) {}
+  try {
+    // Hide a dismissed announcement bar before first paint (no flash, no layout jump).
+    if (localStorage.getItem('vl-announcement-dismissed') === '1') {
+      document.documentElement.classList.add('announcement-dismissed');
     }
   } catch (error) {}
 `;
