@@ -18,20 +18,20 @@ export const metadata = {
 };
 
 const themeBootstrap = `
+  var savedTheme = null;
   try {
-    var savedTheme = localStorage.getItem('dark-mode');
+    savedTheme = localStorage.getItem('dark-mode');
     if (savedTheme === null && localStorage.getItem('darkMode') === 'true') {
-      localStorage.setItem('dark-mode', 'true');
       savedTheme = 'true';
     }
-    // No saved choice: follow the device setting. Runs before first paint, so no flash.
-    var useDark = savedTheme === 'true' || (savedTheme !== 'false' &&
-      window.matchMedia('(prefers-color-scheme: dark)').matches);
-    if (useDark) {
-      document.documentElement.classList.add('dark');
-      document.documentElement.style.colorScheme = 'dark';
-    }
   } catch (error) {}
+  // Apply the override or device theme before first paint, even when storage is unavailable.
+  var useDark = savedTheme === 'true' || (savedTheme !== 'false' &&
+    window.matchMedia('(prefers-color-scheme: dark)').matches);
+  if (useDark) {
+    document.documentElement.classList.add('dark');
+    document.documentElement.style.colorScheme = 'dark';
+  }
   try {
     // Hide a dismissed announcement bar before first paint (no flash, no layout jump).
     if (localStorage.getItem('vl-announcement-dismissed') === '1') {

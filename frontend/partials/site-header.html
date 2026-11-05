@@ -126,9 +126,14 @@
             <div class="site-header-actions">
                 <a href="/#contact" class="site-pill site-pill--outline">Book a Call</a>
                 <a href="/#plans" class="site-pill site-pill--filled">Get Started</a>
-                <button id="dark-mode-toggle" class="site-icon-btn theme-switch" type="button" role="switch" aria-checked="false" aria-label="Switch to dark mode" title="Switch to dark mode">
-                    <i class="fa-solid fa-moon" id="dark-mode-icon" aria-hidden="true"></i>
-                </button>
+                <div class="theme-picker">
+                    <i class="fa-solid fa-circle-half-stroke" aria-hidden="true"></i>
+                    <select data-theme-picker aria-label="Color theme">
+                        <option value="system">System</option>
+                        <option value="light">Light</option>
+                        <option value="dark">Dark</option>
+                    </select>
+                </div>
                 <button id="mobile-menu-btn" class="site-icon-btn site-menu-btn" type="button" aria-expanded="false" aria-controls="site-mobile-sheet" aria-label="Open menu">
                     <i class="fa-solid fa-bars" id="menu-icon" aria-hidden="true"></i>
                 </button>

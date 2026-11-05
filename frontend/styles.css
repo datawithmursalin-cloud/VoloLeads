@@ -762,7 +762,6 @@ textarea:focus {
         font-size: 1.35rem !important;
     }
 
-    #dark-mode-toggle,
     #mobile-menu-btn {
         width: 2.25rem;
         height: 2.25rem;
@@ -3886,40 +3885,7 @@ html.dark .diy-cost-row td strong { color: #f8fafc; }
     }
 }
 
-/* Theme switch, centered DIY heading, and compact testimonials */
-.theme-switch,
-#dark-mode-toggle {
-    width: 2.5rem;
-    height: 2.5rem;
-    display: inline-grid;
-    place-items: center;
-    flex: 0 0 auto;
-    border: 1px solid transparent;
-    border-radius: 999px;
-    background: rgba(241, 245, 249, .82);
-}
-
-.theme-switch:hover,
-#dark-mode-toggle:hover {
-    border-color: rgba(249, 115, 22, .32);
-    background: #fff7ed;
-}
-
-.theme-switch:focus-visible,
-#dark-mode-toggle:focus-visible {
-    outline: 3px solid rgba(249, 115, 22, .28);
-    outline-offset: 2px;
-}
-
-html.dark .theme-switch,
-html.dark #dark-mode-toggle {
-    border-color: rgba(71, 85, 105, .75);
-    background: rgba(30, 41, 59, .9);
-}
-
-html.dark .theme-switch:hover,
-html.dark #dark-mode-toggle:hover { background: rgba(124, 45, 18, .32); }
-
+/* Centered DIY heading and compact testimonials */
 .section-heading-row.diy-comparison-header,
 .section-heading-row.diy-comparison-header p {
     text-align: center;
@@ -6955,6 +6921,47 @@ html.announcement-dismissed .site-announcement {
     margin-left: auto;
 }
 
+.theme-picker {
+    position: relative;
+    display: grid;
+    place-items: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    border: 1px solid #e2e8f0;
+    border-radius: 50%;
+    background-color: #f1f5f9;
+    color: #334155;
+    font-size: 1.25rem;
+}
+
+.theme-picker select {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    font-size: 1rem;
+    cursor: pointer;
+}
+
+.theme-picker:has(select:focus-visible) {
+    outline: 3px solid #f97316;
+    outline-offset: 3px;
+}
+
+.theme-picker:hover {
+    border-color: #fdba74;
+    background-color: #fff7ed;
+}
+
+html.dark .theme-picker {
+    border-color: #475569;
+    background-color: #1e293b;
+    color: #e2e8f0;
+}
+
+html.dark .theme-picker:hover { border-color: #fb923c; }
+
 .site-header-text-link {
     color: #334155;
     font-size: 0.88rem;
@@ -7674,21 +7681,19 @@ html.dark .proof-stack { background: #0f172a; }
 
 html.dark .proof-stack-panel {
     border-color: #1e293b;
-    background:
-        radial-gradient(60rem 18rem at 50% -6rem, rgba(249, 115, 22, 0.12), transparent 70%),
-        #111a2e;
+    background: #111a2e;
     box-shadow: none;
 }
 
 html.dark .proof-tile { border-color: #1e293b; background: #0f172a; }
 html.dark .proof-tile:hover { border-color: rgba(249, 115, 22, 0.45); box-shadow: 0 14px 30px rgba(2, 6, 23, 0.5); }
-html.dark .proof-tile > i,
+html.dark .proof-tile > i { background: #1e293b; }
 html.dark .tool-category > i { background: rgba(249, 115, 22, 0.12); }
 html.dark .proof-tile strong { color: #f8fafc; }
 html.dark .proof-tile > span { color: #94a3b8; }
-html.dark .proof-tile--metric { background: linear-gradient(150deg, #020617 50%, #7c2d12 150%); border-color: #1e293b; }
+html.dark .proof-tile--metric { background: #1e293b; border-color: #334155; }
 html.dark .proof-tile--metric strong { color: #fff; }
-html.dark .proof-tile--metric > span { color: #fdba74; }
+html.dark .proof-tile--metric > span { color: #cbd5e1; }
 html.dark .proof-stack-divider::before,
 html.dark .proof-stack-divider::after { background: #1e293b; }
 html.dark .proof-stack-divider h2 { color: #94a3b8; }

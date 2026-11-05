@@ -2,13 +2,15 @@
    VoloLeads Application Logic
    ============================================ */
 
+let themeListeners;
+
 function initializeVoloLeadsPage() {
     initPageLoadAnimation();
     initSiteHeader();
     initProofStack();
     initQuotePrefillFromTeamBuilder();
     updateCopyrightYear();
-    initDarkMode();
+    initThemePreference();
     initContactForm();
     initFormSecurity();
     initCounterAnimation();
@@ -122,93 +124,54 @@ function initPageLoadAnimation() {
     });
 }
 
-/* --- Dark Mode Logic --- */
-function initDarkMode() {
+/* --- Color Theme --- */
+function initThemePreference() {
+    themeListeners?.abort();
+    themeListeners = new AbortController();
+    const { signal } = themeListeners;
     const html = document.documentElement;
-    const darkModeToggle = document.getElementById('dark-mode-toggle');
-    const mobileDarkModeToggle = document.getElementById('mobile-dark-mode-toggle');
+    const picker = document.querySelector('[data-theme-picker]');
+    const systemDark = window.matchMedia('(prefers-color-scheme: dark)');
 
-    let savedTheme = null;
+    let preference = 'system';
     try {
-        savedTheme = localStorage.getItem('dark-mode');
-        if (savedTheme === null && localStorage.getItem('darkMode') === 'true') {
-            savedTheme = 'true';
-            localStorage.setItem('dark-mode', 'true');
+        const savedTheme = localStorage.getItem('dark-mode');
+        if (savedTheme === 'true' || (savedTheme === null && localStorage.getItem('darkMode') === 'true')) {
+            preference = 'dark';
+        } else if (savedTheme === 'false') {
+            preference = 'light';
         }
     } catch (error) {
-        console.warn('Dark mode preference unavailable', error);
+        console.warn('Color theme preference unavailable', error);
     }
 
-    // Follow the device's light/dark setting until the visitor picks a theme
-    // with the toggle; that explicit choice is saved and wins from then on.
-    const systemDark = window.matchMedia('(prefers-color-scheme: dark)');
-    const hasSavedChoice = savedTheme === 'true' || savedTheme === 'false';
-    const initialDarkMode = hasSavedChoice ? savedTheme === 'true' : systemDark.matches;
-
-    // Helper function to update icon
-    const updateIcon = (icon, isDark) => {
-        if (isDark) {
-            icon.classList.remove('fa-moon');
-            icon.classList.add('fa-sun');
-        } else {
-            icon.classList.remove('fa-sun');
-            icon.classList.add('fa-moon');
-        }
-    };
-
-    const applyTheme = (isDark, persist = false) => {
+    const applyTheme = () => {
+        const isDark = preference === 'dark' || (preference === 'system' && systemDark.matches);
         html.classList.toggle('dark', isDark);
         html.style.colorScheme = isDark ? 'dark' : 'light';
 
         const themeColorMeta = document.querySelector('meta[name="theme-color"]');
-        if (themeColorMeta) {
-            themeColorMeta.setAttribute('content', isDark ? '#020617' : '#f8fafc');
-        }
-
-        const darkModeIcon = document.getElementById('dark-mode-icon');
-        const mobileDarkModeIcon = document.getElementById('mobile-dark-mode-icon');
-
-        if (darkModeIcon) updateIcon(darkModeIcon, isDark);
-        if (mobileDarkModeIcon) updateIcon(mobileDarkModeIcon, isDark);
-
-        [darkModeToggle, mobileDarkModeToggle].filter(Boolean).forEach(toggle => {
-            const nextTheme = isDark ? 'light' : 'dark';
-            toggle.setAttribute('aria-checked', String(isDark));
-            toggle.setAttribute('aria-label', `Switch to ${nextTheme} mode`);
-            toggle.setAttribute('title', `Switch to ${nextTheme} mode`);
-        });
-
-        if (window.renderSiteIcons) window.renderSiteIcons();
-
-        if (persist) {
-            try {
-                localStorage.setItem('dark-mode', String(isDark));
-            } catch (error) {
-                console.warn('Could not save dark mode preference', error);
-            }
-        }
+        themeColorMeta?.setAttribute('content', isDark ? '#020617' : '#f8fafc');
     };
 
-    let followSystem = !hasSavedChoice;
-    const toggleDarkMode = () => {
-        followSystem = false;
-        applyTheme(!html.classList.contains('dark'), true);
-    };
+    applyTheme();
+    systemDark.addEventListener('change', () => {
+        if (preference === 'system') applyTheme();
+    }, { signal });
 
-    applyTheme(initialDarkMode);
-
-    // Live-update when the device switches (e.g. sunset auto dark mode), unless the visitor chose.
-    systemDark.addEventListener('change', event => {
-        if (followSystem) applyTheme(event.matches);
-    });
-
-    if (darkModeToggle) {
-        darkModeToggle.addEventListener('click', toggleDarkMode);
-    }
-
-    if (mobileDarkModeToggle) {
-        mobileDarkModeToggle.addEventListener('click', toggleDarkMode);
-    }
+    if (!picker) return;
+    picker.value = preference;
+    picker.addEventListener('change', () => {
+        preference = picker.value;
+        applyTheme();
+        try {
+            // Keep existing overrides compatible and supersede the old key in System mode.
+            const savedTheme = preference === 'system' ? 'system' : String(preference === 'dark');
+            localStorage.setItem('dark-mode', savedTheme);
+        } catch (error) {
+            console.warn('Could not save color theme preference', error);
+        }
+    }, { signal });
 }
 
 /* --- Shared Site Header (partials/site-header.html) ---
